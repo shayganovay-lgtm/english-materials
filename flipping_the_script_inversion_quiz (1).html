@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flipping the Script — Inversion for Emphasis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #F6F1E7;
+    --surface: #FFFFFF;
+    --surface-2: #FBF7EF;
+    --ink: #201F24;
+    --muted: #6E6A63;
+    --accent: #2541B2;
+    --accent-soft: rgba(37,65,178,0.10);
+    --correct: #3E8E64;
+    --correct-soft: rgba(62,142,100,0.12);
+    --incorrect: #C84630;
+    --incorrect-soft: rgba(200,70,48,0.12);
+    --catA: #8A4FFF;
+    --catB: #2541B2;
+    --catC: #C8862E;
+    --catD: #1E8A85;
+    --border: rgba(32,31,36,0.13);
+    --radius: 14px;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse 800px 460px at 100% -10%, rgba(37,65,178,0.06), transparent 55%),
+      radial-gradient(ellipse 700px 460px at -5% 10%, rgba(138,79,255,0.05), transparent 55%),
+      var(--bg);
+    color: var(--ink);
+    font-family:'Public Sans', sans-serif;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding: 40px 20px 60px;
+  }
+
+  .wrap{ width:100%; max-width: 680px; }
+
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  h1{
+    font-family:'Newsreader', serif;
+    font-weight: 600;
+    font-style: italic;
+    font-size: clamp(34px, 6vw, 50px);
+    line-height: 1.05;
+    margin: 8px 0 6px;
+    letter-spacing: -0.01em;
+  }
+  h1 em{ font-style: normal; color: var(--accent); }
+
+  .lede{
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.55;
+    max-width: 58ch;
+  }
+
+  button{ font-family:'Public Sans', sans-serif; cursor: pointer; }
+
+  .btn-primary{
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 15px 28px;
+    border-radius: 999px;
+    font-size: 15.5px;
+    font-weight: 700;
+    transition: transform .15s ease, box-shadow .15s ease;
+    box-shadow: 0 6px 18px rgba(37,65,178,0.22);
+  }
+  .btn-primary:hover{ transform: translateY(-1px); box-shadow: 0 8px 22px rgba(37,65,178,0.3); }
+  .btn-primary:focus-visible{ outline: 2px solid var(--ink); outline-offset: 3px; }
+  .btn-primary:disabled{ opacity:.35; cursor:not-allowed; transform:none; box-shadow:none; }
+
+  .btn-ghost{
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--border);
+    padding: 13px 24px;
+    border-radius: 999px;
+    font-size: 14.5px;
+    font-weight: 600;
+  }
+  .btn-ghost:hover{ border-color: var(--muted); }
+  .btn-ghost:focus-visible{ outline: 2px solid var(--ink); outline-offset: 3px; }
+
+  /* ---------- Start screen ---------- */
+  .legend{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 28px 0 32px;
+  }
+  .legend-item{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 13.5px;
+  }
+  .swatch-sq{ width: 10px; height: 10px; border-radius: 3px; flex-shrink:0; }
+
+  /* ---------- Progress chips ---------- */
+  .scorecard{ margin: 30px 0 34px; }
+  .group-cluster{ display:inline-block; margin-right: 18px; margin-bottom: 10px; }
+  .group-label{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+  .chips{ display:flex; gap: 6px; }
+  .chip{
+    width: 16px; height: 16px;
+    border-radius: 4px;
+    border: 2px solid var(--border);
+    background: var(--surface);
+    transition: all .2s ease;
+  }
+  .chip.current{
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-soft);
+    transform: scale(1.1);
+  }
+  .chip.correct{ background: var(--correct); border-color: var(--correct); }
+  .chip.incorrect{ background: var(--incorrect); border-color: var(--incorrect); }
+
+  .topline{ display:flex; justify-content: space-between; align-items:baseline; margin-bottom: 6px; }
+  .qcount{ font-family:'JetBrains Mono', monospace; font-size: 13px; color: var(--muted); }
+
+  .cat-badge{
+    display:inline-flex;
+    align-items:center;
+    gap: 7px;
+    font-family:'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .cat-badge .swatch-sq{ width: 9px; height: 9px; }
+
+  /* ---------- Question card ---------- */
+  .card{
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 28px 30px;
+    box-shadow: 0 1px 2px rgba(32,31,36,0.04);
+  }
+
+  .base-sentence{
+    font-family:'Newsreader', serif;
+    font-style: italic;
+    font-size: 16.5px;
+    color: var(--muted);
+    line-height: 1.5;
+    padding-bottom: 16px;
+    margin-bottom: 18px;
+    border-bottom: 1px dashed var(--border);
+  }
+  .base-sentence .tag{
+    font-family:'JetBrains Mono', monospace;
+    font-style: normal;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    display:block;
+    margin-bottom: 6px;
+  }
+
+  .prompt-row{
+    font-size: 15px;
+    margin-bottom: 18px;
+    color: var(--ink);
+  }
+  .prompt-row .starter{
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .options{ display:flex; flex-direction: column; gap: 10px; }
+  .option{
+    text-align:left;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--ink);
+    padding: 14px 16px;
+    border-radius: 10px;
+    font-size: 14.5px;
+    display:flex;
+    align-items:center;
+    gap: 12px;
+    transition: border-color .15s ease, background .15s ease;
+  }
+  .option:hover:not(:disabled){ border-color: var(--muted); }
+  .option:focus-visible{ outline: 2px solid var(--accent); outline-offset: 2px; }
+  .option.selected{ border-color: var(--accent); background: var(--accent-soft); }
+  .option.correct{ border-color: var(--correct); background: var(--correct-soft); }
+  .option.incorrect{ border-color: var(--incorrect); background: var(--incorrect-soft); }
+  .option:disabled{ cursor: default; }
+  .opt-letter{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    color: var(--muted);
+    width: 18px;
+    flex-shrink:0;
+  }
+
+  .feedback{
+    margin-top: 20px;
+    padding: 16px 18px;
+    border-radius: 10px;
+    font-size: 14.5px;
+    line-height: 1.55;
+    border: 1px solid var(--border);
+    display:none;
+  }
+  .feedback.show{ display:block; }
+  .feedback.correct{ background: var(--correct-soft); border-color: rgba(62,142,100,0.35); }
+  .feedback.incorrect{ background: var(--incorrect-soft); border-color: rgba(200,70,48,0.35); }
+  .feedback-label{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    display:block;
+    margin-bottom: 6px;
+  }
+  .feedback.correct .feedback-label{ color: var(--correct); }
+  .feedback.incorrect .feedback-label{ color: var(--incorrect); }
+
+  .actions{ display:flex; justify-content: flex-end; margin-top: 24px; }
+
+  /* ---------- Results ---------- */
+  .score-hero{ text-align:center; padding: 38px 20px 30px; }
+  .score-num{
+    font-family:'Newsreader', serif;
+    font-weight: 700;
+    font-size: 64px;
+    color: var(--accent);
+    line-height:1;
+  }
+  .band{
+    margin-top: 14px;
+    font-size: 15.5px;
+    color: var(--muted);
+    max-width: 48ch;
+    margin-left:auto; margin-right:auto;
+  }
+
+  .cat-breakdown{ display:flex; flex-direction:column; gap: 12px; margin: 28px 0; }
+  .cat-row{ background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .cat-row-top{ display:flex; justify-content: space-between; align-items:center; font-size: 13.5px; margin-bottom: 8px; }
+  .cat-name{ display:flex; align-items:center; gap:8px; font-weight: 600;}
+  .cat-score{ font-family:'JetBrains Mono', monospace; color: var(--muted); }
+  .bar-track{ height: 6px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 4px; overflow:hidden; }
+  .bar-fill{ height:100%; border-radius:4px; }
+
+  .result-actions{ display:flex; gap: 12px; justify-content:center; margin-top: 30px; flex-wrap: wrap; }
+
+  /* ---------- Review ---------- */
+  .review-item{ background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 24px; margin-bottom: 14px; }
+  .review-base{ font-family:'Newsreader', serif; font-style: italic; color: var(--muted); font-size: 15px; margin: 6px 0 12px; }
+  .review-answer-row{ font-size: 14px; margin: 4px 0; }
+  .review-answer-row .lbl{ color: var(--muted); margin-right: 6px;}
+  .review-answer-row .val.correct{ color: var(--correct); font-weight:600;}
+  .review-answer-row .val.incorrect{ color: var(--incorrect); font-weight:600; text-decoration: line-through; text-decoration-color: var(--incorrect); }
+  .review-explain{ margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 13.5px; color: var(--muted); line-height: 1.55; }
+
+  @media (prefers-reduced-motion: reduce){ *{ transition: none !important; } }
+  @media (max-width: 480px){
+    .legend{ grid-template-columns: 1fr; }
+    .card{ padding: 22px 18px; }
+    .group-cluster{ margin-right: 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<script>
+const GROUPS = {
+  catA: { name: "Sequence & Timing",            color: "var(--catA)" },
+  catB: { name: "Restriction & Limitation",      color: "var(--catB)" },
+  catC: { name: "Negative Frequency & Degree",   color: "var(--catC)" },
+  catD: { name: "Addition & Prohibition",        color: "var(--catD)" }
+};
+
+const QUESTIONS = [
+  {
+    group: "catA",
+    starter: "No sooner … than",
+    base: "The concert had barely begun when the power went out.",
+    options: [
+      "No sooner the concert had begun than the power went out.",
+      "No sooner had the concert begun when the power went out.",
+      "No sooner had the concert begun than the power went out.",
+      "No sooner did the concert begin than the power went out."
+    ],
+    correct: 2,
+    explain: "\"No sooner… than\" inverts to <strong>had + subject + past participle</strong>, matching the original past-perfect meaning — and the structure always closes with <em>than</em>, never <em>when</em>."
+  },
+  {
+    group: "catA",
+    starter: "Hardly … when",
+    base: "I had hardly sat down when my phone started ringing.",
+    options: [
+      "Hardly had I sat down when my phone started ringing.",
+      "Hardly I had sat down when my phone started ringing.",
+      "Hardly had I sat down than my phone started ringing.",
+      "Hardly did I sit down when my phone started ringing."
+    ],
+    correct: 0,
+    explain: "\"Hardly… when\" needs the inverted past perfect — <em>Hardly had I sat down</em> — and is completed with <em>when</em>, not <em>than</em> (that connector belongs to \"no sooner… than\")."
+  },
+  {
+    group: "catA",
+    starter: "Scarcely … before",
+    base: "We had scarcely left the house before it started pouring with rain.",
+    options: [
+      "Scarcely we had left the house before it started pouring with rain.",
+      "Scarcely had we leave the house before it started pouring with rain.",
+      "Scarcely had we left the house when it started pouring with rain.",
+      "Scarcely had we left the house before it started pouring with rain."
+    ],
+    correct: 3,
+    explain: "After the inverted auxiliary <em>had</em>, the main verb stays as a past participle (<em>left</em>, not <em>leave</em>), and \"scarcely… before\" keeps its own connector rather than swapping in <em>when</em>."
+  },
+  {
+    group: "catA",
+    starter: "Only after",
+    base: "I felt confident about the contract only after I had spoken to a lawyer.",
+    options: [
+      "Only after had I spoken to a lawyer did I feel confident about the contract.",
+      "Only after I had spoken to a lawyer did I feel confident about the contract.",
+      "Only after I had spoken to a lawyer I felt confident about the contract.",
+      "Only after I had spoken to a lawyer did I felt confident about the contract."
+    ],
+    correct: 1,
+    explain: "With \"only after,\" the inversion happens in the <strong>main clause</strong> (<em>did I feel</em>) — the time clause itself keeps its normal subject–verb order."
+  },
+  {
+    group: "catB",
+    starter: "Not until",
+    base: "I didn't understand the joke until she explained it to me.",
+    options: [
+      "Not until she explained it to me I understood the joke.",
+      "I did not understand the joke not until she explained it to me.",
+      "Not until she explained it to me did I understand the joke.",
+      "Not until did she explain it to me I understood the joke."
+    ],
+    correct: 2,
+    explain: "\"Not until\" pulls the negative idea to the front, so the inversion (<em>did I understand</em>) happens in the main clause, while the \"until\" clause keeps its normal word order."
+  },
+  {
+    group: "catB",
+    starter: "Only when",
+    base: "I only relaxed when the plane landed safely.",
+    options: [
+      "Only when the plane landed safely did I relax.",
+      "Only when the plane landed safely I relaxed.",
+      "Only when did the plane land safely I relaxed.",
+      "Only when the plane had landed safely did I relaxed."
+    ],
+    correct: 0,
+    explain: "As with \"only after,\" the \"when\" clause stays untouched — the inversion lands on the main clause: <em>did I relax</em>, using the base form of the verb after <em>did</em>."
+  },
+  {
+    group: "catB",
+    starter: "Rarely",
+    base: "We rarely see such dedication among new employees.",
+    options: [
+      "Rarely we see such dedication among new employees.",
+      "Rarely we do see such dedication among new employees.",
+      "Rarely did we see such dedication among new employees.",
+      "Rarely do we see such dedication among new employees."
+    ],
+    correct: 3,
+    explain: "\"Rarely\" at the front triggers auxiliary inversion in the present tense — <em>do we see</em> — matching the tense of the original rather than shifting to the past."
+  },
+  {
+    group: "catC",
+    starter: "Never",
+    base: "I have never felt so embarrassed in my life.",
+    options: [
+      "Never I have felt so embarrassed in my life.",
+      "Never have I felt so embarrassed in my life.",
+      "Never did I feel so embarrassed in my life.",
+      "Never had I felt so embarrassed in my life."
+    ],
+    correct: 1,
+    explain: "The inversion keeps the original present perfect — <em>have I felt</em> — rather than shifting to simple past (<em>did I feel</em>) or past perfect (<em>had I felt</em>), which would change the meaning."
+  },
+  {
+    group: "catC",
+    starter: "Never again",
+    base: "He would never trust a stranger again after that experience.",
+    options: [
+      "Never again he would trust a stranger after that experience.",
+      "Never again would he trusted a stranger after that experience.",
+      "Never again would he trust a stranger after that experience.",
+      "Never again did he trust a stranger after that experience."
+    ],
+    correct: 2,
+    explain: "The original modal <em>would</em> carries into the inversion (<em>would he trust</em>), followed by the base form of the verb — not a past participle, and not swapped for <em>did</em>."
+  },
+  {
+    group: "catC",
+    starter: "Little did…",
+    base: "I didn't know that this decision would change my life forever.",
+    options: [
+      "Little did I know that this decision would change my life forever.",
+      "Little I knew that this decision would change my life forever.",
+      "Little did I knew that this decision would change my life forever.",
+      "Little had I known that this decision would change my life forever."
+    ],
+    correct: 0,
+    explain: "\"Little did I know\" is a fixed inversion pattern using <em>did</em> + the base form of the verb (<em>know</em>) — not <em>knew</em>, and not <em>had known</em>."
+  },
+  {
+    group: "catD",
+    starter: "Not only … but also",
+    base: "She not only finished the marathon, but she also broke the course record.",
+    options: [
+      "Not only she finished the marathon, but she also broke the course record.",
+      "Not only finished she the marathon, but she also broke the course record.",
+      "Not only had she finished the marathon, but she also broke the course record.",
+      "Not only did she finish the marathon, but she also broke the course record."
+    ],
+    correct: 3,
+    explain: "\"Not only\" triggers auxiliary inversion in the first clause — <em>did she finish</em> — matching the simple past of the original, while \"but also\" continues normally."
+  },
+  {
+    group: "catD",
+    starter: "Under no circumstances",
+    base: "You should not, under any circumstances, share your password with anyone.",
+    options: [
+      "Under no circumstances you should share your password with anyone.",
+      "Under no circumstances should you share your password with anyone.",
+      "Under no circumstances should you sharing your password with anyone.",
+      "Under no circumstances you should not share your password with anyone."
+    ],
+    correct: 1,
+    explain: "The negative idea moves to the front as \"under no circumstances,\" so the modal inverts with the subject (<em>should you</em>), and the extra <em>not</em> is dropped to avoid a double negative."
+  }
+];
+
+const state = {
+  screen: 'start',
+  index: 0,
+  selected: null,
+  answers: new Array(QUESTIONS.length).fill(null)
+};
+
+function letterFor(i){ return ['A','B','C','D'][i]; }
+
+function renderLegend(){
+  return Object.values(GROUPS).map(g =>
+    `<div class="legend-item"><span class="swatch-sq" style="background:${g.color}"></span>${g.name}</div>`
+  ).join('');
+}
+
+function renderStart(){
+  return `
+    <div class="eyebrow">C1–C2 · Use of English</div>
+    <h1>Flipping <em>the Script</em></h1>
+    <p class="lede">Twelve sentences, twelve inversions. Spot the version where the word order has been flipped correctly for emphasis — and where it's just been flipped wrong.</p>
+    <div class="legend">${renderLegend()}</div>
+    <button class="btn-primary" onclick="startQuiz()">Start flipping →</button>
+  `;
+}
+
+function renderScorecard(){
+  let html = '<div class="scorecard">';
+  Object.keys(GROUPS).forEach((gKey) => {
+    const qIndices = QUESTIONS.map((q,i)=>({q,i})).filter(o => o.q.group === gKey).map(o => o.i);
+    html += `<div class="group-cluster"><div class="group-label">${GROUPS[gKey].name}</div><div class="chips">`;
+    qIndices.forEach(i => {
+      const ans = state.answers[i];
+      let cls = 'chip';
+      if (i === state.index && !ans) cls += ' current';
+      if (ans) cls += ans.correct ? ' correct' : ' incorrect';
+      html += `<div class="${cls}" title="Question ${i+1}"></div>`;
+    });
+    html += `</div></div>`;
+  });
+  html += '</div>';
+  return html;
+}
+
+function renderQuestion(){
+  const q = QUESTIONS[state.index];
+  const group = GROUPS[q.group];
+  const ans = state.answers[state.index];
+  const checked = !!ans;
+
+  const optionsHtml = q.options.map((opt, i) => {
+    let cls = 'option';
+    let disabled = checked ? 'disabled' : '';
+    if (checked){
+      if (i === q.correct) cls += ' correct';
+      else if (i === ans.selected) cls += ' incorrect';
+    } else if (i === state.selected){
+      cls += ' selected';
+    }
+    return `<button class="${cls}" ${disabled} onclick="selectOption(${i})">
+      <span class="opt-letter">${letterFor(i)}</span>${opt}
+    </button>`;
+  }).join('');
+
+  const isLast = state.index === QUESTIONS.length - 1;
+  const actionLabel = checked ? (isLast ? 'See results →' : 'Next question →') : 'Check answer';
+  const actionHandler = checked ? 'goNext()' : 'checkAnswer()';
+  const actionDisabled = (!checked && state.selected === null) ? 'disabled' : '';
+
+  let feedbackHtml = '';
+  if (checked){
+    feedbackHtml = `
+      <div class="feedback show ${ans.correct ? 'correct' : 'incorrect'}">
+        <span class="feedback-label">${ans.correct ? 'Correct' : 'Not quite'}</span>
+        ${q.explain}
+      </div>`;
+  }
+
+  return `
+    ${renderScorecard()}
+    <div class="topline">
+      <span class="qcount">Question ${state.index + 1} / ${QUESTIONS.length}</span>
+    </div>
+    <div class="cat-badge"><span class="swatch-sq" style="background:${group.color}"></span>${group.name}</div>
+    <div class="card">
+      <div class="base-sentence"><span class="tag">Original sentence</span>${q.base}</div>
+      <div class="prompt-row">Which rewrite correctly starts with <span class="starter">${q.starter}</span> for emphasis?</div>
+      <div class="options">${optionsHtml}</div>
+      ${feedbackHtml}
+      <div class="actions">
+        <button class="btn-primary" ${actionDisabled} onclick="${actionHandler}">${actionLabel}</button>
+      </div>
+    </div>
+  `;
+}
+
+function scoreByGroup(){
+  const out = {};
+  Object.keys(GROUPS).forEach(k => out[k] = {correct:0, total:0});
+  QUESTIONS.forEach((q, i) => {
+    out[q.group].total++;
+    if (state.answers[i] && state.answers[i].correct) out[q.group].correct++;
+  });
+  return out;
+}
+
+function bandMessage(score, total){
+  const pct = score/total;
+  if (pct >= 0.83) return "Excellent control of inversion — these structures are ready for exam-level writing and speaking.";
+  if (pct >= 0.55) return "A good base, with a few specific structures worth revisiting. Check which group held you back.";
+  return "Inversion takes practice — work back through the explanations below, one structure at a time.";
+}
+
+function renderResults(){
+  const total = QUESTIONS.length;
+  const score = state.answers.filter(a => a && a.correct).length;
+  const byGroup = scoreByGroup();
+
+  const rows = Object.entries(byGroup).map(([key, v]) => {
+    const g = GROUPS[key];
+    const pct = Math.round((v.correct / v.total) * 100);
+    return `
+      <div class="cat-row">
+        <div class="cat-row-top">
+          <span class="cat-name"><span class="swatch-sq" style="display:inline-block;background:${g.color}"></span>${g.name}</span>
+          <span class="cat-score">${v.correct}/${v.total}</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width:${pct}%; background:${g.color}"></div></div>
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="score-hero">
+      <div class="eyebrow">Results</div>
+      <div class="score-num">${score}<span style="font-size:28px;color:var(--muted)"> / ${total}</span></div>
+      <p class="band">${bandMessage(score, total)}</p>
+    </div>
+    <div class="cat-breakdown">${rows}</div>
+    <div class="result-actions">
+      <button class="btn-primary" onclick="showReview()">Review every answer</button>
+      <button class="btn-ghost" onclick="restartQuiz()">Retry quiz</button>
+    </div>
+  `;
+}
+
+function renderReview(){
+  const items = QUESTIONS.map((q, i) => {
+    const ans = state.answers[i];
+    const g = GROUPS[q.group];
+    return `
+      <div class="review-item">
+        <div class="cat-badge"><span class="swatch-sq" style="background:${g.color}"></span>${g.name} · Q${i+1}</div>
+        <div class="review-base">${q.base}</div>
+        <div class="review-answer-row"><span class="lbl">Your answer:</span><span class="val ${ans.correct ? 'correct' : 'incorrect'}">${q.options[ans.selected]}</span></div>
+        ${!ans.correct ? `<div class="review-answer-row"><span class="lbl">Correct answer:</span><span class="val correct">${q.options[q.correct]}</span></div>` : ''}
+        <div class="review-explain">${q.explain}</div>
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="eyebrow">Full Review</div>
+    <h1 style="font-size:32px;">Every flip, explained</h1>
+    <div style="margin: 24px 0;">${items}</div>
+    <div class="result-actions">
+      <button class="btn-ghost" onclick="restartQuiz()">Retry quiz</button>
+    </div>
+  `;
+}
+
+function render(){
+  const app = document.getElementById('app');
+  if (state.screen === 'start') app.innerHTML = renderStart();
+  else if (state.screen === 'question') app.innerHTML = renderQuestion();
+  else if (state.screen === 'results') app.innerHTML = renderResults();
+  else if (state.screen === 'review') app.innerHTML = renderReview();
+  window.scrollTo({top:0, behavior:'instant'});
+}
+
+function startQuiz(){ state.screen = 'question'; state.index = 0; render(); }
+
+function selectOption(i){
+  if (state.answers[state.index]) return;
+  state.selected = i;
+  render();
+}
+
+function checkAnswer(){
+  if (state.selected === null) return;
+  const q = QUESTIONS[state.index];
+  state.answers[state.index] = { selected: state.selected, correct: state.selected === q.correct };
+  render();
+}
+
+function goNext(){
+  if (state.index < QUESTIONS.length - 1){
+    state.index++;
+    state.selected = null;
+    state.screen = 'question';
+  } else {
+    state.screen = 'results';
+  }
+  render();
+}
+
+function showReview(){ state.screen = 'review'; render(); }
+
+function restartQuiz(){
+  state.index = 0;
+  state.selected = null;
+  state.answers = new Array(QUESTIONS.length).fill(null);
+  state.screen = 'start';
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
