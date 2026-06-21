@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Last Orders — A Pub Vocabulary Quiz Night</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #221811;
+    --bg-deep: #19120D;
+    --surface: #2D2117;
+    --surface-2: #382A1D;
+    --text: #F1E6D3;
+    --text-muted: #B3A088;
+    --brass: #C17A4D;
+    --brass-soft: rgba(193,122,77,0.18);
+    --correct: #8FA66B;
+    --correct-soft: rgba(143,166,107,0.16);
+    --incorrect: #B5544A;
+    --incorrect-soft: rgba(181,84,74,0.16);
+    --r1: #C17A4D;
+    --r2: #D4A24E;
+    --r3: #5E8B7E;
+    --r4: #8B5A6B;
+    --border: rgba(241,230,211,0.13);
+    --radius: 14px;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse 850px 480px at 12% -8%, rgba(212,162,78,0.10), transparent 60%),
+      radial-gradient(ellipse 700px 480px at 105% 8%, rgba(94,139,126,0.10), transparent 55%),
+      repeating-linear-gradient(115deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 2px, transparent 2px, transparent 5px),
+      var(--bg);
+    color: var(--text);
+    font-family:'Work Sans', sans-serif;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding: 40px 20px 60px;
+  }
+
+  .wrap{ width:100%; max-width: 680px; }
+
+  .eyebrow{
+    font-family:'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  h1{
+    font-family:'Bitter', serif;
+    font-weight: 700;
+    font-size: clamp(34px, 6vw, 50px);
+    line-height: 1.05;
+    margin: 8px 0 6px;
+    letter-spacing: -0.01em;
+  }
+  h1 em{ font-style: normal; color: var(--brass); }
+
+  .lede{
+    color: var(--text-muted);
+    font-size: 16px;
+    line-height: 1.55;
+    max-width: 58ch;
+  }
+
+  button{ font-family:'Work Sans', sans-serif; cursor: pointer; }
+
+  .btn-primary{
+    background: var(--brass);
+    color: var(--bg-deep);
+    border: none;
+    padding: 15px 28px;
+    border-radius: 999px;
+    font-size: 15.5px;
+    font-weight: 700;
+    transition: transform .15s ease, box-shadow .15s ease;
+    box-shadow: 0 6px 20px rgba(193,122,77,0.3);
+  }
+  .btn-primary:hover{ transform: translateY(-1px); box-shadow: 0 8px 24px rgba(193,122,77,0.4); }
+  .btn-primary:focus-visible{ outline: 2px solid var(--text); outline-offset: 3px; }
+  .btn-primary:disabled{ opacity:.4; cursor:not-allowed; transform:none; box-shadow:none; }
+
+  .btn-ghost{
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 13px 24px;
+    border-radius: 999px;
+    font-size: 14.5px;
+    font-weight: 600;
+  }
+  .btn-ghost:hover{ border-color: var(--text-muted); }
+  .btn-ghost:focus-visible{ outline: 2px solid var(--text); outline-offset: 3px; }
+
+  /* ---------- Start screen ---------- */
+  .legend{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 28px 0 32px;
+  }
+  .legend-item{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 13.5px;
+  }
+  .legend-item .rnum{
+    font-family:'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--bg-deep);
+    background: var(--text-muted);
+    border-radius: 4px;
+    padding: 2px 6px;
+    flex-shrink:0;
+  }
+
+  /* ---------- Stamp-card progress ---------- */
+  .scorecard{
+    margin: 30px 0 34px;
+  }
+  .round-cluster{
+    display:inline-block;
+    margin-right: 22px;
+    margin-bottom: 10px;
+  }
+  .round-label{
+    font-family:'Space Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+  .stamps{ display:flex; gap: 6px; }
+  .stamp{
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: var(--bg-deep);
+    transition: all .2s ease;
+  }
+  .stamp.current{
+    border-color: var(--brass);
+    box-shadow: 0 0 0 4px var(--brass-soft);
+    transform: scale(1.12);
+  }
+  .stamp.correct{ background: var(--correct); border-color: var(--correct); }
+  .stamp.incorrect{ background: var(--incorrect); border-color: var(--incorrect); }
+
+  .topline{
+    display:flex;
+    justify-content: space-between;
+    align-items:baseline;
+    margin-bottom: 6px;
+  }
+  .qcount{
+    font-family:'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .round-badge{
+    display:inline-flex;
+    align-items:center;
+    gap: 7px;
+    font-family:'Space Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+  }
+  .round-badge .swatch{
+    width: 9px; height: 9px; border-radius: 50%;
+  }
+
+  /* ---------- Question card ---------- */
+  .card{
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 30px 28px;
+  }
+  .qtext{
+    font-family:'Bitter', serif;
+    font-weight: 600;
+    font-size: clamp(19px, 3.2vw, 22px);
+    line-height: 1.45;
+    margin: 0 0 26px;
+  }
+
+  .options{ display:flex; flex-direction: column; gap: 10px; }
+  .option{
+    text-align:left;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 14px 16px;
+    border-radius: 10px;
+    font-size: 15px;
+    display:flex;
+    align-items:center;
+    gap: 12px;
+    transition: border-color .15s ease, background .15s ease;
+  }
+  .option:hover:not(:disabled){ border-color: var(--text-muted); }
+  .option:focus-visible{ outline: 2px solid var(--brass); outline-offset: 2px; }
+  .option.selected{ border-color: var(--brass); background: var(--brass-soft); }
+  .option.correct{ border-color: var(--correct); background: var(--correct-soft); }
+  .option.incorrect{ border-color: var(--incorrect); background: var(--incorrect-soft); }
+  .option:disabled{ cursor: default; }
+  .opt-letter{
+    font-family:'Space Mono', monospace;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    width: 18px;
+    flex-shrink:0;
+  }
+
+  .feedback{
+    margin-top: 20px;
+    padding: 16px 18px;
+    border-radius: 10px;
+    font-size: 14.5px;
+    line-height: 1.55;
+    border: 1px solid var(--border);
+    display:none;
+  }
+  .feedback.show{ display:block; }
+  .feedback.correct{ background: var(--correct-soft); border-color: rgba(143,166,107,0.4); }
+  .feedback.incorrect{ background: var(--incorrect-soft); border-color: rgba(181,84,74,0.4); }
+  .feedback-label{
+    font-family:'Space Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display:block;
+    margin-bottom: 6px;
+  }
+  .feedback.correct .feedback-label{ color: var(--correct); }
+  .feedback.incorrect .feedback-label{ color: var(--incorrect); }
+
+  .actions{ display:flex; justify-content: flex-end; margin-top: 24px; }
+
+  /* ---------- Results ---------- */
+  .score-hero{ text-align:center; padding: 38px 20px 30px; }
+  .score-num{
+    font-family:'Bitter', serif;
+    font-size: 64px;
+    font-weight: 700;
+    color: var(--brass);
+    line-height:1;
+  }
+  .score-denom{ font-family:'Space Mono', monospace; color: var(--text-muted); font-size: 14px; margin-top: 6px; }
+  .band{
+    margin-top: 14px;
+    font-size: 15.5px;
+    color: var(--text-muted);
+    max-width: 48ch;
+    margin-left:auto; margin-right:auto;
+  }
+
+  .cat-breakdown{ display:flex; flex-direction:column; gap: 12px; margin: 28px 0; }
+  .cat-row{ background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .cat-row-top{ display:flex; justify-content: space-between; align-items:center; font-size: 13.5px; margin-bottom: 8px; }
+  .cat-name{ display:flex; align-items:center; gap:8px; font-weight: 600;}
+  .cat-score{ font-family:'Space Mono', monospace; color: var(--text-muted); }
+  .bar-track{ height: 6px; background: var(--surface-2); border-radius: 4px; overflow:hidden; }
+  .bar-fill{ height:100%; border-radius:4px; }
+
+  .result-actions{ display:flex; gap: 12px; justify-content:center; margin-top: 30px; flex-wrap: wrap; }
+
+  /* ---------- Review ---------- */
+  .review-item{ background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 24px; margin-bottom: 14px; }
+  .review-q{ font-family:'Bitter', serif; font-size: 17px; line-height: 1.5; margin: 6px 0 12px; }
+  .review-answer-row{ font-size: 14px; margin: 4px 0; }
+  .review-answer-row .lbl{ color: var(--text-muted); margin-right: 6px;}
+  .review-answer-row .val.correct{ color: var(--correct); font-weight:600;}
+  .review-answer-row .val.incorrect{ color: var(--incorrect); font-weight:600; text-decoration: line-through; text-decoration-color: var(--incorrect); }
+  .review-explain{ margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 13.5px; color: var(--text-muted); line-height: 1.55; }
+
+  @media (prefers-reduced-motion: reduce){ *{ transition: none !important; } }
+  @media (max-width: 480px){
+    .legend{ grid-template-columns: 1fr; }
+    .card{ padding: 24px 18px; }
+    .round-cluster{ margin-right: 14px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<script>
+const ROUNDS = {
+  r1: { name: "People & Places",        color: "var(--r1)" },
+  r2: { name: "Drinks & Quantities",     color: "var(--r2)" },
+  r3: { name: "Pub Customs & Phrases",   color: "var(--r3)" },
+  r4: { name: "Etiquette & Extras",      color: "var(--r4)" }
+};
+
+const QUESTIONS = [
+  // ROUND 1 — People & Places
+  {
+    round: "r1",
+    text: "What do you call the person serving drinks behind the bar?",
+    options: ["A waiter", "A bartender", "A chef", "A host"],
+    correct: 1,
+    explain: "<strong>Bartender</strong> (also <em>barman</em> or <em>barwoman</em>) is the standard term for the person serving drinks. A waiter usually serves tables in a restaurant instead."
+  },
+  {
+    round: "r1",
+    text: "A pub's landlord or landlady is the person who…",
+    options: ["cleans the tables", "owns or manages the pub", "plays live music there", "delivers the food"],
+    correct: 1,
+    explain: "The <strong>landlord/landlady</strong> runs the pub — a different role from the bartenders who actually pour the drinks."
+  },
+  {
+    round: "r1",
+    text: "Where would you sit if you wanted a tall seat right at the bar counter?",
+    options: ["A bar stool", "A booth", "A snug", "A pew"],
+    correct: 0,
+    explain: "A <strong>bar stool</strong> is the tall, usually backless seat found at the counter."
+  },
+  {
+    round: "r1",
+    text: "In an older, traditional pub, a \"snug\" is…",
+    options: ["the strongest beer on the menu", "a small, cosy, partitioned seating area", "the pub's official name", "a drinking game"],
+    correct: 1,
+    explain: "A <strong>snug</strong> is a small, enclosed nook, historically used for more private conversations."
+  },
+
+  // ROUND 2 — Drinks & Quantities
+  {
+    round: "r2",
+    text: "Roughly how much beer are you ordering if you ask for \"a pint\"?",
+    options: ["About 150 ml", "About 285 ml", "About 570 ml", "A full bottle"],
+    correct: 2,
+    explain: "A UK pint is about <strong>570 ml</strong> — the standard full serving of draught beer."
+  },
+  {
+    round: "r2",
+    text: "A \"half-pint\" is…",
+    options: ["double a pint", "roughly half the volume of a pint", "a type of cocktail", "always non-alcoholic"],
+    correct: 1,
+    explain: "A half-pint is around 285 ml — exactly what the name suggests, half a pint."
+  },
+  {
+    round: "r2",
+    text: "Beer poured straight from a pump connected to a keg (not from a bottle or can) is described as…",
+    options: ["bottled", "draught", "flat", "mulled"],
+    correct: 1,
+    explain: "<strong>Draught</strong> beer comes from a pressurised keg via a tap, rather than being bottled or canned."
+  },
+  {
+    round: "r2",
+    text: "If the bartender says \"this round's on the house,\" what's happening?",
+    options: ["You have to pay double", "The drinks are free, paid for by the pub", "You must drink outside", "The drinks are non-alcoholic only"],
+    correct: 1,
+    explain: "<strong>\"On the house\"</strong> means the pub itself is covering the cost — the drinks are free."
+  },
+
+  // ROUND 3 — Pub Customs & Phrases
+  {
+    round: "r3",
+    text: "If you offer to buy \"a round,\" what are you doing?",
+    options: ["Ordering only for yourself", "Buying a drink for everyone in your group", "Asking for the bill", "Starting a pub quiz"],
+    correct: 1,
+    explain: "Buying <strong>a round</strong> means getting a drink for each person in the group — friends usually take turns doing this."
+  },
+  {
+    round: "r3",
+    text: "You ask the bartender, \"Could we start a tab, please?\" What are you requesting?",
+    options: ["A reserved table", "To run up a bill and pay it all at the end", "A free drink", "A seat at the bar"],
+    correct: 1,
+    explain: "A <strong>tab</strong> is an open account at the bar — you order freely and settle the whole bill in one go later."
+  },
+  {
+    round: "r3",
+    text: "The bartender shouts \"Last orders!\" across the room. What does this mean?",
+    options: ["The kitchen has just opened", "It's the final chance to order before the bar closes", "There's a fight breaking out", "The pub has run out of food"],
+    correct: 1,
+    explain: "<strong>\"Last orders\"</strong> is the traditional warning that the bar is about to stop serving — order now or miss out."
+  },
+  {
+    round: "r3",
+    text: "If a bartender asks, \"What'll it be?\", they want to know…",
+    options: ["what time you're leaving", "what you'd like to order", "if you've booked a table", "how you're paying"],
+    correct: 1,
+    explain: "<strong>\"What'll it be?\"</strong> is an informal, friendly way of asking what you'd like to drink."
+  },
+
+  // ROUND 4 — Etiquette & Extras
+  {
+    round: "r4",
+    text: "Someone asks, \"Is this seat taken?\" What do they want to know?",
+    options: ["Whether they can sit there", "The price of a drink", "What time the pub closes", "Where the toilets are"],
+    correct: 0,
+    explain: "This is a polite way of checking whether a free chair is available before sitting down."
+  },
+  {
+    round: "r4",
+    text: "What is a \"beer mat\" used for?",
+    options: ["Paying the bill", "Protecting the table and catching drips under a glass", "Ordering food", "Calling the bartender"],
+    correct: 1,
+    explain: "A <strong>beer mat</strong> is the small cardboard coaster placed under a glass to protect the table surface."
+  },
+  {
+    round: "r4",
+    text: "When someone raises a glass and says \"Cheers!\", they mean…",
+    options: ["Goodbye", "A toast — wishing good health before drinking", "An order to the bartender", "A complaint about the drink"],
+    correct: 1,
+    explain: "<strong>\"Cheers\"</strong> is used as a toast before drinking, and informally can also just mean \"thanks.\""
+  }
+];
+
+const state = {
+  screen: 'start',
+  index: 0,
+  selected: null,
+  answers: new Array(QUESTIONS.length).fill(null)
+};
+
+function letterFor(i){ return ['A','B','C','D'][i]; }
+
+function renderLegend(){
+  return Object.values(ROUNDS).map((r, i) =>
+    `<div class="legend-item"><span class="rnum">R${i+1}</span>${r.name}</div>`
+  ).join('');
+}
+
+function renderStart(){
+  return `
+    <div class="eyebrow">B1–B2 · Vocabulary Quiz Night</div>
+    <h1>Last <em>Orders</em></h1>
+    <p class="lede">Four rounds, fifteen questions, one closing bell. Test what you know about the people, the pints, and the unwritten rules of a British pub before the bar calls time.</p>
+    <div class="legend">${renderLegend()}</div>
+    <button class="btn-primary" onclick="startQuiz()">Order up →</button>
+  `;
+}
+
+function renderScorecard(){
+  let html = '<div class="scorecard">';
+  Object.keys(ROUNDS).forEach((rKey, ri) => {
+    const qIndices = QUESTIONS.map((q,i)=>({q,i})).filter(o => o.q.round === rKey).map(o => o.i);
+    html += `<div class="round-cluster"><div class="round-label">Round ${ri+1}</div><div class="stamps">`;
+    qIndices.forEach(i => {
+      const ans = state.answers[i];
+      let cls = 'stamp';
+      if (i === state.index && !ans) cls += ' current';
+      if (ans) cls += ans.correct ? ' correct' : ' incorrect';
+      html += `<div class="${cls}" title="Question ${i+1}"></div>`;
+    });
+    html += `</div></div>`;
+  });
+  html += '</div>';
+  return html;
+}
+
+function renderQuestion(){
+  const q = QUESTIONS[state.index];
+  const round = ROUNDS[q.round];
+  const ans = state.answers[state.index];
+  const checked = !!ans;
+
+  const optionsHtml = q.options.map((opt, i) => {
+    let cls = 'option';
+    let disabled = checked ? 'disabled' : '';
+    if (checked){
+      if (i === q.correct) cls += ' correct';
+      else if (i === ans.selected) cls += ' incorrect';
+    } else if (i === state.selected){
+      cls += ' selected';
+    }
+    return `<button class="${cls}" ${disabled} onclick="selectOption(${i})">
+      <span class="opt-letter">${letterFor(i)}</span>${opt}
+    </button>`;
+  }).join('');
+
+  const isLast = state.index === QUESTIONS.length - 1;
+  const actionLabel = checked ? (isLast ? 'See the scorecard →' : 'Next question →') : 'Check answer';
+  const actionHandler = checked ? 'goNext()' : 'checkAnswer()';
+  const actionDisabled = (!checked && state.selected === null) ? 'disabled' : '';
+
+  let feedbackHtml = '';
+  if (checked){
+    feedbackHtml = `
+      <div class="feedback show ${ans.correct ? 'correct' : 'incorrect'}">
+        <span class="feedback-label">${ans.correct ? 'Correct' : 'Not quite'}</span>
+        ${q.explain}
+      </div>`;
+  }
+
+  return `
+    ${renderScorecard()}
+    <div class="topline">
+      <span class="qcount">Question ${state.index + 1} / ${QUESTIONS.length}</span>
+    </div>
+    <div class="round-badge"><span class="swatch" style="background:${round.color}"></span>${round.name}</div>
+    <div class="card">
+      <p class="qtext">${q.text}</p>
+      <div class="options">${optionsHtml}</div>
+      ${feedbackHtml}
+      <div class="actions">
+        <button class="btn-primary" ${actionDisabled} onclick="${actionHandler}">${actionLabel}</button>
+      </div>
+    </div>
+  `;
+}
+
+function scoreByRound(){
+  const out = {};
+  Object.keys(ROUNDS).forEach(k => out[k] = {correct:0, total:0});
+  QUESTIONS.forEach((q, i) => {
+    out[q.round].total++;
+    if (state.answers[i] && state.answers[i].correct) out[q.round].correct++;
+  });
+  return out;
+}
+
+function bandMessage(score, total){
+  const pct = score/total;
+  if (pct >= 0.87) return "Top of the leaderboard. This vocabulary set is exam- and pub-ready.";
+  if (pct >= 0.6) return "A solid showing — check which round cost you points and give that one another look.";
+  return "Time to revisit a few rounds before quiz night. The explanations below are a good place to start.";
+}
+
+function renderResults(){
+  const total = QUESTIONS.length;
+  const score = state.answers.filter(a => a && a.correct).length;
+  const byRound = scoreByRound();
+
+  const rows = Object.entries(byRound).map(([key, v]) => {
+    const r = ROUNDS[key];
+    const pct = Math.round((v.correct / v.total) * 100);
+    return `
+      <div class="cat-row">
+        <div class="cat-row-top">
+          <span class="cat-name"><span class="swatch" style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${r.color}"></span>${r.name}</span>
+          <span class="cat-score">${v.correct}/${v.total}</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width:${pct}%; background:${r.color}"></div></div>
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="score-hero">
+      <div class="eyebrow">Final Scorecard</div>
+      <div class="score-num">${score}<span style="font-size:28px;color:var(--text-muted)"> / ${total}</span></div>
+      <p class="band">${bandMessage(score, total)}</p>
+    </div>
+    <div class="cat-breakdown">${rows}</div>
+    <div class="result-actions">
+      <button class="btn-primary" onclick="showReview()">Review every answer</button>
+      <button class="btn-ghost" onclick="restartQuiz()">Retry quiz</button>
+    </div>
+  `;
+}
+
+function renderReview(){
+  const items = QUESTIONS.map((q, i) => {
+    const ans = state.answers[i];
+    const r = ROUNDS[q.round];
+    return `
+      <div class="review-item">
+        <div class="round-badge"><span class="swatch" style="background:${r.color}"></span>${r.name} · Q${i+1}</div>
+        <p class="review-q">${q.text}</p>
+        <div class="review-answer-row"><span class="lbl">Your answer:</span><span class="val ${ans.correct ? 'correct' : 'incorrect'}">${q.options[ans.selected]}</span></div>
+        ${!ans.correct ? `<div class="review-answer-row"><span class="lbl">Correct answer:</span><span class="val correct">${q.options[q.correct]}</span></div>` : ''}
+        <div class="review-explain">${q.explain}</div>
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="eyebrow">Full Review</div>
+    <h1 style="font-size:32px;">Every round, retraced</h1>
+    <div style="margin: 24px 0;">${items}</div>
+    <div class="result-actions">
+      <button class="btn-ghost" onclick="restartQuiz()">Retry quiz</button>
+    </div>
+  `;
+}
+
+function render(){
+  const app = document.getElementById('app');
+  if (state.screen === 'start') app.innerHTML = renderStart();
+  else if (state.screen === 'question') app.innerHTML = renderQuestion();
+  else if (state.screen === 'results') app.innerHTML = renderResults();
+  else if (state.screen === 'review') app.innerHTML = renderReview();
+  window.scrollTo({top:0, behavior:'instant'});
+}
+
+function startQuiz(){ state.screen = 'question'; state.index = 0; render(); }
+
+function selectOption(i){
+  if (state.answers[state.index]) return;
+  state.selected = i;
+  render();
+}
+
+function checkAnswer(){
+  if (state.selected === null) return;
+  const q = QUESTIONS[state.index];
+  state.answers[state.index] = { selected: state.selected, correct: state.selected === q.correct };
+  render();
+}
+
+function goNext(){
+  if (state.index < QUESTIONS.length - 1){
+    state.index++;
+    state.selected = null;
+    state.screen = 'question';
+  } else {
+    state.screen = 'results';
+  }
+  render();
+}
+
+function showReview(){ state.screen = 'review'; render(); }
+
+function restartQuiz(){
+  state.index = 0;
+  state.selected = null;
+  state.answers = new Array(QUESTIONS.length).fill(null);
+  state.screen = 'start';
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
