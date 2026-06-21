@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Turning Points — C1 Grammar Challenge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #1B2438;
+    --bg-deep: #141C2C;
+    --surface: #232E47;
+    --surface-2: #2C3957;
+    --text: #F2E9D8;
+    --text-muted: #A9B4C9;
+    --gold: #D7A65A;
+    --gold-soft: rgba(215,166,90,0.16);
+    --correct: #8FB996;
+    --correct-soft: rgba(143,185,150,0.16);
+    --incorrect: #C97B84;
+    --incorrect-soft: rgba(201,123,132,0.16);
+    --cat-cond: #D7A65A;
+    --cat-prep: #6FAFA0;
+    --cat-wish: #A78BBE;
+    --cat-modal: #6E94B8;
+    --border: rgba(242,233,216,0.12);
+    --radius: 14px;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse 900px 500px at 15% -10%, rgba(215,166,90,0.08), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 110% 10%, rgba(110,148,184,0.10), transparent 55%),
+      var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    display:flex;
+    justify-content:center;
+    padding: 40px 20px 60px;
+  }
+
+  .wrap{ width:100%; max-width: 680px; }
+
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight: 600;
+    font-size: clamp(34px, 6vw, 50px);
+    line-height: 1.05;
+    margin: 8px 0 6px;
+    letter-spacing: -0.01em;
+  }
+  h1 em{
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .lede{
+    color: var(--text-muted);
+    font-size: 16px;
+    line-height: 1.55;
+    max-width: 56ch;
+  }
+
+  /* ---------- Start screen ---------- */
+  .start-card{
+    margin-top: 28px;
+  }
+  .legend{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 28px 0 32px;
+  }
+  .legend-item{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 13.5px;
+  }
+  .dot{
+    width: 9px; height: 9px; border-radius: 50%; flex-shrink:0;
+  }
+
+  button{
+    font-family:'Inter', sans-serif;
+    cursor: pointer;
+  }
+  .btn-primary{
+    background: var(--gold);
+    color: var(--bg-deep);
+    border: none;
+    padding: 15px 28px;
+    border-radius: 999px;
+    font-size: 15.5px;
+    font-weight: 600;
+    transition: transform .15s ease, box-shadow .15s ease;
+    box-shadow: 0 6px 20px rgba(215,166,90,0.25);
+  }
+  .btn-primary:hover{ transform: translateY(-1px); box-shadow: 0 8px 24px rgba(215,166,90,0.35); }
+  .btn-primary:focus-visible{ outline: 2px solid var(--text); outline-offset: 3px; }
+  .btn-primary:disabled{ opacity:.4; cursor:not-allowed; transform:none; box-shadow:none; }
+
+  .btn-ghost{
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 13px 24px;
+    border-radius: 999px;
+    font-size: 14.5px;
+    font-weight: 500;
+  }
+  .btn-ghost:hover{ border-color: var(--text-muted); }
+  .btn-ghost:focus-visible{ outline: 2px solid var(--text); outline-offset: 3px; }
+
+  /* ---------- Path / progress ---------- */
+  .path{
+    display:flex;
+    align-items:center;
+    gap: 4px;
+    margin: 30px 0 36px;
+  }
+  .node-link{
+    flex: 1;
+    height: 2px;
+    background: var(--border);
+  }
+  .node-link.done{ background: var(--text-muted); }
+  .node{
+    width: 13px; height: 13px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: var(--bg-deep);
+    flex-shrink:0;
+    transition: all .2s ease;
+  }
+  .node.current{
+    border-color: var(--gold);
+    box-shadow: 0 0 0 4px var(--gold-soft);
+    transform: scale(1.15);
+  }
+  .node.correct{ background: var(--correct); border-color: var(--correct); }
+  .node.incorrect{ background: var(--incorrect); border-color: var(--incorrect); }
+
+  .topline{
+    display:flex;
+    justify-content: space-between;
+    align-items:baseline;
+    margin-bottom: 6px;
+  }
+  .qcount{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .cat-badge{
+    display:inline-flex;
+    align-items:center;
+    gap: 7px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+  }
+
+  /* ---------- Question card ---------- */
+  .card{
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 30px 28px;
+  }
+  .qtext{
+    font-family:'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(19px, 3.2vw, 23px);
+    line-height: 1.45;
+    margin: 0 0 26px;
+  }
+  .blank{
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  .options{
+    display:flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .option{
+    text-align:left;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 14px 16px;
+    border-radius: 10px;
+    font-size: 15px;
+    display:flex;
+    align-items:center;
+    gap: 12px;
+    transition: border-color .15s ease, background .15s ease;
+  }
+  .option:hover:not(:disabled){ border-color: var(--text-muted); }
+  .option:focus-visible{ outline: 2px solid var(--gold); outline-offset: 2px; }
+  .option.selected{ border-color: var(--gold); background: var(--gold-soft); }
+  .option.correct{ border-color: var(--correct); background: var(--correct-soft); }
+  .option.incorrect{ border-color: var(--incorrect); background: var(--incorrect-soft); }
+  .option:disabled{ cursor: default; }
+  .opt-letter{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    width: 18px;
+    flex-shrink:0;
+  }
+  .option.correct .opt-letter, .option.correct{ color: var(--text); }
+
+  .feedback{
+    margin-top: 20px;
+    padding: 16px 18px;
+    border-radius: 10px;
+    font-size: 14.5px;
+    line-height: 1.55;
+    border: 1px solid var(--border);
+    display:none;
+  }
+  .feedback.show{ display:block; }
+  .feedback.correct{ background: var(--correct-soft); border-color: rgba(143,185,150,0.4); }
+  .feedback.incorrect{ background: var(--incorrect-soft); border-color: rgba(201,123,132,0.4); }
+  .feedback-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display:block;
+    margin-bottom: 6px;
+  }
+  .feedback.correct .feedback-label{ color: var(--correct); }
+  .feedback.incorrect .feedback-label{ color: var(--incorrect); }
+
+  .actions{
+    display:flex;
+    justify-content: flex-end;
+    margin-top: 24px;
+  }
+
+  /* ---------- Results ---------- */
+  .score-hero{
+    text-align:center;
+    padding: 38px 20px 30px;
+  }
+  .score-num{
+    font-family:'Fraunces', serif;
+    font-size: 64px;
+    font-weight: 600;
+    color: var(--gold);
+    line-height:1;
+  }
+  .score-denom{
+    font-family:'IBM Plex Mono', monospace;
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-top: 6px;
+  }
+  .band{
+    margin-top: 14px;
+    font-size: 15.5px;
+    color: var(--text-muted);
+    max-width: 46ch;
+    margin-left:auto; margin-right:auto;
+  }
+
+  .cat-breakdown{
+    display:flex;
+    flex-direction:column;
+    gap: 12px;
+    margin: 28px 0;
+  }
+  .cat-row{
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .cat-row-top{
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    font-size: 13.5px;
+    margin-bottom: 8px;
+  }
+  .cat-name{ display:flex; align-items:center; gap:8px; font-weight: 500;}
+  .cat-score{ font-family:'IBM Plex Mono', monospace; color: var(--text-muted); }
+  .bar-track{
+    height: 6px;
+    background: var(--surface-2);
+    border-radius: 4px;
+    overflow:hidden;
+  }
+  .bar-fill{
+    height:100%;
+    border-radius:4px;
+  }
+
+  .result-actions{
+    display:flex;
+    gap: 12px;
+    justify-content:center;
+    margin-top: 30px;
+    flex-wrap: wrap;
+  }
+
+  /* ---------- Review ---------- */
+  .review-item{
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    margin-bottom: 14px;
+  }
+  .review-q{
+    font-family:'Fraunces', serif;
+    font-size: 17px;
+    line-height: 1.5;
+    margin: 6px 0 12px;
+  }
+  .review-answer-row{ font-size: 14px; margin: 4px 0; }
+  .review-answer-row .lbl{ color: var(--text-muted); margin-right: 6px;}
+  .review-answer-row .val.correct{ color: var(--correct); font-weight:600;}
+  .review-answer-row .val.incorrect{ color: var(--incorrect); font-weight:600; text-decoration: line-through; text-decoration-color: var(--incorrect); }
+  .review-explain{
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    font-size: 13.5px;
+    color: var(--text-muted);
+    line-height: 1.55;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition: none !important; }
+  }
+
+  @media (max-width: 480px){
+    .legend{ grid-template-columns: 1fr; }
+    .card{ padding: 24px 18px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<script>
+const CATEGORIES = {
+  cond:  { name: "Mixed Conditionals",            color: "var(--cat-cond)"  },
+  prep:  { name: "Dependent Prepositions",         color: "var(--cat-prep)"  },
+  wish:  { name: "Wishes & If Only",               color: "var(--cat-wish)"  },
+  modal: { name: "Necessity, Deduction & Ability",  color: "var(--cat-modal)" }
+};
+
+const QUESTIONS = [
+  {
+    cat: "cond",
+    text: "If he ______ more carefully on that construction project last year, he ______ be in a managerial position this year.",
+    options: ["had worked / would be", "worked / would have been", "had worked / would have been", "would have worked / would be"],
+    correct: 0,
+    explain: "An unreal past condition (<em>had worked</em> — past perfect) produces a present result (<em>would be</em>), not a past one — the result is about <em>this year</em>, so it can't take \"would have been.\""
+  },
+  {
+    cat: "cond",
+    text: "I wouldn't be facing financial trouble today if I _______ all my savings on that risky investment.",
+    options: ["didn't waste", "hadn't wasted", "wouldn't have wasted", "haven't wasted"],
+    correct: 1,
+    explain: "The result (\"wouldn't be facing trouble <em>today</em>\") is present, but the condition refers to a finished past action, so the if-clause needs the past perfect: <em>hadn't wasted</em>."
+  },
+  {
+    cat: "cond",
+    text: "She is an incredibly talented linguist. If she ______ Chinese at university, she ________ that ancient manuscript for us right now.",
+    options: ["had studied / could translate", "studied / could have translated", "has studied / can translate", "would have studied / could translate"],
+    correct: 0,
+    explain: "<em>Had studied</em> sets up an unreal past condition; the result describes a present ability, so it takes <em>could</em> + base verb — not \"could have translated.\""
+  },
+  {
+    cat: "cond",
+    text: "They ______ you to the conference next week, if they ________ you were such an expert.",
+    options: ["would invite / knew", "would have invited / knew", "will invite / had known", "would invite / had known"],
+    correct: 0,
+    explain: "This is a type 2 conditional: <em>knew</em> (past simple) expresses a present unreal belief, while <em>would invite</em> refers to the imagined future outcome of that present hypothetical."
+  },
+  {
+    cat: "prep",
+    text: "His lack of success in the role can be blamed _____ his inability to delegate tasks effectively.",
+    options: ["for", "with", "on", "to"],
+    correct: 2,
+    explain: "<strong>Blame something on someone/something</strong> is the fixed pattern: his lack of success can be blamed <em>on</em> his inability to delegate."
+  },
+  {
+    cat: "prep",
+    text: "During the lecture, the professor drew ____ his extensive experience in the Amazon to illustrate the impact of climate change.",
+    options: ["from", "on", "with", "at"],
+    correct: 1,
+    explain: "<strong>Draw on something</strong> means to make use of a resource, such as experience or knowledge."
+  },
+  {
+    cat: "prep",
+    text: "It's a complex problem, but we must refrain _______ making any rash decisions until we have all the data.",
+    options: ["of", "against", "from", "to"],
+    correct: 2,
+    explain: "<strong>Refrain from doing something</strong> means to stop yourself from doing it."
+  },
+  {
+    cat: "prep",
+    text: "As a professional, you are expected to comply ______ the safety regulations without exception.",
+    options: ["to", "with", "by", "for"],
+    correct: 1,
+    explain: "<strong>Comply with</strong> a rule, law, or regulation means to act according to it."
+  },
+  {
+    cat: "wish",
+    text: "I really wish you ______ your muddy boots in the kitchen. I just spent an hour mopping the floor!",
+    options: ["wouldn't have worn", "wouldn't wear", "didn't wear", "hadn't worn"],
+    correct: 3,
+    explain: "The boots are already off and the floor already mopped — the regret is about a completed past action, so it needs <strong>wish + past perfect</strong>: <em>hadn't worn</em>."
+  },
+  {
+    cat: "wish",
+    text: "The view from the top of the mountain is breathtaking. I wish you _____ here with us to see it.",
+    options: ["were", "would be", "can be", "have been"],
+    correct: 0,
+    explain: "<strong>Wish + past simple</strong> expresses a wish about a present, unreal situation: right now you aren't here, but I wish you <em>were</em>."
+  },
+  {
+    cat: "wish",
+    text: "If only I ______ more attention to the warnings about the storm, I wouldn't be stranded at the airport now.",
+    options: ["paid", "have paid", "had paid", "would have paid"],
+    correct: 2,
+    explain: "<strong>If only + past perfect</strong> expresses regret about an unreal past action that explains an unwelcome present result — a mixed conditional pattern, just like \"if I had paid... I wouldn't be stranded now.\""
+  },
+  {
+    cat: "wish",
+    text: "He looks exhausted. He wishes he _______ so late every night this week.",
+    options: ["didn't stay up", "wouldn't stay up", "hadn't stayed up", "hasn't stayed up"],
+    correct: 2,
+    explain: "The late nights already happened, so the regret targets a completed pattern: <strong>wish + had + past participle</strong> → <em>hadn't stayed up</em>. (\"Wish + would\" criticizes someone <em>else's</em> ongoing habit, not the wisher's own past actions.)"
+  },
+  {
+    cat: "modal",
+    text: "You _________ the package by courier — standard mail would have been perfectly adequate for such a low-value item.",
+    options: ["mustn't have sent", "didn't need to send", "needn't have sent", "couldn't have sent"],
+    correct: 2,
+    explain: "<strong>Needn't have + past participle</strong> describes an action that was carried out but, in hindsight, wasn't necessary — the courier was sent, but it didn't need to be."
+  },
+  {
+    cat: "modal",
+    text: "There is no response from the summer house. They ______ to the beach yet — it's still early.",
+    options: ["might not have gone", "must not go", "wouldn't have gone", "shouldn't have gone"],
+    correct: 0,
+    explain: "<strong>Might not have + past participle</strong> expresses uncertainty about whether something happened in the past — the speaker isn't sure if they've left yet."
+  },
+  {
+    cat: "modal",
+    text: "After years of practice, she ________ play the most complex piano sonatas with incredible emotion.",
+    options: ["can", "could", "is able to", "might"],
+    correct: 0,
+    explain: "The sentence describes a settled, general skill in the present, so <strong>can</strong> is the most natural choice. (\"Is able to\" is also grammatically correct here, but less idiomatic; \"could\" wrongly suggests the past, and \"might\" confuses ability with possibility.)"
+  }
+];
+
+const state = {
+  screen: 'start',
+  index: 0,
+  selected: null,
+  checked: false,
+  answers: new Array(QUESTIONS.length).fill(null), // {selected, correct}
+  reviewing: false
+};
+
+function letterFor(i){ return ['A','B','C','D'][i]; }
+
+function renderLegend(){
+  return Object.values(CATEGORIES).map(c =>
+    `<div class="legend-item"><span class="dot" style="background:${c.color}"></span>${c.name}</div>`
+  ).join('');
+}
+
+function renderStart(){
+  return `
+    <div class="eyebrow">C1 · Use of English</div>
+    <h1>Turning <em>Points</em></h1>
+    <p class="lede">Fifteen sentences, fifteen forks in the road. Each one hinges on a single grammatical decision — the wrong choice, and the meaning takes a different path entirely.</p>
+    <div class="legend">${renderLegend()}</div>
+    <button class="btn-primary" onclick="startQuiz()">Begin the challenge →</button>
+  `;
+}
+
+function renderPath(){
+  let html = '<div class="path">';
+  QUESTIONS.forEach((q, i) => {
+    const ans = state.answers[i];
+    let cls = 'node';
+    if (i === state.index && !ans) cls += ' current';
+    if (ans) cls += ans.correct ? ' correct' : ' incorrect';
+    html += `<div class="${cls}" title="Question ${i+1}"></div>`;
+    if (i < QUESTIONS.length - 1){
+      html += `<div class="node-link${ans ? ' done' : ''}"></div>`;
+    }
+  });
+  html += '</div>';
+  return html;
+}
+
+function renderQuestion(){
+  const q = QUESTIONS[state.index];
+  const cat = CATEGORIES[q.cat];
+  const ans = state.answers[state.index];
+  const checked = !!ans;
+
+  const optionsHtml = q.options.map((opt, i) => {
+    let cls = 'option';
+    let disabled = checked ? 'disabled' : '';
+    if (checked){
+      if (i === q.correct) cls += ' correct';
+      else if (i === ans.selected) cls += ' incorrect';
+    } else if (i === state.selected){
+      cls += ' selected';
+    }
+    return `<button class="${cls}" ${disabled} onclick="selectOption(${i})">
+      <span class="opt-letter">${letterFor(i)}</span>${opt}
+    </button>`;
+  }).join('');
+
+  const isLast = state.index === QUESTIONS.length - 1;
+  const actionLabel = checked ? (isLast ? 'See results →' : 'Next question →') : 'Check answer';
+  const actionHandler = checked ? 'goNext()' : 'checkAnswer()';
+  const actionDisabled = (!checked && state.selected === null) ? 'disabled' : '';
+
+  let feedbackHtml = '';
+  if (checked){
+    feedbackHtml = `
+      <div class="feedback show ${ans.correct ? 'correct' : 'incorrect'}">
+        <span class="feedback-label">${ans.correct ? 'Correct' : 'Not quite'}</span>
+        ${q.explain}
+      </div>`;
+  }
+
+  return `
+    ${renderPath()}
+    <div class="topline">
+      <span class="qcount">Question ${state.index + 1} / ${QUESTIONS.length}</span>
+    </div>
+    <div class="cat-badge"><span class="dot" style="background:${cat.color}"></span>${cat.name}</div>
+    <div class="card">
+      <p class="qtext">${q.text}</p>
+      <div class="options">${optionsHtml}</div>
+      ${feedbackHtml}
+      <div class="actions">
+        <button class="btn-primary" ${actionDisabled} onclick="${actionHandler}">${actionLabel}</button>
+      </div>
+    </div>
+  `;
+}
+
+function scoreByCategory(){
+  const out = {};
+  Object.keys(CATEGORIES).forEach(k => out[k] = {correct:0, total:0});
+  QUESTIONS.forEach((q, i) => {
+    out[q.cat].total++;
+    if (state.answers[i] && state.answers[i].correct) out[q.cat].correct++;
+  });
+  return out;
+}
+
+function bandMessage(score, total){
+  const pct = score/total;
+  if (pct >= 0.87) return "Excellent — this range of structures is exam-ready. The mixed conditionals and wish forms are clearly under control.";
+  if (pct >= 0.6) return "Solid grasp overall, with a few specific gaps worth revisiting before exam day. Check which category pulled the score down.";
+  return "These structures need more focused review — especially the difference between past-affecting-present patterns and straightforward past or present forms.";
+}
+
+function renderResults(){
+  const total = QUESTIONS.length;
+  const score = state.answers.filter(a => a && a.correct).length;
+  const byCat = scoreByCategory();
+
+  const rows = Object.entries(byCat).map(([key, v]) => {
+    const cat = CATEGORIES[key];
+    const pct = Math.round((v.correct / v.total) * 100);
+    return `
+      <div class="cat-row">
+        <div class="cat-row-top">
+          <span class="cat-name"><span class="dot" style="background:${cat.color}"></span>${cat.name}</span>
+          <span class="cat-score">${v.correct}/${v.total}</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width:${pct}%; background:${cat.color}"></div></div>
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="score-hero">
+      <div class="eyebrow">Results</div>
+      <div class="score-num">${score}<span style="font-size:28px;color:var(--text-muted)"> / ${total}</span></div>
+      <p class="band">${bandMessage(score, total)}</p>
+    </div>
+    <div class="cat-breakdown">${rows}</div>
+    <div class="result-actions">
+      <button class="btn-primary" onclick="showReview()">Review every answer</button>
+      <button class="btn-ghost" onclick="restartQuiz()">Retry quiz</button>
+    </div>
+  `;
+}
+
+function renderReview(){
+  const items = QUESTIONS.map((q, i) => {
+    const ans = state.answers[i];
+    const cat = CATEGORIES[q.cat];
+    return `
+      <div class="review-item">
+        <div class="cat-badge"><span class="dot" style="background:${cat.color}"></span>${cat.name} · Q${i+1}</div>
+        <p class="review-q">${q.text}</p>
+        <div class="review-answer-row"><span class="lbl">Your answer:</span><span class="val ${ans.correct ? 'correct' : 'incorrect'}">${q.options[ans.selected]}</span></div>
+        ${!ans.correct ? `<div class="review-answer-row"><span class="lbl">Correct answer:</span><span class="val correct">${q.options[q.correct]}</span></div>` : ''}
+        <div class="review-explain">${q.explain}</div>
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="eyebrow">Full review</div>
+    <h1 style="font-size:32px;">Every fork, retraced</h1>
+    <div style="margin: 24px 0;">${items}</div>
+    <div class="result-actions">
+      <button class="btn-ghost" onclick="restartQuiz()">Retry quiz</button>
+    </div>
+  `;
+}
+
+function render(){
+  const app = document.getElementById('app');
+  if (state.screen === 'start') app.innerHTML = renderStart();
+  else if (state.screen === 'question') app.innerHTML = renderQuestion();
+  else if (state.screen === 'results') app.innerHTML = renderResults();
+  else if (state.screen === 'review') app.innerHTML = renderReview();
+  window.scrollTo({top:0, behavior:'instant'});
+}
+
+function startQuiz(){
+  state.screen = 'question';
+  state.index = 0;
+  render();
+}
+
+function selectOption(i){
+  if (state.answers[state.index]) return;
+  state.selected = i;
+  render();
+}
+
+function checkAnswer(){
+  if (state.selected === null) return;
+  const q = QUESTIONS[state.index];
+  state.answers[state.index] = { selected: state.selected, correct: state.selected === q.correct };
+  render();
+}
+
+function goNext(){
+  if (state.index < QUESTIONS.length - 1){
+    state.index++;
+    state.selected = null;
+    state.screen = 'question';
+  } else {
+    state.screen = 'results';
+  }
+  render();
+}
+
+function showReview(){
+  state.screen = 'review';
+  render();
+}
+
+function restartQuiz(){
+  state.index = 0;
+  state.selected = null;
+  state.answers = new Array(QUESTIONS.length).fill(null);
+  state.screen = 'start';
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
