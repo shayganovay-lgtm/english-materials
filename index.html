@@ -1,109 +1,66 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>English LMS</title>
+  <title>Quiz</title>
 
   <style>
-     .back-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 14px;
-    background: transparent;
-    color: #2d6cdf;
-    border: 2px solid #2d6cdf;
-    border-radius: 8px;
-    text-decoration: none;
-    font-size: 14px;
-    font-family: Arial, sans-serif;
-    margin-bottom: 20px;
-    transition: background 0.2s, color 0.2s;
-  }
-  .back-btn:hover {
-    background: #2d6cdf;
-    color: white;
-  }
     body {
       font-family: Arial, sans-serif;
       max-width: 800px;
-      margin: 50px auto;
+      margin: 40px auto;
       padding: 20px;
       background: #f7f7fb;
     }
 
-    h1 {
-      text-align: center;
-      margin-bottom: 10px;
-    }
-
-    .card {
+    .container {
       background: white;
       padding: 20px;
-      margin-top: 20px;
       border-radius: 12px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.08);
     }
 
-    a {
-      display: inline-block;
+    h1 {
+      text-align: center;
+    }
+
+    .question {
+      margin: 20px 0;
+    }
+
+    button {
       margin-top: 10px;
-      padding: 10px 15px;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 6px;
       background: #2d6cdf;
       color: white;
-      text-decoration: none;
-      border-radius: 8px;
-    }
-
-    a:hover {
-      background: #1f4fb3;
-    }
-
-    .tag {
-      font-size: 12px;
-      color: gray;
+      cursor: pointer;
     }
   </style>
 </head>
 
 <body>
-  <a href="index.html" class="back-btn">
-  ← Back to Quizzes
-</a>
 
-<h1>📚 English Learning Platform</h1>
-<p style="text-align:center;">Choose your quiz below</p>
+<div class="container">
 
-<div class="card">
-  <div class="tag">CAE • Collocations</div>
-  <h2>Anchor Words Quiz</h2>
-  <p>Practice CAE collocations and word combinations.</p>
-  <a href="anchor-words-cae-collocations-quiz.html">Start Quiz</a>
-</div>
+  <h1>Quiz Title</h1>
 
-<div class="card">
-  <div class="tag">C1 • Grammar</div>
-  <h2>Turning Points Quiz</h2>
-  <p>Practice advanced C1 grammar structures.</p>
-  <a href="turning_points_c1_grammar_quiz.html">Start Quiz</a>
+  <div class="question">
+    <p>1. Your question here?</p>
+    <button onclick="alert('Answer explanation')">Show Answer</button>
+  </div>
+
+  <div class="question">
+    <p>2. Your question here?</p>
+    <button onclick="alert('Answer explanation')">Show Answer</button>
+  </div>
+
+  <div class="question">
+    <p>3. Your question here?</p>
+    <button onclick="alert('Answer explanation')">Show Answer</button>
+  </div>
+
 </div>
 
 </body>
-  <a href="index.html" class="back-btn">
-  ← Back to Quizzes
-</a>
-  <div class="card">
-  <div class="tag">Vocabulary • Pub / Restaurant</div>
-  <h2>Last Orders Vocabulary Quiz</h2>
-  <p>Practice vocabulary used in restaurants and pubs.</p>
-  <a href="last_orders_pub_vocabulary_quiz.html">Start Quiz</a>
-   </body>
-  <a href="index.html" class="back-btn">
-  ← Back to Quizzes 
-<div class="card">
-  <div class="tag">Inversion • B2</div>
-  <h2>Flipping the Script Quiz</h2>
-  <p>Practice inversion patterns in English.</p>
-  <a href="flipping_the_script_inversion_quiz.html">Start Quiz</a>
-</div>
 </html>
- 
