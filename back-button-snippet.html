@@ -1,0 +1,31 @@
+<!-- ============================================================
+     BACK BUTTON — paste this near the top of <body> in each quiz
+     ============================================================ -->
+
+<!-- In your <style> block, add this CSS: -->
+<style>
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: transparent;
+    color: #2d6cdf;
+    border: 2px solid #2d6cdf;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+    margin-bottom: 20px;
+    transition: background 0.2s, color 0.2s;
+  }
+  .back-btn:hover {
+    background: #2d6cdf;
+    color: white;
+  }
+</style>
+
+<!-- In your <body>, add this as the very first element: -->
+<a href="index.html" class="back-btn">
+  ← Back to Quizzes
+</a>
