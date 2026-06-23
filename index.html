@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Quiz</title>
 
   <style>
@@ -14,27 +15,61 @@
 
     .container {
       background: white;
-      padding: 20px;
+      padding: 25px;
       border-radius: 12px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.08);
     }
 
     h1 {
       text-align: center;
+      margin-bottom: 20px;
     }
 
     .question {
       margin: 20px 0;
+      padding: 15px;
+      border-radius: 10px;
+      background: #f9f9ff;
+      border: 1px solid #e6e6f2;
+    }
+
+    .question p {
+      margin-bottom: 10px;
+      font-size: 16px;
     }
 
     button {
-      margin-top: 10px;
       padding: 8px 12px;
       border: none;
       border-radius: 6px;
       background: #2d6cdf;
       color: white;
       cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #1f56b8;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .answer {
+      display: none;
+      margin-top: 10px;
+      padding: 10px;
+      border-left: 4px solid #2d6cdf;
+      background: #eef3ff;
+      border-radius: 6px;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        margin: 10px;
+        padding: 10px;
+      }
     }
   </style>
 </head>
@@ -47,20 +82,37 @@
 
   <div class="question">
     <p>1. Your question here?</p>
-    <button onclick="alert('Answer explanation')">Show Answer</button>
+    <button onclick="toggleAnswer(this)">Show Answer</button>
+    <div class="answer">Answer explanation for question 1.</div>
   </div>
 
   <div class="question">
     <p>2. Your question here?</p>
-    <button onclick="alert('Answer explanation')">Show Answer</button>
+    <button onclick="toggleAnswer(this)">Show Answer</button>
+    <div class="answer">Answer explanation for question 2.</div>
   </div>
 
   <div class="question">
     <p>3. Your question here?</p>
-    <button onclick="alert('Answer explanation')">Show Answer</button>
+    <button onclick="toggleAnswer(this)">Show Answer</button>
+    <div class="answer">Answer explanation for question 3.</div>
   </div>
 
 </div>
+
+<script>
+  function toggleAnswer(button) {
+    const answer = button.nextElementSibling;
+
+    if (answer.style.display === "block") {
+      answer.style.display = "none";
+      button.textContent = "Show Answer";
+    } else {
+      answer.style.display = "block";
+      button.textContent = "Hide Answer";
+    }
+  }
+</script>
 
 </body>
 </html>
