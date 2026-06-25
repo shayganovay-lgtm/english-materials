@@ -2,14 +2,469 @@
 <html>
 <head>
   <title>English LMS</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f5f7fb;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .quiz {
+      display: none;
+    }
+
+    .card {
+      padding: 15px;
+      background: white;
+      margin: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+  </style>
+
 </head>
+
 <body>
 
-<h1>📚 English Quizzes</h1>
+  <h1>📚 English Quizzes</h1>
 
-<p>Welcome! Choose a quiz:</p>
+  <p>Welcome! Choose a quiz:</p>
 
-<a href="quiz1.html">Open Quiz 1</a>
+  <a href="quiz1.html">Open Quiz 1</a>
 
-</body>
+  <section id="anchor-words-quiz">
+    <!-- quiz1 content -->
+  </section>
+
+  <div class="wrap">
+
+  <header>
+    <div class="mark">
+      <svg viewBox="0 0 84 46" fill="none">
+        <line x1="4" y1="8"  x2="46" y2="23" stroke-width="1.6"/>
+        <line x1="4" y1="23" x2="46" y2="23" stroke-width="1.6"/>
+        <line x1="4" y1="38" x2="46" y2="23" stroke-width="1.6"/>
+        <circle class="node-many" cx="4" cy="8" r="3"/>
+        <circle class="node-many" cx="4" cy="23" r="3"/>
+        <circle class="node-many" cx="4" cy="38" r="3"/>
+        <line x1="46" y1="23" x2="80" y2="23" stroke-width="1.6"/>
+        <circle class="node-one" cx="80" cy="23" r="4.5"/>
+      </svg>
+    </div>
+    <h1>Anchor Words</h1>
+    <div class="subtitle">A CAE collocation drill &middot; <b>24 items</b> &middot; Adjective+Noun &amp; Verb+Noun</div>
+  </header>
+
+  <!-- START SCREEN -->
+  <div id="start-screen">
+    <div class="card">
+      <p>Each set below gives you <strong>three expressions that share one missing word</strong> — the word that &ldquo;anchors&rdquo; all three. Your job is to pick it from four close synonyms.</p>
+      <p>This is the kind of precision CAE Reading &amp; Use of English rewards: most options will sound <em>almost</em> right. Only one collocates naturally in <strong>all three</strong> contexts at once.</p>
+      <div class="stat-row">
+        <span class="stat-chip">12 Adjective + Noun</span>
+        <span class="stat-chip">12 Verb + Noun</span>
+        <span class="stat-chip">Instant feedback</span>
+        <span class="stat-chip">Full review at the end</span>
+      </div>
+      <button class="btn-primary" onclick="beginQuiz()">Begin the quiz</button>
+    </div>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div id="quiz-screen">
+    <div class="progress-row">
+      <span id="progress-label">Item 1 of 24</span>
+      <span class="score">Score: <span id="live-score">0</span></span>
+    </div>
+    <div class="progress-bar-track"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div>
+
+    <div class="card q-card" id="q-card">
+      <div class="eyebrow">
+        <span class="tag" id="q-tag">Adjective + Noun</span>
+        <span class="num" id="q-num">No. 1</span>
+      </div>
+      <ul class="clues" id="q-clues"></ul>
+      <div class="prompt-line">Which word completes all three naturally?</div>
+      <div class="options" id="q-options"></div>
+      <div class="feedback" id="q-feedback">
+        <span class="verdict" id="fb-verdict"></spa
+                                                 <span id="fb-text"></span>
+      </div>
+      <div class="next-row">
+        <button class="btn-next" id="next-btn" onclick="nextQuestion()">Next item &rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS SCREEN -->
+  <div id="results-screen">
+    <div class="card">
+      <div class="score-hero">
+        <div class="big" id="final-score">0<span>/24</span></div>
+        <div class="tier" id="final-tier"></div>
+      </div>
+      <div class="breakdown">
+        <div class="bd-item adj">
+          <div class="label">Adjective + Noun</div>
+          <div class="val" id="bd-adj">0/12</div>
+        </div>
+        <div class="bd-item verb">
+          <div class="label">Verb + Noun</div>
+          <div class="val" id="bd-verb">0/12</div>
+        </div>
+      </div>
+
+      <hr class="div">
+      <div class="review-title">Review</div>
+      <div class="review-sub" id="review-sub">Items worth a second look:</div>
+      <div id="review-list"></div>
+
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="restartQuiz()">Restart quiz</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>Based on a collocation review covering adjective + noun and verb + noun sets.</footer>
+</div>
+
+<script>
+const QUESTIONS = [
+  // ---------------- ADJECTIVE + NOUN ----------------
+  {
+    cat:'adj', num:1,
+    clues:['a slight ___','a fair ___','a second ___'],
+    options:['opportunity','chance','possibility','likelihood'],
+    correct:1,
+    explanation:"Chance is the noun that takes all three modifiers. \u2018A fair possibility\u2019 and \u2018a slight opportunity\u2019 aren\u2019t natural English, and \u2018a second likelihood\u2019 makes no sense \u2014 likelihood isn\u2019t something you get more of."
+  },
+  {
+    cat:'adj', num:2,
+    clues:['significant ___','far-reaching ___','sweeping ___'],
+    options:['amendments','adjustments','changes','revisions'],
+    correct:2,
+    explanation:"Changes works with all three intensifiers. Adjustments and revisions both suggest small, careful edits, so they clash with far-reaching and sweeping; amendments is mostly restricted to formal documents and laws."
+  },
+  {
+    cat:'adj', num:3,
+    clues:['common ___','ambitious ___','short-term ___'],
+    options:['goal','target','objective','aim'],
+    correct:0,
+    explanation:"Goal is the most natural collocate here. Target and objective both work in business contexts, but \u2018a common target\u2019 usually means something different \u2014 a shared object of criticism, not a shared purpose."
+  },
+  {
+    cat:'adj', num:4,
+    clues:['relevant ___','practical ___','useful ___'],
+    options:['background','experience','qualifications','expertise'],
+    correct:1,
+    explanation:"Experience collocates naturally with all three. Background and qualifications can be relevant, but rarely practical or useful; expertise is usually assumed to be useful already, so \u2018useful expertise\u2019 sounds redundant."
+  },
+  {
+    cat:'adj', num:5,
+    clues:['a close ___','a rocky ___','a stable ___'],
+    options:['bond','relationship','partnership','friendship'],
+    correct:1,
+    explanation:"Relationship is the broadest, most natural fit. Rocky describes ups and downs, and while it can stretch to friendship or partnership, \u2018a rocky relationship\u2019 is by far the most standard combination."
+  },
+  {
+    cat:'adj', num:6,
+    clues:['scientific ___','popular ___','(un)proven ___'],
+    options:['concept','idea','theory','hypothesis'],
+    correct:2,
+    explanation:"Theory fits all three. Hypothesis can be unproven or scientific, but not popular. Concept isn\u2019t something that gets \u2018proven\u2019, and a popular/unproven idea sounds far less natural than a popular/unproven theory."
+  },
+  {
+     cat:'adj', num:7,
+    clues:['a dislocated ___','a sprained ___','a bruised ___'],
+    options:['nose','back','ankle / wrist','neck'],
+    correct:2,
+    explanation:"Ankle and wrist are the joints classically paired with this trio of injuries \u2014 easily twisted (sprained), knocked (bruised), or popped out of place (dislocated). \u2018Sprained nose\u2019 and \u2018dislocated nose\u2019 aren\u2019t real expressions, and necks/backs usually take different verbs (a stiff neck, a strained back)."
+  },
+  {
+    cat:'adj', num:8,
+    clues:['modern ___','materialistic ___','consumer ___'],
+    options:['population','society','community','culture'],
+    correct:1,
+    explanation:"Society combines naturally with all three. \u2018Consumer culture\u2019 is common, but \u2018materialistic culture\u2019 sounds less natural than \u2018materialistic society\u2019, and \u2018modern culture\u2019 doesn\u2019t mean \u2018contemporary society\u2019 the way \u2018modern society\u2019 does."
+  },
+  {
+    cat:'adj', num:9,
+    clues:['seasonal ___','sustainable ___','mass ___'],
+    options:['tourists','tourism','travel','visitors'],
+    correct:1,
+    explanation:"Tourism names the industry, which is what these adjectives describe. Tourists and visitors are people, so \u2018mass visitors\u2019 doesn\u2019t work, and travel sounds odd with seasonal or mass \u2014 we say seasonal/mass tourism, not seasonal/mass travel."
+  },
+  {
+    cat:'adj', num:10,
+    clues:['downtown ___','rural ___','safe ___'],
+    options:['zone','district','area','neighbourhood'],
+    correct:2,
+    explanation:"Area is the most general, natural fit. Neighbourhood usually implies an urban or suburban setting, so it clashes with rural, and zone sounds technical (danger zone, time zone) rather than the everyday \u2018safe area\u2019."
+  },
+  {
+    cat:'adj', num:11,
+    clues:['a rare ___','a familiar ___','a welcome ___'],
+    options:['vision','scene','sight','view'],
+    correct:2,
+    explanation:"Sight, meaning \u2018something seen\u2019, is the word tested here. \u2018A rare view\u2019 sounds odd (we\u2019d say a rare sight), and vision refers to eyesight or an imagined picture, not something visible in front of you."
+  },
+  {
+    cat:'adj', num:12,
+    clues:['a controversial ___','an environmental ___','an important ___'],
+    options:['matter','subject','issue','topic'],
+    correct:2,
+    explanation:"Issue is the standard, most frequent collocate across all three. Matter, subject and topic are near-synonyms, but issue specifically names a point of debate or concern \u2014 which fits controversial and environmental best."
+  },
+
+  // ---------------- VERB + NOUN ----------------
+  {
+    cat:'verb', num:1,
+    clues:['face a ___','take up a ___','rise to the ___'],
+    options:['test','difficulty','challenge','task'],
+    correct:2,
+    explanation:"Challenge is fixed in all three, especially \u2018rise to the challenge\u2019 \u2014 a set idiom. You can\u2019t \u2018rise to the test\u2019 or \u2018rise to the difficulty\u2019 in standard English."
+  },
+  {
+    cat:'verb', num:2,
+    clues:['___ an impression','___ a comeback','___ use of'],
+    options:['do','make','have','create'],
+    correct:1,
+    explanation:"Make is required in all three fixed expressions. \u2018Create an impression\u2019 is occasionally heard, but \u2018create a comeback\u2019 and \u2018create use of\u2019 aren\u2019t standard English at all."
+  },
+  {
+    cat:'verb', num:3,
+    clues:['compile ___','gather ___','uncover ___'],
+    options:['evidence','data','information','facts'],
+    correct:2,
+    explanation:"Information is the most general, natural noun for all three verbs. Gather data/evidence both work well, but \u2018compile evidence\u2019 is less natural than \u2018compile information\u2019, and \u2018uncover facts\u2019 fits better than \u2018compile facts\u2019."
+  },
+  {
+    cat:'verb', num:4,
+    clues:['see the ___','there comes a ___','there\u2019s no ___'],
+    options:['reason','purpose','sense','point'],
+    correct:3,
+    explanation:"Point is fixed in all three, especially the idiom \u2018there\u2019s no point (in doing something)\u2019. Reason fits \u2018there\u2019s no reason\u2019 but not \u2018there comes a reason\u2019, and purpose doesn\u2019t combine with \u2018see the\u2019 or \u2018there comes a\u2019 at all."
+  },
+  {
+    cat:'verb', num:5,
+    clues:['___ someone down','___ on someone\u2019s nerves','___ in touch with someone'],
+    options:['keep','put','stay','get'],
+    correct:3,
+    explanation:"Get is the verb in all three common expressions. \u2018Keep in touch with someone\u2019 is correct, but \u2018keep someone down\u2019 and \u2018keep on someone\u2019s nerves\u2019 aren\u2019t the idioms tested here, and \u2018put someone down\u2019 means something different (to insult)."
+  },
+  {
+    cat:'verb', num:6,
+    clues:['administer a ___','sit a ___','perform a ___'],
+    options:['assessment','exam','test','check'],
+    correct:2,
+    explanation:"Test fits naturally with all three verbs, including the more formal \u2018administer a test\u2019 and \u2018perform a test\u2019 (used for medical/lab tests). \u2018Sit an exam\u2019 is very common, but \u2018administer an exam\u2019 and \u2018perform an exam\u2019 sound far less natural."
+  },
+  {
+    cat:'verb', num:7,
+    clues:['take a ___','put someone/something at ___','pose a ___'],
+    options:['danger','threat','hazard','risk'],
+    correct:3,
+    explanation:"Risk is fixed in all three, especially \u2018pose a risk\u2019 and \u2018put something at risk\u2019, which are set phrases. We take a risk but face a danger, and \u2018pose a threat\u2019 is correct while \u2018put something at threat\u2019 is not."
+  },
+  {
+    cat:'verb', num:8,
+    clues:['reach a ___','uphold a ___','overrule a ___'],
+    options:['ruling','verdict / decision','judgment','conviction'],
+    correct:1,
+    explanation:"Verdict and decision both work across all three legal verbs. \u2018Reach a ruling\u2019 sounds slightly unusual (rulings are usually \u2018made\u2019 or \u2018issued\u2019), and \u2018uphold a judgment\u2019 is far less common than \u2018uphold a verdict/decision\u2019."
+  },
+  {
+    cat:'verb', num:9,
+    clues:['___ your temper','___ focus','___ a job'],
+    options:['miss','drop','keep','lose'],
+    correct:3,
+    explanation:"Lose is the fixed verb across all three. \u2018Keep your temper\u2019 and \u2018keep focus\u2019 work, but \u2018keep a job\u2019 reverses the meaning, so it can\u2019t be the shared word; miss and drop don\u2019t combine with temper at all."
+  },
+  {
+    cat:'verb', num:10,
+    clues:['get on like a ___ on fire','be on the ___','brought down the ___'],
+    options:['building','place','house','fire'],
+    correct:2,
+    explanation:"Three fixed idioms, all needing house: \u2018get on like a house on fire\u2019 (become friends instantly), \u2018be on the house\u2019 (free, paid by the venue), and \u2018bring the house down\u2019 (earn huge applause). Idioms like these don\u2019t allow substitutes."
+  },
+  {
+    cat:'verb', num:11,
+    clues:['___ sight of','___ a glimpse of','___ my eye'],
+    options:['notice','spot','see','catch'],
+    correct:3,
+    explanation:"Catch is fixed in \u2018catch sight of\u2019, \u2018catch a glimpse of\u2019 and \u2018catch someone\u2019s eye\u2019. See, spot and notice are close in meaning, but English idiom specifically requires catch in these set phrases."
+  },
+  {
+    cat:'verb', num:12,
+    clues:['___ off calories','___ towards peace','___ on one\u2019s presentation skills'],
+    options:['practise','train','exercise','work'],
+    correct:3,
+    explanation:"Work covers all three: \u2018work off calories\u2019 (burn them through activity), \u2018work towards peace\u2019 (strive for a goal) and \u2018work on a skill\u2019 (improve it). We burn or work off calories rather than exercise them, and \u2018train towards peace\u2019 isn\u2019t idiomatic."
+  }
+];
+
+const TOTAL = QUESTIONS.length;
+let current = 0;
+let score = 0;
+let answered = false;
+const userAnswers = new Array(TOTAL).fill(null);
+
+function beginQuiz(){
+  document.getElementById('start-screen').classList.add('hidden');
+  document.getElementById('quiz-screen').classList.add('active');
+  renderQuestion();
+}
+
+function letterFor(i){ return String.fromCharCode(65+i); }
+
+function renderQuestion(){
+  const q = QUESTIONS[current];
+  answered = false;
+ document.getElementById('progress-label').textContent = 'Item ' + (current+1) + ' of ' + TOTAL;
+  document.getElementById('progress-fill').style.width = (current/TOTAL*100) + '%';
+  document.getElementById('live-score').textContent = score;
+
+  const card = document.getElementById('q-card');
+  card.classList.remove('verb-cat');
+  if(q.cat === 'verb') card.classList.add('verb-cat');
+  // restart entrance animation
+  card.style.animation = 'none';
+  void card.offsetWidth;
+  card.style.animation = '';
+
+  const tag = document.getElementById('q-tag');
+  tag.textContent = q.cat === 'adj' ? 'Adjective + Noun' : 'Verb + Noun';
+  tag.className = 'tag ' + (q.cat === 'adj' ? 'adj' : 'verb');
+  document.getElementById('q-num').textContent = 'No. ' + q.num;
+
+  const cluesEl = document.getElementById('q-clues');
+  cluesEl.innerHTML = q.clues.map(c => '<li>' + c.replace('___', '<span class="blank"></span>') + '</li>').join('');
+
+  const optsEl = document.getElementById('q-options');
+  optsEl.innerHTML = q.options.map((opt, i) =>
+    '<button class="opt" id="opt-' + i + '" onclick="selectOption(' + i + ')">' +
+      '<span class="letter">' + letterFor(i) + '</span><span>' + opt + '</span>' +
+    '</button>'
+  ).join('');
+
+  const fb = document.getElementById('q-feedback');
+  fb.classList.remove('show','is-correct','is-wrong');
+
+  const nextBtn = document.getElementById('next-btn');
+  nextBtn.classList.remove('enabled');
+  nextBtn.textContent = (current === TOTAL-1) ? 'See results \u2192' : 'Next item \u2192';
+}
+
+function selectOption(i){
+  if(answered) return;
+  answered = true;
+  const q = QUESTIONS[current];
+  userAnswers[current] = i;
+  const isCorrect = (i === q.correct);
+  if(isCorrect) score++;
+
+  for(let j=0; j<q.options.length; j++){
+    const btn = document.getElementById('opt-' + j);
+    btn.classList.add('disabled');
+    if(j === q.correct){
+      btn.classList.add('correct-answer');
+    } else if(j === i){
+      btn.classList.add('wrong-answer');
+    } else {
+      btn.classList.add('muted');
+    }
+  }
+
+  // fill in the blanks visually with the correct word
+  const word = q.options[q.correct].split(' / ')[0];
+  document.querySelectorAll('#q-clues .blank').forEach(b => {
+    b.textContent = word;
+    b.classList.add('filled');
+  });
+
+  const fb = document.getElementById('q-feedback');
+  fb.classList.add('show', isCorrect ? 'is-correct' : 'is-wrong');
+  document.getElementById('fb-verdict').textContent = isCorrect ? 'Correct' : 'Not quite';
+  document.getElementById('fb-text').textContent = q.explanation;
+
+  document.getElementById('live-score').textContent = score;
+  document.getElementById('next-btn').classList.add('enabled');
+}
+
+function nextQuestion(){
+  if(!answered) return;
+  if(current < TOTAL-1){
+    current++;
+    renderQuestion();
+  } else {
+    showResults();
+  }
+}
+
+function showResults(){
+  document.getElementById('progress-fill').style.width = '100%';
+  document.getElementById('quiz-screen').classList.remove('active');
+  document.getElementById('results-screen').classList.add('active');
+
+  let adjCorrect = 0, verbCorrect = 0;
+  QUESTIONS.forEach((q, idx) => {
+    if(userAnswers[idx] === q.correct){
+      if(q.cat === 'adj') adjCorrect++; else verbCorrect++;
+    }
+  });
+
+  document.getElementById('final-score').innerHTML = score + '<span>/' + TOTAL + '</span>';
+  document.getElementById('bd-adj').textContent = adjCorrect + '/12';
+  document.getElementById('bd-verb').textContent = verbCorrect + '/12';
+
+  let tier;
+  if(score >= 21) tier = 'Exam-ready precision \u2014 these fine distinctions are exactly what CAE rewards.';
+  else if(score >= 16) tier = 'Strong control, with a few collocations worth tightening up.';
+  else tier = 'A useful diagnostic \u2014 read the explanations below closely and revisit the misses.';
+  document.getElementById('final-tier').textContent = tier;
+
+  const missed = QUESTIONS.map((q, idx) => ({q, idx})).filter(o => userAnswers[o.idx] !== o.q.correct);
+  const reviewList = document.getElementById('review-list');
+  const reviewSub = document.getElementById('review-sub');
+
+  if(missed.length === 0){
+    reviewSub.style.display = 'none';
+    reviewList.innerHTML = '<div class="all-correct-note">All 24 collocations correct \u2014 nothing to review.</div>';
+  } else {
+    reviewSub.style.display = 'block';
+    reviewSub.textContent = missed.length + ' item' + (missed.length>1?'s':'') + ' worth a second look:';
+    reviewList.innerHTML = missed.map(o => {
+      const q = o.q;
+      const yourAns = q.options[userAnswers[o.idx]];
+      const rightAns = q.options[q.correct];
+      const clueText = q.clues.join('  \u00b7  ').replace(/___/g, '\u2014');
+      return '<div class="review-item">' +
+        '<div class="ritag">' + (q.cat==='adj'?'Adjective + Noun':'Verb + Noun') + ' \u00b7 No. ' + q.num + '</div>' +
+        '<div class="riclue">' + clueText + '</div>' +
+        '<div class="riline">Your answer: <span class="yours">' + yourAns + '</span></div>' +
+        '<div class="riline">Correct answer: <span class="right">' + rightAns + '</span></div>' +
+        '<div class="riexp">' + q.explanation + '</div>' +
+      '</div>';
+    }).join('');
+  }
+}
+
+function restartQuiz(){
+  current = 0;
+  score = 0;
+  userAnswers.fill(null);
+  document.getElementById('results-screen').classList.remove('active');
+  document.getElementById('quiz-screen').classList.add('active');
+  renderQuestion();
+}
+</script>
+                                                
 </html>
+  
