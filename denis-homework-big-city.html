@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Homework for Denis — Living in a Big City</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #ffffff;
+      color: #2d2d2d;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    /* ─── STICKY PROGRESS BAR ──────────────────── */
+    #sticky-bar {
+      position: sticky; top: 0; z-index: 200;
+      background: #fff;
+      border-bottom: 1px solid #e5e8f0;
+      padding: 10px 20px;
+      display: flex; align-items: center; gap: 14px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }
+    #prog-text { font-size: 12px; font-weight: 600; color: #666; white-space: nowrap; min-width: 148px; }
+    #prog-track { flex: 1; height: 7px; background: #e8ecf8; border-radius: 4px; overflow: hidden; }
+    #prog-fill { height: 100%; background: linear-gradient(90deg,#3B6BEB,#7c5af4); border-radius: 4px; width: 0%; transition: width .5s ease; }
+    #score-badge { font-size: 13px; font-weight: 700; color: #3B6BEB; white-space: nowrap; background: #EEF2FF; padding: 4px 12px; border-radius: 20px; }
+
+    /* ─── HEADER ────────────────────────────────── */
+    .page-header {
+      background: linear-gradient(140deg,#3B6BEB 0%,#2451c7 60%,#1a3a9a 100%);
+      padding: 44px 24px 40px; text-align: center; color: white;
+      position: relative; overflow: hidden;
+    }
+    .page-header::before {
+      content:''; position:absolute; width:300px; height:300px;
+      background:rgba(255,255,255,.06); border-radius:50%; top:-100px; right:-60px;
+    }
+    .page-header::after {
+      content:''; position:absolute; width:200px; height:200px;
+      background:rgba(255,255,255,.04); border-radius:50%; bottom:-80px; left:-40px;
+    }
+    .h-emoji { font-size:42px; margin-bottom:10px; }
+    .h-name  { font-size:30px; font-weight:800; letter-spacing:-.5px; }
+    .h-topic { font-size:16px; margin-top:8px; opacity:.9; }
+    .h-meta  { font-size:13px; margin-top:6px; opacity:.72; }
+
+    /* ─── LAYOUT ────────────────────────────────── */
+    .container { max-width:760px; margin:0 auto; padding:28px 16px 60px; }
+
+    /* ─── CARDS ─────────────────────────────────── */
+    .card {
+      background:#fff; border:1.5px solid #e5e8f0; border-radius:18px;
+      padding:28px; margin-bottom:24px;
+      box-shadow:0 3px 16px rgba(59,107,235,.05);
+      transition:box-shadow .2s;
+    }
+    .card:hover { box-shadow:0 6px 24px rgba(59,107,235,.1); }
+    .card.reflection { background:linear-gradient(135deg,#f8f0ff,#eef2ff); border-color:#c7d5f8; }
+
+    /* ─── CARD HEAD ─────────────────────────────── */
+    .card-head { display:flex; align-items:flex-start; gap:14px; margin-bottom:22px; }
+    .c-icon { width:46px; height:46px; border-radius:12px; background:#EEF2FF; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; }
+    .c-text { flex:1; }
+    .c-title { font-size:18px; font-weight:700; color:#111827; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+    .tnum { display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; background:#3B6BEB; color:#fff; font-size:12px; font-weight:700; flex-shrink:0; }
+    .c-sub { font-size:13px; color:#9ca3af; margin-top:3px; }
+    .done-badge { display:none; align-items:center; gap:4px; background:#dcfce7; color:#15803d; font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; border:1px solid #86efac; margin-left:auto; flex-shrink:0; white-space:nowrap; }
+    .done-badge.on { display:inline-flex; }
+
+    /* ─── INSTRUCTION ───────────────────────────── */
+    .instr { background:#f0f4ff; border-left:4px solid #3B6BEB; border-radius:0 10px 10px 0; padding:13px 16px; font-size:14px; color:#374151; margin-bottom:22px; line-height:1.65; }
+
+    /* ─── DIVIDER ───────────────────────────────── */
+    .hr { border:none; border-top:1px solid #e5e8f0; margin:4px 0 20px; }
+
+    /* ─── INPUTS ────────────────────────────────── */
+    input[type="text"], textarea {
+      border:2px solid #dde2f0; border-radius:10px; padding:10px 14px;
+      font-size:15px; font-family:inherit; outline:none;
+      width:100%; background:#fafbff; color:#111827;
+      transition:border-color .2s, background .2s, box-shadow .2s;
+    }
+    input[type="text"]:focus, textarea:focus {
+      border-color:#3B6BEB; background:#fff; box-shadow:0 0 0 3px rgba(59,107,235,.1);
+    }
+    input.ok  { border-color:#22c55e !important; background:#f0fdf4 !important; }
+    input.bad { border-color:#ef4444 !important; background:#fff5f5 !important; }
+    textarea  { resize:vertical; min-height:80px; }
+
+    /* ─── BUTTONS ───────────────────────────────── */
+    .btn {
+      display:inline-flex; align-items:center; justify-content:center; gap:6px;
+      padding:10px 22px; border-radius:10px; font-size:14px; font-weight:600;
+      cursor:pointer; border:none; transition:all .15s; user-select:none; font-family:inherit;
+    }
+    .btn:active { transform:scale(.97); }
+    .btn-p  { background:#3B6BEB; color:#fff; box-shadow:0 2px 10px rgba(59,107,235,.3); }
+    .btn-p:hover { background:#2d5cd4; }
+    .btn-p:disabled { background:#a0aec0; cursor:not-allowed; box-shadow:none; }
+    .btn-o  { background:#fff; color:#3B6BEB; border:2px solid #c7d5f8; }
+    .btn-o:hover { background:#EEF2FF; }
+    .btn-spin {
+      background:linear-gradient(135deg,#3B6BEB,#7c5af4); color:#fff;
+      padding:13px 32px; font-size:16px; border-radius:14px;
+      box-shadow:0 4px 18px rgba(59,107,235,.4);
+    }
+    .btn-spin:hover { box-shadow:0 6px 22px rgba(59,107,235,.5); }
+    .btn-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:18px; }
+
+    /* ─── FEEDBACK ──────────────────────────────── */
+    .fb { display:none; padding:9px 14px; border-radius:8px; font-size:13px; margin-top:8px; line-height:1.5; }
+    .fb.ok  { display:block; background:#f0fdf4; color:#166534; border:1px solid #bbf7d0; }
+    .fb.err { display:block; background:#fff5f5; color:#991b1b; border:1px solid #fecaca; }
+
+    /* ─── SHOW ANSWER ───────────────────────────── */
+    .show-btn { background:none; border:1.5px dashed #c4c9d9; color:#9ca3af; border-radius:7px; padding:5px 14px; font-size:12px; cursor:pointer; margin-top:8px; transition:all .2s; font-family:inherit; }
+    .show-btn:hover { border-color:#3B6BEB; color:#3B6BEB; }
+    .ans { display:none; background:#f0fdf4; border:1px solid #bbf7d0; color:#166534; border-radius:8px; padding:9px 14px; font-size:13px; margin-top:8px; line-height:1.5; }
+    .ans.on { display:block; }
+
+    /* ─── WHEEL ─────────────────────────────────── */
+    #wheel-wrap  { text-align:center; }
+    #wheel-cv    { display:block; margin:0 auto 16px; border-radius:50%; box-shadow:0 8px 30px rgba(59,107,235,.2); }
+    #wheel-word  { font-size:20px; font-weight:800; color:#3B6BEB; min-height:32px; margin-bottom:16px; }
+
+    /* ─── FILL-IN-BLANKS ────────────────────────── */
+    .fib-row { display:flex; align-items:center; flex-wrap:wrap; gap:6px; font-size:15px; margin-bottom:6px; }
+    .fib-g   { margin-bottom:14px; }
+    .fib-in  { width:96px !important; text-align:center; padding:7px 6px !important; font-size:14px !important; flex-shrink:0; }
+
+    /* ─── MATCH ─────────────────────────────────── */
+    .match-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    @media(max-width:500px){ .match-grid { grid-template-columns:1fr; } }
+    .m-col { display:flex; flex-direction:column; gap:8px; }
+    .m-w, .m-d { border-radius:9px; padding:10px 13px; cursor:pointer; font-size:14px; transition:all .15s; user-select:none; }
+    .m-w { background:#EEF2FF; border:2px solid #c7d5f8; color:#3B6BEB; font-weight:700; text-align:center; }
+    .m-d { background:#fafbff; border:2px solid #e5e8f0; color:#4b5563; line-height:1.4; }
+    .m-w.sel,.m-d.sel { border-color:#3B6BEB; background:#3B6BEB; color:#fff; }
+    .m-w.matched,.m-d.matched { background:#f0fdf4; border-color:#22c55e; color:#166534; cursor:default; }
+    .m-w.flash,.m-d.flash { background:#fff5f5; border-color:#ef4444; animation:shake .3s ease; }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+
+    /* ─── ERROR CORRECTION ──────────────────────── */
+    .err-item { margin-bottom:20px; }
+    .err-orig { font-style:italic; background:#fffbeb; border:1.5px solid #fde68a; border-radius:9px; padding:10px 14px; color:#78350f; font-size:14px; margin-bottom:8px; }
+    .err-lbl  { font-size:12px; color:#9ca3af; margin-bottom:6px; font-weight:500; }
+
+    /* ─── READING ───────────────────────────────── */
+    .read-box { background:#f8f9ff; border:1.5px solid #dde2f0; border-radius:14px; padding:24px; font-size:15px; line-height:1.85; margin-bottom:26px; }
+    .read-box h3 { color:#3B6BEB; font-size:17px; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+    .read-box p { margin-bottom:12px; }
+    .read-box p:last-child { margin-bottom:0; }
+    .hl { background:#e0e9ff; color:#2451c7; padding:1px 5px; border-radius:4px; font-weight:600; }
+    .q-item { margin-bottom:20px; }
+    .q-lbl  { font-weight:600; font-size:14px; color:#111827; margin-bottom:8px; }
+    .tf-row { display:flex; gap:10px; }
+    .tf-btn { flex:1; padding:10px; border-radius:9px; border:2px solid #dde2f0; background:#fafbff; color:#4b5563; font-weight:600; font-size:14px; cursor:pointer; transition:all .15s; font-family:inherit; }
+    .tf-btn:hover { border-color:#3B6BEB; background:#EEF2FF; color:#3B6BEB; }
+
+    /* ─── CHATBOT ───────────────────────────────── */
+    #chat-box { border:2px solid #e5e8f0; border-radius:14px; overflow:hidden; }
+    #chat-msgs { padding:18px; min-height:220px; max-height:420px; overflow-y:auto; display:flex; flex-direction:column; gap:12px; background:#f8f9ff; }
+    .bubble { max-width:84%; border-radius:16px; padding:11px 15px; font-size:14px; line-height:1.55; white-space:pre-wrap; }
+    .b-t { background:#EEF2FF; color:#1a1a2e; align-self:flex-start; border-bottom-left-radius:4px; }
+    .b-s { background:#3B6BEB; color:#fff;    align-self:flex-end;   border-bottom-right-radius:4px; }
+    .b-tip { background:#fffbeb; border:1px solid #fde68a; color:#78350f; font-size:12px; align-self:flex-start; border-radius:10px; padding:7px 13px; max-width:90%; }
+    .b-dot { background:#EEF2FF; color:#9ca3af; align-self:flex-start; border-bottom-left-radius:4px; font-style:italic; font-size:13px; }
+    #chat-foot { border-top:2px solid #e5e8f0; padding:12px; display:flex; gap:10px; background:#fff; }
+    #chat-in { flex:1; border:2px solid #dde2f0; border-radius:9px; padding:10px 14px; font-size:14px; font-family:inherit; outline:none; color:#111827; background:#fafbff; }
+    #chat-in:focus { border-color:#3B6BEB; background:#fff; }
+    #chat-send { background:#3B6BEB; color:#fff; border:none; border-radius:9px; padding:10px 18px; font-weight:700; cursor:pointer; font-size:14px; font-family:inherit; }
+    #chat-send:hover { background:#2d5cd4; }
+
+    /* ─── REFLECTION ────────────────────────────── */
+    .refl-q { margin-bottom:20px; }
+    .refl-q label { display:block; font-weight:600; color:#3B6BEB; font-size:14px; margin-bottom:8px; }
+    .congrats { text-align:center; padding:24px; background:#fff; border-radius:14px; border:1.5px solid #c7d5f8; margin-top:20px; }
+    .congrats-em  { font-size:38px; margin-bottom:8px; }
+    .congrats-ttl { font-size:20px; font-weight:800; color:#3B6BEB; margin-bottom:4px; }
+    .congrats-sub { font-size:14px; color:#6b7280; }
+
+    /* ─── RESPONSIVE ────────────────────────────── */
+    @media(max-width:600px){
+      .h-name { font-size:24px; }
+      .card { padding:20px 16px; }
+      .btn-row { flex-direction:column; }
+      #sticky-bar { padding:8px 14px; gap:10px; }
+      #prog-text  { min-width:unset; font-size:11px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ STICKY PROGRESS BAR ══════════════════════════════ -->
+<div id="sticky-bar">
+  <div id="prog-text">0 of 5 tasks done</div>
+  <div id="prog-track"><div id="prog-fill"></div></div>
+  <div id="score-badge">⭐ 0 pts</div>
+</div>
+
+<!-- ══ PAGE HEADER ══════════════════════════════════════ -->
+<div class="page-header">
+  <div class="h-emoji">📚</div>
+  <div class="h-name">Homework for Denis</div>
+  <div class="h-topic">🏙️ Living in a Big City</div>
+  <div class="h-meta">Level: A2 &nbsp;·&nbsp; <span id="hw-date"></span></div>
+</div>
+
+<div class="container">
+
+  <!-- ══════════════════════════════════════════════════
+       WARM UP — SPINNING WHEEL
+  ══════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="c-icon">🎡</div>
+      <div class="c-text">
+        <div class="c-title">Warm Up — Spin the Wheel!</div>
+        <div class="c-sub">Get a city word · write a sentence</div>
+      </div>
+    </div>
+    <div class="instr">
+      🎯 Click <strong>SPIN</strong> to get a city word. Then write one sentence using that word below.
+      Try spinning <strong>2–3 times</strong> for extra practice!
+    </div>
+    <div id="wheel-wrap">
+      <canvas id="wheel-cv" width="290" height="290"></canvas>
+      <div id="wheel-word">🎯 Click SPIN to get your word!</div>
+      <button class="btn btn-spin" onclick="spinWheel()">🎲 SPIN!</button>
+    </div>
+    <div style="margin-top:22px;">
+      <label style="display:block;font-weight:700;font-size:14px;margin-bottom:8px;">✍️ Your sentence:</label>
+      <textarea id="wheel-sent" placeholder="Write a sentence with your word here…"></textarea>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TASK 1 — FILL IN THE BLANKS
+  ══════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="c-icon">✍️</div>
+      <div class="c-text">
+        <div class="c-title"><span class="tnum">1</span> Fill in the Blanks</div>
+        <div class="c-sub">am / is / are &nbsp;vs&nbsp; do / does / don't / doesn't</div>
+      </div>
+      <div class="done-badge" id="bd-fib">✓ Done</div>
+    </div>
+    <div class="instr">
+      📌 <strong>Quick rule:</strong><br>
+      Use <strong>am / is / are</strong> for descriptions → "The city <em>is</em> big."<br>
+      Use <strong>do / does / don't / doesn't</strong> for actions → "I <em>don't</em> drive to work."<br><br>
+      Type the correct word in each box. Then click <strong>Check Answers</strong>.
+    </div>
+    <hr class="hr">
+
+    <div class="fib-g">
+      <div class="fib-row">
+        <span>1. London</span>
+        <input type="text" class="fib-in" id="f1" data-ans="is" placeholder="___">
+        <span>a very big city with millions of people.</span>
+      </div>
+      <div class="fb" id="f1fb"></div>
+    </div>
+
+    <div class="fib-g">
+      <div class="fib-row">
+        <span>2. I</span>
+        <input type="text" class="fib-in" id="f2" data-ans="don't" placeholder="___">
+        <span>drive to work. I take the metro.</span>
+      </div>
+      <div class="fb" id="f2fb"></div>
+    </div>
+
+    <div class="fib-g">
+      <div class="fib-row">
+        <input type="text" class="fib-in" id="f3" data-ans="is" placeholder="___">
+        <span>your commute very long every day?</span>
+      </div>
+      <div class="fb" id="f3fb"></div>
+    </div>
+
+    <div class="fib-g">
+      <div class="fib-row">
+        <span>4. The streets</span>
+        <input type="text" class="fib-in" id="f4" data-ans="are" placeholder="___">
+        <span>always very busy in the morning.</span>
+      </div>
+      <div class="fb" id="f4fb"></div>
+    </div>
+
+    <div class="fib-g">
+      <div class="fib-row">
+        <span>5. She</span>
+        <input type="text" class="fib-in" id="f5" data-ans="doesn't" placeholder="___">
+        <span>like the pollution in the city.</span>
+      </div>
+      <div class="fb" id="f5fb"></div>
+    </div>
+
+    <div class="fib-g">
+      <div class="fib-row">
+        <span>6. We</span>
+        <input type="text" class="fib-in" id="f6" data-ans="are" placeholder="___">
+        <span>lucky — we live near public transport.</span>
+      </div>
+      <div class="fb" id="f6fb"></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-p" onclick="checkFIB()">✔ Check Answers</button>
+      <button class="btn btn-o" onclick="resetFIB()">↺ Reset</button>
+    </div>
+    <div class="fb" id="fib-tot" style="margin-top:12px;"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TASK 2 — MATCH
+  ══════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="c-icon">🔗</div>
+      <div class="c-text">
+        <div class="c-title"><span class="tnum">2</span> Match the Words</div>
+        <div class="c-sub">City vocabulary — word to definition</div>
+      </div>
+      <div class="done-badge" id="bd-match">✓ Done</div>
+    </div>
+    <div class="instr">
+      Click a <strong>word</strong> on the left, then click the correct <strong>definition</strong> on the right.
+      Match all 6 pairs! 🏙️
+    </div>
+    <div class="match-grid">
+      <div class="m-col" id="mw-col">
+        <div class="m-w" data-id="commute">commute</div>
+        <div class="m-w" data-id="skyscraper">skyscraper</div>
+        <div class="m-w" data-id="rush hour">rush hour</div>
+        <div class="m-w" data-id="pollution">pollution</div>
+        <div class="m-w" data-id="neighbourhood">neighbourhood</div>
+        <div class="m-w" data-id="traffic jam">traffic jam</div>
+      </div>
+      <div class="m-col" id="md-col">
+        <div class="m-d" data-id="rush hour">the busy time when people travel to or from work</div>
+        <div class="m-d" data-id="traffic jam">when cars stop and cannot move on the road</div>
+        <div class="m-d" data-id="neighbourhood">an area where people live in a city</div>
+        <div class="m-d" data-id="commute">to travel to and from work every day</div>
+        <div class="m-d" data-id="pollution">dirty air or water caused by cars and factories</div>
+        <div class="m-d" data-id="skyscraper">a very tall building in a city</div>
+      </div>
+    </div>
+    <div class="fb" id="match-fb" style="margin-top:16px;"></div>
+    <div class="btn-row">
+      <button class="btn btn-o" onclick="resetMatch()">↺ Reset</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TASK 3 — ERROR CORRECTION
+  ══════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="c-icon">✏️</div>
+      <div class="c-text">
+        <div class="c-title"><span class="tnum">3</span> Error Correction</div>
+        <div class="c-sub">Find and fix the grammar mistake in each sentence</div>
+      </div>
+      <div class="done-badge" id="bd-err">✓ Done</div>
+    </div>
+    <div class="instr">
+      ❌ Each sentence has <strong>one mistake</strong> with "to be" or "to do".<br>
+      Type the <strong>correct sentence</strong> in the box. Then click <strong>Check All</strong>.
+    </div>
+    <hr class="hr">
+
+    <div class="err-item">
+      <div class="err-orig">❓ "Are you like living in a big city?"</div>
+      <div class="err-lbl">Write the correct sentence:</div>
+      <input type="text" id="e1" placeholder="Do you…" data-ans="do you like living in a big city">
+      <div class="fb" id="e1fb"></div>
+    </div>
+
+    <div class="err-item">
+      <div class="err-orig">❓ "She don't live in the city centre."</div>
+      <div class="err-lbl">Write the correct sentence:</div>
+      <input type="text" id="e2" placeholder="She doesn't…" data-ans="she doesnt live in the city centre">
+      <div class="fb" id="e2fb"></div>
+    </div>
+
+    <div class="err-item">
+      <div class="err-orig">❓ "I am not know the city very well yet."</div>
+      <div class="err-lbl">Write the correct sentence:</div>
+      <input type="text" id="e3" placeholder="I don't…" data-ans="i dont know the city very well yet">
+      <div class="fb" id="e3fb"></div>
+    </div>
+
+    <div class="err-item">
+      <div class="err-orig">❓ "Does the metro expensive in your city?"</div>
+      <div class="err-lbl">Write the correct sentence:</div>
+      <input type="text" id="e4" placeholder="Is the metro…" data-ans="is the metro expensive in your city">
+      <div class="fb" id="e4fb"></div>
+    </div>
+
+    <div class="err-item">
+      <div class="err-orig">❓ "He is not have a car so he takes the metro."</div>
+      <div class="err-lbl">Write the correct sentence:</div>
+      <input type="text" id="e5" placeholder="He doesn't…" data-ans="he doesnt have a car so he takes the metro">
+      <div class="fb" id="e5fb"></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-p" onclick="checkErrs()">✔ Check All</button>
+      <button class="btn btn-o" onclick="resetErrs()">↺ Reset</button>
+    </div>
+    <div class="fb" id="err-tot" style="margin-top:12px;"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TASK 4 — READING
+  ══════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="c-icon">📖</div>
+      <div class="c-text">
+        <div class="c-title"><span class="tnum">4</span> Reading</div>
+        <div class="c-sub">Read and answer the questions</div>
+      </div>
+      <div class="done-badge" id="bd-read">✓ Done</div>
+    </div>
+    <div class="instr">
+      Read the text carefully. Then answer the questions below — you can look at the text! 👀
+    </div>
+
+    <div class="read-box">
+      <h3>🏙️ Life in a Big City</h3>
+      <p>
+        Many people today live in big cities. Cities like London, New York, and Tokyo
+        <span class="hl">are</span> home to millions of people. Life in a big city
+        <span class="hl">is</span> exciting, but it <span class="hl">is</span> also difficult.
+      </p>
+      <p>
+        In a big city, there <span class="hl">are</span> many things to do. There are restaurants,
+        museums, and parks. There is good <span class="hl">public transport</span>, so you
+        <span class="hl">don't</span> need a car. Many companies
+        <span class="hl">are</span> in big cities, so it <span class="hl">is</span> easy to find a job.
+      </p>
+      <p>
+        But big cities also have problems. <span class="hl">Traffic jams</span> are very common.
+        In the morning and evening, the roads are very busy — this <span class="hl">is</span>
+        called <strong>rush hour</strong>. <span class="hl">Pollution</span> is also a big problem:
+        cars and factories make the air dirty.
+      </p>
+      <p>
+        Many software developers and tech workers choose to live in big cities. There are many
+        tech companies and co-working spaces. The internet <span class="hl">is</span> fast and
+        the offices <span class="hl">are</span> modern. It <span class="hl">is</span>
+        a great place to build a tech career.
+      </p>
+    </div>
+
+    <div class="q-item">
+      <div class="q-lbl">Q1. Name TWO things you can do in a big city.</div>
+      <textarea id="rq1" placeholder="You can…"></textarea>
+      <button class="show-btn" onclick="toggleAns('ra1',this)">💡 Show answer</button>
+      <div class="ans" id="ra1">✅ For example: you can go to restaurants, museums, or parks. You can find a job easily. You can use public transport.</div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-lbl">Q2. What is "rush hour"? Explain in your own words.</div>
+      <textarea id="rq2" placeholder="Rush hour is…"></textarea>
+      <button class="show-btn" onclick="toggleAns('ra2',this)">💡 Show answer</button>
+      <div class="ans" id="ra2">✅ Rush hour is when the roads are very busy — in the morning and evening when people travel to and from work.</div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-lbl">Q3. Why do software developers like big cities? Give ONE reason.</div>
+      <textarea id="rq3" placeholder="Because…"></textarea>
+      <button class="show-btn" onclick="toggleAns('ra3',this)">💡 Show answer</button>
+      <div class="ans" id="ra3">✅ Because there are many tech companies, co-working spaces, and modern offices. The internet is fast. It is easy to build a career.</div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-lbl">Q4. Name TWO problems in big cities.</div>
+      <textarea id="rq4" placeholder="Two problems are…"></textarea>
+      <button class="show-btn" onclick="toggleAns('ra4',this)">💡 Show answer</button>
+      <div class="ans" id="ra4">✅ Traffic jams and pollution are two big problems in cities.</div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-lbl">Q5. TRUE or FALSE? &nbsp;<em>"You always need a car in a big city."</em></div>
+      <div class="tf-row">
+        <button class="tf-btn" onclick="checkTF('true','q5fb')">TRUE</button>
+        <button class="tf-btn" onclick="checkTF('false','q5fb')">FALSE</button>
+      </div>
+      <div class="fb" id="q5fb"></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-p" id="read-btn" onclick="markReadDone()">✔ Mark reading as done</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TASK 5 — CHATBOT
+  ══════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="c-icon">💬</div>
+      <div class="c-text">
+        <div class="c-title"><span class="tnum">5</span> Speaking Practice — Chat!</div>
+        <div class="c-sub">Answer your tutor's questions in English</div>
+      </div>
+      <div class="done-badge" id="bd-chat">✓ Done</div>
+    </div>
+    <div class="instr">
+      Your tutor has 5 questions about big cities! ✏️<br>
+      Try to use words from today's lesson. There are no wrong answers — just practise!<br>
+      Press <strong>Enter</strong> or click <strong>Send</strong> to reply.
+    </div>
+    <div id="chat-box">
+      <div id="chat-msgs"></div>
+      <div id="chat-foot">
+        <input type="text" id="chat-in" placeholder="Type your answer…" onkeydown="if(event.key==='Enter')sendChat()">
+        <button id="chat-send" onclick="sendChat()">Send ➤</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       MY REFLECTION
+  ══════════════════════════════════════════════════ -->
+  <div class="card reflection">
+    <div class="card-head">
+      <div class="c-icon">💭</div>
+      <div class="c-text">
+        <div class="c-title">My Reflection</div>
+        <div class="c-sub">Think about your learning today</div>
+      </div>
+    </div>
+
+    <div class="refl-q">
+      <label>🌟 What new word do you want to remember from today?</label>
+      <input type="text" placeholder="The word I want to remember is…">
+    </div>
+
+    <div class="refl-q">
+      <label>🤔 Was something difficult today? What was it?</label>
+      <textarea placeholder="Something difficult was…"></textarea>
+    </div>
+
+    <div class="refl-q">
+      <label>🎯 Write ONE sentence about big cities using "is", "are", "do" or "don't":</label>
+      <input type="text" placeholder="Big cities are… / I don't… / Tech workers do…">
+    </div>
+
+    <div class="congrats">
+      <div class="congrats-em">🎉</div>
+      <div class="congrats-ttl">Great work, Denis!</div>
+      <div class="congrats-sub">You practised city vocabulary and Present Simple grammar today. Well done! 🏙️💙</div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<!-- ══════════════════════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════════════════════ -->
+<script>
+/* ── UTILITIES ───────────────────────────────────────────── */
+function $(id){ return document.getElementById(id); }
+$('hw-date').textContent = new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+
+/* ── PROGRESS ────────────────────────────────────────────── */
+const TOTAL = 5;
+const done  = {};
+let   pts   = 0;
+
+function markDone(key, p, badge){
+  if(done[key]) return;
+  done[key] = true; pts += p;
+  if(badge){ const b=$(badge); if(b) b.classList.add('on'); }
+  const c = Object.keys(done).length;
+  $('prog-text').textContent = c + ' of ' + TOTAL + ' tasks done';
+  $('prog-fill').style.width = (c/TOTAL*100) + '%';
+  $('score-badge').textContent = '⭐ ' + pts + ' pts';
+}
+
+/* ── SPINNING WHEEL ──────────────────────────────────────── */
+const WORDS  = ['traffic jam','rush hour','commute','skyscraper','pollution','neighbourhood','public transport','busy streets'];
+const COLORS = ['#3B6BEB','#7c5af4','#0891b2','#059669','#d97706','#e11d48','#1e40af','#065f46'];
+const cv  = $('wheel-cv');
+const ctx = cv.getContext('2d');
+const CX=145, CY=145, R=128;
+let wAng=0, spinning=false;
+
+function drawWheel(a){
+  const n=WORDS.length, seg=(Math.PI*2)/n;
+  ctx.clearRect(0,0,cv.width,cv.height);
+  for(let i=0;i<n;i++){
+    const s=a+i*seg, e=s+seg;
+    ctx.beginPath(); ctx.moveTo(CX,CY); ctx.arc(CX,CY,R,s,e); ctx.closePath();
+    ctx.fillStyle=COLORS[i]; ctx.fill();
+    ctx.strokeStyle='#fff'; ctx.lineWidth=2.5; ctx.stroke();
+    ctx.save();
+    ctx.translate(CX,CY); ctx.rotate(s+seg/2);
+    ctx.textAlign='right'; ctx.fillStyle='rgba(255,255,255,.95)';
+    ctx.font='bold 10.5px -apple-system,sans-serif';
+    ctx.shadowColor='rgba(0,0,0,.4)'; ctx.shadowBlur=4;
+    ctx.fillText(WORDS[i], R-9, 4);
+    ctx.restore();
+  }
+  // hub
+  ctx.shadowColor='transparent';
+  ctx.beginPath(); ctx.arc(CX,CY,24,0,Math.PI*2);
+  ctx.fillStyle='#fff'; ctx.fill();
+  ctx.strokeStyle='#3B6BEB'; ctx.lineWidth=3; ctx.stroke();
+  ctx.font='18px sans-serif'; ctx.textAlign='center';
+  ctx.fillText('🎯',CX,CY+6);
+  // pointer ▼
+  ctx.beginPath(); ctx.moveTo(CX-12,3); ctx.lineTo(CX+12,3); ctx.lineTo(CX,27); ctx.closePath();
+  ctx.fillStyle='#fbbf24'; ctx.fill();
+  ctx.strokeStyle='#78350f'; ctx.lineWidth=1.5; ctx.stroke();
+}
+
+function spinWheel(){
+  if(spinning) return;
+  spinning=true;
+  $('wheel-word').textContent='🌀 Spinning…';
+  const extra=Math.PI*2*(6+Math.random()*6), dur=3200;
+  const t0=performance.now(), a0=wAng;
+  function step(now){
+    const p=Math.min((now-t0)/dur,1), ease=1-Math.pow(1-p,3);
+    wAng=a0+extra*ease; drawWheel(wAng);
+    if(p<1){ requestAnimationFrame(step); return; }
+    spinning=false;
+    const seg=(Math.PI*2)/WORDS.length;
+    const rel=((-Math.PI/2-wAng)%(Math.PI*2)+Math.PI*2)%(Math.PI*2);
+    const idx=Math.floor(rel/seg)%WORDS.length;
+    const w=WORDS[idx];
+    $('wheel-word').innerHTML='🎯 Your word: <strong>"'+w+'"</strong> — write a sentence!';
+    $('wheel-sent').placeholder='Use "'+w+'" in a sentence…';
+    $('wheel-sent').focus();
+  }
+  requestAnimationFrame(step);
+}
+drawWheel(wAng);
+
+/* ── FILL IN THE BLANKS ──────────────────────────────────── */
+function checkFIB(){
+  let ok=0;
+  for(let i=1;i<=6;i++){
+    const inp=$('f'+i), fb=$('f'+i+'fb');
+    const v=inp.value.trim().toLowerCase(), a=inp.dataset.ans.toLowerCase();
+    if(!v){ inp.className='fib-in'; fb.className='fb'; continue; }
+    if(v===a){
+      inp.className='fib-in ok'; fb.className='fb ok'; fb.textContent='✅ Correct!'; ok++;
+    } else {
+      inp.className='fib-in bad'; fb.className='fb err';
+      fb.innerHTML='❌ Answer: <strong>'+inp.dataset.ans+'</strong>';
+    }
+  }
+  const tot=$('fib-tot');
+  if(ok===6){ tot.className='fb ok'; tot.textContent='🎉 Perfect! 6/6 — you really understand "to be" vs "to do"!'; markDone('fib',20,'bd-fib'); }
+  else if(ok>=4){ tot.className='fb ok'; tot.textContent='👍 Good! '+ok+'/6 correct. Check the red answers above.'; markDone('fib',12,'bd-fib'); }
+  else { tot.className='fb err'; tot.textContent='💪 '+ok+'/6. Look at the rule again and try!'; }
+}
+function resetFIB(){
+  for(let i=1;i<=6;i++){
+    $('f'+i).value=''; $('f'+i).className='fib-in';
+    const f=$('f'+i+'fb'); f.className='fb'; f.textContent='';
+  }
+  const t=$('fib-tot'); t.className='fb'; t.textContent='';
+}
+
+/* ── MATCH ───────────────────────────────────────────────── */
+let selW=null, selD=null, mCount=0;
+
+function bindMatch(){
+  document.querySelectorAll('.m-w').forEach(el=>{
+    el.onclick=function(){
+      if(this.dataset.matched) return;
+      document.querySelectorAll('.m-w.sel').forEach(e=>e.classList.remove('sel'));
+      this.classList.add('sel'); selW=this;
+      if(selD) tryPair();
+    };
+  });
+  document.querySelectorAll('.m-d').forEach(el=>{
+    el.onclick=function(){
+      if(this.dataset.matched) return;
+      document.querySelectorAll('.m-d.sel').forEach(e=>e.classList.remove('sel'));
+      this.classList.add('sel'); selD=this;
+      if(selW) tryPair();
+    };
+  });
+}
+
+function tryPair(){
+  const fb=$('match-fb');
+  if(selW.dataset.id===selD.dataset.id){
+    selW.className='m-w matched'; selW.dataset.matched='1';
+    selD.className='m-d matched'; selD.dataset.matched='1';
+    mCount++;
+    fb.className='fb ok';
+    if(mCount===6){ fb.textContent='🎉 You matched all 6! Excellent vocabulary work!'; markDone('match',20,'bd-match'); }
+    else { fb.textContent='✅ Correct match: "'+selW.dataset.id+'" ('+mCount+'/6)'; }
+  } else {
+    fb.className='fb err';
+    fb.textContent='❌ Not a match. Try again! Think about what "'+selW.dataset.id+'" means.';
+    selW.classList.add('flash'); selD.classList.add('flash');
+    const sw=selW, sd=selD;
+    setTimeout(()=>{ sw.classList.remove('flash','sel'); sd.classList.remove('flash','sel'); },400);
+  }
+  selW=null; selD=null;
+}
+
+function resetMatch(){
+  document.querySelectorAll('.m-w,.m-d').forEach(el=>{
+    el.className=el.classList.contains('m-w')?'m-w':'m-d';
+    delete el.dataset.matched;
+  });
+  selW=null; selD=null; mCount=0;
+  const f=$('match-fb'); f.className='fb'; f.textContent='';
+  bindMatch();
+}
+bindMatch();
+
+/* ── ERROR CORRECTION ────────────────────────────────────── */
+function norm(s){
+  return s.toLowerCase()
+    .replace(/[\u2018\u2019\u201C\u201D]/g,"'")
+    .replace(/[^\w\s]/g,'')
+    .replace(/\s+/g,' ').trim();
+}
+function checkErrs(){
+  let ok=0;
+  for(let i=1;i<=5;i++){
+    const inp=$('e'+i), fb=$('e'+i+'fb');
+    const v=norm(inp.value), a=inp.dataset.ans;
+    if(!v){ inp.className=''; fb.className='fb'; continue; }
+    if(v===a){
+      inp.className='ok'; fb.className='fb ok'; fb.textContent='✅ Correct!'; ok++;
+    } else {
+      inp.className='bad'; fb.className='fb err';
+      // Reconstruct display answer with apostrophe
+      const disp=inp.dataset.ans.replace(/doesnt/g,"doesn't").replace(/dont/g,"don't");
+      const cap=disp.charAt(0).toUpperCase()+disp.slice(1);
+      fb.innerHTML='❌ Correct: <strong>'+cap+'.</strong>';
+    }
+  }
+  const tot=$('err-tot');
+  if(ok===5){ tot.className='fb ok'; tot.textContent="🎉 Excellent! 5/5 — 'to be' vs 'to do' is no problem for you!"; markDone('err',20,'bd-err'); }
+  else if(ok>=3){ tot.className='fb ok'; tot.textContent='👍 '+ok+'/5 correct. Good work! Study the corrections above.'; markDone('err',12,'bd-err'); }
+  else { tot.className='fb err'; tot.textContent="💪 "+ok+"/5. Remember: 'to be' for descriptions, 'to do' for actions!"; }
+}
+function resetErrs(){
+  for(let i=1;i<=5;i++){
+    $('e'+i).value=''; $('e'+i).className='';
+    $('e'+i+'fb').className='fb'; $('e'+i+'fb').textContent='';
+  }
+  $('err-tot').className='fb'; $('err-tot').textContent='';
+}
+
+/* ── READING ─────────────────────────────────────────────── */
+function toggleAns(id, btn){
+  const el=$(id); el.classList.toggle('on');
+  btn.textContent=el.classList.contains('on')? '🙈 Hide answer':'💡 Show answer';
+}
+function checkTF(ans,fbId){
+  const fb=$(fbId);
+  if(ans==='false'){
+    fb.className='fb ok';
+    fb.textContent="✅ Correct! FALSE — the text says there is good public transport, so you don't need a car.";
+  } else {
+    fb.className='fb err';
+    fb.textContent="❌ Not quite. The answer is FALSE — you don't need a car because of public transport.";
+  }
+}
+function markReadDone(){
+  const b=$('read-btn'); b.textContent='✅ Reading done!'; b.disabled=true; b.style.background='#22c55e';
+  markDone('read',20,'bd-read');
+}
+
+/* ── CHATBOT ─────────────────────────────────────────────── */
+const flow=[
+  {
+    q:"Hello Denis! 👋 I'm your English tutor today.\nLet's talk about big cities!\n\nDo you live in a big city? Tell me about where you live!",
+    r(a){ const l=a.toLowerCase(); return (l.match(/yes|city|live|town|capital|village/))?'Interesting! It sounds like a great place to be. ':'Thanks for sharing! '; },
+    tip:"💡 Tip: Try 'I live in…' or 'My city is…' (use 'to be'!)"
+  },
+  {
+    q:"How do you get to work every day? 🚇🚗\nDo you use public transport, or do you drive?",
+    r(a){ const l=a.toLowerCase();
+      if(l.match(/metro|bus|tram|train|walk|transport|bike|bicycle/)) return 'Smart! Public transport is great for avoiding traffic jams. ';
+      if(l.match(/car|drive|drove|taxi/)) return 'Driving can be tough during rush hour! ';
+      return 'Interesting way to commute! '; },
+    tip:"💡 Tip: 'I take the metro.' / 'I don't drive.' / 'I walk to work.'"
+  },
+  {
+    q:"What do you LIKE about your city? 🌟\nTell me one good thing!",
+    r(){ return "That's a great reason to enjoy your city! "; },
+    tip:"💡 Tip: 'I like… because…' OR 'My city is…' — description → use 'to be'!"
+  },
+  {
+    q:"Now tell me one PROBLEM in your city. 🤔\nThink about: traffic, noise, pollution, or cost of living…",
+    r(a){ const l=a.toLowerCase();
+      if(l.match(/traffic|jam/)) return 'Yes — traffic jams are the classic city problem! ';
+      if(l.match(/noise|loud/)) return 'Noise pollution is very common in big cities! ';
+      if(l.match(/pollution|air/)) return 'Air pollution is a serious issue in many cities! ';
+      if(l.match(/expensive|cost|price|rent/)) return 'Living costs are very high in big cities! ';
+      return 'Good point! '; },
+    tip:"💡 Tip: 'The biggest problem is…' OR 'I don't like…'"
+  },
+  {
+    q:"Last question! 🏁\nYou are a software developer. Is your city a good place for tech workers? Why or why not?",
+    r(){ return 'Great answer! You spoke about city life really well today! '; },
+    tip:"💡 Tip: 'My city is good for tech because…' / 'There are many companies…'"
+  }
+];
+let step=0;
+const msgs=$('chat-msgs');
+
+function bubble(txt,cls){
+  const d=document.createElement('div'); d.className='bubble '+cls;
+  d.textContent=txt; msgs.appendChild(d); msgs.scrollTop=msgs.scrollHeight; return d;
+}
+
+setTimeout(()=>bubble(flow[0].q,'b-t'),400);
+
+function sendChat(){
+  const inp=$('chat-in'), txt=inp.value.trim();
+  if(!txt||step>=flow.length) return;
+  bubble(txt,'b-s'); inp.value='';
+  const cur=flow[step], reply=cur.r(txt), tip=cur.tip;
+  step++;
+  const dot=bubble('Typing…','b-dot');
+  setTimeout(()=>{
+    dot.remove();
+    if(step<flow.length){
+      bubble(reply+flow[step].q,'b-t');
+    } else {
+      bubble(reply+'You finished all 5 questions! 🎉 Well done, Denis — your English is improving every day!','b-t');
+      setTimeout(()=>{
+        bubble('✅ Chat complete! Scroll down to fill in your reflection. 👇','b-t');
+        $('chat-foot').style.display='none';
+        markDone('chat',20,'bd-chat');
+      },800);
+    }
+    const tipEl=document.createElement('div'); tipEl.className='bubble b-tip';
+    tipEl.textContent=tip; msgs.appendChild(tipEl); msgs.scrollTop=msgs.scrollHeight;
+  },900);
+}
+</script>
+</body>
+</html>
