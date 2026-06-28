@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FCE Speaking Part 3 – Saturday Night</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --blue:       #3b82f6;
+  --blue-dark:  #0f2040;
+  --green:      #22c55e;
+  --green-dark: #0f2010;
+  --bg:         #0f172a;
+  --surface:    #1e293b;
+  --border:     #334155;
+  --text:       #e2e8f0;
+  --muted:      #94a3b8;
+  --amber:      #f59e0b;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+/* ── HEADER ──────────────────────────────────── */
+.header {
+  background: linear-gradient(135deg, #1a3a60 0%, #0f172a 100%);
+  padding: 22px 24px 18px;
+  text-align: center;
+  border-bottom: 2px solid var(--blue);
+}
+.exam-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: #93c5fd;
+  font-weight: 700;
+}
+.header h1 {
+  font-size: 1.65rem;
+  font-weight: 700;
+  margin: 5px 0 10px;
+  color: #fff;
+}
+.badges {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.badge {
+  padding: 3px 13px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.badge-blue  { background: #1d4ed8; color: #bfdbfe; }
+.badge-green { background: #166534; color: #86efac; }
+.badge-amber { background: #78350f; color: #fcd34d; }
+
+/* ── SECTION LABELS ──────────────────────────── */
+.section {
+  max-width: 780px;
+  margin: 20px auto 0;
+  padding: 0 16px;
+}
+.section-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  color: var(--muted);
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+/* ── ROLE CARDS ──────────────────────────────── */
+.cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.role-card {
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 0.82rem;
+}
+.role-card.parent {
+  background: var(--blue-dark);
+  border: 1px solid rgba(59,130,246,.55);
+}
+.role-card.teen {
+  background: var(--green-dark);
+  border: 1px solid rgba(34,197,94,.45);
+}
+.card-title {
+  font-weight: 700;
+  font-size: 0.85rem;
+  margin-bottom: 7px;
+}
+.role-card.parent .card-title { color: #93c5fd; }
+.role-card.teen  .card-title  { color: #86efac; }
+.role-card p  { color: #cbd5e1; margin-bottom: 6px; }
+.role-card ul { padding-left: 16px; }
+.role-card ul li { color: #94a3b8; margin-bottom: 3px; font-size: 0.79rem; }
+.card-task {
+  margin-top: 9px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255,255,255,.06);
+  font-size: 0.76rem;
+  color: #475569;
+  font-style: italic;
+}
+
+/* ── PLAYER ──────────────────────────────────── */
+.player {
+  background: var(--surface);
+  border-radius: 13px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.window-bar {
+  background: #131f35;
+  padding: 9px 13px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border-bottom: 1px solid var(--border);
+}
+.dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.dot-r { background: #ef4444; }
+.dot-y { background: #eab308; }
+.dot-g { background: #22c55e; }
+.win-title {
+  flex: 1;
+  text-align: center;
+  font-size: 0.7rem;
+  color: #475569;
+  margin-left: 4px;
+}
+.win-timer {
+  font-family: 'Courier New', monospace;
+  font-size: 0.73rem;
+  color: #64748b;
+  background: var(--bg);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+.dialogue-area {
+  height: 340px;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  scroll-behavior: smooth;
+}
+.dialogue-area::-webkit-scrollbar { width: 4px; }
+.dialogue-area::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #334155;
+  font-size: 0.88rem;
+  text-align: center;
+  line-height: 1.7;
+}
+.line {
+  display: flex;
+  animation: lineIn .35s ease-out;
+}
+@keyframes lineIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.line.parent { justify-content: flex-start; }
+.line.teen   { justify-content: flex-end; }
+.bubble-wrap {
+  max-width: 73%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.line.teen .bubble-wrap { align-items: flex-end; }
+.speaker-tag {
+  font-size: 0.67rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 2px;
+}
+.parent .speaker-tag { color: #93c5fd; }
+.teen   .speaker-tag { color: #86efac; text-align: right; }
+.bubble {
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+.parent .bubble {
+  background: #0f2040;
+  border: 1px solid rgba(59,130,246,.38);
+  border-bottom-left-radius: 3px;
+}
+.teen .bubble {
+  background: #0f2010;
+  border: 1px solid rgba(34,197,94,.32);
+  border-bottom-right-radius: 3px;
+}
+.note-tag {
+  font-size: 0.71rem;
+  padding: 4px 10px;
+  border-radius: 6px;
+  line-height: 1.45;
+}
+.parent .note-tag {
+  background: rgba(59,130,246,.1);
+  border-left: 2px solid var(--blue);
+  color: #93c5fd;
+}
+.teen .note-tag {
+  background: rgba(34,197,94,.1);
+  border-right: 2px solid var(--green);
+  color: #86efac;
+  text-align: right;
+}
+
+/* Progress */
+.progress-row {
+  background: var(--bg);
+  padding: 6px 14px 0;
+  border-top: 1px solid var(--border);
+}
+.progress-bg {
+  background: var(--border);
+  height: 3px;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--blue), var(--green));
+  width: 0%;
+  transition: width .2s linear;
+}
+
+/* Status */
+.status-bar {
+  background: var(--bg);
+  padding: 6px 14px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: #475569;
+}
+.status-left { display: flex; align-items: center; gap: 6px; }
+.indicator {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #334155;
+  flex-shrink: 0;
+}
+.indicator.on {
+  background: var(--green);
+  animation: blink 1.2s infinite;
+}
+@keyframes blink {
+  0%,100% { opacity: 1; }
+  50%      { opacity: .3; }
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 9px;
+  padding: 13px 16px;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.btn {
+  padding: 9px 20px;
+  border-radius: 22px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.83rem;
+  transition: all .15s;
+  outline: none;
+}
+.btn:active { transform: scale(.97); }
+.btn-play {
+  background: var(--blue);
+  color: #fff;
+  padding: 9px 28px;
+  min-width: 140px;
+}
+.btn-play:hover { background: #2563eb; }
+.btn-secondary {
+  background: var(--surface);
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+.btn-secondary:hover { background: var(--border); }
+
+/* Speed selector */
+.speed-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.speed-label { font-size: 0.72rem; color: var(--muted); }
+.speed-select {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 0.78rem;
+  cursor: pointer;
+  outline: none;
+}
+
+/* ── LANGUAGE KEY ──────────────────────────────── */
+.lang-section { display: none; }
+.lang-box {
+  background: var(--surface);
+  border-radius: 10px;
+  border: 1px solid var(--amber);
+  padding: 16px;
+}
+.lang-title {
+  font-size: 0.82rem;
+  color: var(--amber);
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.chips { display: flex; flex-wrap: wrap; gap: 7px; }
+.chip {
+  padding: 5px 13px;
+  border-radius: 20px;
+  font-size: 0.77rem;
+  font-weight: 500;
+}
+.chip-b { background: var(--blue-dark); color: #93c5fd; border: 1px solid rgba(59,130,246,.45); }
+.chip-g { background: var(--green-dark); color: #86efac; border: 1px solid rgba(34,197,94,.4); }
+
+/* ── TIPS ────────────────────────────────────── */
+.tips-box {
+  background: var(--surface);
+  border-radius: 10px;
+  border: 1px solid #1e3a5f;
+  padding: 16px;
+}
+.tips-title {
+  font-size: 0.82rem;
+  color: #93c5fd;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.tips-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+.tip {
+  display: flex;
+  gap: 7px;
+  font-size: 0.79rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+.tip-icon { color: #93c5fd; flex-shrink: 0; margin-top: 1px; }
+
+.footer {
+  text-align: center;
+  padding: 16px;
+  font-size: 0.7rem;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 540px) {
+  .cards-grid { grid-template-columns: 1fr; }
+  .tips-grid  { grid-template-columns: 1fr; }
+  .header h1  { font-size: 1.35rem; }
+  .controls   { gap: 7px; }
+  .btn-play   { min-width: 120px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<div class="header">
+  <div class="exam-label">Cambridge B2 First (FCE) · Speaking Part 3</div>
+  <h1>🌙 Saturday Night</h1>
+  <div class="badges">
+    <span class="badge badge-blue">Model Answer</span>
+    <span class="badge badge-green">~2.5 Minutes</span>
+    <span class="badge badge-amber">Interactive Script</span>
+  </div>
+</div>
+
+<!-- ── ROLE CARDS ── -->
+<div class="section">
+  <div class="section-label">📋 Role Cards</div>
+  <div class="cards-grid">
+    <div class="role-card parent">
+      <div class="card-title">👨‍👩‍👧 Parent</div>
+      <p>It is Saturday night. Your teenager has come home <strong>30 minutes late</strong>. You are annoyed because:</p>
+      <ul>
+        <li>You asked them to be back by midnight</li>
+        <li>You phoned their mobile but they didn't answer</li>
+        <li>This has already happened once before this month</li>
+      </ul>
+      <div class="card-task">Find out what happened and decide how to avoid this situation in the future.</div>
+    </div>
+    <div class="role-card teen">
+      <div class="card-title">🧑 Teenager</div>
+      <p>It is Saturday night and you have just arrived home <strong>30 minutes late</strong>. You are apologetic because:</p>
+      <ul>
+        <li>The party went on much longer than expected</li>
+        <li>Your phone battery died — you couldn't call</li>
+        <li>You didn't want to leave your friends early</li>
+      </ul>
+      <div class="card-task">Explain what happened and try to agree on rules for the future.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── PLAYER ── -->
+<div class="section" style="margin-top:20px;">
+  <div class="section-label">▶ Model Conversation</div>
+  <div class="player">
+    <div class="window-bar">
+      <div class="dot dot-r"></div>
+      <div class="dot dot-y"></div>
+      <div class="dot dot-g"></div>
+      <span class="win-title">FCE Speaking Part 3 — Model Conversation</span>
+      <span class="win-timer" id="timer">0:00</span>
+    </div>
+
+    <div class="dialogue-area" id="dialogueArea">
+      <div class="empty-state" id="emptyState">
+        Press <strong>▶ Play</strong> to watch the model conversation unfold<br>
+        <span style="font-size:.8rem;margin-top:6px;display:block;">Language tips appear after each exchange</span>
+      </div>
+    </div>
+
+    <div class="progress-row">
+      <div class="progress-bg">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <div class="status-bar">
+      <div class="status-left">
+        <div class="indicator" id="indicator"></div>
+        <span id="statusText">Ready — press Play to begin</span>
+      </div>
+      <span id="lineCount">0 / 18 lines</span>
+    </div>
+
+    <div class="controls">
+      <button class="btn btn-secondary" onclick="restartDialogue()">↺ Restart</button>
+      <button class="btn btn-play" id="playBtn" onclick="togglePlay()">▶ Play</button>
+      <button class="btn btn-secondary" onclick="showFullScript()">📄 Full Script</button>
+      <div class="speed-wrap">
+        <span class="speed-label">Speed:</span>
+        <select class="speed-select" id="speedSelect">
+          <option value="0.6">0.6×</option>
+          <option value="0.8">0.8×</option>
+          <option value="1" selected>1×</option>
+          <option value="1.4">1.4×</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── LANGUAGE KEY ── -->
+<div class="section lang-section" id="langSection" style="margin-top:20px;">
+  <div class="section-label">✨ Key Language Used</div>
+  <div class="lang-box">
+    <div class="lang-title">Expressions from this model — great for your FCE exam!</div>
+    <div class="chips">
+      <span class="chip chip-b">Could you explain what happened?</span>
+      <span class="chip chip-b">I was getting quite worried</span>
+      <span class="chip chip-b">The thing is…</span>
+      <span class="chip chip-b">Perhaps we should agree on…</span>
+      <span class="chip chip-b">I might even consider…</span>
+      <span class="chip chip-b">I want to be clear…</span>
+      <span class="chip chip-g">I'm really sorry — I know it's late</span>
+      <span class="chip chip-g">I should have planned better</span>
+      <span class="chip chip-g">You're absolutely right</span>
+      <span class="chip chip-g">What can I do to make it up to you?</span>
+      <span class="chip chip-g">What did you have in mind?</span>
+      <span class="chip chip-g">I could also…</span>
+      <span class="chip chip-g">I'd really appreciate that</span>
+      <span class="chip chip-g">I mean it this time</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── EXAMINER TIPS ── -->
+<div class="section" style="margin-top:20px;margin-bottom:32px;">
+  <div class="section-label">📝 Examiner's Tips</div>
+  <div class="tips-box">
+    <div class="tips-title">What FCE examiners look for in Speaking Part 3</div>
+    <div class="tips-grid">
+      <div class="tip"><span class="tip-icon">✓</span><span>React to your partner — don't just wait for your turn</span></div>
+      <div class="tip"><span class="tip-icon">✓</span><span>Make suggestions: <em>"Perhaps we should…"</em>, <em>"What if we…?"</em></span></div>
+      <div class="tip"><span class="tip-icon">✓</span><span>Use discourse markers: <em>"Well…"</em>, <em>"The thing is…"</em>, <em>"Actually…"</em></span></div>
+      <div class="tip"><span class="tip-icon">✓</span><span>Try to reach a decision or compromise by the end</span></div>
+      <div class="tip"><span class="tip-icon">✓</span><span>Show empathy: <em>"I understand how you feel about that"</em></span></div>
+      <div class="tip"><span class="tip-icon">✓</span><span>Avoid repeating the same words — aim for a range of vocabulary</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">FCE Speaking Part 3 — Model Answer · B2 Level · Saturday Night</div>
+
+<script>
+const dialogue = [
+  {
+    speaker: 'Parent',
+    text:    "Right, come and sit down. I need to talk to you.",
+    time:    0,
+    note:    null
+  },
+  {
+    speaker: 'Teen',
+    text:    "What's wrong?",
+    time:    3,
+    note:    null
+  },
+  {
+    speaker: 'Parent',
+    text:    "What's wrong? It's half past twelve! I asked you to be back by midnight. Could you explain what happened?",
+    time:    5,
+    note:    "💡 Asking for explanation politely: 'Could you explain what happened?'"
+  },
+  {
+    speaker: 'Teen',
+    text:    "I'm really sorry — I know it's late. We just lost track of time. The party went on much longer than we expected.",
+    time:    13,
+    note:    "💡 Apologising and giving a reason: 'We just lost track of time'"
+  },
+  {
+    speaker: 'Parent',
+    text:    "That might be true, but I tried to phone you several times and you didn't answer. I was getting quite worried.",
+    time:    21,
+    note:    "💡 Expressing concern: 'I was getting quite worried'"
+  },
+  {
+    speaker: 'Teen',
+    text:    "I know, and I'm sorry about that too. My phone battery died completely and I didn't have a charger. I should have planned better.",
+    time:    30,
+    note:    "💡 Accepting responsibility: 'I should have planned better'"
+  },
+  {
+    speaker: 'Parent',
+    text:    "The thing is, this has already happened once this month. Last time you promised it wouldn't happen again.",
+    time:    40,
+    note:    "💡 Discourse marker: 'The thing is…' softens a difficult point"
+  },
+  {
+    speaker: 'Teen',
+    text:    "You're absolutely right, and I feel terrible about it. What can I do to make it up to you?",
+    time:    49,
+    note:    "💡 Conceding: 'You're absolutely right' + offering to repair: 'make it up to you'"
+  },
+  {
+    speaker: 'Parent',
+    text:    "Well, look — I understand you want to have fun with your friends. But I need to know you're safe. Perhaps we should agree on some rules?",
+    time:    57,
+    note:    "💡 Making a suggestion: 'Perhaps we should agree on…'"
+  },
+  {
+    speaker: 'Teen',
+    text:    "I'd be happy to do that. What did you have in mind?",
+    time:    68,
+    note:    "💡 Collaborative phrase: 'What did you have in mind?' — great for interaction marks"
+  },
+  {
+    speaker: 'Parent',
+    text:    "First of all, you need to keep your phone charged. Take a power bank when you go out.",
+    time:    73,
+    note:    null
+  },
+  {
+    speaker: 'Teen',
+    text:    "That's a really good idea. I'll do that from now on. What else?",
+    time:    81,
+    note:    "💡 Agreeing and inviting more: 'What else?' keeps the dialogue interactive"
+  },
+  {
+    speaker: 'Parent',
+    text:    "And if you're going to be late, text me in advance — before your battery runs out.",
+    time:    87,
+    note:    null
+  },
+  {
+    speaker: 'Teen',
+    text:    "Absolutely. I could also message you when I'm leaving, so you know roughly when to expect me home?",
+    time:    95,
+    note:    "💡 Adding a suggestion: 'I could also…' shows you're engaged and proactive"
+  },
+  {
+    speaker: 'Parent',
+    text:    "Actually, that would help a lot. And if you give me enough warning, I might even consider extending your curfew occasionally.",
+    time:    104,
+    note:    "💡 Offering a compromise: 'I might even consider…' — tentative but positive"
+  },
+  {
+    speaker: 'Teen',
+    text:    "I'd really appreciate that. I promise I'll be more responsible. I do understand how much you worry.",
+    time:    114,
+    note:    "💡 Emphatic 'do': 'I do understand' adds sincerity — and shows good range!"
+  },
+  {
+    speaker: 'Parent',
+    text:    "All right. But I want to be clear — if this happens again, there'll be no Saturday nights out for a month.",
+    time:    122,
+    note:    "💡 Stating consequences clearly: 'I want to be clear…'"
+  },
+  {
+    speaker: 'Teen',
+    text:    "I completely understand, and that's fair. It won't happen again — I mean it this time.",
+    time:    132,
+    note:    "💡 Strong reassurance: 'I mean it this time' — conviction marker"
+  }
+];
+
+const TOTAL_DURATION = 143;
+let isPlaying    = false;
+let elapsedSecs  = 0;
+let lastTS       = null;
+let animId       = null;
+const shown      = new Set();
+
+/* ── Helpers ── */
+function fmt(s) {
+  const m = Math.floor(s / 60);
+  const sec = Math.floor(s % 60);
+  return `${m}:${sec.toString().padStart(2,'0')}`;
+}
+
+function renderLine(i) {
+  const area = document.getElementById('dialogueArea');
+  const empty = document.getElementById('emptyState');
+  if (empty) empty.remove();
+
+  const d   = dialogue[i];
+  const div = document.createElement('div');
+  div.className = `line ${d.speaker.toLowerCase()}`;
+
+  const wrap = document.createElement('div');
+  wrap.className = 'bubble-wrap';
+
+  const tag = document.createElement('div');
+  tag.className = 'speaker-tag';
+  tag.textContent = d.speaker === 'Parent' ? '👨‍👩‍👧 Parent' : '🧑 Teenager';
+
+  const bub = document.createElement('div');
+  bub.className = 'bubble';
+  bub.textContent = d.text;
+
+  wrap.appendChild(tag);
+  wrap.appendChild(bub);
+
+  if (d.note) {
+    const note = document.createElement('div');
+    note.className = 'note-tag';
+    note.textContent = d.note;
+    wrap.appendChild(note);
+  }
+
+  div.appendChild(wrap);
+  area.appendChild(div);
+
+  requestAnimationFrame(() => { area.scrollTop = area.scrollHeight; });
+
+  shown.add(i);
+  document.getElementById('lineCount').textContent = `${shown.size} / ${dialogue.length} lines`;
+  document.getElementById('statusText').textContent = `${d.speaker} speaking…`;
+}
+
+/* ── Animation tick ── */
+function tick(ts) {
+  if (!isPlaying) return;
+  if (lastTS !== null) {
+    const speed = parseFloat(document.getElementById('speedSelect').value) || 1;
+    elapsedSecs += ((ts - lastTS) / 1000) * speed;
+  }
+  lastTS = ts;
+
+  document.getElementById('timer').textContent = fmt(elapsedSecs);
+  document.getElementById('progressFill').style.width =
+    Math.min((elapsedSecs / TOTAL_DURATION) * 100, 100) + '%';
+
+  dialogue.forEach((d, i) => {
+    if (!shown.has(i) && elapsedSecs >= d.time) renderLine(i);
+  });
+
+  if (elapsedSecs >= TOTAL_DURATION) { finish(); return; }
+  animId = requestAnimationFrame(tick);
+}
+
+function finish() {
+  isPlaying = false;
+  lastTS    = null;
+  document.getElementById('playBtn').textContent = '▶ Play Again';
+  document.getElementById('statusText').textContent = '✓ Conversation complete';
+  document.getElementById('indicator').classList.remove('on');
+  document.getElementById('progressFill').style.width = '100%';
+  document.getElementById('timer').textContent = '2:23';
+  document.getElementById('langSection').style.display = 'block';
+  setTimeout(() => {
+    document.getElementById('langSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 400);
+}
+
+/* ── Controls ── */
+function togglePlay() {
+  if (isPlaying) {
+    isPlaying = false;
+    lastTS    = null;
+    if (animId) cancelAnimationFrame(animId);
+    document.getElementById('playBtn').textContent = '▶ Resume';
+    document.getElementById('statusText').textContent = 'Paused';
+    document.getElementById('indicator').classList.remove('on');
+  } else {
+    if (elapsedSecs >= TOTAL_DURATION) { restartDialogue(); return; }
+    isPlaying = true;
+    document.getElementById('playBtn').textContent = '⏸ Pause';
+    document.getElementById('indicator').classList.add('on');
+    animId = requestAnimationFrame(tick);
+  }
+}
+
+function restartDialogue() {
+  isPlaying   = false;
+  lastTS      = null;
+  elapsedSecs = 0;
+  if (animId) cancelAnimationFrame(animId);
+  shown.clear();
+
+  document.getElementById('dialogueArea').innerHTML =
+    '<div class="empty-state" id="emptyState">Press <strong>▶ Play</strong> to watch the model conversation unfold<br><span style="font-size:.8rem;margin-top:6px;display:block;">Language tips appear after each exchange</span></div>';
+  document.getElementById('progressFill').style.width = '0%';
+  document.getElementById('timer').textContent = '0:00';
+  document.getElementById('playBtn').textContent = '▶ Play';
+  document.getElementById('statusText').textContent = 'Ready — press Play to begin';
+  document.getElementById('lineCount').textContent = `0 / ${dialogue.length} lines`;
+  document.getElementById('indicator').classList.remove('on');
+  document.getElementById('langSection').style.display = 'none';
+}
+
+function showFullScript() {
+  isPlaying = false;
+  lastTS    = null;
+  if (animId) cancelAnimationFrame(animId);
+
+  const area = document.getElementById('dialogueArea');
+  area.innerHTML = '';
+  shown.clear();
+  dialogue.forEach((d, i) => renderLine(i));
+
+  elapsedSecs = TOTAL_DURATION;
+  document.getElementById('progressFill').style.width = '100%';
+  document.getElementById('timer').textContent = '2:23';
+  document.getElementById('playBtn').textContent = '↺ Play Again';
+  document.getElementById('statusText').textContent = 'Full script view';
+  document.getElementById('indicator').classList.remove('on');
+  document.getElementById('langSection').style.display = 'block';
+}
+</script>
+</body>
+</html>
