@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Homework for A2</title>
+<style>
+  :root{
+    --accent:#3B6BEB;
+    --accent-light:#EAF0FE;
+    --text:#333333;
+    --grey:#6b6b6b;
+    --border:#e2e5ea;
+    --green:#2e9e5b;
+    --green-bg:#e8f7ee;
+    --red:#d5433c;
+    --red-bg:#fdecea;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:-apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    background:#ffffff;
+    color:var(--text);
+    line-height:1.5;
+  }
+  header{
+    padding:32px 20px 24px;
+    text-align:center;
+    border-bottom:1px solid var(--border);
+  }
+  header h1{
+    margin:0 0 6px;
+    font-size:28px;
+    color:var(--accent);
+  }
+  header p{
+    margin:2px 0;
+    color:var(--grey);
+    font-size:15px;
+  }
+  #progressBar{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:#ffffff;
+    border-bottom:1px solid var(--border);
+    padding:10px 20px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-size:14px;
+  }
+  #progressTrack{
+    flex:1;
+    height:8px;
+    background:var(--accent-light);
+    border-radius:6px;
+    overflow:hidden;
+  }
+  #progressFill{
+    height:100%;
+    width:0%;
+    background:var(--accent);
+    transition:width .3s ease;
+  }
+  #progressLabel{
+    white-space:nowrap;
+    color:var(--accent);
+    font-weight:600;
+  }
+  main{
+    max-width:720px;
+    margin:0 auto;
+    padding:24px 16px 60px;
+  }
+  .card{
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:22px;
+    margin-bottom:22px;
+    background:#ffffff;
+    box-shadow:0 2px 8px rgba(0,0,0,0.03);
+  }
+  .card-head{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:6px;
+  }
+  .card-num{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    background:var(--accent);
+    color:#fff;
+    font-weight:700;
+    font-size:14px;
+    flex-shrink:0;
+  }
+  .card-icon{
+    font-size:20px;
+  }
+  .card-title{
+    font-size:18px;
+    font-weight:700;
+    margin:0;
+  }
+  .instructions{
+    color:var(--grey);
+    font-size:14.5px;
+    margin:6px 0 16px;
+  }
+  input[type="text"], textarea{
+    width:100%;
+    padding:9px 11px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    font-size:15px;
+    font-family:inherit;
+    color:var(--text);
+    margin-top:4px;
+  }
+  textarea{
+    resize:vertical;
+    min-height:70px;
+  }
+  .btn{
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    padding:9px 18px;
+    border-radius:8px;
+    font-size:14.5px;
+    font-weight:600;
+    cursor:pointer;
+    margin-top:10px;
+  }
+  .btn:hover{opacity:.9;}
+  .btn.secondary{
+    background:#fff;
+    color:var(--accent);
+    border:1px solid var(--accent);
+  }
+  .correct{
+    border-color:var(--green) !important;
+    background:var(--green-bg) !important;
+  }
+  .incorrect{
+    border-color:var(--red) !important;
+    background:var(--red-bg) !important;
+  }
+  .feedback{
+    font-size:13.5px;
+    margin-top:6px;
+  }
+  .feedback.ok{color:var(--green);}
+  .feedback.bad{color:var(--red);}
+  .fib-row{
+    margin-bottom:14px;
+    font-size:15.5px;
+  }
+  .fib-row input{
+    display:inline-block;
+    width:130px;
+    margin:0 4px;
+    text-align:center;
+  }
+  .match-wrap{
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+  }
+  .match-col{
+    flex:1;
+    min-width:140px;
+  }
+  .match-item, .match-target{
+    padding:8px 10px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    margin-bottom:8px;
+    font-size:14.5px;
+    cursor:pointer;
+    user-select:none;
+  }
+  .match-item.selected{
+    border-color:var(--accent);
+    background:var(--accent-light);
+  }
+  .match-item.done{
+    opacity:.55;
+  }
+  .wheel-wrap{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+  }
+  .wheel-pointer{
+    width:0;height:0;
+    border-left:12px solid transparent;
+    border-right:12px solid transparent;
+    border-top:20px solid var(--accent);
+    margin-bottom:-4px;
+  }
+  #wheelCanvas{
+    transition:transform 4s cubic-bezier(0.17, 0.67, 0.32, 1.02);
+  }
+  #wheelResult{
+    font-weight:700;
+    color:var(--accent);
+    min-height:22px;
+  }
+  .reading-text{
+    background:var(--accent-light);
+    border-radius:10px;
+    padding:16px;
+    font-size:15px;
+    margin-bottom:16px;
+  }
+  .qa-block{
+    margin-bottom:14px;
+  }
+  .chat-log{
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:12px;
+    min-height:60px;
+    margin-bottom:12px;
+    font-size:14.5px;
+  }
+  .chat-line{
+    margin-bottom:8px;
+  }
+  .chat-line.bot b{color:var(--accent);}
+  .chat-line.user b{color:var(--grey);}
+  .reflect-q{
+    font-weight:600;
+    margin:14px 0 4px;
+    font-size:15px;
+  }
+  footer{
+    text-align:center;
+    color:var(--grey);
+    font-size:13px;
+    padding:20px;
+  }
+  @media (max-width:480px){
+    header h1{font-size:23px;}
+    .match-wrap{flex-direction:column;}
+    .fib-row input{width:100px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Homework for A2</h1>
+  <p>Topic: Daily Routine</p>
+  <p id="dateLine"></p>
+</header>
+
+<div id="progressBar">
+  <span id="progressLabel">0 / 6 tasks completed</span>
+  <div id="progressTrack"><div id="progressFill"></div></div>
+</div>
+
+<main>
+
+  <!-- TASK 1: SPINNING WHEEL -->
+  <div class="card" data-task="wheel">
+    <div class="card-head">
+      <span class="card-num">1</span>
+      <span class="card-icon">🎡</span>
+      <p class="card-title">Spin the Wheel</p>
+    </div>
+    <p class="instructions">Spin the wheel. You will get one word about your daily routine. Write one sentence with this word.</p>
+    <div class="wheel-wrap">
+      <div class="wheel-pointer"></div>
+      <canvas id="wheelCanvas" width="280" height="280"></canvas>
+      <button class="btn" id="spinBtn">Spin the wheel</button>
+      <p id="wheelResult"></p>
+    </div>
+    <div id="wheelSentenceBox" style="display:none; margin-top:14px;">
+      <label>Your sentence:</label>
+      <input type="text" id="wheelSentence" placeholder="Write your sentence here...">
+      <button class="btn secondary" id="checkWheel">Check</button>
+      <p class="feedback" id="wheelFeedback"></p>
+    </div>
+  </div>
+
+  <!-- TASK 2: FILL IN THE BLANKS -->
+  <div class="card" data-task="fib">
+    <div class="card-head">
+      <span class="card-num">2</span>
+      <span class="card-icon">✏️</span>
+      <p class="card-title">Fill in the Blanks</p>
+    </div>
+    <p class="instructions">Write the correct form of the verb in the box. Use Present Simple.</p>
+
+    <div class="fib-row">1. She <input type="text" class="fib-input" data-answer="is"> a software developer.</div>
+    <div class="fib-row">2. He <input type="text" class="fib-input" data-answer="doesn't"> have breakfast at home. He eats at the office.</div>
+    <div class="fib-row">3. My colleagues and I <input type="text" class="fib-input" data-answer="check"> our emails every morning.</div>
+    <div class="fib-row">4. What time <input type="text" class="fib-input" data-answer="do"> you usually wake up?</div>
+    <div class="fib-row">5. She <input type="text" class="fib-input" data-answer="isn't"> late for work. She is always on time.</div>
+
+    <button class="btn" id="checkFib">Check</button>
+  </div>
+
+  <!-- TASK 3: MATCHING -->
+  <div class="card" data-task="match">
+    <div class="card-head">
+      <span class="card-num">3</span>
+      <span class="card-icon">🔗</span>
+      <p class="card-title">Match the Time and the Action</p>
+    </div>
+    <p class="instructions">Tap a time on the left, then tap the action that matches it on the right.</p>
+    <div class="match-wrap">
+      <div class="match-col" id="matchLeft"></div>
+      <div class="match-col" id="matchRight"></div>
+    </div>
+    <p class="feedback" id="matchFeedback"></p>
+  </div>
+
+  <!-- TASK 4: ERROR CORRECTION -->
+  <div class="card" data-task="error">
+    <div class="card-head">
+      <span class="card-num">4</span>
+      <span class="card-icon">🛠️</span>
+      <p class="card-title">Find and Correct the Mistake</p>
+    </div>
+    <p class="instructions">Each sentence has one mistake with "to be" or "to do". Write the correct sentence.</p>
+
+    <div class="fib-row">1. "She are a developer." <br><input type="text" class="err-input" data-answer="She is a developer."></div>
+    <div class="fib-row">2. "He do not works on weekends." <br><input type="text" class="err-input" data-answer="He doesn't work on weekends."></div>
+    <div class="fib-row">3. "I am work every day from home." <br><input type="text" class="err-input" data-answer="I work every day from home."></div>
+    <div class="fib-row">4. "Does she is busy in the morning?" <br><input type="text" class="err-input" data-answer="Is she busy in the morning?"></div>
+
+    <button class="btn" id="checkError">Check</button>
+  </div>
+
+  <!-- TASK 5: READING -->
+  <div class="card" data-task="reading">
+    <div class="card-head">
+      <span class="card-num">5</span>
+      <span class="card-icon">📖</span>
+      <p class="card-title">Reading: Morning Routines of Tech Workers</p>
+    </div>
+    <p class="instructions">Read the text. Then answer the questions.</p>
+    <div class="reading-text">
+      Many software developers work from home now. Their day often starts without a long commute, but they still need a good routine. Some famous tech workers wake up very early, before 6 a.m. First, they drink water and do a short exercise. Then they check their messages, but only for ten minutes — not more! After that, they eat a healthy breakfast and start their most difficult task first, when their mind is fresh. In the afternoon, they take short breaks between meetings. A simple daily routine helps them work better and feel less stressed.
+    </div>
+    <div class="qa-block">
+      <label>1. Do many software developers commute to work every day now?</label>
+      <textarea class="reading-answer" data-answer="No, many of them work from home, so they don't commute."></textarea>
+      <button class="btn secondary showAnswer">Show answer</button>
+    </div>
+    <div class="qa-block">
+      <label>2. What do they do first, before checking messages?</label>
+      <textarea class="reading-answer" data-answer="They drink water and do a short exercise."></textarea>
+      <button class="btn secondary showAnswer">Show answer</button>
+    </div>
+    <div class="qa-block">
+      <label>3. Why do they start with the most difficult task?</label>
+      <textarea class="reading-answer" data-answer="Because their mind is fresh in the morning."></textarea>
+      <button class="btn secondary showAnswer">Show answer</button>
+    </div>
+  </div>
+
+  <!-- TASK 6: CHATBOT -->
+  <div class="card" data-task="chat">
+    <div class="card-head">
+      <span class="card-num">6</span>
+      <span class="card-icon">💬</span>
+      <p class="card-title">Talk About Your Day</p>
+    </div>
+    <p class="instructions">Answer the questions one by one. This is good practice for speaking about your routine.</p>
+    <div class="chat-log" id="chatLog"></div>
+    <input type="text" id="chatInput" placeholder="Type your answer...">
+    <button class="btn" id="chatSend">Send</button>
+  </div>
+
+  <!-- REFLECTION -->
+  <div class="card" data-task="reflect">
+    <div class="card-head">
+      <span class="card-icon">🪞</span>
+      <p class="card-title">My Reflection</p>
+    </div>
+    <p class="reflect-q">1. What was the most difficult task today?</p>
+    <textarea></textarea>
+    <p class="reflect-q">2. Write one new word or phrase you learned today.</p>
+    <textarea></textarea>
+    <p class="reflect-q">3. How confident do you feel talking about your daily routine now? (1–5)</p>
+    <textarea></textarea>
+  </div>
+
+</main>
+
+<footer>Homework generated for A2 — Daily Routine</footer>
+
+<script>
+document.getElementById('dateLine').textContent = new Date().toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
+
+/* ---------- PROGRESS TRACKER ---------- */
+const totalTasks = 6;
+const completed = new Set();
+function updateProgress(taskName){
+  completed.add(taskName);
+  const pct = Math.round((completed.size / totalTasks) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = completed.size + ' / ' + totalTasks + ' tasks completed';
+}
+
+/* ---------- TASK 1: WHEEL ---------- */
+const wheelWords = ["wake up","have breakfast","go to work","check emails","have lunch","take a break","cook dinner","go to bed"];
+const wheelColors = ["#3B6BEB","#EAF0FE","#3B6BEB","#EAF0FE","#3B6BEB","#EAF0FE","#3B6BEB","#EAF0FE"];
+const canvas = document.getElementById('wheelCanvas');
+const ctx = canvas.getContext('2d');
+const numSectors = wheelWords.length;
+const sectorAngle = 360 / numSectors;
+const radius = 140;
+const center = 140;
+
+function drawWheel(){
+  ctx.clearRect(0,0,280,280);
+  for(let i=0;i<numSectors;i++){
+    const startDeg = i*sectorAngle - 90;
+    const endDeg = startDeg + sectorAngle;
+    const startRad = startDeg * Math.PI/180;
+    const endRad = endDeg * Math.PI/180;
+
+    ctx.beginPath();
+    ctx.moveTo(center, center);
+    ctx.arc(center, center, radius, startRad, endRad);
+    ctx.closePath();
+    ctx.fillStyle = wheelColors[i];
+    ctx.fill();
+    ctx.strokeStyle = "#ffffff";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.save();
+    ctx.translate(center, center);
+    ctx.rotate((startDeg + sectorAngle/2) * Math.PI/180);
+    ctx.textAlign = "right";
+    ctx.fillStyle = wheelColors[i] === "#3B6BEB" ? "#ffffff" : "#333333";
+    ctx.font = "bold 13px sans-serif";
+    ctx.fillText(wheelWords[i], radius - 10, 5);
+    ctx.restore();
+  }
+}
+drawWheel();
+
+let currentRotation = 0;
+document.getElementById('spinBtn').addEventListener('click', function(){
+  const extraSpins = 5 + Math.floor(Math.random()*3);
+  const randomOffset = Math.random()*360;
+  currentRotation += extraSpins*360 + randomOffset;
+  canvas.style.transform = 'rotate(' + currentRotation + 'deg)';
+
+  setTimeout(function(){
+    const normalized = ((currentRotation % 360) + 360) % 360;
+    const targetAngle = ((-90 - normalized) % 360 + 360) % 360;
+    const index = Math.floor(((targetAngle + 90) % 360) / sectorAngle);
+    const word = wheelWords[index];
+    document.getElementById('wheelResult').textContent = 'Your word: ' + word;
+    document.getElementById('wheelSentenceBox').style.display = 'block';
+    document.getElementById('wheelSentenceBox').dataset.word = word;
+  }, 4100);
+});
+
+document.getElementById('checkWheel').addEventListener('click', function(){
+  const word = document.getElementById('wheelSentenceBox').dataset.word || "";
+  const sentence = document.getElementById('wheelSentence').value.trim();
+  const fb = document.getElementById('wheelFeedback');
+  if(sentence.length > 4 && sentence.toLowerCase().includes(word.toLowerCase())){
+    fb.textContent = "Nice! Your sentence uses the word.";
+    fb.className = "feedback ok";
+    updateProgress('wheel');
+  } else {
+    fb.textContent = 'Try again — make sure your sentence includes "' + word + '".';
+    fb.className = "feedback bad";
+  }
+});
+
+/* ---------- TASK 2: FILL IN THE BLANKS ---------- */
+document.getElementById('checkFib').addEventListener('click', function(){
+  const inputs = document.querySelectorAll('.fib-input');
+  let allCorrect = true;
+  inputs.forEach(function(inp){
+    const answer = inp.dataset.answer.toLowerCase();
+    const value = inp.value.trim().toLowerCase();
+    if(value === answer){
+      inp.classList.remove('incorrect');
+      inp.classList.add('correct');
+    } else {
+      inp.classList.remove('correct');
+      inp.classList.add('incorrect');
+      allCorrect = false;
+      inp.title = "Correct answer: " + inp.dataset.answer;
+    }
+  });
+  if(allCorrect) updateProgress('fib');
+});
+
+/* ---------- TASK 3: MATCHING ---------- */
+const matchPairs = [
+  {time:"7:00 a.m.", action:"wake up"},
+  {time:"7:30 a.m.", action:"have breakfast"},
+  {time:"9:00 a.m.", action:"check emails"},
+  {time:"1:00 p.m.", action:"have lunch"},
+  {time:"7:00 p.m.", action:"cook dinner"}
+];
+const leftCol = document.getElementById('matchLeft');
+const rightCol = document.getElementById('matchRight');
+const shuffledActions = [...matchPairs].sort(()=>Math.random()-0.5);
+
+matchPairs.forEach(function(pair, i){
+  const div = document.createElement('div');
+  div.className = 'match-item';
+  div.textContent = pair.time;
+  div.dataset.time = pair.time;
+  div.dataset.correctAction = pair.action;
+  leftCol.appendChild(div);
+});
+shuffledActions.forEach(function(pair){
+  const div = document.createElement('div');
+  div.className = 'match-target';
+  div.textContent = pair.action;
+  div.dataset.action = pair.action;
+  rightCol.appendChild(div);
+});
+
+let selectedTime = null;
+let matchedCount = 0;
+leftCol.addEventListener('click', function(e){
+  const item = e.target.closest('.match-item');
+  if(!item || item.classList.contains('done')) return;
+  document.querySelectorAll('.match-item').forEach(el=>el.classList.remove('selected'));
+  item.classList.add('selected');
+  selectedTime = item;
+});
+rightCol.addEventListener('click', function(e){
+  const target = e.target.closest('.match-target');
+  if(!target || target.classList.contains('done') || !selectedTime) return;
+  const fb = document.getElementById('matchFeedback');
+  if(target.dataset.action === selectedTime.dataset.correctAction){
+    target.classList.add('done', 'correct');
+    selectedTime.classList.add('done', 'correct');
+    selectedTime.classList.remove('selected');
+    fb.textContent = "Correct match!";
+    fb.className = "feedback ok";
+    matchedCount++;
+    selectedTime = null;
+    if(matchedCount === matchPairs.length){
+      updateProgress('match');
+      fb.textContent = "All matched! Well done.";
+    }
+  } else {
+    fb.textContent = "Not quite — try another pair.";
+    fb.className = "feedback bad";
+  }
+});
+
+/* ---------- TASK 4: ERROR CORRECTION ---------- */
+document.getElementById('checkError').addEventListener('click', function(){
+  const inputs = document.querySelectorAll('.err-input');
+  let allCorrect = true;
+  inputs.forEach(function(inp){
+    const answer = inp.dataset.answer.toLowerCase().replace(/[.?!]/g,'');
+    const value = inp.value.trim().toLowerCase().replace(/[.?!]/g,'');
+    if(value === answer){
+      inp.classList.remove('incorrect');
+      inp.classList.add('correct');
+    } else {
+      inp.classList.remove('correct');
+      inp.classList.add('incorrect');
+      allCorrect = false;
+    }
+  });
+  if(allCorrect) updateProgress('error');
+});
+
+/* ---------- TASK 5: READING ---------- */
+document.querySelectorAll('.showAnswer').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    const box = btn.previousElementSibling;
+    box.value = box.dataset.answer;
+    updateProgress('reading');
+  });
+});
+
+/* ---------- TASK 6: CHATBOT ---------- */
+const chatQuestions = [
+  "What time do you usually wake up?",
+  "What do you usually do first in the morning?",
+  "What time do you start work?",
+  "Do you take a break during the day? When?",
+  "What time do you usually go to bed?"
+];
+let chatStep = 0;
+const chatLog = document.getElementById('chatLog');
+
+function addChatLine(who, text){
+  const line = document.createElement('div');
+  line.className = 'chat-line ' + who;
+  line.innerHTML = '<b>' + (who === 'bot' ? 'Coach' : 'You') + ':</b> ' + text;
+  chatLog.appendChild(line);
+  chatLog.scrollTop = chatLog.scrollHeight;
+}
+function askNext(){
+  if(chatStep < chatQuestions.length){
+    addChatLine('bot', chatQuestions[chatStep]);
+  } else {
+    addChatLine('bot', "Great! Now you can describe your day in the reading and reflection tasks too.");
+    updateProgress('chat');
+  }
+}
+document.getElementById('chatSend').addEventListener('click', function(){
+  const input = document.getElementById('chatInput');
+  const value = input.value.trim();
+  if(!value) return;
+  addChatLine('user', value);
+  input.value = '';
+  chatStep++;
+  setTimeout(askNext, 400);
+});
+document.getElementById('chatInput').addEventListener('keydown', function(e){
+  if(e.key === 'Enter'){ document.getElementById('chatSend').click(); }
+});
+askNext();
+</script>
+
+</body>
+</html>
