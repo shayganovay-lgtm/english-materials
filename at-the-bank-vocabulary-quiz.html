@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>At the Bank — Vocabulary &amp; Dialogue Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#10233D;
+    --navy-deep:#0A1830;
+    --parchment:#FBF6EA;
+    --parchment-2:#F3ECDB;
+    --ink:#1B2733;
+    --ink-soft:#5B6B7A;
+    --ink-faint:#8D9AA6;
+    --gold:#B8863B;
+    --gold-bg:#F1E3C6;
+    --teal:#3E6E78;
+    --teal-bg:#DCE7E5;
+    --correct:#3F7D5C;
+    --correct-bg:#E1EEE4;
+    --incorrect:#A23B3B;
+    --incorrect-bg:#F4E1DD;
+    --line:rgba(16,35,61,0.14);
+    --line-soft:rgba(16,35,61,0.08);
+    --font-display:'Fraunces', Georgia, serif;
+    --font-body:'Source Serif 4', Georgia, serif;
+    --font-mono:'IBM Plex Mono', 'Courier New', monospace;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    background:var(--navy);
+    background-image:
+      radial-gradient(ellipse 900px 480px at 12% -8%, rgba(184,134,59,0.10), transparent 60%),
+      radial-gradient(ellipse 700px 480px at 108% 12%, rgba(62,110,120,0.14), transparent 55%);
+    color:var(--parchment);
+    font-family:var(--font-body);
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:36px 16px 64px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; transition-duration:0.001ms !important; }
+  }
+
+  .wrap{ width:100%; max-width:660px; }
+
+  /* ---------- Header / seal ---------- */
+  header{
+    text-align:center;
+    margin-bottom:26px;
+    animation: dropIn 0.5s ease both;
+  }
+  @keyframes dropIn{ from{opacity:0; transform:translateY(-8px);} to{opacity:1; transform:translateY(0);} }
+
+  .seal{ display:flex; justify-content:center; margin-bottom:10px; }
+  .seal svg{ width:64px; height:64px; }
+  .seal circle{ fill:none; stroke:var(--gold); }
+  .seal .ring-outer{ stroke-width:1.4; stroke-dasharray:2.6 4.2; }
+  .seal .ring-inner{ stroke-width:1.2; }
+  .seal text{
+    font-family:var(--font-mono);
+    fill:var(--gold);
+    font-size:7.6px;
+    letter-spacing:0.14em;
+  }
+  .seal .star{ fill:var(--gold); }
+
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:8px;
+  }
+  h1{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:2.3rem;
+    letter-spacing:-0.01em;
+    margin:0 0 6px;
+    color:var(--parchment);
+  }
+  .subtitle{
+    font-size:0.94rem;
+    color:rgba(251,246,234,0.62);
+    letter-spacing:0.01em;
+  }
+  .subtitle b{ color:var(--gold); font-weight:600; }
+
+  /* ---------- Cards ---------- */
+  .card{
+    background:var(--parchment);
+    color:var(--ink);
+    border:1px solid rgba(16,35,61,0.06);
+    border-radius:6px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15), 0 18px 40px rgba(0,0,0,0.28);
+    padding:32px 30px;
+  }
+
+  /* ---------- Start screen ---------- */
+  #start-screen .card p{
+    font-size:0.98rem;
+    line-height:1.68;
+    color:var(--ink-soft);
+    margin:0 0 16px;
+  }
+  #start-screen .card p:last-of-type{ margin-bottom:26px; }
+  #start-screen strong{ color:var(--ink); }
+
+  .stat-row{
+    display:flex;
+    gap:10px;
+    margin-bottom:26px;
+    flex-wrap:wrap;
+  }
+  .stat-chip{
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    border:1px solid var(--line);
+    border-radius:3px;
+    padding:7px 11px;
+    background:#fff;
+  }
+
+  .btn-primary{
+    display:inline-block;
+    width:100%;
+    background:var(--navy);
+    color:var(--parchment);
+    font-family:var(--font-mono);
+    font-weight:600;
+    font-size:0.9rem;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    border:none;
+    border-radius:3px;
+    padding:15px 20px;
+    cursor:pointer;
+    transition:background 0.15s ease, transform 0.1s ease;
+  }
+  .btn-primary:hover{ background:#1a3358; }
+  .btn-primary:active{ transform:translateY(1px); }
+  .btn-primary:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+
+  /* ---------- Progress (ledger style) ---------- */
+  .progress-bar-track{
+    width:100%;
+    height:5px;
+    background:rgba(251,246,234,0.14);
+    border-radius:3px;
+    overflow:hidden;
+    margin-bottom:8px;
+  }
+  .progress-bar-fill{
+    height:100%;
+    background:linear-gradient(90deg, var(--gold), var(--teal));
+    border-radius:3px;
+    transition:width 0.35s ease;
+  }
+  .progress-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-family:var(--font-mono);
+    font-size:0.76rem;
+    color:rgba(251,246,234,0.66);
+    margin-bottom:18px;
+    letter-spacing:0.02em;
+  }
+  .progress-row .score{ color:var(--gold); font-weight:600; }
+
+  /* ---------- Quiz card ---------- */
+  #quiz-screen{ display:none; }
+  #quiz-screen.active{ display:block; }
+  #start-screen.hidden, #results-screen.hidden{ display:none; }
+
+  .q-card{ animation: fadeSlide 0.3s ease both; }
+  @keyframes fadeSlide{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+  .eyebrow-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:20px;
+  }
+  .eyebrow-row .tag{
+    font-family:var(--font-mono);
+    font-size:0.7rem;
+    font-weight:600;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    padding:5px 9px;
+    border-radius:3px;
+  }
+  .tag.vocab{ background:var(--gold-bg); color:var(--gold); }
+  .tag.dialogue{ background:var(--teal-bg); color:var(--teal); }
+  .eyebrow-row .num{
+    font-family:var(--font-mono);
+    font-size:0.78rem;
+    color:var(--ink-faint);
+  }
+
+  .q-clue{
+    font-family:var(--font-display);
+    font-size:1.28rem;
+    line-height:1.55;
+    color:var(--ink);
+    margin:0 0 8px;
+  }
+  .q-context{
+    font-size:0.85rem;
+    color:var(--ink-soft);
+    line-height:1.6;
+    margin:0 0 22px;
+    padding:10px 14px;
+    background:var(--parchment-2);
+    border-left:3px solid var(--gold);
+    border-radius:0 3px 3px 0;
+  }
+  .q-card.dialogue .q-context{ border-left-color:var(--teal); }
+
+  .prompt-line{
+    font-size:0.83rem;
+    color:var(--ink-soft);
+    margin:-10px 0 18px;
+  }
+
+  .options{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-bottom:6px;
+  }
+  @media (max-width:480px){ .options{ grid-template-columns:1fr; } }
+
+  .opt{
+    text-align:left;
+    font-family:var(--font-body);
+    font-size:0.96rem;
+    color:var(--ink);
+    background:#fff;
+    border:1.5px solid var(--line);
+    border-radius:3px;
+    padding:13px 14px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    transition:border-color 0.12s ease, background 0.12s ease, transform 0.08s ease;
+  }
+  .opt:hover:not(.disabled){ border-color:var(--ink-faint); }
+  .opt:active:not(.disabled){ transform:translateY(1px); }
+  .opt:focus-visible{ outline:2px solid var(--gold); outline-offset:1px; }
+  .opt .letter{
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    color:var(--ink-faint);
+    border:1px solid var(--line);
+    border-radius:50%;
+    width:20px; height:20px;
+    flex:none;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .opt.disabled{ cursor:default; }
+  .opt.correct-answer{ background:var(--correct-bg); border-color:var(--correct); color:var(--correct); font-weight:600; }
+  .opt.correct-answer .letter{ border-color:var(--correct); color:var(--correct); }
+  .opt.wrong-answer{ background:var(--incorrect-bg); border-color:var(--incorrect); color:var(--incorrect); }
+  .opt.wrong-answer .letter{ border-color:var(--incorrect); color:var(--incorrect); }
+  .opt.muted{ opacity:0.5; }
+
+  .feedback{
+    margin-top:18px;
+    padding:16px 18px;
+    border-radius:3px;
+    border-left:3px solid var(--ink-faint);
+    background:var(--parchment-2);
+    font-size:0.91rem;
+    line-height:1.6;
+    color:var(--ink-soft);
+    display:none;
+  }
+  .feedback.show{ display:block; animation: fadeSlide 0.25s ease both; }
+  .feedback.is-correct{ border-left-color:var(--correct); }
+  .feedback.is-wrong{ border-left-color:var(--incorrect); }
+  .feedback .verdict{
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    font-weight:600;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    display:block;
+    margin-bottom:6px;
+  }
+  .feedback.is-correct .verdict{ color:var(--correct); }
+  .feedback.is-wrong .verdict{ color:var(--incorrect); }
+
+  .next-row{ display:flex; justify-content:flex-end; margin-top:22px; }
+  .btn-next{
+    font-family:var(--font-mono);
+    font-weight:600;
+    font-size:0.82rem;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    color:var(--ink);
+    background:transparent;
+    border:1.5px solid var(--ink);
+    border-radius:3px;
+    padding:10px 18px;
+    cursor:pointer;
+    opacity:0.35;
+    pointer-events:none;
+    transition:opacity 0.15s ease, background 0.15s ease, color 0.15s ease;
+  }
+  .btn-next.enabled{ opacity:1; pointer-events:auto; }
+  .btn-next.enabled:hover{ background:var(--ink); color:var(--parchment); }
+  .btn-next:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+
+  /* ---------- Results screen ---------- */
+  #results-screen{ display:none; }
+  #results-screen.active{ display:block; }
+
+  .score-hero{ text-align:center; padding:6px 0 24px; }
+  .score-hero .big{
+    font-family:var(--font-display);
+    font-size:3.4rem;
+    font-weight:600;
+    line-height:1;
+    color:var(--ink);
+  }
+  .score-hero .big span{ font-size:1.6rem; color:var(--ink-faint); font-weight:500; }
+  .score-hero .tier{ margin-top:10px; font-size:1rem; color:var(--ink-soft); }
+
+  .breakdown{ display:flex; gap:12px; margin:22px 0 8px; }
+  .bd-item{
+    flex:1;
+    border:1px solid var(--line);
+    border-radius:3px;
+    padding:14px 16px;
+    background:#fff;
+  }
+  .bd-item .label{
+    font-family:var(--font-mono);
+    font-size:0.68rem;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    margin-bottom:6px;
+  }
+  .bd-item.vocab .label{ color:var(--gold); }
+  .bd-item.dialogue .label{ color:var(--teal); }
+  .bd-item .val{ font-family:var(--font-display); font-size:1.5rem; font-weight:600; }
+
+  hr.div{ border:none; border-top:1px solid var(--line); margin:28px 0 22px; }
+
+  .review-title{ font-family:var(--font-display); font-size:1.15rem; font-weight:600; margin:0 0 4px; }
+  .review-sub{ font-size:0.85rem; color:var(--ink-soft); margin:0 0 18px; }
+
+  .review-item{
+    border:1px solid var(--line);
+    border-radius:3px;
+    padding:16px 18px;
+    margin-bottom:12px;
+    background:#fff;
+  }
+  .review-item .ritag{
+    font-family:var(--font-mono);
+    font-size:0.66rem;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    color:var(--ink-faint);
+    margin-bottom:6px;
+  }
+  .review-item .riclue{ font-family:var(--font-display); font-size:1.03rem; margin-bottom:8px; }
+  .review-item .riline{ font-size:0.86rem; margin:2px 0; }
+  .review-item .riline .yours{ color:var(--incorrect); font-weight:600; }
+  .review-item .riline .right{ color:var(--correct); font-weight:600; }
+  .review-item .riexp{ font-size:0.86rem; color:var(--ink-soft); line-height:1.55; margin-top:8px; }
+
+  .all-correct-note{ text-align:center; font-size:0.92rem; color:var(--ink-soft); padding:18px 0; }
+
+  .btn-row{ display:flex; gap:10px; margin-top:24px; }
+  .btn-secondary{
+    flex:1;
+    font-family:var(--font-mono);
+    font-weight:600;
+    font-size:0.82rem;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    background:transparent;
+    border:1.5px solid var(--ink);
+    color:var(--ink);
+    border-radius:3px;
+    padding:12px 16px;
+    cursor:pointer;
+    transition:background 0.15s ease, color 0.15s ease;
+  }
+  .btn-secondary:hover{ background:var(--ink); color:var(--parchment); }
+
+  footer{
+    text-align:center;
+    margin-top:24px;
+    font-size:0.76rem;
+    color:rgba(251,246,234,0.4);
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="seal">
+      <svg viewBox="0 0 64 64">
+        <circle class="ring-outer" cx="32" cy="32" r="29"/>
+        <circle class="ring-inner" cx="32" cy="32" r="22"/>
+        <polygon class="star" points="32,20 34.2,27 41.5,27 35.6,31.3 37.8,38.3 32,34 26.2,38.3 28.4,31.3 22.5,27 29.8,27"/>
+        <text x="32" y="52" text-anchor="middle">EST. 1892</text>
+      </svg>
+    </div>
+    <div class="eyebrow">Travel English &middot; Track 28</div>
+    <h1>At the Bank</h1>
+    <div class="subtitle">Vocabulary &amp; dialogue drill &middot; <b>17 items</b> &middot; Useful Words &amp; the counter dialogue</div>
+  </header>
+
+  <!-- START SCREEN -->
+  <div id="start-screen">
+    <div class="card">
+      <p>You&rsquo;re standing at the counter with Jane, paying money in, applying for a credit card, and changing some dollars. Each item below tests a word from the <strong>Useful Words</strong> list or a gap from the <strong>bank dialogue</strong> itself.</p>
+      <p>Read the clue carefully &mdash; several options are close cousins of the right answer, but only one is the word a cashier would actually use.</p>
+      <div class="stat-row">
+        <span class="stat-chip">9 Useful Words</span>
+        <span class="stat-chip">8 Dialogue gaps</span>
+        <span class="stat-chip">Instant feedback</span>
+        <span class="stat-chip">Full review at the end</span>
+      </div>
+      <button class="btn-primary" onclick="beginQuiz()">Begin the quiz</button>
+    </div>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div id="quiz-screen">
+    <div class="progress-row">
+      <span id="progress-label">Item 1 of 17</span>
+      <span class="score">Score: <span id="live-score">0</span></span>
+    </div>
+    <div class="progress-bar-track"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div>
+
+    <div class="card q-card" id="q-card">
+      <div class="eyebrow-row">
+        <span class="tag" id="q-tag">Useful Words</span>
+        <span class="num" id="q-num">No. 1</span>
+      </div>
+      <p class="q-clue" id="q-clue"></p>
+      <p class="q-context" id="q-context" style="display:none;"></p>
+      <div class="prompt-line" id="q-prompt">Which word fits?</div>
+      <div class="options" id="q-options"></div>
+      <div class="feedback" id="q-feedback">
+        <span class="verdict" id="fb-verdict"></span>
+        <span id="fb-text"></span>
+      </div>
+      <div class="next-row">
+        <button class="btn-next" id="next-btn" onclick="nextQuestion()">Next item &rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS SCREEN -->
+  <div id="results-screen">
+    <div class="card">
+      <div class="score-hero">
+        <div class="big" id="final-score">0<span>/17</span></div>
+        <div class="tier" id="final-tier"></div>
+      </div>
+      <div class="breakdown">
+        <div class="bd-item vocab">
+          <div class="label">Useful Words</div>
+          <div class="val" id="bd-vocab">0/9</div>
+        </div>
+        <div class="bd-item dialogue">
+          <div class="label">Dialogue</div>
+          <div class="val" id="bd-dialogue">0/8</div>
+        </div>
+      </div>
+
+      <hr class="div">
+      <div class="review-title">Review</div>
+      <div class="review-sub" id="review-sub">Items worth a second look:</div>
+      <div id="review-list"></div>
+
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="restartQuiz()">Restart quiz</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>Based on &ldquo;At the Bank,&rdquo; Travel English Booklet, Hot English Publishing.</footer>
+</div>
+
+<script>
+const QUESTIONS = [
+  // ---------------- USEFUL WORDS ----------------
+  {
+    cat:'vocab', num:1,
+    clue:'A machine on the street where you insert your card and PIN to take out cash.',
+    context:null,
+    options:['A cash machine','A safe','A vault','A cashier'],
+    correct:0,
+    explanation:"A cash machine (an ATM, or \u201cautomated teller machine\u201d in US English) is the street machine you use to withdraw cash. A safe and a vault store money rather than dispense it, and a cashier is the person behind the counter."
+  },
+  {
+    cat:'vocab', num:2,
+    clue:'The four-digit secret number you enter with your card to prove it\u2019s really you.',
+    context:null,
+    options:['An account number','A commission charge','A PIN number','A cheque'],
+    correct:2,
+    explanation:"A PIN number (personal identification number) is the code you type in at a cash machine or card reader. An account number identifies your account but isn\u2019t secret in the same way, and it isn\u2019t used to authorise a payment on its own."
+  },
+  {
+    cat:'vocab', num:3,
+    clue:'A small book of blank cheques you use to pay by writing an amount and signing.',
+    context:null,
+    options:['A piggy bank','A cheque book','A purse','A paying-in slip'],
+    correct:1,
+    explanation:"A cheque book contains the blank cheques themselves. A paying-in slip is a different form, used for depositing money rather than paying someone by cheque; a piggy bank and a purse simply hold money."
+  },
+  {
+    cat:'vocab', num:4,
+    clue:'A safer alternative to carrying cash abroad \u2014 you sign it once when you buy it and again when you use it.',
+    context:null,
+    options:['A credit card','A bag of money','A traveller\u2019s cheque','A wallet'],
+    correct:2,
+    explanation:"A traveller\u2019s cheque is designed exactly for this: it\u2019s worthless without your matching signature, so it\u2019s harder to steal and use than cash. A credit card serves a similar travel purpose but isn\u2019t signed twice in this way."
+  },
+  {
+    cat:'vocab', num:5,
+    clue:'The little form you fill in at the counter when you want to put money into your account.',
+    context:null,
+    options:['An application','A commission charge','A paying-in slip','A cheque'],
+    correct:2,
+    explanation:"A paying-in slip is completed specifically to deposit money into an account. An application is for something like a card or a mortgage, and a commission charge is a fee, not a form."
+  },
+  {
+    cat:'vocab', num:6,
+    clue:'If your account is this, you\u2019ve taken out more money than you actually have.',
+    context:null,
+    options:['Cancelled','Overdrawn','Frozen','Cashed'],
+    correct:1,
+    explanation:"Overdrawn describes an account that has gone below zero. Frozen and cancelled describe an account being blocked or closed altogether, which is a different situation."
+  },
+  {
+    cat:'vocab', num:7,
+    clue:'The value of one currency compared to another \u2014 for example, how many pounds one dollar is worth.',
+    context:null,
+    options:['The interest rate','The bank charge','The exchange rate','The commission charge'],
+    correct:2,
+    explanation:"The exchange rate is the comparison between two currencies. The interest rate concerns money you earn or owe on savings and loans, and a commission charge or bank charge is a fee taken by the bank, not a currency value."
+  },
+  {
+    cat:'vocab', num:8,
+    clue:'A fee \u2014 often a percentage of the total \u2014 that you pay the bank for carrying out a transaction.',
+    context:null,
+    options:['A mortgage','An overdraft','A commission charge','An application'],
+    correct:2,
+    explanation:"A commission charge is exactly this kind of fee, often quoted as a percentage (e.g. 2.5%). A mortgage and an overdraft are types of borrowing, and an application is simply a request form."
+  },
+  {
+    cat:'vocab', num:9,
+    clue:'The strong, secure room inside a bank where cash and valuables are locked away.',
+    context:null,
+    options:['A piggy bank','An alarm','A vault','A safe'],
+    correct:2,
+    explanation:"A vault is the large, reinforced room used by banks. A safe is the smaller, similar idea but usually kept in a home or office rather than being part of the bank building itself; an alarm just warns of intruders."
+  },
+
+  // ---------------- DIALOGUE AT THE BANK ----------------
+  {
+    cat:'dialogue', num:1,
+    clue:'Jane: &ldquo;I&rsquo;d like to pay this money into my ___, please.&rdquo;',
+    context:'Jane has just walked up to the counter and greeted the cashier.',
+    options:['account','safe','wallet','purse'],
+    correct:0,
+    explanation:"You pay money into an account \u2014 this is the standard phrase for a deposit, and it sets up the cashier\u2019s next question about a paying-in slip."
+  },
+  {
+    cat:'dialogue', num:2,
+    clue:'Cashier: &ldquo;Have you filled in a paying-in ___?&rdquo;',
+    context:'Jane says she hasn\u2019t seen one, so the cashier hands her a slip.',
+    options:['slip','form','cheque','receipt'],
+    correct:0,
+    explanation:"\u2018Paying-in slip\u2019 is the fixed term for the small deposit form, matching the Useful Words list; \u2018paying-in form\u2019 or \u2018paying-in receipt\u2019 aren\u2019t the standard phrase."
+  },
+  {
+    cat:'dialogue', num:3,
+    clue:'Jane: &ldquo;I&rsquo;d also like to apply for a credit ___.&rdquo;',
+    context:'After filling in the slip, Jane asks about a second service.',
+    options:['card','cheque','account','loan'],
+    correct:0,
+    explanation:"\u2018Apply for a credit card\u2019 is the set collocation. A credit cheque or credit loan aren\u2019t real banking terms, and \u2018credit account\u2019 means something different (a running tab, not a card)."
+  },
+  {
+    cat:'dialogue', num:4,
+    clue:'Cashier: &ldquo;You&rsquo;ll need to fill out this ___.&rdquo; <em>(He gives Jane a form.)</em>',
+    context:'This is the document Jane completes to apply for the credit card.',
+    options:['form','slip','cheque','card'],
+    correct:0,
+    explanation:"An application for something like a credit card is completed on a form, distinct from the paying-in slip used earlier for the deposit."
+  },
+  {
+    cat:'dialogue', num:5,
+    clue:'Jane: &ldquo;I&rsquo;ve also got these US dollars on me. Can I ___ them here?&rdquo;',
+    context:'Jane wants to convert her US dollars into pounds at this bank.',
+    options:['change','cash','save','transfer'],
+    correct:0,
+    explanation:"\u2018Change\u2019 money means to convert it into another currency, which is exactly what Jane wants \u2014 and it sets up her very next question about the exchange rate for dollars to pounds."
+  },
+  {
+    cat:'dialogue', num:6,
+    clue:'Jane: &ldquo;What&rsquo;s the exchange ___ for dollars to pounds?&rdquo;',
+    context:'The cashier answers: &ldquo;It&rsquo;s 0.50615 pence.&rdquo;',
+    options:['rate','charge','price','value'],
+    correct:0,
+    explanation:"\u2018Exchange rate\u2019 is the fixed term for the value of one currency against another, as also tested in the Useful Words section."
+  },
+  {
+    cat:'dialogue', num:7,
+    clue:'Jane: &ldquo;And are there any ___?&rdquo;',
+    context:'The cashier replies: &ldquo;There&rsquo;s a 2.5% commission charge on all transactions.&rdquo;',
+    options:['charges','savings','discounts','deposits'],
+    correct:0,
+    explanation:"Jane is asking whether the bank takes a fee for the exchange \u2014 \u2018any charges\u2019 \u2014 which the cashier confirms by naming the 2.5% commission charge."
+  },
+  {
+    cat:'dialogue', num:8,
+    clue:'Jane: &ldquo;OK. I&rsquo;ll think I&rsquo;ll just keep them for my next ___ to the states.&rdquo;',
+    context:'Jane decides not to change the dollars after hearing about the charge.',
+    options:['trip','flight','transfer','visit'],
+    correct:0,
+    explanation:"\u2018My next trip to the states\u2019 is the natural, idiomatic phrase for a future journey; \u2018flight\u2019 is too narrow (just the plane journey) and \u2018transfer\u2019 belongs to banking, not travel."
+  }
+];
+
+const TOTAL = QUESTIONS.length;
+let current = 0;
+let score = 0;
+let answered = false;
+const userAnswers = new Array(TOTAL).fill(null);
+
+function beginQuiz(){
+  document.getElementById('start-screen').classList.add('hidden');
+  document.getElementById('quiz-screen').classList.add('active');
+  renderQuestion();
+}
+
+function letterFor(i){ return String.fromCharCode(65+i); }
+
+function renderQuestion(){
+  const q = QUESTIONS[current];
+  answered = false;
+
+  document.getElementById('progress-label').textContent = 'Item ' + (current+1) + ' of ' + TOTAL;
+  document.getElementById('progress-fill').style.width = (current/TOTAL*100) + '%';
+  document.getElementById('live-score').textContent = score;
+
+  const card = document.getElementById('q-card');
+  card.classList.remove('dialogue');
+  if(q.cat === 'dialogue') card.classList.add('dialogue');
+  card.style.animation = 'none';
+  void card.offsetWidth;
+  card.style.animation = '';
+
+  const tag = document.getElementById('q-tag');
+  tag.textContent = q.cat === 'vocab' ? 'Useful Words' : 'Dialogue at the Bank';
+  tag.className = 'tag ' + (q.cat === 'vocab' ? 'vocab' : 'dialogue');
+  document.getElementById('q-num').textContent = 'No. ' + q.num;
+
+  document.getElementById('q-clue').innerHTML = q.clue;
+
+  const ctxEl = document.getElementById('q-context');
+  if(q.context){
+    ctxEl.innerHTML = q.context;
+    ctxEl.style.display = 'block';
+  } else {
+    ctxEl.style.display = 'none';
+  }
+
+  document.getElementById('q-prompt').textContent = q.cat === 'vocab' ? 'Which word matches the clue?' : 'Which word completes the line?';
+
+  const optsEl = document.getElementById('q-options');
+  optsEl.innerHTML = q.options.map((opt, i) =>
+    '<button class="opt" id="opt-' + i + '" onclick="selectOption(' + i + ')">' +
+      '<span class="letter">' + letterFor(i) + '</span><span>' + opt + '</span>' +
+    '</button>'
+  ).join('');
+
+  const fb = document.getElementById('q-feedback');
+  fb.classList.remove('show','is-correct','is-wrong');
+
+  const nextBtn = document.getElementById('next-btn');
+  nextBtn.classList.remove('enabled');
+  nextBtn.textContent = (current === TOTAL-1) ? 'See results \u2192' : 'Next item \u2192';
+}
+
+function selectOption(i){
+  if(answered) return;
+  answered = true;
+  const q = QUESTIONS[current];
+  userAnswers[current] = i;
+  const isCorrect = (i === q.correct);
+  if(isCorrect) score++;
+
+  for(let j=0; j<q.options.length; j++){
+    const btn = document.getElementById('opt-' + j);
+    btn.classList.add('disabled');
+    if(j === q.correct){
+      btn.classList.add('correct-answer');
+    } else if(j === i){
+      btn.classList.add('wrong-answer');
+    } else {
+      btn.classList.add('muted');
+    }
+  }
+
+  const fb = document.getElementById('q-feedback');
+  fb.classList.add('show', isCorrect ? 'is-correct' : 'is-wrong');
+  document.getElementById('fb-verdict').textContent = isCorrect ? 'Correct' : 'Not quite';
+  document.getElementById('fb-text').textContent = q.explanation;
+
+  document.getElementById('live-score').textContent = score;
+  document.getElementById('next-btn').classList.add('enabled');
+}
+
+function nextQuestion(){
+  if(!answered) return;
+  if(current < TOTAL-1){
+    current++;
+    renderQuestion();
+  } else {
+    showResults();
+  }
+}
+
+function showResults(){
+  document.getElementById('progress-fill').style.width = '100%';
+  document.getElementById('quiz-screen').classList.remove('active');
+  document.getElementById('results-screen').classList.add('active');
+
+  let vocabCorrect = 0, dialogueCorrect = 0;
+  QUESTIONS.forEach((q, idx) => {
+    if(userAnswers[idx] === q.correct){
+      if(q.cat === 'vocab') vocabCorrect++; else dialogueCorrect++;
+    }
+  });
+
+  document.getElementById('final-score').innerHTML = score + '<span>/' + TOTAL + '</span>';
+  document.getElementById('bd-vocab').textContent = vocabCorrect + '/9';
+  document.getElementById('bd-dialogue').textContent = dialogueCorrect + '/8';
+
+  let tier;
+  if(score >= 15) tier = 'Excellent \u2014 you\u2019d handle a real bank counter with ease.';
+  else if(score >= 11) tier = 'Solid grasp of the vocabulary, with a few phrases worth a second look.';
+  else tier = 'A useful diagnostic \u2014 revisit the Useful Words list and the dialogue below.';
+  document.getElementById('final-tier').textContent = tier;
+
+  const missed = QUESTIONS.map((q, idx) => ({q, idx})).filter(o => userAnswers[o.idx] !== o.q.correct);
+  const reviewList = document.getElementById('review-list');
+  const reviewSub = document.getElementById('review-sub');
+
+  if(missed.length === 0){
+    reviewSub.style.display = 'none';
+    reviewList.innerHTML = '<div class="all-correct-note">All 17 items correct \u2014 nothing to review.</div>';
+  } else {
+    reviewSub.style.display = 'block';
+    reviewSub.textContent = missed.length + ' item' + (missed.length>1?'s':'') + ' worth a second look:';
+    reviewList.innerHTML = missed.map(o => {
+      const q = o.q;
+      const yourAns = q.options[userAnswers[o.idx]];
+      const rightAns = q.options[q.correct];
+      return '<div class="review-item">' +
+        '<div class="ritag">' + (q.cat==='vocab'?'Useful Words':'Dialogue at the Bank') + ' \u00b7 No. ' + q.num + '</div>' +
+        '<div class="riclue">' + q.clue + '</div>' +
+        '<div class="riline">Your answer: <span class="yours">' + yourAns + '</span></div>' +
+        '<div class="riline">Correct answer: <span class="right">' + rightAns + '</span></div>' +
+        '<div class="riexp">' + q.explanation + '</div>' +
+      '</div>';
+    }).join('');
+  }
+}
+
+function restartQuiz(){
+  current = 0;
+  score = 0;
+  userAnswers.fill(null);
+  document.getElementById('results-screen').classList.remove('active');
+  document.getElementById('quiz-screen').classList.add('active');
+  renderQuestion();
+}
+</script>
+</body>
+</html>
