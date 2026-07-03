@@ -47,6 +47,25 @@
 
   .wrap{ width:100%; max-width: 680px; }
 
+  .site-nav{ display:flex; justify-content:flex-start; margin-bottom: 18px; }
+  .back-link{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-family:'Space Mono', monospace;
+    font-size:12.5px;
+    letter-spacing:0.04em;
+    color: var(--text-muted);
+    text-decoration:none;
+    border:1px solid var(--border);
+    background: var(--surface);
+    border-radius: 999px;
+    padding:8px 14px;
+    transition: border-color .15s ease, color .15s ease;
+  }
+  .back-link:hover{ border-color: var(--text-muted); color: var(--text); }
+  .back-link:focus-visible{ outline: 2px solid var(--brass); outline-offset: 3px; }
+
   .eyebrow{
     font-family:'Space Mono', monospace;
     font-size: 12px;
@@ -254,7 +273,20 @@
   .feedback.correct .feedback-label{ color: var(--correct); }
   .feedback.incorrect .feedback-label{ color: var(--incorrect); }
 
-  .actions{ display:flex; justify-content: flex-end; margin-top: 24px; }
+  .actions{ display:flex; justify-content: space-between; align-items:center; gap:10px; margin-top: 24px; }
+  .btn-prev{
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    padding: 15px 24px;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 600;
+    transition: border-color .15s ease, color .15s ease;
+  }
+  .btn-prev:hover:not(:disabled){ border-color: var(--text-muted); color: var(--text); }
+  .btn-prev:disabled{ opacity:.35; cursor:not-allowed; }
+  .btn-prev:focus-visible{ outline: 2px solid var(--brass); outline-offset: 3px; }
 
   /* ---------- Results ---------- */
   .score-hero{ text-align:center; padding: 38px 20px 30px; }
@@ -442,8 +474,13 @@ function renderLegend(){
   ).join('');
 }
 
+function renderBackLink(){
+  return `<div class="site-nav"><a class="back-link" href="index.html">&larr; All quizzes</a></div>`;
+}
+
 function renderStart(){
   return `
+    ${renderBackLink()}
     <div class="eyebrow">B1–B2 · Vocabulary Quiz Night</div>
     <h1>Last <em>Orders</em></h1>
     <p class="lede">Four rounds, fifteen questions, one closing bell. Test what you know about the people, the pints, and the unwritten rules of a British pub before the bar calls time.</p>
@@ -494,6 +531,7 @@ function renderQuestion(){
   const actionLabel = checked ? (isLast ? 'See the scorecard →' : 'Next question →') : 'Check answer';
   const actionHandler = checked ? 'goNext()' : 'checkAnswer()';
   const actionDisabled = (!checked && state.selected === null) ? 'disabled' : '';
+  const prevDisabled = state.index === 0 ? 'disabled' : '';
 
   let feedbackHtml = '';
   if (checked){
@@ -505,6 +543,7 @@ function renderQuestion(){
   }
 
   return `
+    ${renderBackLink()}
     ${renderScorecard()}
     <div class="topline">
       <span class="qcount">Question ${state.index + 1} / ${QUESTIONS.length}</span>
@@ -515,6 +554,7 @@ function renderQuestion(){
       <div class="options">${optionsHtml}</div>
       ${feedbackHtml}
       <div class="actions">
+        <button class="btn-prev" ${prevDisabled} onclick="goPrev()">&larr; Previous</button>
         <button class="btn-primary" ${actionDisabled} onclick="${actionHandler}">${actionLabel}</button>
       </div>
     </div>
@@ -557,6 +597,7 @@ function renderResults(){
   }).join('');
 
   return `
+    ${renderBackLink()}
     <div class="score-hero">
       <div class="eyebrow">Final Scorecard</div>
       <div class="score-num">${score}<span style="font-size:28px;color:var(--text-muted)"> / ${total}</span></div>
@@ -566,6 +607,7 @@ function renderResults(){
     <div class="result-actions">
       <button class="btn-primary" onclick="showReview()">Review every answer</button>
       <button class="btn-ghost" onclick="restartQuiz()">Retry quiz</button>
+      <a class="btn-ghost" href="index.html" style="text-decoration:none; display:inline-flex; align-items:center;">Back to main menu</a>
     </div>
   `;
 }
@@ -585,11 +627,13 @@ function renderReview(){
   }).join('');
 
   return `
+    ${renderBackLink()}
     <div class="eyebrow">Full Review</div>
     <h1 style="font-size:32px;">Every round, retraced</h1>
     <div style="margin: 24px 0;">${items}</div>
     <div class="result-actions">
       <button class="btn-ghost" onclick="restartQuiz()">Retry quiz</button>
+      <a class="btn-ghost" href="index.html" style="text-decoration:none; display:inline-flex; align-items:center;">Back to main menu</a>
     </div>
   `;
 }
@@ -627,6 +671,15 @@ function goNext(){
     state.screen = 'results';
   }
   render();
+}
+
+function goPrev(){
+  if (state.index > 0){
+    state.index--;
+    state.selected = null;
+    state.screen = 'question';
+    render();
+  }
 }
 
 function showReview(){ state.screen = 'review'; render(); }
