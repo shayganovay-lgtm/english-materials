@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Interactive English quizzes for B1–C2 learners. Grammar, vocabulary, use of English.">
+<title>English Materials</title>
+<style>
+
+/* ── TOKENS ──────────────────────────────────────────────── */
+:root {
+  --bg:      #F9F8F6;
+  --surface: #FFFFFF;
+  --ink:     #1C1917;
+  --muted:   #79716B;
+  --border:  #E8E4DF;
+  --accent:  #2451CC;
+  --radius:  14px;
+
+  --a2-clr:  #E9603F;
+  --a2-bg:   rgba(233,96,63,0.10);
+  --b-clr:   #0A8F65;
+  --b-bg:    rgba(10,143,101,0.10);
+  --c1-clr:  #2451CC;
+  --c1-bg:   rgba(36,81,204,0.10);
+  --c2-clr:  #7033BF;
+  --c2-bg:   rgba(112,51,191,0.10);
+
+  --f-serif: Georgia, 'Times New Roman', serif;
+  --f-sans:  system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+             Helvetica, Arial, sans-serif;
+  --f-mono:  ui-monospace, 'SF Mono', 'Cascadia Code', 'Fira Mono',
+             'Courier New', monospace;
+}
+
+/* ── RESET ───────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--f-sans);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* ── NAV ─────────────────────────────────────────────────── */
+.nav {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(20px, 5vw, 64px);
+  background: rgba(249,248,246,0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.nav-brand {
+  font-family: var(--f-serif);
+  font-size: 17px;
+  font-weight: bold;
+  color: var(--ink);
+  text-decoration: none;
+  letter-spacing: -0.01em;
+}
+
+.nav-pill {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  padding: 5px 12px;
+}
+
+/* ── HERO ────────────────────────────────────────────────── */
+.hero {
+  padding: clamp(52px, 8vw, 88px) clamp(20px, 5vw, 64px)
+           clamp(44px, 6vw, 64px);
+  background-image: radial-gradient(rgba(28,25,23,0.07) 1.2px,
+                    transparent 1.2px);
+  background-size: 26px 26px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* vignette to fade dot-grid at all edges */
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 55% at 50% 100%, var(--bg) 35%, transparent 70%),
+    radial-gradient(ellipse 28% 80% at   0% 50%, var(--bg) 35%, transparent 70%),
+    radial-gradient(ellipse 28% 80% at 100% 50%, var(--bg) 35%, transparent 70%),
+    radial-gradient(ellipse 80% 40% at 50%   0%, var(--bg) 20%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+}
+
+.eyebrow {
+  font-family: var(--f-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 22px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 18px;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.hero-title {
+  font-family: var(--f-serif);
+  font-style: italic;
+  font-size: clamp(38px, 6.2vw, 66px);
+  font-weight: bold;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  margin-bottom: 22px;
+}
+
+.hero-title em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.hero-sub {
+  font-size: 17px;
+  color: var(--muted);
+  line-height: 1.65;
+  max-width: 50ch;
+  margin-bottom: 40px;
+}
+
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+}
+
+.stat {
+  padding-right: 28px;
+  margin-right: 28px;
+  border-right: 1px solid var(--border);
+}
+.stat:last-child { border-right: none; padding-right: 0; margin-right: 0; }
+
+.stat-n {
+  font-family: var(--f-serif);
+  font-size: 30px;
+  font-weight: bold;
+  color: var(--ink);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  display: block;
+}
+.stat-l {
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 5px;
+  display: block;
+}
+
+/* ── COURSES ─────────────────────────────────────────────── */
+.courses {
+  padding: 0 clamp(20px, 5vw, 64px) 72px;
+}
+
+.section-head {
+  padding: 36px 0 24px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+.section-title {
+  font-family: var(--f-serif);
+  font-size: 19px;
+  font-weight: bold;
+  letter-spacing: -0.01em;
+}
+.section-count {
+  font-family: var(--f-mono);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+/* ── CARD ────────────────────────────────────────────────── */
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.18s ease, box-shadow 0.18s ease,
+              border-color 0.18s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 40px rgba(28,25,23,0.10);
+  border-color: rgba(28,25,23,0.18);
+}
+.card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.card-band { height: 4px; width: 100%; display: block; }
+
+.card-body {
+  padding: 20px 22px 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 13px;
+}
+
+.badge {
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 99px;
+}
+.badge-a2 { color: var(--a2-clr); background: var(--a2-bg); }
+.badge-b  { color: var(--b-clr);  background: var(--b-bg);  }
+.badge-c1 { color: var(--c1-clr); background: var(--c1-bg); }
+.badge-c2 { color: var(--c2-clr); background: var(--c2-bg); }
+
+.card-type {
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.card-title {
+  font-family: var(--f-serif);
+  font-weight: bold;
+  font-size: 26px;
+  letter-spacing: -0.015em;
+  line-height: 1.1;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+
+.card-desc {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.6;
+  flex: 1;
+  margin-bottom: 18px;
+}
+
+.card-footer {
+  border-top: 1px solid var(--border);
+  padding: 13px 22px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--f-mono);
+  font-size: 11px;
+  color: var(--muted);
+}
+.meta-sep {
+  width: 3px; height: 3px;
+  background: var(--border);
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.card-cta {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: gap 0.15s ease;
+  white-space: nowrap;
+}
+.card:hover .card-cta { gap: 8px; }
+
+/* ── FOOTER ──────────────────────────────────────────────── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 22px clamp(20px, 5vw, 64px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.footer-copy {
+  font-family: var(--f-mono);
+  font-size: 11.5px;
+  color: var(--muted);
+}
+.footer-levels {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.levels-lbl {
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ── RESPONSIVE ──────────────────────────────────────────── */
+@media (max-width: 540px) {
+  .stat { padding-right: 20px; margin-right: 20px; }
+  .stat-n { font-size: 24px; }
+  footer { flex-direction: column; align-items: flex-start; }
+  .nav-pill { display: none; }
+}
+@media (max-width: 360px) {
+  .stats { flex-direction: column; gap: 14px; }
+  .stat {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: 0 0 14px;
+    margin: 0;
+  }
+  .stat:last-child { border-bottom: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card { transition: none; }
+  .card:hover .card-cta { gap: 4px; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="index.html" class="nav-brand">English Materials</a>
+  <span class="nav-pill">A2 → C2</span>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-inner">
+    <p class="eyebrow">Interactive Use of English</p>
+    <h1 class="hero-title">
+      The difference between<br>
+      <em>almost right</em> and exactly right.
+    </h1>
+    <p class="hero-sub">
+      Five focused quizzes on the grammar and vocabulary that separates
+      beginner learners from truly advanced ones.
+      No accounts. No timers. Just the language.
+    </p>
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-n">5</span>
+        <span class="stat-l">Quizzes</span>
+      </div>
+      <div class="stat">
+        <span class="stat-n">76</span>
+        <span class="stat-l">Questions</span>
+      </div>
+      <div class="stat">
+        <span class="stat-n">A2–C2</span>
+        <span class="stat-l">Levels</span>
+      </div>
+      <div class="stat">
+        <span class="stat-n">Free</span>
+        <span class="stat-l">Always</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- QUIZ GRID -->
+<main class="courses">
+  <div class="section-head">
+    <h2 class="section-title">All quizzes</h2>
+    <span class="section-count">5 available</span>
+  </div>
+
+  <div class="grid">
+
+    <!-- Daily Routine -->
+    <a class="card" href="daily-routine-a2-vocabulary-quiz.html">
+      <span class="card-band" style="background:#E9603F;" aria-hidden="true"></span>
+      <div class="card-body">
+        <div class="card-top">
+          <span class="badge badge-a2">A2</span>
+          <span class="card-type">Vocabulary</span>
+        </div>
+        <h3 class="card-title">Daily Routine</h3>
+        <p class="card-desc">
+          Everyday phrases for talking about your day and habits — from
+          waking up and grabbing a coffee to hitting the gym after work.
+        </p>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta">
+          <span>14 questions</span>
+          <span class="meta-sep" aria-hidden="true"></span>
+          <span>~7 min</span>
+        </div>
+        <span class="card-cta">Start →</span>
+      </div>
+    </a>
+
+    <!-- Anchor Words -->
+    <a class="card" href="anchor-words-cae-collocations-quiz.html">
+      <span class="card-band" style="background:#2451CC;" aria-hidden="true"></span>
+      <div class="card-body">
+        <div class="card-top">
+          <span class="badge badge-c1">C1</span>
+          <span class="card-type">Vocabulary</span>
+        </div>
+        <h3 class="card-title">Anchor Words</h3>
+        <p class="card-desc">
+          CAE-level collocations and fixed expressions. Find the one word
+          that locks each phrase in place — the one no synonym can replace.
+        </p>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta">
+          <span>20 questions</span>
+          <span class="meta-sep" aria-hidden="true"></span>
+          <span>~12 min</span>
+        </div>
+        <span class="card-cta">Start →</span>
+      </div>
+    </a>
+
+    <!-- Turning Points -->
+    <a class="card" href="turning_points_c1_grammar_quiz.html">
+      <span class="card-band" style="background:#1D4ED8;" aria-hidden="true"></span>
+      <div class="card-body">
+        <div class="card-top">
+          <span class="badge badge-c1">C1</span>
+          <span class="card-type">Grammar</span>
+        </div>
+        <h3 class="card-title">Turning Points</h3>
+        <p class="card-desc">
+          Mixed conditionals, wishes, dependent prepositions, modals of
+          deduction. Fifteen questions where the wrong verb form changes
+          everything.
+        </p>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta">
+          <span>15 questions</span>
+          <span class="meta-sep" aria-hidden="true"></span>
+          <span>~10 min</span>
+        </div>
+        <span class="card-cta">Start →</span>
+      </div>
+    </a>
+
+    <!-- Last Orders -->
+    <a class="card" href="last_orders_pub_vocabulary_quiz.html">
+      <span class="card-band" style="background:#0A8F65;" aria-hidden="true"></span>
+      <div class="card-body">
+        <div class="card-top">
+          <span class="badge badge-b">B1–B2</span>
+          <span class="card-type">Vocabulary</span>
+        </div>
+        <h3 class="card-title">Last Orders</h3>
+        <p class="card-desc">
+          People, drinks, customs and the unwritten rules of the British pub —
+          four rounds of 15 questions before the bar calls time.
+        </p>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta">
+          <span>15 questions</span>
+          <span class="meta-sep" aria-hidden="true"></span>
+          <span>~8 min</span>
+        </div>
+        <span class="card-cta">Start →</span>
+      </div>
+    </a>
+
+    <!-- Flipping the Script -->
+    <a class="card" href="flipping_the_script_inversion_quiz.html">
+      <span class="card-band" style="background:#7033BF;" aria-hidden="true"></span>
+      <div class="card-body">
+        <div class="card-top">
+          <span class="badge badge-c2">C1–C2</span>
+          <span class="card-type">Grammar</span>
+        </div>
+        <h3 class="card-title">Flipping the Script</h3>
+        <p class="card-desc">
+          Inversion for emphasis — <em>no sooner</em>, <em>hardly</em>,
+          <em>not until</em>, <em>under no circumstances</em>.
+          Twelve sentences, one correct word order in each.
+        </p>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta">
+          <span>12 questions</span>
+          <span class="meta-sep" aria-hidden="true"></span>
+          <span>~8 min</span>
+        </div>
+        <span class="card-cta">Start →</span>
+      </div>
+    </a>
+
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <p class="footer-copy">shayganovay-lgtm.github.io/english-materials</p>
+  <div class="footer-levels">
+    <span class="levels-lbl">Levels</span>
+    <span class="badge badge-a2">A2</span>
+    <span class="badge badge-b">B1–B2</span>
+    <span class="badge badge-c1">C1</span>
+    <span class="badge badge-c2">C1–C2</span>
+  </div>
+</footer>
+
+</body>
+</html>

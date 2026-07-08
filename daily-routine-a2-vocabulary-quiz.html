@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Routine — A2 Vocabulary Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFF7EF;
+    --card:#FFFFFF;
+    --ink:#2C2622;
+    --ink-soft:#867C73;
+    --ink-faint:#B4AA9F;
+    --coral:#E9603F;
+    --coral-bg:#FDE6DE;
+    --mint:#2F8F73;
+    --mint-bg:#DFF1E9;
+    --correct:#2F8F55;
+    --correct-bg:#E3F3E6;
+    --incorrect:#D0483C;
+    --incorrect-bg:#FBE3DF;
+    --line:#EDE2D6;
+    --line-soft:#F5EDE2;
+    --font-display:'Fraunces', Georgia, serif;
+    --font-body:'IBM Plex Sans', Arial, sans-serif;
+    --font-mono:'IBM Plex Mono', 'Courier New', monospace;
+    --shadow: 0 1px 2px rgba(44,38,34,0.05), 0 10px 26px rgba(44,38,34,0.08);
+    --radius: 16px;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    background:var(--bg);
+    background-image: radial-gradient(circle at 1px 1px, rgba(233,96,63,0.08) 1px, transparent 0);
+    background-size: 24px 24px;
+    color:var(--ink);
+    font-family:var(--font-body);
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:32px 16px 64px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; transition-duration:0.001ms !important; }
+  }
+
+  .wrap{ width:100%; max-width:640px; }
+
+  /* ---------- Top nav ---------- */
+  .top-nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+    font-family:var(--font-mono);
+    font-size:0.78rem;
+  }
+  .nav-link{
+    color:var(--ink-soft);
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:6px 10px;
+    border-radius:8px;
+    transition:background 0.15s ease, color 0.15s ease;
+  }
+  .nav-link:hover{ background:var(--coral-bg); color:var(--coral); }
+  .nav-link:focus-visible{ outline:2px solid var(--coral); outline-offset:2px; }
+  .nav-link.disabled{ visibility:hidden; }
+
+  /* ---------- Header ---------- */
+  header{
+    text-align:center;
+    margin-bottom:24px;
+    animation: dropIn 0.5s ease both;
+  }
+  @keyframes dropIn{
+    from{ opacity:0; transform:translateY(-8px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  .mark{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:52px; height:52px;
+    border-radius:50%;
+    background:var(--coral-bg);
+    font-size:1.5rem;
+    margin-bottom:10px;
+  }
+
+  h1{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:2rem;
+    letter-spacing:-0.01em;
+    margin:0 0 6px;
+  }
+  .subtitle{
+    font-size:0.94rem;
+    color:var(--ink-soft);
+    line-height:1.5;
+  }
+  .subtitle b{ color:var(--ink); font-weight:600; }
+
+  /* ---------- Cards ---------- */
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:30px 28px;
+  }
+
+  /* ---------- Start screen ---------- */
+  #start-screen .card p{
+    font-size:0.98rem;
+    line-height:1.65;
+    color:var(--ink-soft);
+    margin:0 0 16px;
+  }
+  #start-screen .card p:last-of-type{ margin-bottom:24px; }
+  #start-screen strong{ color:var(--ink); }
+
+  .word-chip-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:26px;
+  }
+  .word-chip{
+    font-family:var(--font-mono);
+    font-size:0.74rem;
+    color:var(--ink-soft);
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:6px 12px;
+    background:var(--line-soft);
+  }
+
+  .btn-primary{
+    display:inline-block;
+    width:100%;
+    background:var(--coral);
+    color:#fff;
+    font-family:var(--font-body);
+    font-weight:700;
+    font-size:0.98rem;
+    letter-spacing:0.01em;
+    border:none;
+    border-radius:999px;
+    padding:15px 20px;
+    cursor:pointer;
+    transition:background 0.15s ease, transform 0.1s ease;
+    box-shadow:0 8px 20px rgba(233,96,63,0.28);
+  }
+  .btn-primary:hover{ background:#D6512F; }
+  .btn-primary:active{ transform:translateY(1px); }
+  .btn-primary:focus-visible{ outline:2px solid var(--ink); outline-offset:2px; }
+  .btn-primary:disabled{ opacity:0.4; cursor:not-allowed; box-shadow:none; }
+
+  .btn-secondary{
+    flex:1;
+    font-family:var(--font-body);
+    font-weight:600;
+    font-size:0.9rem;
+    background:transparent;
+    border:1.5px solid var(--ink);
+    color:var(--ink);
+    border-radius:999px;
+    padding:12px 16px;
+    cursor:pointer;
+    transition:background 0.15s ease, color 0.15s ease;
+  }
+  .btn-secondary:hover{ background:var(--ink); color:#fff; }
+
+  /* ---------- Progress path ---------- */
+  .path{
+    display:flex;
+    align-items:center;
+    gap:4px;
+    margin-bottom:8px;
+  }
+  .node-link{ flex:1; height:3px; background:var(--line); border-radius:2px; }
+  .node-link.done{ background:var(--ink-faint); }
+  .node{
+    width:12px; height:12px;
+    border-radius:50%;
+    border:2px solid var(--line);
+    background:var(--card);
+    flex-shrink:0;
+    transition:all 0.2s ease;
+  }
+  .node.current{ border-color:var(--coral); box-shadow:0 0 0 4px var(--coral-bg); transform:scale(1.15); }
+  .node.correct{ background:var(--correct); border-color:var(--correct); }
+  .node.incorrect{ background:var(--incorrect); border-color:var(--incorrect); }
+
+  .progress-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-family:var(--font-mono);
+    font-size:0.76rem;
+    color:var(--ink-soft);
+    margin-bottom:18px;
+  }
+  .progress-row .score{ color:var(--ink); font-weight:600; }
+
+  /* ---------- Quiz card ---------- */
+  #quiz-screen, #results-screen, #review-screen{ display:none; }
+  #quiz-screen.active, #results-screen.active, #review-screen.active{ display:block; }
+  #start-screen.hidden{ display:none; }
+
+  .q-card{ animation: fadeSlide 0.3s ease both; }
+  @keyframes fadeSlide{
+    from{ opacity:0; transform:translateY(6px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  .eyebrow{ display:flex; align-items:center; gap:10px; margin-bottom:18px; }
+  .tag{
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    font-weight:600;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    padding:5px 10px;
+    border-radius:999px;
+  }
+  .tag.routine{ background:var(--coral-bg); color:var(--coral); }
+  .tag.freq{ background:var(--mint-bg); color:var(--mint); }
+  .eyebrow .num{ font-family:var(--font-mono); font-size:0.78rem; color:var(--ink-faint); }
+
+  .qtext{
+    font-family:var(--font-display);
+    font-size:1.28rem;
+    line-height:1.55;
+    margin:0 0 22px;
+  }
+  .qtext .blank-mark{ color:var(--coral); font-weight:700; }
+
+  .options{ display:flex; flex-direction:column; gap:10px; margin-bottom:6px; }
+
+  .opt{
+    text-align:left;
+    font-family:var(--font-body);
+    font-size:0.98rem;
+    color:var(--ink);
+    background:#fff;
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    padding:14px 16px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    transition:border-color 0.12s ease, background 0.12s ease, transform 0.08s ease;
+  }
+  .opt:hover:not(.disabled){ border-color:var(--ink-faint); }
+  .opt:active:not(.disabled){ transform:translateY(1px); }
+  .opt:focus-visible{ outline:2px solid var(--coral); outline-offset:1px; }
+  .opt .letter{
+    font-family:var(--font-mono);
+    font-size:0.74rem;
+    color:var(--ink-faint);
+    border:1px solid var(--line);
+    border-radius:50%;
+    width:22px; height:22px;
+    flex:none;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .opt.disabled{ cursor:default; }
+  .opt.correct-answer{ background:var(--correct-bg); border-color:var(--correct); color:var(--correct); font-weight:600; }
+  .opt.correct-answer .letter{ border-color:var(--correct); color:var(--correct); }
+  .opt.wrong-answer{ background:var(--incorrect-bg); border-color:var(--incorrect); color:var(--incorrect); }
+  .opt.wrong-answer .letter{ border-color:var(--incorrect); color:var(--incorrect); }
+  .opt.muted{ opacity:0.5; }
+
+  .feedback{
+    margin-top:18px;
+    padding:16px 18px;
+    border-radius:12px;
+    border-left:4px solid var(--ink-faint);
+    background:var(--line-soft);
+    font-size:0.92rem;
+    line-height:1.6;
+    color:var(--ink-soft);
+    display:none;
+  }
+  .feedback.show{ display:block; animation: fadeSlide 0.25s ease both; }
+  .feedback.is-correct{ border-left-color:var(--correct); background:var(--correct-bg); }
+  .feedback.is-wrong{ border-left-color:var(--incorrect); background:var(--incorrect-bg); }
+  .feedback .verdict{
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    display:block;
+    margin-bottom:6px;
+  }
+  .feedback.is-correct .verdict{ color:var(--correct); }
+  .feedback.is-wrong .verdict{ color:var(--incorrect); }
+
+  .actions-row{
+    display:flex;
+    justify-content:flex-end;
+    margin-top:22px;
+  }
+  .btn-next{
+    font-family:var(--font-body);
+    font-weight:700;
+    font-size:0.92rem;
+    color:#fff;
+    background:var(--coral);
+    border:none;
+    border-radius:999px;
+    padding:12px 22px;
+    cursor:pointer;
+    transition:background 0.15s ease, opacity 0.15s ease;
+  }
+  .btn-next:hover{ background:#D6512F; }
+  .btn-next:disabled{ opacity:0.35; cursor:not-allowed; }
+  .btn-next:focus-visible{ outline:2px solid var(--ink); outline-offset:2px; }
+
+  /* ---------- Results screen ---------- */
+  .score-hero{ text-align:center; padding:6px 0 22px; }
+  .score-hero .big{
+    font-family:var(--font-display);
+    font-size:3.2rem;
+    font-weight:700;
+    line-height:1;
+    color:var(--coral);
+  }
+  .score-hero .big span{ font-size:1.5rem; color:var(--ink-faint); font-weight:500; }
+  .score-hero .tier{ margin-top:10px; font-size:1rem; color:var(--ink-soft); line-height:1.5; }
+
+  .breakdown{ display:flex; gap:12px; margin:22px 0 8px; }
+  .bd-item{
+    flex:1;
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:14px 16px;
+    background:#fff;
+  }
+  .bd-item .label{
+    font-family:var(--font-mono);
+    font-size:0.7rem;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    margin-bottom:6px;
+  }
+  .bd-item.routine .label{ color:var(--coral); }
+  .bd-item.freq .label{ color:var(--mint); }
+  .bd-item .val{ font-family:var(--font-display); font-size:1.4rem; font-weight:700; }
+
+  hr.div{ border:none; border-top:1px solid var(--line); margin:26px 0 20px; }
+
+  .result-actions{ display:flex; gap:10px; margin-top:24px; flex-wrap:wrap; }
+
+  /* ---------- Review screen ---------- */
+  .review-title{ font-family:var(--font-display); font-size:1.5rem; font-weight:700; margin:0 0 18px; }
+  .review-item{
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:18px 20px;
+    margin-bottom:14px;
+    background:#fff;
+  }
+  .review-item .ritag{
+    font-family:var(--font-mono);
+    font-size:0.68rem;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    color:var(--ink-faint);
+    margin-bottom:8px;
+  }
+  .review-item .riq{ font-family:var(--font-display); font-size:1.05rem; margin-bottom:10px; line-height:1.5; }
+  .review-item .riline{ font-size:0.87rem; margin:3px 0; }
+  .review-item .riline .yours{ color:var(--incorrect); font-weight:600; }
+  .review-item .riline .right{ color:var(--correct); font-weight:600; }
+  .review-item .riexp{ font-size:0.87rem; color:var(--ink-soft); line-height:1.55; margin-top:10px; padding-top:10px; border-top:1px solid var(--line-soft); }
+
+  .all-correct-note{ text-align:center; font-size:0.94rem; color:var(--ink-soft); padding:20px 0; }
+
+  footer{
+    text-align:center;
+    margin-top:22px;
+    font-size:0.76rem;
+    color:var(--ink-faint);
+  }
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<script>
+const CATEGORIES = {
+  routine: { name: "Daily Actions", tagLabel: "Daily Actions" },
+  freq:    { name: "Frequency & Degree", tagLabel: "Frequency & Degree" }
+};
+
+const QUESTIONS = [
+  {
+    cat: "routine",
+    text: "I always ______ at 7 o'clock, then I take a shower.",
+    options: ["wake up", "go up", "stand up", "rise up"],
+    correct: 0,
+    explain: "\u2018Wake up\u2019 is the everyday phrase for stopping sleeping. \u2018Get up\u2019 (leaving bed) is similar, but \u2018go up\u2019, \u2018stand up\u2019 and \u2018rise up\u2019 don\u2019t mean this at all."
+  },
+  {
+    cat: "routine",
+    text: "In the morning I don't have time to make coffee at home, so I ______ from the caf\u00e9 near my office.",
+    options: ["grab a coffee", "catch a coffee", "hold a coffee", "take a coffee cup"],
+    correct: 0,
+    explain: "\u2018Grab a coffee\u2019 means to get a coffee quickly, often to take away. It\u2019s a very common informal phrase for getting food or drink fast."
+  },
+  {
+    cat: "routine",
+    text: "I usually eat breakfast, but this morning I was late, so I ______.",
+    options: ["skipped breakfast", "jumped breakfast", "cut breakfast", "passed breakfast"],
+    correct: 0,
+    explain: "\u2018Skip a meal\u2019 means to not eat it. \u2018Skip breakfast/lunch/dinner\u2019 is the fixed expression \u2014 the other verbs don\u2019t work with meals."
+  },
+  {
+    cat: "routine",
+    text: "On Saturday mornings I ______ : I go to the bank, the post office and the supermarket.",
+    options: ["run errands", "walk errands", "do errands", "make errands"],
+    correct: 0,
+    explain: "\u2018Run errands\u2019 is the fixed phrase for doing a list of small jobs outside the house. You can\u2019t \u2018walk\u2019, \u2018do\u2019 or \u2018make\u2019 errands in natural English."
+  },
+  {
+    cat: "routine",
+    text: "It takes me 40 minutes to ______ every day because I live far from the city centre.",
+    options: ["commute to work", "move to work", "run to work", "commute at work"],
+    correct: 0,
+    explain: "\u2018Commute to work\u2019 means to travel regularly between home and work. Note the preposition: commute *to* work, not *at* work."
+  },
+  {
+    cat: "routine",
+    text: "After work, I like to ______ and lift some weights.",
+    options: ["hit the gym", "touch the gym", "go the gym", "hit in the gym"],
+    correct: 0,
+    explain: "\u2018Hit the gym\u2019 is an informal way of saying \u2018go to the gym to exercise\u2019. It\u2019s used with other places too, like \u2018hit the shops\u2019 or \u2018hit the road\u2019."
+  },
+  {
+    cat: "routine",
+    text: "This month I have a very ______ \u2014 meetings every day and almost no free time.",
+    options: ["busy schedule", "busy program", "full agenda", "quick schedule"],
+    correct: 0,
+    explain: "\u2018A busy schedule\u2019 is the natural way to describe a full timetable with a lot of things to do. \u2018Program\u2019 and \u2018agenda\u2019 exist, but \u2018busy schedule\u2019 is the everyday collocation."
+  },
+  {
+    cat: "freq",
+    text: "I don't go to the cinema every week, but ______ I watch a film there.",
+    options: ["from time to time", "from time", "time to time", "at time to time"],
+    correct: 0,
+    explain: "\u2018From time to time\u2019 means \u2018sometimes, not often, not never\u2019. All three words are needed \u2014 you can\u2019t shorten or change the phrase."
+  },
+  {
+    cat: "freq",
+    text: "\u201cDo you prefer tea or coffee?\u201d \u201c______ \u2014 I drink both, depending on my mood.\u201d",
+    options: ["A bit of both", "A piece of both", "A little of both", "Some of both"],
+    correct: 0,
+    explain: "\u2018A bit of both\u2019 is the fixed, informal way to say you like or do two things partly, not just one. It\u2019s a very common answer in everyday conversation."
+  },
+  {
+    cat: "freq",
+    text: "\u201cHow much sugar do you want in your tea?\u201d \u201cJust ______, please \u2014 not too much!\u201d",
+    options: ["a teeny bit", "a teeny much", "a bit teeny", "a teeny many"],
+    correct: 0,
+    explain: "\u2018A teeny bit\u2019 is an informal, friendly way of saying \u2018a very small amount\u2019. Only \u2018a teeny bit\u2019 is correct \u2014 the other combinations aren\u2019t real English."
+  },
+  {
+    cat: "freq",
+    text: "\u201cWhat is a ______ day for you?\u201d \u201cI wake up at seven, go to work, and relax in the evening.\u201d",
+    options: ["typical", "typic", "typically", "type"],
+    correct: 0,
+    explain: "\u2018Typical\u2019 is the adjective meaning \u2018usual\u2019 or \u2018normal\u2019, and it goes before a noun like \u2018day\u2019. \u2018Typically\u2019 is the adverb form, so it can\u2019t be used here."
+  },
+  {
+    cat: "routine",
+    text: "What does \u2018grab a coffee\u2019 mean?",
+    options: ["to get a coffee quickly", "to hold a coffee cup tightly", "to make coffee at home", "to spill your coffee"],
+    correct: 0,
+    explain: "\u2018Grab\u2019 in this phrase means \u2018to get quickly\u2019, not \u2018to hold tightly\u2019. \u2018Grab a coffee/bite/snack\u2019 all mean getting something fast, usually on the way somewhere."
+  },
+  {
+    cat: "routine",
+    text: "If someone has \u2018a busy schedule\u2019, it means\u2026",
+    options: ["they have a lot of things to do", "they have a lot of free time", "they are relaxed all day", "they don't have any plans"],
+    correct: 0,
+    explain: "A busy schedule is full of appointments, meetings and tasks \u2014 the opposite of having free time or no plans."
+  },
+  {
+    cat: "freq",
+    text: "\u2018From time to time\u2019 means the same as\u2026",
+    options: ["sometimes, not often", "always, every day", "never", "all the time"],
+    correct: 0,
+    explain: "\u2018From time to time\u2019 sits in the middle of the frequency scale \u2014 more than \u2018never\u2019, but much less than \u2018always\u2019 or \u2018all the time\u2019."
+  }
+];
+
+const state = {
+  screen: 'start',
+  index: 0,
+  selected: null,
+  answers: new Array(QUESTIONS.length).fill(null)
+};
+
+function letterFor(i){ return ['A','B','C','D'][i]; }
+
+function renderWordChips(){
+  const words = ["wake up","grab a coffee","skip breakfast","run errands","commute to work","a bit of both","a teeny bit","hit the gym","busy schedule","from time to time","typical"];
+  return words.map(w => `<span class="word-chip">${w}</span>`).join('');
+}
+
+function renderStart(){
+  return `
+    <header>
+      <div class="mark">\u2615</div>
+      <h1>Daily Routine</h1>
+      <div class="subtitle">An A2 vocabulary check &middot; <b>14 questions</b> &middot; everyday routines &amp; habits</div>
+    </header>
+    <div id="start-screen">
+      <div class="card">
+        <p>This short quiz checks eleven useful phrases for talking about your <strong>day, habits and free time</strong> \u2014 the kind of English you use to describe a normal week.</p>
+        <p>Read each sentence carefully and choose the word or phrase that fits best. You'll see the correct answer and a short explanation after every question.</p>
+        <div class="word-chip-row">${renderWordChips()}</div>
+        <button class="btn-primary" onclick="startQuiz()">Start the quiz</button>
+      </div>
+    </div>
+    <footer>Vocabulary practice: daily routines and habits (A2).</footer>
+  `;
+}
+
+function renderPath(){
+  let html = '<div class="path">';
+  QUESTIONS.forEach((q, i) => {
+    const ans = state.answers[i];
+    let cls = 'node';
+    if (i === state.index && !ans) cls += ' current';
+    if (ans) cls += ans.correct ? ' correct' : ' incorrect';
+    html += `<div class="${cls}"></div>`;
+    if (i < QUESTIONS.length - 1){
+      html += `<div class="node-link${ans ? ' done' : ''}"></div>`;
+    }
+  });
+  html += '</div>';
+  return html;
+}
+
+function renderTopNav(){
+  const backPrev = state.index > 0
+    ? `<a href="#" class="nav-link" onclick="goPrev();return false;">\u2190 Previous question</a>`
+    : `<span class="nav-link disabled">\u2190 Previous question</span>`;
+  return `
+    <div class="top-nav">
+      ${backPrev}
+      <a href="index.html" class="nav-link">\u2261 Main menu</a>
+    </div>`;
+}
+
+function renderQuestion(){
+  const q = QUESTIONS[state.index];
+  const cat = CATEGORIES[q.cat];
+  const ans = state.answers[state.index];
+  const checked = !!ans;
+
+  const optionsHtml = q.options.map((opt, i) => {
+    let cls = 'opt';
+    if (checked){
+      cls += ' disabled';
+      if (i === q.correct) cls += ' correct-answer';
+      else if (i === ans.selected) cls += ' wrong-answer';
+      else cls += ' muted';
+    } else if (i === state.selected){
+      cls += '';
+    }
+    return `<button class="${cls}" ${checked ? 'disabled' : ''} onclick="selectOption(${i})">
+      <span class="letter">${letterFor(i)}</span><span>${opt}</span>
+    </button>`;
+  }).join('');
+
+  let feedbackHtml = '';
+  if (checked){
+    feedbackHtml = `
+      <div class="feedback show ${ans.correct ? 'is-correct' : 'is-wrong'}">
+        <span class="verdict">${ans.correct ? 'Correct' : 'Not quite'}</span>
+        ${q.explain}
+      </div>`;
+  }
+
+  const isLast = state.index === QUESTIONS.length - 1;
+  const actionLabel = checked ? (isLast ? 'See results \u2192' : 'Next question \u2192') : 'Check answer';
+  const actionHandler = checked ? 'goNext()' : 'checkAnswer()';
+  const actionDisabled = (!checked && state.selected === null) ? 'disabled' : '';
+
+  return `
+    ${renderTopNav()}
+    ${renderPath()}
+    <div class="progress-row">
+      <span>Question ${state.index + 1} of ${QUESTIONS.length}</span>
+      <span class="score">Score: ${state.answers.filter(a=>a&&a.correct).length}</span>
+    </div>
+    <div class="card q-card">
+      <div class="eyebrow">
+        <span class="tag ${q.cat}">${cat.tagLabel}</span>
+      </div>
+      <p class="qtext">${q.text}</p>
+      <div class="options">${optionsHtml}</div>
+      ${feedbackHtml}
+      <div class="actions-row">
+        <button class="btn-next" ${actionDisabled} onclick="${actionHandler}">${actionLabel}</button>
+      </div>
+    </div>
+  `;
+}
+
+function scoreByCategory(){
+  const out = {};
+  Object.keys(CATEGORIES).forEach(k => out[k] = {correct:0, total:0});
+  QUESTIONS.forEach((q, i) => {
+    out[q.cat].total++;
+    if (state.answers[i] && state.answers[i].correct) out[q.cat].correct++;
+  });
+  return out;
+}
+
+function tierMessage(score, total){
+  const pct = score/total;
+  if (pct >= 0.85) return "Great job! You know these everyday phrases really well \u2014 try using a few of them today.";
+  if (pct >= 0.6) return "Good work \u2014 most phrases are clear. Look at the ones you missed and try them in your own sentences.";
+  return "A useful first look \u2014 read the explanations again and practise the phrases in short sentences about your own day.";
+}
+
+function renderResults(){
+  const total = QUESTIONS.length;
+  const score = state.answers.filter(a => a && a.correct).length;
+  const byCat = scoreByCategory();
+
+  const rows = Object.entries(byCat).map(([key, v]) => {
+    const cat = CATEGORIES[key];
+    return `
+      <div class="bd-item ${key}">
+        <div class="label">${cat.name}</div>
+        <div class="val">${v.correct}/${v.total}</div>
+      </div>`;
+  }).join('');
+
+  return `
+    <header>
+      <div class="mark">\ud83c\udf1f</div>
+      <h1>Nice work!</h1>
+    </header>
+    <div class="card">
+      <div class="score-hero">
+        <div class="big">${score}<span>/${total}</span></div>
+        <p class="tier">${tierMessage(score, total)}</p>
+      </div>
+      <div class="breakdown">${rows}</div>
+      <hr class="div">
+      <div class="result-actions">
+        <button class="btn-primary" style="flex:1" onclick="showReview()">Review every answer</button>
+        <button class="btn-secondary" onclick="restartQuiz()">Restart quiz</button>
+      </div>
+    </div>
+    <footer><a href="index.html" style="color:inherit;">\u2190 Back to all quizzes</a></footer>
+  `;
+}
+
+function renderReview(){
+  const items = QUESTIONS.map((q, i) => {
+    const ans = state.answers[i];
+    const cat = CATEGORIES[q.cat];
+    return `
+      <div class="review-item">
+        <div class="ritag">${cat.tagLabel} &middot; Q${i+1}</div>
+        <p class="riq">${q.text}</p>
+        <div class="riline">Your answer: <span class="${ans.correct?'right':'yours'}">${q.options[ans.selected]}</span></div>
+        ${!ans.correct ? `<div class="riline">Correct answer: <span class="right">${q.options[q.correct]}</span></div>` : ''}
+        <div class="riexp">${q.explain}</div>
+      </div>`;
+  }).join('');
+
+  return `
+    <header>
+      <h1>Full Review</h1>
+      <div class="subtitle">Every question, with the correct answer and explanation.</div>
+    </header>
+    <div>${items}</div>
+    <div class="result-actions">
+      <button class="btn-secondary" style="flex:1" onclick="restartQuiz()">Restart quiz</button>
+    </div>
+    <footer><a href="index.html" style="color:inherit;">\u2190 Back to all quizzes</a></footer>
+  `;
+}
+
+function render(){
+  const app = document.getElementById('app');
+  if (state.screen === 'start') app.innerHTML = renderStart();
+  else if (state.screen === 'question') app.innerHTML = renderQuestion();
+  else if (state.screen === 'results') app.innerHTML = renderResults();
+  else if (state.screen === 'review') app.innerHTML = renderReview();
+  window.scrollTo({top:0, behavior:'instant'});
+}
+
+function startQuiz(){
+  state.screen = 'question';
+  state.index = 0;
+  render();
+}
+
+function selectOption(i){
+  if (state.answers[state.index]) return;
+  state.selected = i;
+  render();
+  document.querySelectorAll('.opt').forEach((btn, idx) => {
+    if (idx === i) btn.classList.add('selected');
+  });
+}
+
+function checkAnswer(){
+  if (state.selected === null) return;
+  const q = QUESTIONS[state.index];
+  state.answers[state.index] = { selected: state.selected, correct: state.selected === q.correct };
+  render();
+}
+
+function goNext(){
+  if (state.index < QUESTIONS.length - 1){
+    state.index++;
+    state.selected = null;
+    state.screen = 'question';
+  } else {
+    state.screen = 'results';
+  }
+  render();
+}
+
+function goPrev(){
+  if (state.index > 0){
+    state.index--;
+    state.selected = null;
+    state.screen = 'question';
+    render();
+  }
+}
+
+function showReview(){
+  state.screen = 'review';
+  render();
+}
+
+function restartQuiz(){
+  state.index = 0;
+  state.selected = null;
+  state.answers = new Array(QUESTIONS.length).fill(null);
+  state.screen = 'start';
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
