@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Interactive English quizzes for A2–C2 learners. Grammar, vocabulary, use of English.">
+<meta name="description" content="Interactive English quizzes for B1–C2 learners. Grammar, vocabulary, use of English.">
 <title>English Materials</title>
 <style>
 
@@ -17,14 +17,14 @@
   --accent:  #2451CC;
   --radius:  14px;
 
+  --a2-clr:  #E9603F;
+  --a2-bg:   rgba(233,96,63,0.10);
   --b-clr:   #0A8F65;
   --b-bg:    rgba(10,143,101,0.10);
   --c1-clr:  #2451CC;
   --c1-bg:   rgba(36,81,204,0.10);
   --c2-clr:  #7033BF;
   --c2-bg:   rgba(112,51,191,0.10);
-  --a2-clr:  #B8863B;
-  --a2-bg:   rgba(184,134,59,0.10);
 
   --f-serif: Georgia, 'Times New Roman', serif;
   --f-sans:  system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
@@ -268,10 +268,10 @@ body {
   padding: 3px 9px;
   border-radius: 99px;
 }
+.badge-a2 { color: var(--a2-clr); background: var(--a2-bg); }
 .badge-b  { color: var(--b-clr);  background: var(--b-bg);  }
 .badge-c1 { color: var(--c1-clr); background: var(--c1-bg); }
 .badge-c2 { color: var(--c2-clr); background: var(--c2-bg); }
-.badge-a2 { color: var(--a2-clr); background: var(--a2-bg); }
 
 .card-type {
   font-family: var(--f-mono);
@@ -406,7 +406,7 @@ footer {
     </h1>
     <p class="hero-sub">
       Five focused quizzes on the grammar and vocabulary that separates
-      upper-intermediate learners from truly advanced ones.
+      beginner learners from truly advanced ones.
       No accounts. No timers. Just the language.
     </p>
     <div class="stats">
@@ -415,7 +415,7 @@ footer {
         <span class="stat-l">Quizzes</span>
       </div>
       <div class="stat">
-        <span class="stat-n">79</span>
+        <span class="stat-n">76</span>
         <span class="stat-l">Questions</span>
       </div>
       <div class="stat">
@@ -439,26 +439,25 @@ footer {
 
   <div class="grid">
 
-    <!-- At the Bank -->
-    <a class="card" href="at-the-bank-vocabulary-quiz.html">
-      <span class="card-band" style="background:#B8863B;" aria-hidden="true"></span>
+    <!-- Daily Routine -->
+    <a class="card" href="daily-routine-a2-vocabulary-quiz.html">
+      <span class="card-band" style="background:#E9603F;" aria-hidden="true"></span>
       <div class="card-body">
         <div class="card-top">
           <span class="badge badge-a2">A2</span>
           <span class="card-type">Vocabulary</span>
         </div>
-        <h3 class="card-title">At the Bank</h3>
+        <h3 class="card-title">Daily Routine</h3>
         <p class="card-desc">
-          Cash machines, paying-in slips, exchange rates and a full counter
-          dialogue with Jane the customer. Everyday banking English for
-          travel.
+          Everyday phrases for talking about your day and habits — from
+          waking up and grabbing a coffee to hitting the gym after work.
         </p>
       </div>
       <div class="card-footer">
         <div class="card-meta">
-          <span>17 questions</span>
+          <span>14 questions</span>
           <span class="meta-sep" aria-hidden="true"></span>
-          <span>~9 min</span>
+          <span>~7 min</span>
         </div>
         <span class="card-cta">Start →</span>
       </div>
@@ -480,7 +479,7 @@ footer {
       </div>
       <div class="card-footer">
         <div class="card-meta">
-          <span>24 questions</span>
+          <span>20 questions</span>
           <span class="meta-sep" aria-hidden="true"></span>
           <span>~12 min</span>
         </div>
@@ -578,7 +577,4 @@ footer {
 </footer>
 
 </body>
-  </html>
-
-
-   
+</html>
