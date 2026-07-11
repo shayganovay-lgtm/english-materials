@@ -24,4 +24,4 @@ Static HTML site for English learning materials (quizzes, tests, grammar tasks, 
 - No build tools, no package.json, no tests
 - Static files only - deploy by copying to any static host
 - No linting, formatting, or type checking configured
-- Use GitHub MCP tools for GitHub operations (push, PRs, issues) instead of git CLI
+- Use git CLI for all Git operations (push, PRs, issues) — not GitHub MCP tools
