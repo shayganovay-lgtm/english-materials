@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grammar Gym — Questions &amp; Present Simple</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F6F3EE;
+    --surface:#FFFFFF;
+    --surface-2:#F0ECE4;
+    --ink:#221D17;
+    --ink-muted:#7A7266;
+    --border:#E3DDD1;
+    --accent:#C4551F;
+    --accent-soft:rgba(196,85,31,0.12);
+    --correct:#3D7A54;
+    --correct-soft:rgba(61,122,84,0.12);
+    --incorrect:#B23A3A;
+    --incorrect-soft:rgba(178,58,58,0.12);
+
+    --cat-place:#C4551F;
+    --cat-order1:#2E7D6B;
+    --cat-simple:#4457C9;
+    --cat-order2:#A6417A;
+
+    --radius:16px;
+    --f-serif:'Fraunces', Georgia, serif;
+    --f-sans:'Inter', sans-serif;
+    --f-mono:'IBM Plex Mono', monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse 700px 400px at 10% -10%, rgba(196,85,31,0.07), transparent 60%),
+      radial-gradient(ellipse 600px 400px at 110% 10%, rgba(68,87,201,0.07), transparent 55%),
+      var(--bg);
+    color:var(--ink);
+    font-family:var(--f-sans);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:40px 18px 60px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{width:100%;max-width:680px;}
+
+  .top-nav{
+    margin-bottom:18px;
+  }
+  .back-link{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-family:var(--f-mono);
+    font-size:12px;
+    letter-spacing:0.04em;
+    color:var(--ink-muted);
+    text-decoration:none;
+    border:1px solid var(--border);
+    border-radius:999px;
+    padding:8px 14px;
+    background:var(--surface);
+    transition:border-color .15s ease, color .15s ease;
+  }
+  .back-link:hover{ border-color:var(--accent); color:var(--accent); }
+  .back-link:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+  .eyebrow{
+    font-family:var(--f-mono);
+    font-size:11.5px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--ink-muted);
+  }
+  h1{
+    font-family:var(--f-serif);
+    font-weight:600;
+    font-size:clamp(32px,6vw,46px);
+    line-height:1.08;
+    letter-spacing:-0.01em;
+    margin:8px 0 14px;
+  }
+  h1 em{ font-style:italic; color:var(--accent); }
+  .lede{
+    color:var(--ink-muted);
+    font-size:15.5px;
+    line-height:1.6;
+    max-width:54ch;
+  }
+
+  .legend{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin:26px 0 30px;
+  }
+  .legend-item{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:12px 14px;
+    font-size:13px;
+  }
+  .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+
+  button{font-family:var(--f-sans);cursor:pointer;}
+  .btn-primary{
+    background:var(--accent);
+    color:#FFF8F1;
+    border:none;
+    padding:15px 26px;
+    border-radius:999px;
+    font-size:15px;
+    font-weight:600;
+    box-shadow:0 6px 18px rgba(196,85,31,0.28);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(196,85,31,0.36);}
+  .btn-primary:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none;}
+  .btn-primary:focus-visible{outline:2px solid var(--ink);outline-offset:3px;}
+  .btn-ghost{
+    background:transparent;
+    color:var(--ink);
+    border:1px solid var(--border);
+    padding:13px 22px;
+    border-radius:999px;
+    font-size:14px;
+    font-weight:500;
+  }
+  .btn-ghost:hover{border-color:var(--ink-muted);}
+
+  .path{display:flex;align-items:center;gap:3px;margin:26px 0 30px;flex-wrap:wrap;}
+  .node-link{flex:1;min-width:6px;height:2px;background:var(--border);}
+  .node-link.done{background:var(--ink-muted);}
+  .node{
+    width:11px;height:11px;border-radius:50%;
+    border:2px solid var(--border);background:var(--surface);
+    flex-shrink:0;transition:all .2s ease;
+  }
+  .node.current{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft);transform:scale(1.15);}
+  .node.correct{background:var(--correct);border-color:var(--correct);}
+  .node.incorrect{background:var(--incorrect);border-color:var(--incorrect);}
+
+  .topline{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;}
+  .qcount{font-family:var(--f-mono);font-size:12.5px;color:var(--ink-muted);}
+  .cat-badge{
+    display:inline-flex;align-items:center;gap:7px;
+    font-family:var(--f-mono);font-size:11px;letter-spacing:0.07em;
+    text-transform:uppercase;color:var(--ink-muted);margin-bottom:14px;
+  }
+
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:28px 26px;
+    box-shadow:0 2px 3px rgba(34,29,23,0.03), 0 10px 30px rgba(34,29,23,0.05);
+  }
+  .qmeta{
+    font-family:var(--f-mono);
+    font-size:12px;
+    color:var(--ink-muted);
+    margin-bottom:8px;
+  }
+  .qtext{
+    font-family:var(--f-serif);
+    font-weight:500;
+    font-size:clamp(18px,3vw,21px);
+    line-height:1.5;
+    margin:0 0 24px;
+  }
+  .qtext .word{ color:var(--accent); font-weight:600; }
+  .scramble{
+    font-family:var(--f-mono);
+    font-size:14.5px;
+    letter-spacing:0.02em;
+    color:var(--ink-muted);
+    background:var(--surface-2);
+    border-radius:9px;
+    padding:10px 13px;
+    display:inline-block;
+    margin-bottom:6px;
+  }
+
+  .options{display:flex;flex-direction:column;gap:9px;}
+  .option{
+    text-align:left;
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    color:var(--ink);
+    padding:13px 15px;
+    border-radius:10px;
+    font-size:14.5px;
+    display:flex;
+    align-items:center;
+    gap:11px;
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .option:hover:not(:disabled){border-color:var(--ink-muted);}
+  .option:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+  .option.selected{border-color:var(--accent);background:var(--accent-soft);}
+  .option.correct{border-color:var(--correct);background:var(--correct-soft);}
+  .option.incorrect{border-color:var(--incorrect);background:var(--incorrect-soft);}
+  .option:disabled{cursor:default;}
+  .opt-letter{
+    font-family:var(--f-mono);font-size:12px;color:var(--ink-muted);
+    width:17px;flex-shrink:0;
+  }
+
+  .feedback{
+    margin-top:18px;padding:15px 17px;border-radius:10px;
+    font-size:13.8px;line-height:1.55;border:1px solid var(--border);display:none;
+  }
+  .feedback.show{display:block;}
+  .feedback.correct{background:var(--correct-soft);border-color:rgba(61,122,84,0.35);}
+  .feedback.incorrect{background:var(--incorrect-soft);border-color:rgba(178,58,58,0.35);}
+  .feedback-label{
+    font-family:var(--f-mono);font-size:11px;letter-spacing:0.07em;
+    text-transform:uppercase;display:block;margin-bottom:5px;
+  }
+  .feedback.correct .feedback-label{color:var(--correct);}
+  .feedback.incorrect .feedback-label{color:var(--incorrect);}
+
+  .actions{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:22px;}
+  .btn-ghost:disabled{opacity:.35;cursor:not-allowed;}
+  .btn-ghost:disabled:hover{border-color:var(--border);}
+
+  .score-hero{text-align:center;padding:34px 16px 26px;}
+  .score-num{
+    font-family:var(--f-serif);font-size:60px;font-weight:600;
+    color:var(--accent);line-height:1;
+  }
+  .score-denom{font-family:var(--f-mono);color:var(--ink-muted);font-size:13.5px;margin-top:6px;}
+  .band{margin-top:14px;font-size:15px;color:var(--ink-muted);max-width:46ch;margin-left:auto;margin-right:auto;}
+
+  .cat-breakdown{display:flex;flex-direction:column;gap:11px;margin:26px 0;}
+  .cat-row{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px 15px;}
+  .cat-row-top{display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:7px;}
+  .cat-name{display:flex;align-items:center;gap:8px;font-weight:500;}
+  .cat-score{font-family:var(--f-mono);color:var(--ink-muted);}
+  .bar-track{height:6px;background:var(--surface-2);border-radius:4px;overflow:hidden;}
+  .bar-fill{height:100%;border-radius:4px;}
+
+  .result-actions{display:flex;gap:12px;justify-content:center;margin-top:28px;flex-wrap:wrap;}
+
+  .review-item{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:var(--radius);padding:20px 22px;margin-bottom:13px;
+  }
+  .review-scr{font-family:var(--f-mono);font-size:12.5px;color:var(--ink-muted);margin:6px 0 10px;}
+  .review-answer-row{font-size:13.5px;margin:4px 0;}
+  .review-answer-row .lbl{color:var(--ink-muted);margin-right:6px;}
+  .review-answer-row .val.correct{color:var(--correct);font-weight:600;}
+  .review-answer-row .val.incorrect{color:var(--incorrect);font-weight:600;text-decoration:line-through;text-decoration-color:var(--incorrect);}
+  .review-explain{
+    margin-top:11px;padding-top:11px;border-top:1px solid var(--border);
+    font-size:13px;color:var(--ink-muted);line-height:1.55;
+  }
+
+  @media (max-width:480px){
+    .legend{grid-template-columns:1fr;}
+    .card{padding:22px 17px;}
+  }
+  @media (prefers-reduced-motion: reduce){ *{transition:none !important;} }
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<script>
+const CATEGORIES = {
+  place:  { name: "Word Placement",        color: "var(--cat-place)"  },
+  order1: { name: "Question Word Order",   color: "var(--cat-order1)" },
+  simple: { name: "Present Simple +/-/?",  color: "var(--cat-simple)" },
+  order2: { name: "Frequency Word Order",  color: "var(--cat-order2)" }
+};
+
+const QUESTIONS = [
+  // ---------- WORD PLACEMENT ----------
+  { cat:"place", prompt:"Where we park?", word:"can",
+    options:["Where we can park?","Where can we park?","Can where we park?","Where we park can?"], correct:1,
+    explain:"The modal verb <strong>can</strong> goes straight after the question word, before the subject: Where + can + we + park?" },
+  { cat:"place", prompt:"How are you?", word:"old",
+    options:["How old are you?","How are you old?","How are old you?","Old how are you?"], correct:0,
+    explain:"In \"how + adjective\" questions, the adjective attaches directly to <strong>how</strong>: How old are you?" },
+  { cat:"place", prompt:"Does finish at 8.00?", word:"the class",
+    options:["Does the class finish at 8.00?","Does finish the class at 8.00?","The class does finish at 8.00?","Does finish at 8.00 the class?"], correct:0,
+    explain:"The subject <strong>the class</strong> sits between the auxiliary \"does\" and the main verb \"finish\"." },
+  { cat:"place", prompt:"Where do your friends?", word:"live",
+    options:["Where do live your friends?","Where do your friends live?","Where your friends do live?","Where live do your friends?"], correct:1,
+    explain:"The main verb <strong>live</strong> comes at the end of the question, after the subject: do + subject + verb." },
+  { cat:"place", prompt:"Why you answer my email?", word:"didn't",
+    options:["Why you didn't answer my email?","Why didn't answer you my email?","Why didn't you answer my email?","Why you answer didn't my email?"], correct:2,
+    explain:"The negative auxiliary <strong>didn't</strong> goes right after the question word, before the subject." },
+  { cat:"place", prompt:"Do you often to the cinema?", word:"go",
+    options:["Do you often go to the cinema?","Do you go often to the cinema?","Do you often to go the cinema?","Do often you go to the cinema?"], correct:0,
+    explain:"The main verb <strong>go</strong> follows the frequency adverb \"often\": subject + often + verb." },
+  { cat:"place", prompt:"What this word mean?", word:"does",
+    options:["What does this word mean?","What this does word mean?","What this word does mean?","Does what this word mean?"], correct:0,
+    explain:"The auxiliary <strong>does</strong> goes right after the question word, before the subject." },
+  { cat:"place", prompt:"What time did arrive?", word:"your friends",
+    options:["What time did your friends arrive?","What time your friends did arrive?","What time did arrive your friends?","Your friends what time did arrive?"], correct:0,
+    explain:"The subject <strong>your friends</strong> sits between \"did\" and the main verb \"arrive\"." },
+  { cat:"place", prompt:"Who are you talking?", word:"to",
+    options:["Who are you to talking?","Who to are you talking?","Who are you talking to?","To who are you talking?"], correct:2,
+    explain:"In everyday spoken English, the preposition <strong>to</strong> stays at the very end of the question." },
+  { cat:"place", prompt:"Where were last night?", word:"you",
+    options:["Where you were last night?","Where were you last night?","Were where you last night?","Where were last night you?"], correct:1,
+    explain:"With the verb \"to be\", the subject <strong>you</strong> goes directly after \"were\": Where + were + you...?" },
+
+  // ---------- QUESTION WORD ORDER ----------
+  { cat:"order1", scramble:"you · a · do · have · car · ?",
+    options:["Do you have a car?","Do you a have car?","Have you a do car?","Do have you a car?"], correct:0,
+    explain:"Yes/no questions with \"do\" follow: Do + subject + verb + object?" },
+  { cat:"order1", scramble:"was · brother · your · where · born · ?",
+    options:["Where was your brother born?","Where your brother was born?","Was where your brother born?","Where was born your brother?"], correct:0,
+    explain:"Wh-word + was + subject + past participle: Where was your brother born?" },
+  { cat:"order1", scramble:"often · he · how · phone · does · you · ?",
+    options:["How often does he phone you?","How does he often phone you?","How often he does phone you?","Does he how often phone you?"], correct:0,
+    explain:"\"How often\" stays together at the front, followed by does + subject + verb." },
+  { cat:"order1", scramble:"their · time · arrive · does · flight · what · ?",
+    options:["What time does their flight arrive?","What time their flight does arrive?","Does what time their flight arrive?","What does time their flight arrive?"], correct:0,
+    explain:"\"What time\" stays together at the front, followed by does + subject + verb." },
+  { cat:"order1", scramble:"Brazil · from · is · girlfriend · your · ?",
+    options:["Is your girlfriend from Brazil?","Is from Brazil your girlfriend?","Your girlfriend is from Brazil?","From Brazil is your girlfriend?"], correct:0,
+    explain:"With \"to be\", the question order is: Is + subject + complement? — Is your girlfriend from Brazil?" },
+  { cat:"order1", scramble:"languages · how · you · many · can · speak · ?",
+    options:["How many languages can you speak?","How many can you languages speak?","How can you many languages speak?","How many languages you can speak?"], correct:0,
+    explain:"\"How many languages\" forms one unit at the front, followed by can + subject + verb." },
+  { cat:"order1", scramble:"party · the · how · was · ?",
+    options:["How was the party?","How the party was?","Was how the party?","The party how was?"], correct:0,
+    explain:"With \"to be\" in the past: How + was + subject?" },
+  { cat:"order1", scramble:"last · go · where · you · did · summer · ?",
+    options:["Where did you go last summer?","Where you did go last summer?","Did where you go last summer?","Where did go you last summer?"], correct:0,
+    explain:"Wh-word + did + subject + verb + time expression: Where did you go last summer?" },
+  { cat:"order1", scramble:"there · doctor · here · is · a · ?",
+    options:["Is there a doctor here?","Is there here a doctor?","There is a doctor here?","Is a there doctor here?"], correct:0,
+    explain:"\"There is\" inverts to \"Is there\" in questions: Is there a doctor here?" },
+  { cat:"order1", scramble:"come · bus · to · you · by · school · did · ?",
+    options:["Did you come to school by bus?","Did you come by bus to school?","Did come you to school by bus?","Did you by bus come to school?"], correct:0,
+    explain:"Did + subject + verb + place + method of transport: Did you come to school by bus?" },
+
+  // ---------- PRESENT SIMPLE +/-/? ----------
+  { cat:"simple", prompt:"? &nbsp; Anna / like music",
+    options:["Does Anna like music?","Does Anna likes music?","Is Anna like music?","Anna does like music?"], correct:0,
+    explain:"Questions with \"does\" use the base form of the verb: Does Anna like music?" },
+  { cat:"simple", prompt:"+ &nbsp; my sister / have a lot of hobbies",
+    options:["My sister has a lot of hobbies.","My sister have a lot of hobbies.","My sister haves a lot of hobbies.","My sister is having a lot of hobbies."], correct:0,
+    explain:"Third person singular: \"have\" becomes <strong>has</strong>." },
+  { cat:"simple", prompt:"− &nbsp; I / get on very well with my parents",
+    options:["I don't get on very well with my parents.","I doesn't get on very well with my parents.","I not get on very well with my parents.","I don't got on very well with my parents."], correct:0,
+    explain:"\"I\" takes <strong>don't</strong> + base verb in the negative." },
+  { cat:"simple", prompt:"+ &nbsp; my brother / study English at university",
+    options:["My brother studies English at university.","My brother study English at university.","My brother studys English at university.","My brother is study English at university."], correct:0,
+    explain:"Verbs ending in a consonant + y change to <strong>-ies</strong> in the third person: study → studies." },
+  { cat:"simple", prompt:"− &nbsp; my neighbours / have any children",
+    options:["My neighbours don't have any children.","My neighbours doesn't have any children.","My neighbours don't has any children.","My neighbours not have any children."], correct:0,
+    explain:"\"My neighbours\" is plural, so it takes <strong>don't</strong> + base verb." },
+  { cat:"simple", prompt:"? &nbsp; What time / the film start",
+    options:["What time does the film start?","What time does the film starts?","What time do the film start?","What time is the film start?"], correct:0,
+    explain:"After \"does\", the main verb stays in its base form: What time does the film start?" },
+  { cat:"simple", prompt:"+ &nbsp; he / go out twice a week",
+    options:["He goes out twice a week.","He go out twice a week.","He is going out twice a week.","He goed out twice a week."], correct:0,
+    explain:"Third person singular: \"go\" becomes <strong>goes</strong>." },
+  { cat:"simple", prompt:"− &nbsp; we / often talk about politics",
+    options:["We don't often talk about politics.","We often don't talk about politics.","We doesn't often talk about politics.","We don't talk often about politics."], correct:0,
+    explain:"The frequency adverb <strong>often</strong> goes after \"don't\" and before the main verb." },
+  { cat:"simple", prompt:"? &nbsp; how often / you see your brother",
+    options:["How often do you see your brother?","How often you do see your brother?","How often does you see your brother?","How often do you sees your brother?"], correct:0,
+    explain:"\"You\" takes <strong>do</strong> in questions, followed by the base verb: How often do you see...?" },
+  { cat:"simple", prompt:"− &nbsp; Sally / go on Facebook very much",
+    options:["Sally doesn't go on Facebook very much.","Sally don't go on Facebook very much.","Sally doesn't goes on Facebook very much.","Sally not go on Facebook very much."], correct:0,
+    explain:"\"Sally\" is third person singular, so the negative auxiliary is <strong>doesn't</strong> + base verb." },
+
+  // ---------- FREQUENCY WORD ORDER ----------
+  { cat:"order2", scramble:"always · before · go · I · bed · 11.00 · to",
+    options:["I always go to bed before 11.00.","I go always to bed before 11.00.","Always I go to bed before 11.00.","I always go before 11.00 to bed."], correct:0,
+    explain:"The adverb <strong>always</strong> sits between subject and verb: I + always + go..." },
+  { cat:"order2", scramble:"ever · her · Kate · sees · family · hardly",
+    options:["Kate hardly ever sees her family.","Kate sees hardly ever her family.","Hardly ever Kate sees her family.","Kate hardly sees ever her family."], correct:0,
+    explain:"\"Hardly ever\" stays together as a unit, between subject and verb: Kate + hardly ever + sees..." },
+  { cat:"order2", scramble:"Saturdays · never · shopping · on · go · we",
+    options:["We never go shopping on Saturdays.","We go never shopping on Saturdays.","Never we go shopping on Saturdays.","We never go on Saturdays shopping."], correct:0,
+    explain:"<strong>Never</strong> goes between subject and verb; the time expression \"on Saturdays\" goes at the end." },
+  { cat:"order2", scramble:"a · to · I · dentist's · year · go · twice · the",
+    options:["I go to the dentist's twice a year.","I go twice to the dentist's a year.","Twice a year I go to the dentist's.","I twice go to the dentist's a year."], correct:0,
+    explain:"Frequency expressions like <strong>twice a year</strong> usually go at the end of the sentence." },
+  { cat:"order2", scramble:"in · they · breakfast · sometimes · bed · have",
+    options:["They sometimes have breakfast in bed.","They have sometimes breakfast in bed.","Sometimes they have breakfast in bed.","They sometimes have in bed breakfast."], correct:0,
+    explain:"<strong>Sometimes</strong> goes between subject and verb: They + sometimes + have..." },
+  { cat:"order2", scramble:"usually · car · I · the · listen · the · in · radio · to",
+    options:["I usually listen to the radio in the car.","I listen usually to the radio in the car.","Usually I listen to the radio in the car.","I usually listen in the car to the radio."], correct:0,
+    explain:"<strong>Usually</strong> goes between subject and verb; the place expression \"in the car\" goes at the end." },
+  { cat:"order2", scramble:"in · day · park · every · Alan · the · runs",
+    options:["Alan runs in the park every day.","Alan every day runs in the park.","Every day Alan runs in the park.","Alan runs every day in the park."], correct:0,
+    explain:"The time expression <strong>every day</strong> typically goes at the end: Alan runs in the park every day." },
+  { cat:"order2", scramble:"often · late · Sam · is · work · for",
+    options:["Sam is often late for work.","Sam often is late for work.","Often Sam is late for work.","Sam is late often for work."], correct:0,
+    explain:"With \"to be\", the adverb <strong>often</strong> goes straight after it: Sam + is + often + late." },
+  { cat:"order2", scramble:"often · John · to · go · doesn't · theatre · the",
+    options:["John doesn't often go to the theatre.","John often doesn't go to the theatre.","John doesn't go often to the theatre.","Often John doesn't go to the theatre."], correct:0,
+    explain:"In the negative, <strong>often</strong> goes after \"doesn't\" and before the main verb." },
+  { cat:"order2", scramble:"visit · I · once · my · month · a · mum",
+    options:["I visit my mum once a month.","I once visit my mum a month.","Once a month I visit my mum.","I visit once my mum a month."], correct:0,
+    explain:"Frequency expressions like <strong>once a month</strong> usually go at the end of the sentence." }
+];
+
+// Shuffle each question's options so the correct answer isn't always in the same slot.
+function shuffleOptions(q){
+  const correctText = q.options[q.correct];
+  const arr = q.options.slice();
+  for(let i = arr.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  q.options = arr;
+  q.correct = arr.indexOf(correctText);
+}
+QUESTIONS.forEach(shuffleOptions);
+
+const state = {
+  screen: 'start',
+  index: 0,
+  selected: null,
+  answers: new Array(QUESTIONS.length).fill(null)
+};
+
+function letterFor(i){ return ['A','B','C','D'][i]; }
+
+function renderLegend(){
+  return Object.values(CATEGORIES).map(c =>
+    `<div class="legend-item"><span class="dot" style="background:${c.color}"></span>${c.name}</div>`
+  ).join('');
+}
+
+function renderStart(){
+  return `
+    <div class="top-nav"><a class="back-link" href="index.html">&larr; All quizzes</a></div>
+    <div class="eyebrow">Present Simple &amp; Question Order</div>
+    <h1>Grammar <em>Gym</em></h1>
+    <p class="lede">Forty quick reps: fixing word order, building questions, and getting the present simple exactly right — the same fine details that trip learners up in real conversation.</p>
+    <div class="legend">${renderLegend()}</div>
+    <button class="btn-primary" onclick="startQuiz()">Start the workout →</button>
+  `;
+}
+
+function renderPath(){
+  let html = '<div class="path">';
+  QUESTIONS.forEach((q, i) => {
+    const ans = state.answers[i];
+    let cls = 'node';
+    if (i === state.index && !ans) cls += ' current';
+    if (ans) cls += ans.correct ? ' correct' : ' incorrect';
+    html += `<div class="${cls}" title="Question ${i+1}"></div>`;
+    if (i < QUESTIONS.length - 1){
+      html += `<div class="node-link${ans ? ' done' : ''}"></div>`;
+    }
+  });
+  html += '</div>';
+  return html;
+}
+
+function renderQuestion(){
+  const q = QUESTIONS[state.index];
+  const cat = CATEGORIES[q.cat];
+  const ans = state.answers[state.index];
+  const checked = !!ans;
+
+  const optionsHtml = q.options.map((opt, i) => {
+    let cls = 'option';
+    let disabled = checked ? 'disabled' : '';
+    if (checked){
+      if (i === q.correct) cls += ' correct';
+      else if (i === ans.selected) cls += ' incorrect';
+    } else if (i === state.selected){
+      cls += ' selected';
+    }
+    return `<button class="${cls}" ${disabled} onclick="selectOption(${i})">
+      <span class="opt-letter">${letterFor(i)}</span>${opt}
+    </button>`;
+  }).join('');
+
+  const isLast = state.index === QUESTIONS.length - 1;
+  const actionLabel = checked ? (isLast ? 'See results →' : 'Next question →') : 'Check answer';
+  const actionHandler = checked ? 'goNext()' : 'checkAnswer()';
+  const actionDisabled = (!checked && state.selected === null) ? 'disabled' : '';
+
+  let feedbackHtml = '';
+  if (checked){
+    feedbackHtml = `
+      <div class="feedback show ${ans.correct ? 'correct' : 'incorrect'}">
+        <span class="feedback-label">${ans.correct ? 'Correct' : 'Not quite'}</span>
+        ${q.explain}
+      </div>`;
+  }
+
+  const promptBlock = q.prompt
+    ? `<p class="qtext">${q.prompt}${q.word ? ` &nbsp;<span class="word">(${q.word})</span>` : ''}</p>`
+    : `<div class="scramble">${q.scramble}</div><p class="qtext" style="font-size:14px;color:var(--ink-muted);margin-top:8px;">Choose the correctly ordered sentence.</p>`;
+
+  const prevDisabled = (state.index === 0) ? 'disabled' : '';
+
+  return `
+    <div class="top-nav"><a class="back-link" href="index.html">&larr; All quizzes</a></div>
+    ${renderPath()}
+    <div class="topline">
+      <span class="qcount">Question ${state.index + 1} / ${QUESTIONS.length}</span>
+    </div>
+    <div class="cat-badge"><span class="dot" style="background:${cat.color}"></span>${cat.name}</div>
+    <div class="card">
+      ${promptBlock}
+      <div class="options">${optionsHtml}</div>
+      ${feedbackHtml}
+      <div class="actions">
+        <button class="btn-ghost" ${prevDisabled} onclick="goPrev()">&larr; Previous</button>
+        <button class="btn-primary" ${actionDisabled} onclick="${actionHandler}">${actionLabel}</button>
+      </div>
+    </div>
+  `;
+}
+
+function scoreByCategory(){
+  const out = {};
+  Object.keys(CATEGORIES).forEach(k => out[k] = {correct:0, total:0});
+  QUESTIONS.forEach((q, i) => {
+    out[q.cat].total++;
+    if (state.answers[i] && state.answers[i].correct) out[q.cat].correct++;
+  });
+  return out;
+}
+
+function bandMessage(score, total){
+  const pct = score/total;
+  if (pct >= 0.87) return "Excellent — question word order and the present simple are firmly under control.";
+  if (pct >= 0.6) return "Solid overall, with a few specific gaps worth revisiting. Check which category pulled the score down.";
+  return "Good practice run — go back through the categories with the lowest scores and try again.";
+}
+
+function renderResults(){
+  const total = QUESTIONS.length;
+  const score = state.answers.filter(a => a && a.correct).length;
+  const byCat = scoreByCategory();
+
+  const rows = Object.entries(byCat).map(([key, v]) => {
+    const cat = CATEGORIES[key];
+    const pct = Math.round((v.correct / v.total) * 100);
+    return `
+      <div class="cat-row">
+        <div class="cat-row-top">
+          <span class="cat-name"><span class="dot" style="background:${cat.color}"></span>${cat.name}</span>
+          <span class="cat-score">${v.correct}/${v.total}</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width:${pct}%; background:${cat.color}"></div></div>
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="top-nav"><a class="back-link" href="index.html">&larr; All quizzes</a></div>
+    <div class="score-hero">
+      <div class="eyebrow">Results</div>
+      <div class="score-num">${score}<span style="font-size:26px;color:var(--ink-muted)"> / ${total}</span></div>
+      <p class="band">${bandMessage(score, total)}</p>
+    </div>
+    <div class="cat-breakdown">${rows}</div>
+    <div class="result-actions">
+      <button class="btn-primary" onclick="showReview()">Review every answer</button>
+      <button class="btn-ghost" onclick="restartQuiz()">Retry quiz</button>
+    </div>
+  `;
+}
+
+function renderReview(){
+  const items = QUESTIONS.map((q, i) => {
+    const ans = state.answers[i];
+    const cat = CATEGORIES[q.cat];
+    const headerText = q.prompt ? q.prompt.replace(/&nbsp;/g,' ') : q.scramble;
+    return `
+      <div class="review-item">
+        <div class="cat-badge"><span class="dot" style="background:${cat.color}"></span>${cat.name} · Q${i+1}</div>
+        <div class="review-scr">${headerText}${q.word ? ` (${q.word})` : ''}</div>
+        <div class="review-answer-row"><span class="lbl">Your answer:</span><span class="val ${ans.correct ? 'correct' : 'incorrect'}">${q.options[ans.selected]}</span></div>
+        ${!ans.correct ? `<div class="review-answer-row"><span class="lbl">Correct answer:</span><span class="val correct">${q.options[q.correct]}</span></div>` : ''}
+        <div class="review-explain">${q.explain}</div>
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="top-nav"><a class="back-link" href="index.html">&larr; All quizzes</a></div>
+    <div class="eyebrow">Full review</div>
+    <h1 style="font-size:30px;">Every rep, retraced</h1>
+    <div style="margin:22px 0;">${items}</div>
+    <div class="result-actions">
+      <button class="btn-ghost" onclick="restartQuiz()">Retry quiz</button>
+    </div>
+  `;
+}
+
+function render(){
+  const app = document.getElementById('app');
+  if (state.screen === 'start') app.innerHTML = renderStart();
+  else if (state.screen === 'question') app.innerHTML = renderQuestion();
+  else if (state.screen === 'results') app.innerHTML = renderResults();
+  else if (state.screen === 'review') app.innerHTML = renderReview();
+  window.scrollTo({top:0, behavior:'instant'});
+}
+
+function startQuiz(){
+  state.screen = 'question';
+  state.index = 0;
+  render();
+}
+function selectOption(i){
+  if (state.answers[state.index]) return;
+  state.selected = i;
+  render();
+}
+function checkAnswer(){
+  if (state.selected === null) return;
+  const q = QUESTIONS[state.index];
+  state.answers[state.index] = { selected: state.selected, correct: state.selected === q.correct };
+  render();
+}
+function goNext(){
+  if (state.index < QUESTIONS.length - 1){
+    state.index++;
+    state.selected = null;
+    state.screen = 'question';
+  } else {
+    state.screen = 'results';
+  }
+  render();
+}
+function goPrev(){
+  if (state.index === 0) return;
+  state.index--;
+  const prevAns = state.answers[state.index];
+  state.selected = prevAns ? prevAns.selected : null;
+  state.screen = 'question';
+  render();
+}
+function showReview(){
+  state.screen = 'review';
+  render();
+}
+function restartQuiz(){
+  state.index = 0;
+  state.selected = null;
+  state.answers = new Array(QUESTIONS.length).fill(null);
+  state.screen = 'start';
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
