@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clause &amp; Effect — Adverbial Clauses Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #1B2438;
+    --bg-deep: #141C2C;
+    --surface: #232E47;
+    --surface-2: #2C3957;
+    --text: #F2E9D8;
+    --text-muted: #A9B4C9;
+    --gold: #D7A65A;
+    --gold-soft: rgba(215,166,90,0.16);
+    --correct: #8FB996;
+    --correct-soft: rgba(143,185,150,0.16);
+    --incorrect: #C97B84;
+    --incorrect-soft: rgba(201,123,132,0.16);
+    --cat-time: #D7A65A;
+    --cat-concession: #6FAFA0;
+    --cat-purpose: #A78BBE;
+    --cat-discourse: #6E94B8;
+    --border: rgba(242,233,216,0.12);
+    --radius: 14px;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse 900px 500px at 15% -10%, rgba(215,166,90,0.08), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 110% 10%, rgba(110,148,184,0.10), transparent 55%),
+      var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    display:flex;
+    justify-content:center;
+    padding: 40px 20px 60px;
+  }
+
+  .wrap{ width:100%; max-width: 680px; }
+
+  .top-nav{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:22px;
+    flex-wrap:wrap;
+  }
+  .nav-link{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.03em;
+    color: var(--text-muted);
+    text-decoration:none;
+    border:1px solid var(--border);
+    border-radius:999px;
+    padding:7px 14px;
+    transition: border-color .15s ease, color .15s ease, background .15s ease;
+  }
+  .nav-link:hover{ border-color: var(--gold); color: var(--gold); }
+  .nav-link:focus-visible{ outline: 2px solid var(--gold); outline-offset: 2px; }
+  .nav-link.disabled{ visibility:hidden; }
+
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight: 600;
+    font-size: clamp(34px, 6vw, 50px);
+    line-height: 1.05;
+    margin: 8px 0 6px;
+    letter-spacing: -0.01em;
+  }
+  h1 em{
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .lede{
+    color: var(--text-muted);
+    font-size: 16px;
+    line-height: 1.55;
+    max-width: 56ch;
+  }
+
+  /* ---------- Start screen ---------- */
+  .legend{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 28px 0 32px;
+  }
+  .legend-item{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 13.5px;
+  }
+  .dot{
+    width: 9px; height: 9px; border-radius: 50%; flex-shrink:0;
+  }
+
+  button{
+    font-family:'Inter', sans-serif;
+    cursor: pointer;
+  }
+  .btn-primary{
+    background: var(--gold);
+    color: var(--bg-deep);
+    border: none;
+    padding: 15px 28px;
+    border-radius: 999px;
+    font-size: 15.5px;
+    font-weight: 600;
+    transition: transform .15s ease, box-shadow .15s ease;
+    box-shadow: 0 6px 20px rgba(215,166,90,0.25);
+  }
+  .btn-primary:hover{ transform: translateY(-1px); box-shadow: 0 8px 24px rgba(215,166,90,0.35); }
+  .btn-primary:focus-visible{ outline: 2px solid var(--text); outline-offset: 3px; }
+  .btn-primary:disabled{ opacity:.4; cursor:not-allowed; transform:none; box-shadow:none; }
+
+  .btn-ghost{
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 13px 24px;
+    border-radius: 999px;
+    font-size: 14.5px;
+    font-weight: 500;
+  }
+  .btn-ghost:hover:not(:disabled){ border-color: var(--text-muted); }
+  .btn-ghost:disabled{ opacity:.35; cursor:not-allowed; }
+  .btn-ghost:focus-visible{ outline: 2px solid var(--text); outline-offset: 3px; }
+
+  /* ---------- Path / progress ---------- */
+  .path{
+    display:flex;
+    align-items:center;
+    gap: 3px;
+    margin: 26px 0 30px;
+    flex-wrap: wrap;
+  }
+  .node-link{
+    flex: 1;
+    min-width: 5px;
+    height: 2px;
+    background: var(--border);
+  }
+  .node-link.done{ background: var(--text-muted); }
+  .node{
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: var(--bg-deep);
+    flex-shrink:0;
+    transition: all .2s ease;
+  }
+  .node.current{
+    border-color: var(--gold);
+    box-shadow: 0 0 0 4px var(--gold-soft);
+    transform: scale(1.15);
+  }
+  .node.correct{ background: var(--correct); border-color: var(--correct); }
+  .node.incorrect{ background: var(--incorrect); border-color: var(--incorrect); }
+
+  .topline{
+    display:flex;
+    justify-content: space-between;
+    align-items:baseline;
+    margin-bottom: 6px;
+  }
+  .qcount{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .cat-badge{
+    display:inline-flex;
+    align-items:center;
+    gap: 7px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+  }
+
+  /* ---------- Question card ---------- */
+  .card{
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 30px 28px;
+  }
+  .qtext{
+    font-family:'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(18px, 3.1vw, 22px);
+    line-height: 1.5;
+    margin: 0 0 26px;
+  }
+  .blank{
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  .options{
+    display:flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .option{
+    text-align:left;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 14px 16px;
+    border-radius: 10px;
+    font-size: 15px;
+    display:flex;
+    align-items:center;
+    gap: 12px;
+    transition: border-color .15s ease, background .15s ease;
+  }
+  .option:hover:not(:disabled){ border-color: var(--text-muted); }
+  .option:focus-visible{ outline: 2px solid var(--gold); outline-offset: 2px; }
+  .option.selected{ border-color: var(--gold); background: var(--gold-soft); }
+  .option.correct{ border-color: var(--correct); background: var(--correct-soft); }
+  .option.incorrect{ border-color: var(--incorrect); background: var(--incorrect-soft); }
+  .option:disabled{ cursor: default; }
+  .opt-letter{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    width: 18px;
+    flex-shrink:0;
+  }
+  .option.correct .opt-letter, .option.correct{ color: var(--text); }
+
+  .feedback{
+    margin-top: 20px;
+    padding: 16px 18px;
+    border-radius: 10px;
+    font-size: 14.5px;
+    line-height: 1.55;
+    border: 1px solid var(--border);
+    display:none;
+  }
+  .feedback.show{ display:block; }
+  .feedback.correct{ background: var(--correct-soft); border-color: rgba(143,185,150,0.4); }
+  .feedback.incorrect{ background: var(--incorrect-soft); border-color: rgba(201,123,132,0.4); }
+  .feedback-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display:block;
+    margin-bottom: 6px;
+  }
+  .feedback.correct .feedback-label{ color: var(--correct); }
+  .feedback.incorrect .feedback-label{ color: var(--incorrect); }
+
+  .actions{
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    margin-top: 24px;
+    gap: 12px;
+  }
+
+  /* ---------- Results ---------- */
+  .score-hero{
+    text-align:center;
+    padding: 38px 20px 30px;
+  }
+  .score-num{
+    font-family:'Fraunces', serif;
+    font-size: 64px;
+    font-weight: 600;
+    color: var(--gold);
+    line-height:1;
+  }
+  .score-denom{
+    font-family:'IBM Plex Mono', monospace;
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-top: 6px;
+  }
+  .band{
+    margin-top: 14px;
+    font-size: 15.5px;
+    color: var(--text-muted);
+    max-width: 46ch;
+    margin-left:auto; margin-right:auto;
+  }
+
+  .cat-breakdown{
+    display:flex;
+    flex-direction:column;
+    gap: 12px;
+    margin: 28px 0;
+  }
+  .cat-row{
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .cat-row-top{
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    font-size: 13.5px;
+    margin-bottom: 8px;
+  }
+  .cat-name{ display:flex; align-items:center; gap:8px; font-weight: 500;}
+  .cat-score{ font-family:'IBM Plex Mono', monospace; color: var(--text-muted); }
+  .bar-track{
+    height: 6px;
+    background: var(--surface-2);
+    border-radius: 4px;
+    overflow:hidden;
+  }
+  .bar-fill{
+    height:100%;
+    border-radius:4px;
+  }
+
+  .result-actions{
+    display:flex;
+    gap: 12px;
+    justify-content:center;
+    margin-top: 30px;
+    flex-wrap: wrap;
+  }
+
+  /* ---------- Review ---------- */
+  .review-item{
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    margin-bottom: 14px;
+  }
+  .review-q{
+    font-family:'Fraunces', serif;
+    font-size: 17px;
+    line-height: 1.5;
+    margin: 6px 0 12px;
+  }
+  .review-answer-row{ font-size: 14px; margin: 4px 0; }
+  .review-answer-row .lbl{ color: var(--text-muted); margin-right: 6px;}
+  .review-answer-row .val.correct{ color: var(--correct); font-weight:600;}
+  .review-answer-row .val.incorrect{ color: var(--incorrect); font-weight:600; text-decoration: line-through; text-decoration-color: var(--incorrect); }
+  .review-explain{
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    font-size: 13.5px;
+    color: var(--text-muted);
+    line-height: 1.55;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition: none !important; }
+  }
+
+  @media (max-width: 480px){
+    .legend{ grid-template-columns: 1fr; }
+    .card{ padding: 24px 18px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<script>
+const CATEGORIES = {
+  time:       { name: "Time Clauses (as / when / while)", color: "var(--cat-time)"       },
+  concession: { name: "Concession (although / despite)",  color: "var(--cat-concession)" },
+  purpose:    { name: "Purpose & Reason",                 color: "var(--cat-purpose)"     },
+  discourse:  { name: "Choose in Context",                color: "var(--cat-discourse)"   }
+};
+
+const QUESTIONS = [
+  // ---------------- TIME CLAUSES ----------------
+  {
+    cat: "time",
+    text: "You wouldn't think it now, but ______ I was very young, I had curly, brown hair.",
+    options: ["when", "as", "while", "since"],
+    correct: 0,
+    explain: "<strong>When</strong> introduces a single period in the past \u2014 the time when the speaker was young \u2014 rather than two simultaneous actions (<em>as</em>) or a background action (<em>while</em>)."
+  },
+  {
+    cat: "time",
+    text: "Did you see her hands shaking ______ she spoke? She must have been so nervous.",
+    options: ["as", "when", "while", "since"],
+    correct: 0,
+    explain: "<strong>As</strong> links two things happening at the same moment, often adding a sense of cause or manner \u2014 her hands shook <em>as</em> she spoke."
+  },
+  {
+    cat: "time",
+    text: "How old were you ______ you got married?",
+    options: ["when", "while", "as", "since"],
+    correct: 0,
+    explain: "<strong>When</strong> asks about the age at a specific past point in time \u2014 the moment of marriage."
+  },
+  {
+    cat: "time",
+    text: "______ the structure of the novel might at first appear chaotic, in fact it is very carefully organised.",
+    options: ["While", "When", "As", "Despite"],
+    correct: 0,
+    explain: "<strong>While</strong> can mean \u201calthough\u201d when it introduces a concession, contrasting the novel's apparent chaos with its real organisation."
+  },
+  {
+    cat: "time",
+    text: "______ my children get older, I find they get even fussier about the food they eat.",
+    options: ["As", "When", "While", "Since"],
+    correct: 0,
+    explain: "<strong>As</strong> describes two situations changing together over time \u2014 as the children grow older, their fussiness increases."
+  },
+  {
+    cat: "time",
+    text: "______ the level of pesticides in the potatoes is well below the legal limit, the public have been advised to avoid eating them for the time being.",
+    options: ["While", "When", "As", "Since"],
+    correct: 0,
+    explain: "<strong>While</strong> here means \u201calthough\u201d \u2014 it contrasts the safe pesticide level with the advice to avoid eating the potatoes."
+  },
+
+  // ---------------- CONCESSION ----------------
+  {
+    cat: "concession",
+    text: "\u201cAlthough smoking is now banned in public spaces, sales of cigarettes have actually increased.\u201d Which sentence expresses the same idea using <em>Despite</em>?",
+    options: [
+      "Despite smoking being banned in public spaces, sales of cigarettes have actually increased.",
+      "Despite smoking is banned in public spaces, sales of cigarettes have actually increased.",
+      "Despite of smoking being banned in public spaces, sales of cigarettes have actually increased.",
+      "Despite that smoking being banned in public spaces, sales of cigarettes have actually increased."
+    ],
+    correct: 0,
+    explain: "<strong>Despite</strong> is followed by a noun phrase or -ing form, never a finite clause with its own subject and verb, and never by \u201cof\u201d or \u201cthat\u201d \u2014 <em>smoking being banned</em> turns the idea into a gerund phrase."
+  },
+  {
+    cat: "concession",
+    text: "\u201cAlthough she fell heavily at the start of the race, she went on to finish second.\u201d Which sentence expresses the same idea using <em>Despite</em>?",
+    options: [
+      "Despite falling heavily at the start of the race, she went on to finish second.",
+      "Despite she fell heavily at the start of the race, she went on to finish second.",
+      "Despite to fall heavily at the start of the race, she went on to finish second.",
+      "Despite fell heavily at the start of the race, she went on to finish second."
+    ],
+    correct: 0,
+    explain: "<strong>Despite + -ing</strong> replaces the subject and verb of the although-clause when the subject is the same as in the main clause: <em>falling heavily...</em> (she is understood)."
+  },
+  {
+    cat: "concession",
+    text: "\u201cAlthough we got lost on the way, we were eventually only a few minutes late.\u201d Which sentence expresses the same idea using <em>Despite</em>?",
+    options: [
+      "Despite getting lost on the way, we were eventually only a few minutes late.",
+      "Despite got lost on the way, we were eventually only a few minutes late.",
+      "Despite we got lost on the way, we were eventually only a few minutes late.",
+      "Despite to get lost on the way, we were eventually only a few minutes late."
+    ],
+    correct: 0,
+    explain: "The -ing form (<strong>getting</strong>) is required after <em>despite</em> when describing an action the same subject performed."
+  },
+  {
+    cat: "concession",
+    text: "\u201cAlthough the alarm went off when the house was broken into, nobody bothered to call the police.\u201d Which sentence expresses the same idea using <em>Despite</em>?",
+    options: [
+      "Despite the alarm going off when the house was broken into, nobody bothered to call the police.",
+      "Despite the alarm went off when the house was broken into, nobody bothered to call the police.",
+      "Despite of the alarm going off when the house was broken into, nobody bothered to call the police.",
+      "Despite the alarm to go off when the house was broken into, nobody bothered to call the police."
+    ],
+    correct: 0,
+    explain: "Here the subject of the despite-clause (<em>the alarm</em>) differs from the main clause subject (<em>nobody</em>), so it must be stated explicitly before the -ing form: <strong>the alarm going off</strong>."
+  },
+  {
+    cat: "concession",
+    text: "\u201cAlthough we lived in the same village, we had never spoken to each other.\u201d Which sentence expresses the same idea using <em>Despite</em>?",
+    options: [
+      "Despite living in the same village, we had never spoken to each other.",
+      "Despite live in the same village, we had never spoken to each other.",
+      "Despite we lived in the same village, we had never spoken to each other.",
+      "Despite of living in the same village, we had never spoken to each other."
+    ],
+    correct: 0,
+    explain: "<strong>Living</strong> replaces \u201clived\u201d as the -ing form; <em>despite</em> is never directly followed by \u201cof\u201d."
+  },
+  {
+    cat: "concession",
+    text: "\u201cAlthough she was badly hurt herself, she helped a number of passengers out of the crashed coach.\u201d Which sentence expresses the same idea using <em>Despite</em>?",
+    options: [
+      "Despite being badly hurt herself, she helped a number of passengers out of the crashed coach.",
+      "Despite badly hurt herself, she helped a number of passengers out of the crashed coach.",
+      "Despite she was badly hurt herself, she helped a number of passengers out of the crashed coach.",
+      "Despite to be badly hurt herself, she helped a number of passengers out of the crashed coach."
+    ],
+    correct: 0,
+    explain: "The verb \u201cto be\u201d becomes <strong>being</strong> in the -ing form: <em>despite being badly hurt herself</em>."
+  },
+
+  // ---------------- PURPOSE & REASON ----------------
+  {
+    cat: "purpose",
+    text: "My bike is unusual ______ the front wheel is smaller than the back.",
+    options: ["in that", "so as not to", "in order that", "seeing that"],
+    correct: 0,
+    explain: "<strong>In that</strong> introduces a specific detail or way in which something is true \u2014 it explains what makes the bike unusual."
+  },
+  {
+    cat: "purpose",
+    text: "You need to lift the plant carefully ______ damage its roots.",
+    options: ["so as not to", "in order that", "in that", "seeing that"],
+    correct: 0,
+    explain: "<strong>So as not to</strong> + base verb expresses a negative purpose when the subject is the same in both clauses: lift carefully so as not to damage..."
+  },
+  {
+    cat: "purpose",
+    text: "Pitcher plants are unique ______ they are carnivorous.",
+    options: ["in that", "so as not to", "in order that", "seeing that"],
+    correct: 0,
+    explain: "<strong>In that</strong> again introduces the specific respect in which pitcher plants are unique."
+  },
+  {
+    cat: "purpose",
+    text: "The runway is going to be extended ______ larger planes can land there.",
+    options: ["in order that", "so as not to", "in that", "seeing that"],
+    correct: 0,
+    explain: "<strong>In order that</strong> introduces a purpose clause with its own subject and a modal verb (<em>can</em>) \u2014 a more formal alternative to \u201cso that\u201d."
+  },
+  {
+    cat: "purpose",
+    text: "She'll probably recover from the illness quickly ______ she's so fit.",
+    options: ["seeing that", "in order that", "in that", "so as not to"],
+    correct: 0,
+    explain: "<strong>Seeing that</strong> means \u201csince/because\u201d \u2014 it gives a known reason for the prediction."
+  },
+  {
+    cat: "purpose",
+    text: "She left work early ______ she could get to the concert on time.",
+    options: ["in order that", "so as not to", "in that", "seeing that"],
+    correct: 0,
+    explain: "<strong>In order that</strong> introduces the purpose behind leaving early, followed by a full clause with a modal (<em>could</em>)."
+  },
+
+  // ---------------- CHOOSE IN CONTEXT ----------------
+  {
+    cat: "discourse",
+    text: "Which version is correct? (from an email)",
+    options: [
+      "I couldn't contact you this morning because we had a power cut here. Sorry.",
+      "I couldn't contact you this morning. Because we had a power cut here. Sorry.",
+      "I couldn't contact you this morning, because. We had a power cut here. Sorry.",
+      "I couldn't contact you this morning because. We had a power cut here. Sorry."
+    ],
+    correct: 0,
+    explain: "<strong>Because</strong> introduces a subordinate clause and should stay attached to the main clause in one sentence \u2014 starting a new sentence with \u201cBecause...\u201d is a common error in this kind of informal writing."
+  },
+  {
+    cat: "discourse",
+    text: "I'm not sure I'll be able to make it, ______.",
+    options: ["though", "although", "despite", "however that"],
+    correct: 0,
+    explain: "<strong>Though</strong> can stand alone at the end of a sentence as an adverb meaning \u201chowever\u201d. \u201cAlthough\u201d cannot be used this way \u2014 it must introduce a clause."
+  },
+  {
+    cat: "discourse",
+    text: "______ we've got extra staff at work, we're struggling to meet the deadline.",
+    options: ["In spite of the fact that", "In spite of that", "Despite", "Although of"],
+    correct: 0,
+    explain: "<strong>In spite of the fact that</strong> is followed by a full clause (<em>we've got extra staff</em>). \u201cIn spite of that\u201d refers back to something already mentioned and can't introduce a new clause like this."
+  },
+  {
+    cat: "discourse",
+    text: "This means I've got a huge amount of work to do ______ on holiday at the end of the week.",
+    options: ["before I go", "before I will go", "before I am going", "before I would go"],
+    correct: 0,
+    explain: "Time clauses referring to the future use the present simple, not \u201cwill\u201d: <strong>before I go</strong>, not \u201cbefore I will go\u201d."
+  },
+  {
+    cat: "discourse",
+    text: "I feel really guilty ______ this is the second time this year I've had to turn down your invitation.",
+    options: ["seeing that", "seeing", "given", "despite"],
+    correct: 0,
+    explain: "<strong>Seeing that</strong> (= since/because) needs \u201cthat\u201d to introduce the reason clause; \u201cseeing\u201d alone isn't a standard conjunction here."
+  },
+  {
+    cat: "discourse",
+    text: "We won't be able to finish the report on time, ______ we lost two days to the system outage.",
+    options: ["given that", "given", "given of", "considering"],
+    correct: 0,
+    explain: "<strong>Given that</strong> introduces a reason clause; \u201cgiven\u201d alone typically precedes a noun phrase (<em>given the circumstances</em>), not a full clause."
+  }
+];
+
+// Shuffle each question's options so the correct answer isn't always in the same slot.
+function shuffleOptions(q){
+  const correctText = q.options[q.correct];
+  const arr = q.options.slice();
+  for(let i = arr.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  q.options = arr;
+  q.correct = arr.indexOf(correctText);
+}
+QUESTIONS.forEach(shuffleOptions);
+
+const state = {
+  screen: 'start',
+  index: 0,
+  selected: null,
+  answers: new Array(QUESTIONS.length).fill(null)
+};
+
+function letterFor(i){ return ['A','B','C','D'][i]; }
+
+function renderLegend(){
+  return Object.values(CATEGORIES).map(c =>
+    `<div class="legend-item"><span class="dot" style="background:${c.color}"></span>${c.name}</div>`
+  ).join('');
+}
+
+function renderTopNav(){
+  return `
+    <div class="top-nav">
+      <a href="index.html" class="nav-link">&larr; All quizzes</a>
+      ${(state.screen === 'question' && state.index > 0)
+        ? `<a href="#" class="nav-link" onclick="goPrev();return false;">&larr; Previous question</a>`
+        : ''}
+    </div>`;
+}
+
+function renderStart(){
+  return `
+    ${renderTopNav()}
+    <div class="eyebrow">C1 &middot; Adverbial Clauses</div>
+    <h1>Clause <em>&amp; Effect</em></h1>
+    <p class="lede">Twenty-four sentences testing the small words that carry big grammatical weight: time clauses, concession, purpose and reason, and the discourse choices that trip learners up in real writing.</p>
+    <div class="legend">${renderLegend()}</div>
+    <button class="btn-primary" onclick="startQuiz()">Begin the quiz &rarr;</button>
+  `;
+}
+
+function renderPath(){
+  let html = '<div class="path">';
+  QUESTIONS.forEach((q, i) => {
+    const ans = state.answers[i];
+    let cls = 'node';
+    if (i === state.index && !ans) cls += ' current';
+    if (ans) cls += ans.correct ? ' correct' : ' incorrect';
+    html += `<div class="${cls}" title="Question ${i+1}"></div>`;
+    if (i < QUESTIONS.length - 1){
+      html += `<div class="node-link${ans ? ' done' : ''}"></div>`;
+    }
+  });
+  html += '</div>';
+  return html;
+}
+
+function renderQuestion(){
+  const q = QUESTIONS[state.index];
+  const cat = CATEGORIES[q.cat];
+  const ans = state.answers[state.index];
+  const checked = !!ans;
+
+  const optionsHtml = q.options.map((opt, i) => {
+    let cls = 'option';
+    let disabled = checked ? 'disabled' : '';
+    if (checked){
+      if (i === q.correct) cls += ' correct';
+      else if (i === ans.selected) cls += ' incorrect';
+    } else if (i === state.selected){
+      cls += ' selected';
+    }
+    return `<button class="${cls}" ${disabled} onclick="selectOption(${i})">
+      <span class="opt-letter">${letterFor(i)}</span>${opt}
+    </button>`;
+  }).join('');
+
+  const isLast = state.index === QUESTIONS.length - 1;
+  const actionLabel = checked ? (isLast ? 'See results \u2192' : 'Next question \u2192') : 'Check answer';
+  const actionHandler = checked ? 'goNext()' : 'checkAnswer()';
+  const actionDisabled = (!checked && state.selected === null) ? 'disabled' : '';
+  const prevDisabled = state.index === 0 ? 'disabled' : '';
+
+  let feedbackHtml = '';
+  if (checked){
+    feedbackHtml = `
+      <div class="feedback show ${ans.correct ? 'correct' : 'incorrect'}">
+        <span class="feedback-label">${ans.correct ? 'Correct' : 'Not quite'}</span>
+        ${q.explain}
+      </div>`;
+  }
+
+  return `
+    ${renderTopNav()}
+    ${renderPath()}
+    <div class="topline">
+      <span class="qcount">Question ${state.index + 1} / ${QUESTIONS.length}</span>
+    </div>
+    <div class="cat-badge"><span class="dot" style="background:${cat.color}"></span>${cat.name}</div>
+    <div class="card">
+      <p class="qtext">${q.text}</p>
+      <div class="options">${optionsHtml}</div>
+      ${feedbackHtml}
+      <div class="actions">
+        <button class="btn-ghost" ${prevDisabled} onclick="goPrev()">&larr; Previous</button>
+        <button class="btn-primary" ${actionDisabled} onclick="${actionHandler}">${actionLabel}</button>
+      </div>
+    </div>
+  `;
+}
+
+function scoreByCategory(){
+  const out = {};
+  Object.keys(CATEGORIES).forEach(k => out[k] = {correct:0, total:0});
+  QUESTIONS.forEach((q, i) => {
+    out[q.cat].total++;
+    if (state.answers[i] && state.answers[i].correct) out[q.cat].correct++;
+  });
+  return out;
+}
+
+function bandMessage(score, total){
+  const pct = score/total;
+  if (pct >= 0.87) return "Excellent \u2014 these fine distinctions between time, concession, purpose and discourse markers are exam-ready.";
+  if (pct >= 0.6) return "Solid grasp overall, with a few specific gaps worth revisiting. Check which category pulled the score down.";
+  return "These structures need more focused review \u2014 especially the difference between although/despite and the purpose/reason connectors.";
+}
+
+function renderResults(){
+  const total = QUESTIONS.length;
+  const score = state.answers.filter(a => a && a.correct).length;
+  const byCat = scoreByCategory();
+
+  const rows = Object.entries(byCat).map(([key, v]) => {
+    const cat = CATEGORIES[key];
+    const pct = Math.round((v.correct / v.total) * 100);
+    return `
+      <div class="cat-row">
+        <div class="cat-row-top">
+          <span class="cat-name"><span class="dot" style="background:${cat.color}"></span>${cat.name}</span>
+          <span class="cat-score">${v.correct}/${v.total}</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width:${pct}%; background:${cat.color}"></div></div>
+      </div>`;
+  }).join('');
+
+  return `
+    ${renderTopNav()}
+    <div class="score-hero">
+      <div class="eyebrow">Results</div>
+      <div class="score-num">${score}<span style="font-size:28px;color:var(--text-muted)"> / ${total}</span></div>
+      <p class="band">${bandMessage(score, total)}</p>
+    </div>
+    <div class="cat-breakdown">${rows}</div>
+    <div class="result-actions">
+      <button class="btn-primary" onclick="showReview()">Review every answer</button>
+      <button class="btn-ghost" onclick="restartQuiz()">Retry quiz</button>
+    </div>
+  `;
+}
+
+function renderReview(){
+  const items = QUESTIONS.map((q, i) => {
+    const ans = state.answers[i];
+    const cat = CATEGORIES[q.cat];
+    return `
+      <div class="review-item">
+        <div class="cat-badge"><span class="dot" style="background:${cat.color}"></span>${cat.name} &middot; Q${i+1}</div>
+        <p class="review-q">${q.text}</p>
+        <div class="review-answer-row"><span class="lbl">Your answer:</span><span class="val ${ans.correct ? 'correct' : 'incorrect'}">${q.options[ans.selected]}</span></div>
+        ${!ans.correct ? `<div class="review-answer-row"><span class="lbl">Correct answer:</span><span class="val correct">${q.options[q.correct]}</span></div>` : ''}
+        <div class="review-explain">${q.explain}</div>
+      </div>`;
+  }).join('');
+
+  return `
+    ${renderTopNav()}
+    <div class="eyebrow">Full review</div>
+    <h1 style="font-size:32px;">Every clause, retraced</h1>
+    <div style="margin: 24px 0;">${items}</div>
+    <div class="result-actions">
+      <button class="btn-ghost" onclick="restartQuiz()">Retry quiz</button>
+    </div>
+  `;
+}
+
+function render(){
+  const app = document.getElementById('app');
+  if (state.screen === 'start') app.innerHTML = renderStart();
+  else if (state.screen === 'question') app.innerHTML = renderQuestion();
+  else if (state.screen === 'results') app.innerHTML = renderResults();
+  else if (state.screen === 'review') app.innerHTML = renderReview();
+  window.scrollTo({top:0, behavior:'instant'});
+}
+
+function startQuiz(){
+  state.screen = 'question';
+  state.index = 0;
+  render();
+}
+
+function selectOption(i){
+  if (state.answers[state.index]) return;
+  state.selected = i;
+  render();
+}
+
+function checkAnswer(){
+  if (state.selected === null) return;
+  const q = QUESTIONS[state.index];
+  state.answers[state.index] = { selected: state.selected, correct: state.selected === q.correct };
+  render();
+}
+
+function goNext(){
+  if (state.index < QUESTIONS.length - 1){
+    state.index++;
+    state.selected = null;
+    state.screen = 'question';
+  } else {
+    state.screen = 'results';
+  }
+  render();
+}
+
+function goPrev(){
+  if (state.index === 0) return;
+  state.index--;
+  const prevAns = state.answers[state.index];
+  state.selected = prevAns ? prevAns.selected : null;
+  state.screen = 'question';
+  render();
+}
+
+function showReview(){
+  state.screen = 'review';
+  render();
+}
+
+function restartQuiz(){
+  state.index = 0;
+  state.selected = null;
+  state.answers = new Array(QUESTIONS.length).fill(null);
+  state.screen = 'start';
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
