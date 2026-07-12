@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Homework for Study Buddy — Vocabulary Revision</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #ffffff;
+      color: #2d2d2d;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    /* ─── STICKY PROGRESS BAR ──────────────────── */
+    #sticky-bar {
+      position: sticky; top: 0; z-index: 200;
+      background: #fff;
+      border-bottom: 1px solid #e5e8f0;
+      padding: 10px 20px;
+      display: flex; align-items: center; gap: 14px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }
+    #prog-text { font-size: 12px; font-weight: 600; color: #666; white-space: nowrap; min-width: 148px; }
+    #prog-track { flex: 1; height: 7px; background: #e8ecf8; border-radius: 4px; overflow: hidden; }
+    #prog-fill { height: 100%; background: linear-gradient(90deg,#3B6BEB,#7c5af4); border-radius: 4px; width: 0%; transition: width .5s ease; }
+    #score-badge { font-size: 13px; font-weight: 700; color: #3B6BEB; white-space: nowrap; background: #EEF2FF; padding: 4px 12px; border-radius: 20px; }
+
+    /* ─── HEADER ────────────────────────────────── */
+    .page-header{
+      background:#ffffff;
+      padding:48px 24px 42px;
+      text-align:center;
+      cursor:default;
+      transition: background .25s ease;
+    }
+    .page-header:hover{
+      background: linear-gradient(180deg,#f4f4f5 0%,#e2e2e4 100%);
+    }
+    .h-icon-box{
+      width:110px; height:110px;
+      margin:0 auto 22px;
+      background:#f6f6f7;
+      border:1px solid #e9e9ea;
+      border-radius:14px;
+      display:flex; align-items:center; justify-content:center;
+      box-shadow:0 4px 14px rgba(0,0,0,0.04);
+      transition: background .25s ease, box-shadow .25s ease, transform .25s ease;
+    }
+    .page-header:hover .h-icon-box{
+      background:#ffffff;
+      box-shadow:0 8px 20px rgba(0,0,0,0.08);
+      transform: translateY(-2px);
+    }
+    .h-icon-box svg{ width:66px; height:66px; }
+    .h-name{
+      font-size:34px;
+      font-weight:800;
+      letter-spacing:-.5px;
+      color:#8a8a8f;
+      transition: color .25s ease;
+    }
+    .page-header:hover .h-name{ color:#161616; }
+    .h-topic{
+      font-size:15px;
+      margin-top:10px;
+      color:#a3a3a8;
+      transition: color .25s ease;
+    }
+    .page-header:hover .h-topic{ color:#5b5b60; }
+    .h-meta{
+      font-size:12.5px;
+      margin-top:5px;
+      color:#c2c2c6;
+      transition: color .25s ease;
+    }
+    .page-header:hover .h-meta{ color:#8a8a8f; }
+
+    /* ─── LAYOUT ────────────────────────────────── */
+    .container { max-width:760px; margin:0 auto; padding:28px 16px 60px; }
+
+    /* ─── CARDS ─────────────────────────────────── */
+    .card {
+      background:#fff; border:1.5px solid #e5e8f0; border-radius:18px;
+      padding:28px; margin-bottom:24px;
+      box-shadow:0 3px 16px rgba(59,107,235,.05);
+      transition:box-shadow .2s;
+    }
+    .card:hover { box-shadow:0 6px 24px rgba(59,107,235,.1); }
+    .card.reflection { background:linear-gradient(135deg,#f8f0ff,#eef2ff); border-color:#c7d5f8; }
+
+    /* ─── CARD HEAD ─────────────────────────────── */
+    .card-head { display:flex; align-items:flex-start; gap:14px; margin-bottom:22px; }
+    .c-icon { width:46px; height:46px; border-radius:12px; background:#EEF2FF; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; }
+    .c-text { flex:1; }
+    .c-title { font-size:18px; font-weight:700; color:#111827; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+    .tnum { display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; background:#3B6BEB; color:#fff; font-size:12px; font-weight:700; flex-shrink:0; }
+    .c-sub { font-size:13px; color:#9ca3af; margin-top:3px; }
+    .done-badge { display:none; align-items:center; gap:4px; background:#dcfce7; color:#15803d; font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; border:1px solid #86efac; margin-left:auto; flex-shrink:0; white-space:nowrap; }
+    .done-badge.on { display:inline-flex; }
+
+    /* ─── INSTRUCTION ───────────────────────────── */
+    .instr { background:#f0f4ff; border-left:4px solid #3B6BEB; border-radius:0 10px 10px 0; padding:13px 16px; font-size:14px; color:#374151; margin-bottom:22px; line-height:1.65; }
+
+    /* ─── DIVIDER ───────────────────────────────── */
+    .hr { border:none; border-top:1px solid #e5e8f0; margin:4px 0 20px; }
+
+    /* ─── INPUTS ────────────────────────────────── */
+    input[type="text"], textarea {
+      border:2px solid #dde2f0; border-radius:10px; padding:10px 14px;
+      font-size:15px; font-family:inherit; outline:none;
+      width:100%; background:#fafbff; color:#111827;
+      transition:border-color .2s, background .2s, box-shadow .2s;
+    }
+    input[type="text"]:focus, textarea:focus {
+      border-color:#3B6BEB; background:#fff; box-shadow:0 0 0 3px rgba(59,107,235,.1);
+    }
+    input.ok  { border-color:#22c55e !important; background:#f0fdf4 !important; }
+    input.bad { border-color:#ef4444 !important; background:#fff5f5 !important; }
+    textarea  { resize:vertical; min-height:80px; }
+
+    /* ─── BUTTONS ───────────────────────────────── */
+    .btn {
+      display:inline-flex; align-items:center; justify-content:center; gap:6px;
+      padding:10px 22px; border-radius:10px; font-size:14px; font-weight:600;
+      cursor:pointer; border:none; transition:all .15s; user-select:none; font-family:inherit;
+    }
+    .btn:active { transform:scale(.97); }
+    .btn-p  { background:#3B6BEB; color:#fff; box-shadow:0 2px 10px rgba(59,107,235,.3); }
+    .btn-p:hover { background:#2d5cd4; }
+    .btn-p:disabled { background:#a0aec0; cursor:not-allowed; box-shadow:none; }
+    .btn-o  { background:#fff; color:#3B6BEB; border:2px solid #c7d5f8; }
+    .btn-o:hover { background:#EEF2FF; }
+    .btn-spin {
+      background:linear-gradient(135deg,#3B6BEB,#7c5af4); color:#fff;
+      padding:13px 32px; font-size:16px; border-radius:14px;
+      box-shadow:0 4px 18px rgba(59,107,235,.4);
+    }
+    .btn-spin:hover { box-shadow:0 6px 22px rgba(59,107,235,.5); }
+    .btn-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:18px; }
+
+    /* ─── FEEDBACK ──────────────────────────────── */
+    .fb { display:none; padding:9px 14px; border-radius:8px; font-size:13px; margin-top:8px; line-height:1.5; }
+    .fb.ok  { display:block; background:#f0fdf4; color:#166534; border:1px solid #bbf7d0; }
+    .fb.err { display:block; background:#fff5f5; color:#991b1b; border:1px solid #fecaca; }
+
+    /* ─── SHOW ANSWER ───────────────────────────── */
+    .show-btn { background:none; border:1.5px dashed #c4c9d9; color:#9ca3af; border-radius:7px; padding:5px 14px; font-size:12px; cursor:pointer; margin-top:8px; transition:all .2s; font-family:inherit; }
+    .show-btn:hover { border-color:#3B6BEB; color:#3B6BEB; }
+    .ans { display:none; background:#f0fdf4; border:1px solid #bbf7d0; color:#166534; border-radius:8px; padding:9px 14px; font-size:13px; margin-top:8px; line-height:1.5; }
+    .ans.on { display:block; }
+
+    /* ─── WHEEL ─────────────────────────────────── */
+    #wheel-wrap  { text-align:center; }
+    #wheel-cv    { display:block; margin:0 auto 16px; border-radius:50%; box-shadow:0 8px 30px rgba(59,107,235,.2); }
+    #wheel-word  { font-size:19px; font-weight:800; color:#3B6BEB; min-height:32px; margin-bottom:16px; }
+
+    /* ─── FILL-IN-BLANKS ────────────────────────── */
+    .fib-row { display:flex; align-items:center; flex-wrap:wrap; gap:6px; font-size:15px; margin-bottom:6px; }
+    .fib-g   { margin-bottom:14px; }
+    .fib-in  { width:150px !important; text-align:center; padding:7px 6px !important; font-size:14px !important; flex-shrink:0; }
+
+    /* ─── MATCH ─────────────────────────────────── */
+    .match-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    @media(max-width:500px){ .match-grid { grid-template-columns:1fr; } }
+    .m-col { display:flex; flex-direction:column; gap:8px; }
+    .m-w, .m-d { border-radius:9px; padding:10px 13px; cursor:pointer; font-size:14px; transition:all .15s; user-select:none; }
+    .m-w { background:#EEF2FF; border:2px solid #c7d5f8; color:#3B6BEB; font-weight:700; text-align:center; }
+    .m-d { background:#fafbff; border:2px solid #e5e8f0; color:#4b5563; line-height:1.4; }
+    .m-w.sel,.m-d.sel { border-color:#3B6BEB; background:#3B6BEB; color:#fff; }
+    .m-w.matched,.m-d.matched { background:#f0fdf4; border-color:#22c55e; color:#166534; cursor:default; }
+    .m-w.flash,.m-d.flash { background:#fff5f5; border-color:#ef4444; animation:shake .3s ease; }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+
+    /* ─── ERROR CORRECTION ──────────────────────── */
+    .err-item { margin-bottom:20px; }
+    .err-orig { font-style:italic; background:#fffbeb; border:1.5px solid #fde68a; border-radius:9px; padding:10px 14px; color:#78350f; font-size:14px; margin-bottom:8px; }
+    .err-lbl  { font-size:12px; color:#9ca3af; margin-bottom:6px; font-weight:500; }
+
+    /* ─── READING ───────────────────────────────── */
+    .read-box { background:#f8f9ff; border:1.5px solid #dde2f0; border-radius:14px; padding:24px; font-size:15px; line-height:1.85; margin-bottom:26px; }
+    .read-box h3 { color:#3B6BEB; font-size:17px; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+    .read-box p { margin-bottom:12px; }
+    .read-box p:last-child { margin-bottom:0; }
+    .hl { background:#e0e9ff; color:#2451c7; padding:1px 5px; border-radius:4px; font-weight:600; }
+    .q-item { margin-bottom:20px; }
+    .q-lbl  { font-weight:600; font-size:14px; color:#111827; margin-bottom:8px; }
+    .tf-row { display:flex; gap:10px; }
+    .tf-btn { flex:1; padding:10px; border-radius:9px; border:2px solid #dde2f0; background:#fafbff; color:#4b5563; font-weight:600; font-size:14px; cursor:pointer; transition:all .15s; font-family:inherit; }
+    .tf-btn:hover { border-color:#3B6BEB; background:#EEF2FF; color:#3B6BEB; }
+
+    /* ─── CHATBOT ───────────────────────────────── */
+    #chat-box { border:2px solid #e5e8f0; border-radius:14px; overflow:hidden; }
+    #chat-msgs { padding:18px; min-height:220px; max-height:420px; overflow-y:auto; display:flex; flex-direction:column; gap:12px; background:#f8f9ff; }
+    .bubble { max-width:84%; border-radius:16px; padding:11px 15px; font-size:14px; line-height:1.55; white-space:pre-wrap; }
+    .b-t { background:#EEF2FF; color:#1a1a2e; align-self:flex-start; border-bottom-left-radius:4px; }
+    .b-s { background:#3B6BEB; color:#fff;    align-self:flex-end;   border-bottom-right-radius:4px; }
+    .b-tip { background:#fffbeb; border:1px solid #fde68a; color:#78350f; font-size:12px; align-self:flex-start; border-radius:10px; padding:7px 13px; max-width:90%; }
+    .b-dot { background:#EEF2FF; color:#9ca3af; align-self:flex-start; border-bottom-left-radius:4px; font-style:italic; font-size:13px; }
+    #chat-foot { border-top:2px solid #e5e8f0; padding:12px; display:flex; gap:10px; background:#fff; }
+    #chat-in { flex:1; border:2px solid #dde2f0; border-radius:9px; padding:10px 14px; font-size:14px; font-family:inherit; outline:none; color:#111827; background:#fafbff; }
+    #chat-in:focus { border-color:#3B6BEB; background:#fff; }
+    #chat-send { background:#3B6BEB; color:#fff; border:none; border-radius:9px; padding:10px 18px; font-weight:700; cursor:pointer; font-size:14px; font-family:inherit; }
+    #chat-send:hover { background:#2d5cd4; }
+
+    /* ─── DISCUSSION ────────────────────────────── */
+    .disc-item { margin-bottom:18px; }
+    .disc-item label { display:block; font-weight:600; font-size:14px; color:#111827; margin-bottom:8px; }
+    .disc-hint { font-size:12px; color:#9ca3af; margin-top:5px; }
+
+    /* ─── REFLECTION ────────────────────────────── */
+    .refl-q { margin-bottom:20px; }
+    .refl-q label { display:block; font-weight:600; color:#3B6BEB; font-size:14px; margin-bottom:8px; }
+    .congrats { text-align:center; padding:24px; background:#fff; border-radius:14px; border:1.5px solid #c7d5f8; margin-top:20px; }
+    .congrats-em  { font-size:38px; margin-bottom:8px; }
+    .congrats-ttl { font-size:20px; font-weight:800; color:#3B6BEB; margin-bottom:4px; }
+    .congrats-sub { font-size:14px; color:#6b7280; }
+
+    /* ─── RESPONSIVE ────────────────────────────── */
+    @media(max-width:600px){
+      .h-name { font-size:24px; }
+      .card { padding:20px 16px; }
+      .btn-row { flex-direction:column; }
+      #sticky-bar { padding:8px 14px; gap:10px; }
+      #prog-text  { min-width:unset; font-size:11px; }
+      .fib-in { width:120px !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ STICKY PROGRESS BAR ══════════════════════════════ -->
+<div id="sticky-bar">
+  <div id="prog-text">0 of 6 tasks done</div>
+  <div id="prog-track"><div id="prog-fill"></div></div>
+  <div id="score-badge">⭐ 0 pts</div>
+</div>
+
+<!-- ══ PAGE HEADER ══════════════════════════════════════ -->
+<div class="page-header">
+  <div class="h-icon-box">
+    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="50" cy="82" rx="34" ry="7" fill="#E4DFD8"/>
+      <rect x="30" y="66" width="3" height="16" fill="#3F3F3F"/>
+      <rect x="60" y="66" width="3" height="16" fill="#3F3F3F"/>
+      <rect x="27" y="80" width="9" height="2.4" fill="#3F3F3F"/>
+      <rect x="57" y="80" width="9" height="2.4" fill="#3F3F3F"/>
+      <path d="M27 62 h40 v4 h-40 z" fill="#4B4B4B"/>
+      <circle cx="50" cy="24" r="13" fill="#2C2C2C"/>
+      <path d="M37 26 a13 13 0 0 1 26 0 v2 c-4 -3 -9 -4 -13 -4 s-9 1 -13 4 z" fill="#232323"/>
+      <ellipse cx="50" cy="30" rx="10.5" ry="11.5" fill="#EAB08C"/>
+      <circle cx="46" cy="30" r="1.3" fill="#2C2C2C"/>
+      <circle cx="54" cy="30" r="1.3" fill="#2C2C2C"/>
+      <path d="M45 35 q5 4 10 0" stroke="#2C2C2C" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      <path d="M35 45 q15 -8 30 0 l3 20 q-18 8 -36 0 z" fill="#4B4B4B"/>
+      <path d="M33 48 q-7 3 -8 12 q4 4 9 2 q3 -8 2 -14 z" fill="#4B4B4B"/>
+      <path d="M67 48 q7 3 8 12 q-4 4 -9 2 q-3 -8 -2 -14 z" fill="#4B4B4B"/>
+      <ellipse cx="25" cy="62" rx="4.4" ry="4" fill="#EAB08C"/>
+      <ellipse cx="75" cy="62" rx="4.4" ry="4" fill="#EAB08C"/>
+      <path d="M42 44 l16 -3 v26 l-16 3 z" fill="#E2703F"/>
+      <path d="M58 41 l16 3 v26 l-16 -3 z" fill="#E2703F"/>
+      <path d="M43.5 44.5 l13 -2.4 v22 l-13 2.6 z" fill="#FDFAF5"/>
+      <path d="M56.5 42.1 l13 2.4 v22 l-13 -2.6 z" fill="#FDFAF5"/>
+      <rect x="49" y="41" width="2" height="27" fill="#C65A2E"/>
+    </svg>
+  </div>
+  <div class="h-name">Homework</div>
+  <div class="h-topic">for Study Buddy &middot; Vocabulary Revision</div>
+  <div class="h-meta">Level: B2</div>
+</div>
+
+<div class="container">
+
+  <!-- ══════════════════════════════════════════════════
+       WARM UP — SPINNING WHEEL
+  ══════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="c-icon">🎡</div>
+      <div class="c-text">
+        <div class="c-title">Warm Up — Spin the Wheel!</div>
+        <div class="c-sub">Get a word from a previous lesson · write a sentence</div>
+      </div>
+    </div>
+    <div class="instr">
+      🎯 Click <strong>SPIN</strong> to get a word or phrase. Then write one sentence using it below — try to make it relevant to your work as a product manager if you can!
+      Spin <strong>2–3 times</strong> for extra practice.
+    </div>
+    <div id="wheel-wrap">
+      <canvas id="wheel-cv" width="290" height="290"></canvas>
+      <div id="wheel-word">🎯 Click SPIN to get your word!</div>
+      <button class="btn btn-spin" onclick="spinWheel()">🎲 SPIN!</button>
+    </div>
+    <div style="margin-top:22px;">
+      <label style="display:block;font-weight:700;font-size:14px;margin-bottom:8px;">✍️ Your sentence:</label>
+      <textarea id="wheel-sent" placeholder="Write a sentence with your word here…"></textarea>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TASK 1 — FILL IN THE BLANKS
+  ══════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="c-icon">✍️</div>
+      <div class="c-text">
+        <div class="c-title"><span class="tnum">1</span> Fill in the Blanks</div>
+        <div class="c-sub">Bring back the words you've already learned</div>
+      </div>
+      <div class="done-badge" id="bd-fib">✓ Done</div>
+    </div>
+    <div class="instr">
+      Complete each sentence with the correct word or phrase from the box. Then click <strong>Check Answers</strong>.<br>
+      <em>Box: relentless · determined · with gusto · subtle · follow to the letter · have a go</em>
+    </div>
+    <hr class="hr">
+
+    <div class="fib-g">
+      <div class="fib-row">
+        <span>1. My manager is</span>
+        <input type="text" class="fib-in" id="f1" data-ans="relentless" placeholder="___">
+        <span>— she never stops chasing better results, even after a big win.</span>
+      </div>
+      <div class="fb" id="f1fb"></div>
+    </div>
+
+    <div class="fib-g">
+      <div class="fib-row">
+        <span>2. There was a</span>
+        <input type="text" class="fib-in" id="f2" data-ans="subtle" placeholder="___">
+        <span>shift in the roadmap that most of the team didn't even notice at first.</span>
+      </div>
+      <div class="fb" id="f2fb"></div>
+    </div>
+
+    <div class="fib-g">
+      <div class="fib-row">
+        <span>3. I've never used this design tool before, but I'll</span>
+        <input type="text" class="fib-in" id="f3" data-ans="have a go" placeholder="___">
+        <span>and see what happens.</span>
+      </div>
+      <div class="fb" id="f3fb"></div>
+    </div>
+
+    <div class="fib-g">
+      <div class="fib-row">
+        <span>4. He's</span>
+        <input type="text" class="fib-in" id="f4" data-ans="determined" placeholder="___">
+        <span>to launch the feature before the end of the quarter, no matter what.</span>
+      </div>
+      <div class="fb" id="f4fb"></div>
+    </div>
+
+    <div class="fib-g">
+      <div class="fib-row">
+        <span>5. The whole team dug into the sprint</span>
+        <input type="text" class="fib-in" id="f5" data-ans="with gusto" placeholder="___">
+        <span>after the planning meeting.</span>
+      </div>
+      <div class="fb" id="f5fb"></div>
+    </div>
+
+    <div class="fib-g">
+      <div class="fib-row">
+        <span>6. Legal asked us to</span>
+        <input type="text" class="fib-in" id="f6" data-ans="follow to the letter" placeholder="___">
+        <span>the new data privacy guidelines.</span>
+      </div>
+      <div class="fb" id="f6fb"></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-p" onclick="checkFIB()">✔ Check Answers</button>
+      <button class="btn btn-o" onclick="resetFIB()">↺ Reset</button>
+    </div>
+    <div class="fb" id="fib-tot" style="margin-top:12px;"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TASK 2 — MATCH
+  ══════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="c-icon">🔗</div>
+      <div class="c-text">
+        <div class="c-title"><span class="tnum">2</span> Match the Words</div>
+        <div class="c-sub">Word to definition</div>
+      </div>
+      <div class="done-badge" id="bd-match">✓ Done</div>
+    </div>
+    <div class="instr">
+      Click a <strong>word or phrase</strong> on the left, then click the matching <strong>definition</strong> on the right.
+      Match all 6 pairs! 🧩
+    </div>
+    <div class="match-grid">
+      <div class="m-col" id="mw-col">
+        <div class="m-w" data-id="fussy">fussy eater</div>
+        <div class="m-w" data-id="discerning">discerning traveler</div>
+        <div class="m-w" data-id="longhaul">long-haul flight</div>
+        <div class="m-w" data-id="complaint">make a complaint</div>
+        <div class="m-w" data-id="leap">a leap of faith</div>
+        <div class="m-w" data-id="rudimentary">rudimentary knowledge</div>
+      </div>
+      <div class="m-col" id="md-col">
+        <div class="m-d" data-id="longhaul">a very long flight, usually over 6 hours</div>
+        <div class="m-d" data-id="rudimentary">very basic understanding of something, not detailed</div>
+        <div class="m-d" data-id="discerning">someone with high standards who chooses carefully where and how they travel</div>
+        <div class="m-d" data-id="fussy">a person who is very particular about what they eat</div>
+        <div class="m-d" data-id="leap">a risky decision made without being sure it will work out</div>
+        <div class="m-d" data-id="complaint">to formally say you are unhappy about a product or service</div>
+      </div>
+    </div>
+    <div class="fb" id="match-fb" style="margin-top:16px;"></div>
+    <div class="btn-row">
+      <button class="btn btn-o" onclick="resetMatch()">↺ Reset</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TASK 3 — ERROR CORRECTION
+  ══════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="c-icon">✏️</div>
+      <div class="c-text">
+        <div class="c-title"><span class="tnum">3</span> Error Correction</div>
+        <div class="c-sub">The vocabulary is missing or misused — fix it</div>
+      </div>
+      <div class="done-badge" id="bd-err">✓ Done</div>
+    </div>
+    <div class="instr">
+      ❌ Each sentence should use one of this week's words, but the word is missing or wrong.<br>
+      Type the <strong>correct sentence</strong> in the box. Then click <strong>Check All</strong>.
+    </div>
+    <hr class="hr">
+
+    <div class="err-item">
+      <div class="err-orig">❓ "She's a very affection person with her whole team."</div>
+      <div class="err-lbl">Write the correct sentence:</div>
+      <input type="text" id="e1" placeholder="She's a very…" data-ans="shes a very affectionate person with her whole team">
+      <div class="fb" id="e1fb"></div>
+    </div>
+
+    <div class="err-item">
+      <div class="err-orig">❓ "The new dashboard is very visual appealing."</div>
+      <div class="err-lbl">Write the correct sentence:</div>
+      <input type="text" id="e2" placeholder="The new dashboard…" data-ans="the new dashboard is very visually appealing">
+      <div class="fb" id="e2fb"></div>
+    </div>
+
+    <div class="err-item">
+      <div class="err-orig">❓ "This new plugin isn't compatible for our current system."</div>
+      <div class="err-lbl">Write the correct sentence:</div>
+      <input type="text" id="e3" placeholder="This new plugin…" data-ans="this new plugin isnt compatible with our current system">
+      <div class="fb" id="e3fb"></div>
+    </div>
+
+    <div class="err-item">
+      <div class="err-orig">❓ "Honestly, I'm fed up for these endless status meetings."</div>
+      <div class="err-lbl">Write the correct sentence:</div>
+      <input type="text" id="e4" placeholder="Honestly, I'm…" data-ans="honestly im fed up with these endless status meetings">
+      <div class="fb" id="e4fb"></div>
+    </div>
+
+    <div class="err-item">
+      <div class="err-orig">❓ "We were still debugging at the dawn of the morning."</div>
+      <div class="err-lbl">Write the correct sentence:</div>
+      <input type="text" id="e5" placeholder="We were still…" data-ans="we were still debugging at the dawn of the night">
+      <div class="fb" id="e5fb"></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-p" onclick="checkErrs()">✔ Check All</button>
+      <button class="btn btn-o" onclick="resetErrs()">↺ Reset</button>
+    </div>
+    <div class="fb" id="err-tot" style="margin-top:12px;"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TASK 4 — READING
+  ══════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="c-icon">📖</div>
+      <div class="c-text">
+        <div class="c-title"><span class="tnum">4</span> Reading</div>
+        <div class="c-sub">Small talk, revisited</div>
+      </div>
+      <div class="done-badge" id="bd-read">✓ Done</div>
+    </div>
+    <div class="instr">
+      Read the text carefully. Then answer the questions below — you can look back at the text! 👀
+    </div>
+
+    <div class="read-box">
+      <h3>💬 The Art of Small Talk</h3>
+      <p>
+        For a lot of product managers, small talk feels like a <span class="hl">rudimentary knowledge</span> everyone
+        should already have — but plenty of people still find it awkward. Before a big meeting, or on a
+        <span class="hl">long-haul flight</span> sitting next to a stranger, small talk is often the first
+        real test of a working relationship.
+      </p>
+      <p>
+        The best small talk isn't loud. It's usually <span class="hl">subtle</span> — a short comment about the
+        weather, the coffee, or the meeting room, said <span class="hl">with gusto</span> but without pressure.
+        A <span class="hl">discerning traveler</span>, for example, might ask a colleague about their trip instead
+        of jumping straight into business.
+      </p>
+      <p>
+        Starting a conversation with someone new can feel like <span class="hl">a leap of faith</span> — you don't
+        know how it will go. But research shows that people who <span class="hl">have a go</span> at small talk,
+        even briefly, are seen as more <span class="hl">affectionate</span> and easier to work with. It doesn't
+        require you to <span class="hl">follow to the letter</span> any script; a genuine question is usually enough.
+      </p>
+      <p>
+        Of course, not every attempt lands. Sometimes people get <span class="hl">fed up with</span> forced small
+        talk, especially if it feels repetitive. The goal isn't to be <span class="hl">relentless</span> about it —
+        just consistent and genuine, one short conversation at a time.
+      </p>
+    </div>
+
+    <div class="q-item">
+      <div class="q-lbl">Q1. According to the text, when is small talk often the "first real test" of a relationship?</div>
+      <textarea id="rq1" placeholder="Small talk is often the first test when…"></textarea>
+      <button class="show-btn" onclick="toggleAns('ra1',this)">💡 Show answer</button>
+      <div class="ans" id="ra1">✅ Before a big meeting, or on a long-haul flight next to a stranger.</div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-lbl">Q2. What does "the best small talk isn't loud" mean, in your own words?</div>
+      <textarea id="rq2" placeholder="It means…"></textarea>
+      <button class="show-btn" onclick="toggleAns('ra2',this)">💡 Show answer</button>
+      <div class="ans" id="ra2">✅ It means good small talk is subtle and low-pressure — a short, natural comment rather than a big, forced effort.</div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-lbl">Q3. Why is starting small talk described as "a leap of faith"?</div>
+      <textarea id="rq3" placeholder="Because…"></textarea>
+      <button class="show-btn" onclick="toggleAns('ra3',this)">💡 Show answer</button>
+      <div class="ans" id="ra3">✅ Because you don't know in advance how the other person will react — it's a small risk without a guaranteed outcome.</div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-lbl">Q4. TRUE or FALSE? <em>"The text says you should follow a fixed script for small talk."</em></div>
+      <div class="tf-row">
+        <button class="tf-btn" onclick="checkTF('true','q4fb')">TRUE</button>
+        <button class="tf-btn" onclick="checkTF('false','q4fb')">FALSE</button>
+      </div>
+      <div class="fb" id="q4fb"></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-p" id="read-btn" onclick="markReadDone()">✔ Mark reading as done</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TASK 5 — CHATBOT
+  ══════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="c-icon">💬</div>
+      <div class="c-text">
+        <div class="c-title"><span class="tnum">5</span> Speaking Practice — Chat!</div>
+        <div class="c-sub">Practise small talk with your tutor</div>
+      </div>
+      <div class="done-badge" id="bd-chat">✓ Done</div>
+    </div>
+    <div class="instr">
+      Let's practise some small talk! ✏️ Try to use this week's vocabulary in your answers where you can.<br>
+      Press <strong>Enter</strong> or click <strong>Send</strong> to reply.
+    </div>
+    <div id="chat-box">
+      <div id="chat-msgs"></div>
+      <div id="chat-foot">
+        <input type="text" id="chat-in" placeholder="Type your answer…" onkeydown="if(event.key==='Enter')sendChat()">
+        <button id="chat-send" onclick="sendChat()">Send ➤</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TASK 6 — QUICK DISCUSSION QUESTIONS
+  ══════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="c-icon">🗣️</div>
+      <div class="c-text">
+        <div class="c-title"><span class="tnum">6</span> Quick Discussion Questions</div>
+        <div class="c-sub">Answer using this week's vocabulary</div>
+      </div>
+      <div class="done-badge" id="bd-disc">✓ Done</div>
+    </div>
+    <div class="instr">
+      No right or wrong answers here — just try to use the target vocabulary naturally.
+    </div>
+
+    <div class="disc-item">
+      <label>1. Do you know anyone who is a fussy eater or a discerning traveler? Describe them.</label>
+      <textarea placeholder="Yes, my colleague is…"></textarea>
+      <div class="disc-hint">Try to use: fussy eater / discerning traveler</div>
+    </div>
+
+    <div class="disc-item">
+      <label>2. Have you ever taken a leap of faith at work — with only rudimentary knowledge of what you were doing?</label>
+      <textarea placeholder="Yes, once I…"></textarea>
+      <div class="disc-hint">Try to use: a leap of faith / rudimentary knowledge</div>
+    </div>
+
+    <div class="disc-item">
+      <label>3. What's something at work that makes you feel fed up, and how do you deal with it?</label>
+      <textarea placeholder="I get fed up with…"></textarea>
+      <div class="disc-hint">Try to use: fed up with</div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-p" id="disc-btn" onclick="markDiscDone()">✔ Mark discussion as done</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       MY REFLECTION
+  ══════════════════════════════════════════════════ -->
+  <div class="card reflection">
+    <div class="card-head">
+      <div class="c-icon">💭</div>
+      <div class="c-text">
+        <div class="c-title">My Reflection</div>
+        <div class="c-sub">Think about your learning today</div>
+      </div>
+    </div>
+
+    <div class="refl-q">
+      <label>🌟 Which word or phrase from today do you want to remember most?</label>
+      <input type="text" placeholder="The word I want to remember is…">
+    </div>
+
+    <div class="refl-q">
+      <label>🤔 Was there a word you kept forgetting today? Which one, and why do you think that is?</label>
+      <textarea placeholder="I kept forgetting…"></textarea>
+    </div>
+
+    <div class="refl-q">
+      <label>🎯 Write ONE sentence about your work using at least two words from today's vocabulary:</label>
+      <input type="text" placeholder="At work, I…">
+    </div>
+
+    <div class="congrats">
+      <div class="congrats-em">🎉</div>
+      <div class="congrats-ttl">Great work!</div>
+      <div class="congrats-sub">You revised 17 words and phrases today. Well done! 🧠💙</div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<!-- ══════════════════════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════════════════════ -->
+<script>
+/* ── UTILITIES ───────────────────────────────────────────── */
+function $(id){ return document.getElementById(id); }
+
+/* ── PROGRESS ────────────────────────────────────────────── */
+const TOTAL = 6;
+const done  = {};
+let   pts   = 0;
+
+function markDone(key, p, badge){
+  if(done[key]) return;
+  done[key] = true; pts += p;
+  if(badge){ const b=$(badge); if(b) b.classList.add('on'); }
+  const c = Object.keys(done).length;
+  $('prog-text').textContent = c + ' of ' + TOTAL + ' tasks done';
+  $('prog-fill').style.width = (c/TOTAL*100) + '%';
+  $('score-badge').textContent = '⭐ ' + pts + ' pts';
+}
+
+/* ── SPINNING WHEEL ──────────────────────────────────────── */
+const WORDS  = ['affectionate','relentless','determined','subtle','fussy eater','discerning traveler','a leap of faith','rudimentary knowledge'];
+const COLORS = ['#3B6BEB','#7c5af4','#0891b2','#059669','#d97706','#e11d48','#1e40af','#065f46'];
+const cv  = $('wheel-cv');
+const ctx = cv.getContext('2d');
+const CX=145, CY=145, R=128;
+let wAng=0, spinning=false;
+
+function drawWheel(a){
+  const n=WORDS.length, seg=(Math.PI*2)/n;
+  ctx.clearRect(0,0,cv.width,cv.height);
+  for(let i=0;i<n;i++){
+    const s=a+i*seg, e=s+seg;
+    ctx.beginPath(); ctx.moveTo(CX,CY); ctx.arc(CX,CY,R,s,e); ctx.closePath();
+    ctx.fillStyle=COLORS[i]; ctx.fill();
+    ctx.strokeStyle='#fff'; ctx.lineWidth=2.5; ctx.stroke();
+    ctx.save();
+    ctx.translate(CX,CY); ctx.rotate(s+seg/2);
+    ctx.textAlign='right'; ctx.fillStyle='rgba(255,255,255,.95)';
+    ctx.font='bold 9.5px -apple-system,sans-serif';
+    ctx.shadowColor='rgba(0,0,0,.4)'; ctx.shadowBlur=4;
+    ctx.fillText(WORDS[i], R-9, 4);
+    ctx.restore();
+  }
+  // hub
+  ctx.shadowColor='transparent';
+  ctx.beginPath(); ctx.arc(CX,CY,24,0,Math.PI*2);
+  ctx.fillStyle='#fff'; ctx.fill();
+  ctx.strokeStyle='#3B6BEB'; ctx.lineWidth=3; ctx.stroke();
+  ctx.font='18px sans-serif'; ctx.textAlign='center';
+  ctx.fillText('🎯',CX,CY+6);
+  // pointer ▼
+  ctx.beginPath(); ctx.moveTo(CX-12,3); ctx.lineTo(CX+12,3); ctx.lineTo(CX,27); ctx.closePath();
+  ctx.fillStyle='#fbbf24'; ctx.fill();
+  ctx.strokeStyle='#78350f'; ctx.lineWidth=1.5; ctx.stroke();
+}
+
+function spinWheel(){
+  if(spinning) return;
+  spinning=true;
+  $('wheel-word').textContent='🌀 Spinning…';
+  const extra=Math.PI*2*(6+Math.random()*6), dur=3200;
+  const t0=performance.now(), a0=wAng;
+  function step(now){
+    const p=Math.min((now-t0)/dur,1), ease=1-Math.pow(1-p,3);
+    wAng=a0+extra*ease; drawWheel(wAng);
+    if(p<1){ requestAnimationFrame(step); return; }
+    spinning=false;
+    const seg=(Math.PI*2)/WORDS.length;
+    const rel=((-Math.PI/2-wAng)%(Math.PI*2)+Math.PI*2)%(Math.PI*2);
+    const idx=Math.floor(rel/seg)%WORDS.length;
+    const w=WORDS[idx];
+    $('wheel-word').innerHTML='🎯 Your word: <strong>"'+w+'"</strong> — write a sentence!';
+    $('wheel-sent').placeholder='Use "'+w+'" in a sentence…';
+    $('wheel-sent').focus();
+  }
+  requestAnimationFrame(step);
+}
+drawWheel(wAng);
+
+/* ── FILL IN THE BLANKS ──────────────────────────────────── */
+function checkFIB(){
+  let ok=0;
+  for(let i=1;i<=6;i++){
+    const inp=$('f'+i), fb=$('f'+i+'fb');
+    const v=inp.value.trim().toLowerCase(), a=inp.dataset.ans.toLowerCase();
+    if(!v){ inp.className='fib-in'; fb.className='fb'; continue; }
+    if(v===a){
+      inp.className='fib-in ok'; fb.className='fb ok'; fb.textContent='✅ Correct!'; ok++;
+    } else {
+      inp.className='fib-in bad'; fb.className='fb err';
+      fb.innerHTML='❌ Answer: <strong>'+inp.dataset.ans+'</strong>';
+    }
+  }
+  const tot=$('fib-tot');
+  if(ok===6){ tot.className='fb ok'; tot.textContent='🎉 Perfect! 6/6 — this vocabulary is sticking!'; markDone('fib',20,'bd-fib'); }
+  else if(ok>=4){ tot.className='fb ok'; tot.textContent='👍 Good! '+ok+'/6 correct. Check the red answers above.'; markDone('fib',12,'bd-fib'); }
+  else { tot.className='fb err'; tot.textContent='💪 '+ok+'/6. Look at the words again and try!'; }
+}
+function resetFIB(){
+  for(let i=1;i<=6;i++){
+    $('f'+i).value=''; $('f'+i).className='fib-in';
+    const f=$('f'+i+'fb'); f.className='fb'; f.textContent='';
+  }
+  const t=$('fib-tot'); t.className='fb'; t.textContent='';
+}
+
+/* ── MATCH ───────────────────────────────────────────────── */
+let selW=null, selD=null, mCount=0;
+
+function bindMatch(){
+  document.querySelectorAll('.m-w').forEach(el=>{
+    el.onclick=function(){
+      if(this.dataset.matched) return;
+      document.querySelectorAll('.m-w.sel').forEach(e=>e.classList.remove('sel'));
+      this.classList.add('sel'); selW=this;
+      if(selD) tryPair();
+    };
+  });
+  document.querySelectorAll('.m-d').forEach(el=>{
+    el.onclick=function(){
+      if(this.dataset.matched) return;
+      document.querySelectorAll('.m-d.sel').forEach(e=>e.classList.remove('sel'));
+      this.classList.add('sel'); selD=this;
+      if(selW) tryPair();
+    };
+  });
+}
+
+function tryPair(){
+  const fb=$('match-fb');
+  if(selW.dataset.id===selD.dataset.id){
+    selW.className='m-w matched'; selW.dataset.matched='1';
+    selD.className='m-d matched'; selD.dataset.matched='1';
+    mCount++;
+    fb.className='fb ok';
+    if(mCount===6){ fb.textContent='🎉 You matched all 6! Excellent vocabulary work!'; markDone('match',20,'bd-match'); }
+    else { fb.textContent='✅ Correct match: "'+selW.textContent+'" ('+mCount+'/6)'; }
+  } else {
+    fb.className='fb err';
+    fb.textContent='❌ Not a match. Try again! Think about what "'+selW.textContent+'" means.';
+    selW.classList.add('flash'); selD.classList.add('flash');
+    const sw=selW, sd=selD;
+    setTimeout(()=>{ sw.classList.remove('flash','sel'); sd.classList.remove('flash','sel'); },400);
+  }
+  selW=null; selD=null;
+}
+
+function resetMatch(){
+  document.querySelectorAll('.m-w,.m-d').forEach(el=>{
+    el.className=el.classList.contains('m-w')?'m-w':'m-d';
+    delete el.dataset.matched;
+  });
+  selW=null; selD=null; mCount=0;
+  const f=$('match-fb'); f.className='fb'; f.textContent='';
+  bindMatch();
+}
+bindMatch();
+
+/* ── ERROR CORRECTION ────────────────────────────────────── */
+function norm(s){
+  return s.toLowerCase()
+    .replace(/[\u2018\u2019\u201C\u201D]/g,"'")
+    .replace(/[^\w\s]/g,'')
+    .replace(/\s+/g,' ').trim();
+}
+function checkErrs(){
+  let ok=0;
+  for(let i=1;i<=5;i++){
+    const inp=$('e'+i), fb=$('e'+i+'fb');
+    const v=norm(inp.value), a=inp.dataset.ans;
+    if(!v){ inp.className=''; fb.className='fb'; continue; }
+    if(v===a){
+      inp.className='ok'; fb.className='fb ok'; fb.textContent='✅ Correct!'; ok++;
+    } else {
+      inp.className='bad'; fb.className='fb err';
+      const disp=inp.dataset.ans.replace(/isnt/g,"isn't").replace(/im/g,"I'm").replace(/shes/g,"she's");
+      const cap=disp.charAt(0).toUpperCase()+disp.slice(1);
+      fb.innerHTML='❌ Correct: <strong>'+cap+'.</strong>';
+    }
+  }
+  const tot=$('err-tot');
+  if(ok===5){ tot.className='fb ok'; tot.textContent="🎉 Excellent! 5/5 — these words are locked in now!"; markDone('err',20,'bd-err'); }
+  else if(ok>=3){ tot.className='fb ok'; tot.textContent='👍 '+ok+'/5 correct. Good work! Study the corrections above.'; markDone('err',12,'bd-err'); }
+  else { tot.className='fb err'; tot.textContent="💪 "+ok+"/5. Have another look at the target vocabulary and try again!"; }
+}
+function resetErrs(){
+  for(let i=1;i<=5;i++){
+    $('e'+i).value=''; $('e'+i).className='';
+    $('e'+i+'fb').className='fb'; $('e'+i+'fb').textContent='';
+  }
+  $('err-tot').className='fb'; $('err-tot').textContent='';
+}
+
+/* ── READING ─────────────────────────────────────────────── */
+function toggleAns(id, btn){
+  const el=$(id); el.classList.toggle('on');
+  btn.textContent=el.classList.contains('on')? '🙈 Hide answer':'💡 Show answer';
+}
+function checkTF(ans,fbId){
+  const fb=$(fbId);
+  if(ans==='false'){
+    fb.className='fb ok';
+    fb.textContent="✅ Correct! FALSE — the text says a genuine question is usually enough, not a fixed script.";
+  } else {
+    fb.className='fb err';
+    fb.textContent="❌ Not quite. The answer is FALSE — you don't need to follow a script to the letter.";
+  }
+}
+function markReadDone(){
+  const b=$('read-btn'); b.textContent='✅ Reading done!'; b.disabled=true; b.style.background='#22c55e';
+  markDone('read',20,'bd-read');
+}
+
+/* ── CHATBOT ─────────────────────────────────────────────── */
+const flow=[
+  {
+    q:"Hi! 👋 Let's warm up with a bit of small talk practice, product manager style.\n\nHow's your week going so far?",
+    r(a){ const l=a.toLowerCase(); return (l.match(/busy|good|great|hectic|relentless|fine|ok|okay/))?'Sounds about right for a PM! ':'Thanks for sharing! '; },
+    tip:"💡 Tip: try using 'relentless' or 'fed up with' if it fits!"
+  },
+  {
+    q:"Imagine you're on a long-haul flight next to someone you've never met. What's your go-to small talk opener?",
+    r(a){ const l=a.toLowerCase();
+      if(l.match(/weather|coffee|flight|trip|travel/)) return 'Classic and effective! ';
+      return 'Interesting approach! '; },
+    tip:"💡 Tip: 'I'd probably have a go at asking about their trip.'"
+  },
+  {
+    q:"Would you describe yourself as a discerning traveler, or do you just go with the flow?",
+    r(){ return "Good self-awareness! "; },
+    tip:"💡 Tip: 'I'd say I'm a fairly discerning traveler because…'"
+  },
+  {
+    q:"Tell me about a time you took a leap of faith at work — maybe with only rudimentary knowledge of the topic!",
+    r(a){ const l=a.toLowerCase();
+      if(l.match(/leap|risk|faith/)) return 'That takes real courage! ';
+      if(l.match(/rudimentary|basic|little/)) return 'Starting with limited knowledge and figuring it out — very relatable! ';
+      return 'Great example! '; },
+    tip:"💡 Tip: 'It felt like a leap of faith because I only had rudimentary knowledge of…'"
+  },
+  {
+    q:"Last one! 🏁 What's something at work that makes you feel fed up, and how do you usually deal with it?",
+    r(){ return 'Great answer — you handled that small talk really naturally! '; },
+    tip:"💡 Tip: 'I get fed up with… so I usually…'"
+  }
+];
+let step=0;
+const msgs=$('chat-msgs');
+
+function bubble(txt,cls){
+  const d=document.createElement('div'); d.className='bubble '+cls;
+  d.textContent=txt; msgs.appendChild(d); msgs.scrollTop=msgs.scrollHeight; return d;
+}
+
+setTimeout(()=>bubble(flow[0].q,'b-t'),400);
+
+function sendChat(){
+  const inp=$('chat-in'), txt=inp.value.trim();
+  if(!txt||step>=flow.length) return;
+  bubble(txt,'b-s'); inp.value='';
+  const cur=flow[step], reply=cur.r(txt), tip=cur.tip;
+  step++;
+  const dot=bubble('Typing…','b-dot');
+  setTimeout(()=>{
+    dot.remove();
+    if(step<flow.length){
+      bubble(reply+flow[step].q,'b-t');
+    } else {
+      bubble(reply+'You finished all 5 questions! 🎉 Well done — this vocabulary is really coming together.','b-t');
+      setTimeout(()=>{
+        bubble('✅ Chat complete! Scroll down for the discussion questions and reflection. 👇','b-t');
+        $('chat-foot').style.display='none';
+        markDone('chat',20,'bd-chat');
+      },800);
+    }
+    const tipEl=document.createElement('div'); tipEl.className='bubble b-tip';
+    tipEl.textContent=tip; msgs.appendChild(tipEl); msgs.scrollTop=msgs.scrollHeight;
+  },900);
+}
+
+/* ── DISCUSSION ──────────────────────────────────────────── */
+function markDiscDone(){
+  const b=$('disc-btn'); b.textContent='✅ Discussion done!'; b.disabled=true; b.style.background='#22c55e';
+  markDone('disc',20,'bd-disc');
+}
+</script>
+</body>
+</html>
