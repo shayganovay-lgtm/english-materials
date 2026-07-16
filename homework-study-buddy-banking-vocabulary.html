@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Homework for Study Buddy — Banking Vocabulary Revision</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #ffffff;
+      color: #2d2d2d;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    /* ─── STICKY PROGRESS BAR ──────────────────── */
+    #sticky-bar {
+      position: sticky; top: 0; z-index: 200;
+      background: #fff;
+      border-bottom: 1px solid #e5e8f0;
+      padding: 10px 20px;
+      display: flex; align-items: center; gap: 14px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }
+    #prog-text { font-size: 12px; font-weight: 600; color: #666; white-space: nowrap; min-width: 148px; }
+    #prog-track { flex: 1; height: 7px; background: #e8ecf8; border-radius: 4px; overflow: hidden; }
+    #prog-fill { height: 100%; background: linear-gradient(90deg,#3B6BEB,#7c5af4); border-radius: 4px; width: 0%; transition: width .5s ease; }
+    #score-badge { font-size: 13px; font-weight: 700; color: #3B6BEB; white-space: nowrap; background: #EEF2FF; padding: 4px 12px; border-radius: 20px; }
+
+    /* ─── HERO ──────────────────────────────────── */
+    @import url('data:text/css;charset=utf-8,');
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr;
+      min-height: 420px;
+      border-bottom: 1px solid #e5e8f0;
+    }
+    .hero-panel {
+      position: relative;
+      padding: 56px 44px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      overflow: hidden;
+    }
+    .hero-left  { background:#EFEEEC; }
+
+    .hero-eyebrow {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: #9c9890;
+      margin-bottom: 10px;
+    }
+    .hero-title {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-weight: 800;
+      font-size: clamp(34px, 5vw, 52px);
+      color: #6C63C9;
+      letter-spacing: -0.01em;
+      line-height: 1.05;
+      margin-bottom: 8px;
+    }
+    .hero-sub {
+      font-size: 14px;
+      color: #6b7280;
+      max-width: 34ch;
+      margin-bottom: 30px;
+    }
+
+    .hero-btn-stack { display:flex; flex-direction:column; gap:12px; max-width:340px; }
+    .hero-btn {
+      display:flex; align-items:center; justify-content:space-between;
+      gap:14px;
+      border:2.5px solid #1c1917;
+      border-radius:999px;
+      padding:14px 10px 14px 24px;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-weight:700;
+      font-size:17px;
+      color:#3f3a35;
+      cursor:pointer;
+      text-decoration:none;
+      background:#fff;
+      transition: transform .15s ease, box-shadow .15s ease;
+      box-shadow: 3px 3px 0 rgba(28,25,23,0.12);
+    }
+    .hero-btn:hover { transform: translate(-2px,-2px); box-shadow: 5px 5px 0 rgba(28,25,23,0.16); }
+    .hero-btn:active { transform: translate(0,0); box-shadow: 1px 1px 0 rgba(28,25,23,0.16); }
+    .hero-btn-icon {
+      width:36px; height:36px; border-radius:50%;
+      border:2.5px solid #1c1917;
+      background:#fff;
+      display:flex; align-items:center; justify-content:center;
+      flex-shrink:0;
+    }
+    .hero-btn.primary { background:#E3E4B9; }
+    .hero-btn.secondary { background:#DCC9F0; }
+    .hero-btn:disabled { opacity:.55; cursor:default; box-shadow:none; }
+    .hero-btn:disabled:hover { transform:none; }
+    .hero-btn.tertiary { background:#DCC9F0; align-self:flex-start; }
+
+    .hero-illustration { position:absolute; }
+    .hero-illustration.left-ill  { width:300px; bottom:36px; right:28px; }
+    .hero-illustration svg { width:100%; height:auto; display:block; }
+
+    @media (max-width: 880px){
+      .hero-panel { padding: 40px 26px; min-height:auto; }
+      .hero-illustration.left-ill  { position:static; width:220px; margin:20px auto 0; }
+      .hero-btn-stack { max-width:100%; }
+    }
+
+    /* ─── HOMEWORK CONTENT (hidden until started) ───────── */
+    #hw-content {
+      display: none;
+    }
+    #hw-content.visible {
+      display: block;
+      animation: hwFadeIn .4s ease both;
+    }
+    @keyframes hwFadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── LAYOUT ────────────────────────────────── */
+    .container { max-width:760px; margin:0 auto; padding:28px 16px 60px; }
+
+    /* ─── CARDS ─────────────────────────────────── */
+    .card {
+      background:#fff; border:1.5px solid #e5e8f0; border-radius:18px;
+      padding:28px; margin-bottom:24px;
+      box-shadow:0 3px 16px rgba(59,107,235,.05);
+      transition:box-shadow .2s;
+    }
+    .card:hover { box-shadow:0 6px 24px rgba(59,107,235,.1); }
+    .card.reflection { background:linear-gradient(135deg,#f8f0ff,#eef2ff); border-color:#c7d5f8; }
+
+    /* ─── CARD HEAD ─────────────────────────────── */
+    .card-head { display:flex; align-items:flex-start; gap:14px; margin-bottom:22px; }
+    .c-icon { width:46px; height:46px; border-radius:12px; background:#EEF2FF; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; }
+    .c-text { flex:1; }
+    .c-title { font-size:18px; font-weight:700; color:#111827; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+    .tnum { display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; background:#3B6BEB; color:#fff; font-size:12px; font-weight:700; flex-shrink:0; }
+    .c-sub { font-size:13px; color:#9ca3af; margin-top:3px; }
+    .done-badge { display:none; align-items:center; gap:4px; background:#dcfce7; color:#15803d; font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; border:1px solid #86efac; margin-left:auto; flex-shrink:0; white-space:nowrap; }
+    .done-badge.on { display:inline-flex; }
+
+    /* ─── INSTRUCTION ───────────────────────────── */
+    .instr { background:#f0f4ff; border-left:4px solid #3B6BEB; border-radius:0 10px 10px 0; padding:13px 16px; font-size:14px; color:#374151; margin-bottom:22px; line-height:1.65; }
+
+    /* ─── DIVIDER ───────────────────────────────── */
+    .hr { border:none; border-top:1px solid #e5e8f0; margin:4px 0 20px; }
+
+    /* ─── INPUTS ────────────────────────────────── */
+    input[type="text"], textarea {
+      border:2px solid #dde2f0; border-radius:10px; padding:10px 14px;
+      font-size:15px; font-family:inherit; outline:none;
+      width:100%; background:#fafbff; color:#111827;
+      transition:border-color .2s, background .2s, box-shadow .2s;
+    }
+    input[type="text"]:focus, textarea:focus {
+      border-color:#3B6BEB; background:#fff; box-shadow:0 0 0 3px rgba(59,107,235,.1);
+    }
+    input.ok  { border-color:#22c55e !important; background:#f0fdf4 !important; }
+    input.bad { border-color:#ef4444 !important; background:#fff5f5 !important; }
+    textarea  { resize:vertical; min-height:80px; }
+
+    /* ─── BUTTONS ───────────────────────────────── */
+    .btn {
+      display:inline-flex; align-items:center; justify-content:center; gap:6px;
+      padding:10px 22px; border-radius:10px; font-size:14px; font-weight:600;
+      cursor:pointer; border:none; transition:all .15s; user-select:none; font-family:inherit;
+    }
+    .btn:active { transform:scale(.97); }
+    .btn-p  { background:#3B6BEB; color:#fff; box-shadow:0 2px 10px rgba(59,107,235,.3); }
+    .btn-p:hover { background:#2d5cd4; }
+    .btn-p:disabled { background:#a0aec0; cursor:not-allowed; box-shadow:none; }
+    .btn-o  { background:#fff; color:#3B6BEB; border:2px solid #c7d5f8; }
+    .btn-o:hover { background:#EEF2FF; }
+    .btn-spin {
+      background:linear-gradient(135deg,#3B6BEB,#7c5af4); color:#fff;
+      padding:13px 32px; font-size:16px; border-radius:14px;
+      box-shadow:0 4px 18px rgba(59,107,235,.4);
+    }
+    .btn-spin:hover { box-shadow:0 6px 22px rgba(59,107,235,.5); }
+    .btn-spin:disabled { background:#a0aec0; cursor:not-allowed; box-shadow:none; }
+    .btn-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:18px; }
+
+    /* ─── FEEDBACK ──────────────────────────────── */
+    .fb { display:none; padding:9px 14px; border-radius:8px; font-size:13px; margin-top:8px; line-height:1.5; }
+    .fb.ok  { display:block; background:#f0fdf4; color:#166534; border:1px solid #bbf7d0; }
+    .fb.err { display:block; background:#fff5f5; color:#991b1b; border:1px solid #fecaca; }
+
+    /* ─── SHOW ANSWER ───────────────────────────── */
+    .show-btn { background:none; border:1.5px dashed #c4c9d9; color:#9ca3af; border-radius:7px; padding:5px 14px; font-size:12px; cursor:pointer; margin-top:8px; transition:all .2s; font-family:inherit; }
+    .show-btn:hover { border-color:#3B6BEB; color:#3B6BEB; }
+    .ans { display:none; background:#f0fdf4; border:1px solid #bbf7d0; color:#166534; border-radius:8px; padding:9px 14px; font-size:13px; margin-top:8px; line-height:1.5; }
+    .ans.on { display:block; }
+
+    /* ─── WHEEL ─────────────────────────────────── */
+    #wheel-wrap  { text-align:center; }
+    #wheel-cv    { display:block; margin:0 auto 16px; border-radius:50%; box-shadow:0 8px 30px rgba(59,107,235,.2); }
+    #wheel-word  { font-size:19px; font-weight:800; color:#3B6BEB; min-height:32px; margin-bottom:16px; }
+    #wheel-empty { font-size:13px; color:#9ca3af; margin-top:6px; }
+
+    /* ─── FILL-IN-BLANKS ────────────────────────── */
+    .fib-row { display:flex; align-items:center; flex-wrap:wrap; gap:6px; font-size:15px; margin-bottom:6px; }
+    .fib-g   { margin-bottom:14px; }
+    .fib-in  { width:180px !important; text-align:center; padding:7px 6px !important; font-size:14px !important; flex-shrink:0; }
+
+    /* ─── MATCH ─────────────────────────────────── */
+    .match-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    @media(max-width:500px){ .match-grid { grid-template-columns:1fr; } }
+    .m-col { display:flex; flex-direction:column; gap:8px; }
+    .m-w, .m-d { border-radius:9px; padding:10px 13px; cursor:pointer; font-size:14px; transition:all .15s; user-select:none; }
+    .m-w { background:#EEF2FF; border:2px solid #c7d5f8; color:#3B6BEB; font-weight:700; text-align:center; }
+    .m-d { background:#fafbff; border:2px solid #e5e8f0; color:#4b5563; line-height:1.4; }
+    .m-w.sel,.m-d.sel { border-color:#3B6BEB; background:#3B6BEB; color:#fff; }
+    .m-w.matched,.m-d.matched { background:#f0fdf4; border-color:#22c55e; color:#166534; cursor:default; }
+    .m-w.flash,.m-d.flash { background:#fff5f5; border-color:#ef4444; animation:shake .3s ease; }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+
+    /* ─── ERROR CORRECTION ──────────────────────── */
+    .err-item { margin-bottom:20px; }
+    .err-orig { font-style:italic; background:#fffbeb; border:1.5px solid #fde68a; border-radius:9px; padding:10px 14px; color:#78350f; font-size:14px; margin-bottom:8px; }
+    .err-lbl  { font-size:12px; color:#9ca3af; margin-bottom:6px; font-weight:500; }
+    .err-hint { font-size:12px; color:#3B6BEB; margin-bottom:8px; }
+
+    /* ─── READING ───────────────────────────────── */
+    .read-box { background:#f8f9ff; border:1.5px solid #dde2f0; border-radius:14px; padding:24px; font-size:15px; line-height:1.85; margin-bottom:26px; }
+    .read-box h3 { color:#3B6BEB; font-size:17px; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+    .read-box p { margin-bottom:12px; }
+    .read-box p:last-child { margin-bottom:0; }
+    .hl { background:#e0e9ff; color:#2451c7; padding:1px 5px; border-radius:4px; font-weight:600; }
+    .q-item { margin-bottom:20px; }
+    .q-lbl  { font-weight:600; font-size:14px; color:#111827; margin-bottom:8px; }
+    .tf-row { display:flex; gap:10px; }
+    .tf-btn { flex:1; padding:10px; border-radius:9px; border:2px solid #dde2f0; background:#fafbff; color:#4b5563; font-weight:600; font-size:14px; cursor:pointer; transition:all .15s; font-family:inherit; }
+    .tf-btn:hover { border-color:#3B6BEB; background:#EEF2FF; color:#3B6BEB; }
+
+    /* ─── CHATBOT ───────────────────────────────── */
+    #chat-box { border:2px solid #e5e8f0; border-radius:14px; overflow:hidden; }
+    #chat-msgs { padding:18px; min-height:220px; max-height:420px; overflow-y:auto; display:flex; flex-direction:column; gap:12px; background:#f8f9ff; }
+    .bubble { max-width:84%; border-radius:16px; padding:11px 15px; font-size:14px; line-height:1.55; white-space:pre-wrap; }
+    .b-t { background:#EEF2FF; color:#1a1a2e; align-self:flex-start; border-bottom-left-radius:4px; }
+    .b-s { background:#3B6BEB; color:#fff;    align-self:flex-end;   border-bottom-right-radius:4px; }
+    .b-tip { background:#fffbeb; border:1px solid #fde68a; color:#78350f; font-size:12px; align-self:flex-start; border-radius:10px; padding:7px 13px; max-width:90%; }
+    .b-dot { background:#EEF2FF; color:#9ca3af; align-self:flex-start; border-bottom-left-radius:4px; font-style:italic; font-size:13px; }
+    #chat-foot { border-top:2px solid #e5e8f0; padding:12px; display:flex; gap:10px; background:#fff; }
+    #chat-in { flex:1; border:2px solid #dde2f0; border-radius:9px; padding:10px 14px; font-size:14px; font-family:inherit; outline:none; color:#111827; background:#fafbff; }
+    #chat-in:focus { border-color:#3B6BEB; background:#fff; }
+    #chat-send { background:#3B6BEB; color:#fff; border:none; border-radius:9px; padding:10px 18px; font-weight:700; cursor:pointer; font-size:14px; font-family:inherit; }
+    #chat-send:hover { background:#2d5cd4; }
+
+    /* ─── DISCUSSION ────────────────────────────── */
+    .disc-q { margin-bottom:20px; }
+    .disc-q label { display:block; font-weight:600; color:#111827; font-size:14px; margin-bottom:8px; }
+    .disc-hint { font-size:12px; color:#9ca3af; margin-bottom:8px; }
+
+    /* ─── REFLECTION ────────────────────────────── */
+    .refl-q { margin-bottom:20px; }
+    .refl-q label { display:block; font-weight:600; color:#3B6BEB; font-size:14px; margin-bottom:8px; }
+    .congrats { text-align:center; padding:24px; background:#fff; border-radius:14px; border:1.5px solid #c7d5f8; margin-top:20px; }
+    .congrats-em  { font-size:38px; margin-bottom:8px; }
+    .congrats-ttl { font-size:20px; font-weight:800; color:#3B6BEB; margin-bottom:4px; }
+    .congrats-sub { font-size:14px; color:#6b7280; }
+
+    /* ─── RESPONSIVE ────────────────────────────── */
+    @media(max-width:600px){
+      .h-name { font-size:24px; }
+      .card { padding:20px 16px; }
+      .btn-row { flex-direction:column; }
+      #sticky-bar { padding:8px 14px; gap:10px; }
+      #prog-text  { min-width:unset; font-size:11px; }
+      .fib-in { width:140px !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ HERO ══════════════════════════════════════════════ -->
+<div class="hero" id="hero">
+
+  <!-- LEFT PANEL -->
+  <div class="hero-panel hero-left">
+    <p class="hero-eyebrow">Study Buddy &middot; B2 &middot; <span id="hw-date"></span></p>
+    <h1 class="hero-title">Homework<br>Time</h1>
+    <p class="hero-sub">Today's focus: 🏦 Banking Vocabulary Revision. Fifteen words, six tasks, one wheel spin to get you started.</p>
+
+    <div class="hero-btn-stack">
+      <button class="hero-btn primary" id="hero-start-btn" onclick="showTasks()">
+        <span>Start your homework</span>
+        <span class="hero-btn-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#1c1917" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </button>
+      <a class="hero-btn secondary" href="index.html">
+        <span class="hero-btn-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke="#1c1917" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span>Back to quizzes</span>
+      </a>
+    </div>
+
+    <div class="hero-illustration left-ill">
+      <svg viewBox="0 0 340 230" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- ground shadow -->
+        <ellipse cx="170" cy="208" rx="120" ry="10" fill="#1c1917" opacity="0.06"/>
+
+        <!-- pillow -->
+        <path d="M28 176c-10 2-14 12-8 20 4 6 12 8 20 8h44c10 0 14-10 8-18-6-8-16-10-26-10-14 0-28-2-38 0z"
+              fill="#fff" stroke="#1c1917" stroke-width="4" stroke-linejoin="round"/>
+
+        <!-- back arm resting on pillow -->
+        <path d="M70 168c14-6 26-4 34 6" fill="none" stroke="#1c1917" stroke-width="4.5" stroke-linecap="round"/>
+
+        <!-- body / shirt -->
+        <path d="M66 150c-6-22 8-46 40-50 30-4 58 8 66 30 6 16-2 28-16 34-24 10-58 12-78 2-6-4-10-10-12-16z"
+              fill="#EF6A8B" stroke="#1c1917" stroke-width="4.5" stroke-linejoin="round"/>
+
+        <!-- far leg, bent, kicked up -->
+        <path d="M162 132c26-2 46-18 56-42 4-10 8-22 16-30" fill="none" stroke="#1c1917" stroke-width="4.5" stroke-linecap="round"/>
+        <path d="M218 90c8-14 20-24 20-24s-4 14-10 26c-4 8-14 8-10-2z" fill="#fff" stroke="#1c1917" stroke-width="4" stroke-linejoin="round"/>
+
+        <!-- near leg, bent, kicked up higher -->
+        <path d="M150 138c22 4 42-6 56-26 8-12 14-26 24-32" fill="none" stroke="#1c1917" stroke-width="4.5" stroke-linecap="round"/>
+        <path d="M228 82c10-10 22-16 22-16s-6 12-14 22c-6 6-14 2-8-6z" fill="#fff" stroke="#1c1917" stroke-width="4" stroke-linejoin="round"/>
+
+        <!-- head -->
+        <circle cx="70" cy="120" r="30" fill="#fff" stroke="#1c1917" stroke-width="4.5"/>
+        <!-- afro hair -->
+        <path d="M40 108c-8-16 2-34 20-38 4-10 16-16 28-12 14-8 32 0 34 16 12 2 18 16 12 26-4-10-14-14-22-12-10 6-24 6-32-2-10 4-20 2-26-6-6 8-10 18-14 28z"
+              fill="#1c1917"/>
+        <!-- face -->
+        <circle cx="60" cy="126" r="2.6" fill="#1c1917"/>
+        <path d="M52 138c4 4 10 4 14 0" stroke="#1c1917" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+
+        <!-- front arm + hand holding phone -->
+        <path d="M86 156c10-2 20 0 26 8 4 6 4 12 0 16" fill="none" stroke="#1c1917" stroke-width="4.5" stroke-linecap="round"/>
+        <rect x="44" y="164" width="30" height="20" rx="5" fill="#fff" stroke="#1c1917" stroke-width="4" transform="rotate(-8 44 164)"/>
+        <rect x="50" y="169" width="18" height="10" rx="2" fill="#EF6A8B" opacity="0.55" transform="rotate(-8 50 169)"/>
+      </svg>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ HOMEWORK CONTENT (hidden until Start is pressed) ══ -->
+<div id="hw-content">
+
+<!-- ══ STICKY PROGRESS BAR ══════════════════════════════ -->
+<div id="sticky-bar">
+  <div id="prog-text">0 of 5 tasks done</div>
+  <div id="prog-track"><div id="prog-fill"></div></div>
+  <div id="score-badge">⭐ 0 pts</div>
+</div>
+
+<div class="container">
+  <div class="card">
+    <div class="card-head">
+      <div class="c-icon">🎡</div>
+      <div class="c-text">
+        <div class="c-title">Warm Up — Spin the Wheel!</div>
+        <div class="c-sub">Get a banking word · make a sentence with it</div>
+      </div>
+    </div>
+    <div class="instr">
+      🎯 Click <strong>SPIN</strong> to get a word from the lesson. Then write one sentence using it below.
+      Each word only appears once, so try to spin <strong>several times</strong> and build up a set of sentences!
+    </div>
+    <div id="wheel-wrap">
+      <canvas id="wheel-cv" width="290" height="290"></canvas>
+      <div id="wheel-word">🎯 Click SPIN to get your word!</div>
+      <button class="btn btn-spin" id="spin-btn" onclick="spinWheel()">🎲 SPIN!</button>
+      <div id="wheel-empty"></div>
+    </div>
+    <div style="margin-top:22px;">
+      <label style="display:block;font-weight:700;font-size:14px;margin-bottom:8px;">✍️ Your sentence:</label>
+      <textarea id="wheel-sent" placeholder="Write a sentence with your word here…"></textarea>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TASK 1 — FILL IN THE BLANKS
+  ══════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="c-icon">✍️</div>
+      <div class="c-text">
+        <div class="c-title"><span class="tnum">1</span> Fill in the Blanks</div>
+        <div class="c-sub">Complete each sentence with the correct banking term</div>
+      </div>
+      <div class="done-badge" id="bd-fib">✓ Done</div>
+    </div>
+    <div class="instr">
+      📌 Choose the correct word or phrase for each gap. Type it in the box, then click <strong>Check Answers</strong>.
+    </div>
+    <hr class="hr">
+
+    <div class="fib-g">
+      <div class="fib-row">
+        <span>1. I keep my everyday spending money in a</span>
+        <input type="text" class="fib-in" id="f1" data-ans="cash account" placeholder="___">
+        <span>, separate from my savings.</span>
+      </div>
+      <div class="fb" id="f1fb"></div>
+    </div>
+
+    <div class="fib-g">
+      <div class="fib-row">
+        <span>2. My</span>
+        <input type="text" class="fib-in" id="f2" data-ans="savings account" placeholder="___">
+        <span>pays a little interest every month.</span>
+      </div>
+      <div class="fb" id="f2fb"></div>
+    </div>
+
+    <div class="fib-g">
+      <div class="fib-row">
+        <span>3. My pension is paid as a monthly</span>
+        <input type="text" class="fib-in" id="f3" data-ans="disbursement" placeholder="___">
+        <span>from the fund.</span>
+      </div>
+      <div class="fb" id="f3fb"></div>
+    </div>
+
+    <div class="fib-g">
+      <div class="fib-row">
+        <span>4. Interest earned on a savings account is usually</span>
+        <input type="text" class="fib-in" id="f4" data-ans="subject to" placeholder="___">
+        <span>tax.</span>
+      </div>
+      <div class="fb" id="f4fb"></div>
+    </div>
+
+    <div class="fib-g">
+      <div class="fib-row">
+        <span>5. Whenever I need cash, I</span>
+        <input type="text" class="fib-in" id="f5" data-ans="tap" placeholder="___">
+        <span>my account at the cash machine.</span>
+      </div>
+      <div class="fb" id="f5fb"></div>
+    </div>
+
+    <div class="fib-g">
+      <div class="fib-row">
+        <span>6. I need to</span>
+        <input type="text" class="fib-in" id="f6" data-ans="withdraw" placeholder="___">
+        <span>some money before the weekend.</span>
+      </div>
+      <div class="fb" id="f6fb"></div>
+    </div>
+
+    <div class="fib-g">
+      <div class="fib-row">
+        <span>7. Once a month I</span>
+        <input type="text" class="fib-in" id="f7" data-ans="top up" placeholder="___">
+        <span>my balance so the account never runs too low.</span>
+      </div>
+      <div class="fb" id="f7fb"></div>
+    </div>
+
+    <div class="fib-g">
+      <div class="fib-row">
+        <span>8. Be careful not to</span>
+        <input type="text" class="fib-in" id="f8" data-ans="max out" placeholder="___">
+        <span>your credit card before the trip.</span>
+      </div>
+      <div class="fb" id="f8fb"></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-p" onclick="checkFIB()">✔ Check Answers</button>
+      <button class="btn btn-o" onclick="resetFIB()">↺ Reset</button>
+    </div>
+    <div class="fb" id="fib-tot" style="margin-top:12px;"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TASK 2 — MATCH
+  ══════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="c-icon">🔗</div>
+      <div class="c-text">
+        <div class="c-title"><span class="tnum">2</span> Match the Words</div>
+        <div class="c-sub">Banking vocabulary — term to definition</div>
+      </div>
+      <div class="done-badge" id="bd-match">✓ Done</div>
+    </div>
+    <div class="instr">
+      Click a <strong>term</strong> on the left, then click the correct <strong>definition</strong> on the right.
+      Match all 6 pairs! 🏦
+    </div>
+    <div class="match-grid">
+      <div class="m-col" id="mw-col">
+        <div class="m-w" data-id="margin">margin account</div>
+        <div class="m-w" data-id="brokerage">brokerage account</div>
+        <div class="m-w" data-id="yield">yield</div>
+        <div class="m-w" data-id="deplete">deplete an account</div>
+        <div class="m-w" data-id="roi">ROI</div>
+        <div class="m-w" data-id="overdraft">overdraft fee</div>
+      </div>
+      <div class="m-col" id="md-col">
+        <div class="m-d" data-id="roi">a measure of the profit made compared to the amount you originally invested</div>
+        <div class="m-d" data-id="overdraft">a charge the bank makes when you spend more money than you actually have</div>
+        <div class="m-d" data-id="deplete">to use up most or all of the money in an account</div>
+        <div class="m-d" data-id="margin">an account that lets you borrow money from the broker to buy investments</div>
+        <div class="m-d" data-id="yield">the income, usually shown as a percentage, that an investment produces</div>
+        <div class="m-d" data-id="brokerage">an account used to buy and sell investments such as stocks and bonds</div>
+      </div>
+    </div>
+    <div class="fb" id="match-fb" style="margin-top:16px;"></div>
+    <div class="btn-row">
+      <button class="btn btn-o" onclick="resetMatch()">↺ Reset</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TASK 3 — ERROR CORRECTION
+  ══════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="c-icon">✏️</div>
+      <div class="c-text">
+        <div class="c-title"><span class="tnum">3</span> Error Correction</div>
+        <div class="c-sub">Replace the underlined idea with the precise banking word</div>
+      </div>
+      <div class="done-badge" id="bd-err">✓ Done</div>
+    </div>
+    <div class="instr">
+      💭 Each sentence below uses a vague, everyday phrase instead of the exact banking term you learned.<br>
+      Rewrite the sentence, replacing the vague phrase with the correct word from the lesson. Then click <strong>Check All</strong>.
+    </div>
+    <hr class="hr">
+
+    <div class="err-item">
+      <div class="err-orig">❓ "I put more money into my account so it wouldn't run low."</div>
+      <div class="err-lbl">Rewrite using the exact banking phrase:</div>
+      <input type="text" id="e1" placeholder="I topped up…" data-ans="top up">
+      <div class="fb" id="e1fb"></div>
+    </div>
+
+    <div class="err-item">
+      <div class="err-orig">❓ "I used up almost all the money in my savings account for the roof repair."</div>
+      <div class="err-lbl">Rewrite using the exact banking phrase:</div>
+      <input type="text" id="e2" placeholder="I…" data-ans="deplete">
+      <div class="fb" id="e2fb"></div>
+    </div>
+
+    <div class="err-item">
+      <div class="err-orig">❓ "The bank pays out my pension automatically every month."</div>
+      <div class="err-lbl">Rewrite using the exact banking phrase:</div>
+      <input type="text" id="e3" placeholder="The bank makes a…" data-ans="disbursement">
+      <div class="fb" id="e3fb"></div>
+    </div>
+
+    <div class="err-item">
+      <div class="err-orig">❓ "I reached the limit on my credit card while I was travelling."</div>
+      <div class="err-lbl">Rewrite using the exact banking phrase:</div>
+      <input type="text" id="e4" placeholder="I…" data-ans="max out">
+      <div class="fb" id="e4fb"></div>
+    </div>
+
+    <div class="err-item">
+      <div class="err-orig">❓ "This kind of account lets me borrow money from the broker to invest."</div>
+      <div class="err-lbl">Rewrite using the exact banking phrase:</div>
+      <input type="text" id="e5" placeholder="It's a…" data-ans="margin account">
+      <div class="fb" id="e5fb"></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-p" onclick="checkErrs()">✔ Check All</button>
+      <button class="btn btn-o" onclick="resetErrs()">↺ Reset</button>
+    </div>
+    <div class="fb" id="err-tot" style="margin-top:12px;"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TASK 4 — READING
+  ══════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="c-icon">📖</div>
+      <div class="c-text">
+        <div class="c-title"><span class="tnum">4</span> Reading</div>
+        <div class="c-sub">A conversation with a bank representative</div>
+      </div>
+      <div class="done-badge" id="bd-read">✓ Done</div>
+    </div>
+    <div class="instr">
+      Read the conversation carefully. Then answer the questions below — you can look at the text! 👀
+    </div>
+
+    <div class="read-box">
+      <h3>🏦 At the Bank</h3>
+      <p>
+        Mr. Harris went to his local branch to review his finances after retiring. The advisor
+        began by checking his <span class="hl">cash account</span>, which he used for daily
+        spending, and his <span class="hl">savings account</span>, where he kept money aside for
+        emergencies.
+      </p>
+      <p>
+        The advisor explained that his monthly pension arrives as a <span class="hl">disbursement</span>
+        from his old workplace fund, and reminded him that any interest on his savings is
+        <span class="hl">subject to</span> tax. She also warned him not to
+        <span class="hl">deplete</span> his savings account too quickly, since it was his main
+        safety net.
+      </p>
+      <p>
+        Mr. Harris mentioned he sometimes wanted to try investing. The advisor suggested a
+        <span class="hl">brokerage account</span> for buying shares, and explained that a
+        <span class="hl">margin account</span> would let him borrow money to invest — but warned
+        this was riskier. She showed him how to check the <span class="hl">yield</span> and
+        overall <span class="hl">ROI</span> of different funds before choosing one.
+      </p>
+      <p>
+        Finally, she reminded him to <span class="hl">top up</span> his cash account balance
+        before his bills went out, so he wouldn't accidentally <span class="hl">max out</span>
+        his overdraft limit and pay an unwanted <span class="hl">overdraft fee</span>.
+      </p>
+    </div>
+
+    <div class="q-item">
+      <div class="q-lbl">Q1. What two accounts did the advisor check first, and what was each one for?</div>
+      <textarea id="rq1" placeholder="The advisor checked…"></textarea>
+      <button class="show-btn" onclick="toggleAns('ra1',this)">💡 Show answer</button>
+      <div class="ans" id="ra1">✅ His cash account (daily spending) and his savings account (money set aside for emergencies).</div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-lbl">Q2. Where does Mr. Harris's monthly income come from, and what should he remember about it?</div>
+      <textarea id="rq2" placeholder="It comes from…"></textarea>
+      <button class="show-btn" onclick="toggleAns('ra2',this)">💡 Show answer</button>
+      <div class="ans" id="ra2">✅ It comes from a disbursement from his old workplace pension fund, and the interest on his savings is subject to tax.</div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-lbl">Q3. What is the difference between a brokerage account and a margin account, according to the advisor?</div>
+      <textarea id="rq3" placeholder="A brokerage account is… while a margin account…"></textarea>
+      <button class="show-btn" onclick="toggleAns('ra3',this)">💡 Show answer</button>
+      <div class="ans" id="ra3">✅ A brokerage account is for buying and selling shares with your own money; a margin account lets you borrow money to invest, which is riskier.</div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-lbl">Q4. Why did the advisor tell him to top up his cash account before his bills went out?</div>
+      <textarea id="rq4" placeholder="Because…"></textarea>
+      <button class="show-btn" onclick="toggleAns('ra4',this)">💡 Show answer</button>
+      <div class="ans" id="ra4">✅ So that he wouldn't max out his overdraft limit and end up paying an overdraft fee.</div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-lbl">Q5. TRUE or FALSE? &nbsp;<em>"The advisor encouraged him to spend his savings quickly."</em></div>
+      <div class="tf-row">
+        <button class="tf-btn" onclick="checkTF('false','q5fb')">TRUE</button>
+        <button class="tf-btn" onclick="checkTF2('false','q5fb')">FALSE</button>
+      </div>
+      <div class="fb" id="q5fb"></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-p" id="read-btn" onclick="markReadDone()">✔ Mark reading as done</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TASK 5 — CHATBOT
+  ══════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="c-icon">💬</div>
+      <div class="c-text">
+        <div class="c-title"><span class="tnum">5</span> Speaking Practice — Chat!</div>
+        <div class="c-sub">Answer a few questions about your own banking habits</div>
+      </div>
+      <div class="done-badge" id="bd-chat">✓ Done</div>
+    </div>
+    <div class="instr">
+      A friendly "bank advisor" has 5 quick questions for you! ✏️<br>
+      Try to use words from today's lesson (cash account, savings account, withdraw, top up…). There are no wrong answers — just practise!<br>
+      Press <strong>Enter</strong> or click <strong>Send</strong> to reply.
+    </div>
+    <div id="chat-box">
+      <div id="chat-msgs"></div>
+      <div id="chat-foot">
+        <input type="text" id="chat-in" placeholder="Type your answer…" onkeydown="if(event.key==='Enter')sendChat()">
+        <button id="chat-send" onclick="sendChat()">Send ➤</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       QUICK DISCUSSION QUESTIONS
+  ══════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="c-icon">🗣️</div>
+      <div class="c-text">
+        <div class="c-title">Quick Discussion Questions</div>
+        <div class="c-sub">Answer using the target vocabulary — no auto-check, just practise</div>
+      </div>
+    </div>
+    <div class="instr">
+      Try to include at least one lesson word in each answer. There's no right or wrong here — just get the vocabulary out of your head and onto the page.
+    </div>
+
+    <div class="disc-q">
+      <label>1. Do you prefer to keep most of your money in a cash account or a savings account? Why?</label>
+      <div class="disc-hint">Try to use: cash account / savings account / yield</div>
+      <textarea placeholder="I prefer…"></textarea>
+    </div>
+
+    <div class="disc-q">
+      <label>2. Have you ever come close to maxing out a card or paying an overdraft fee? What happened?</label>
+      <div class="disc-hint">Try to use: max out / overdraft fee / top up</div>
+      <textarea placeholder="Once, I…"></textarea>
+    </div>
+
+    <div class="disc-q">
+      <label>3. Would you ever open a brokerage account or a margin account? Why or why not?</label>
+      <div class="disc-hint">Try to use: brokerage account / margin account / ROI</div>
+      <textarea placeholder="I would / wouldn't…"></textarea>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       MY REFLECTION
+  ══════════════════════════════════════════════════ -->
+  <div class="card reflection">
+    <div class="card-head">
+      <div class="c-icon">💭</div>
+      <div class="c-text">
+        <div class="c-title">My Reflection</div>
+        <div class="c-sub">Think about your learning today</div>
+      </div>
+    </div>
+
+    <div class="refl-q">
+      <label>🌟 Which banking word from today do you want to remember?</label>
+      <input type="text" placeholder="The word I want to remember is…">
+    </div>
+
+    <div class="refl-q">
+      <label>🤔 Which word was hardest to recall today?</label>
+      <textarea placeholder="The hardest word was… because…"></textarea>
+    </div>
+
+    <div class="refl-q">
+      <label>🎯 Write ONE sentence about your own banking using a word from today's lesson:</label>
+      <input type="text" placeholder="Every month I…">
+    </div>
+
+    <div class="congrats">
+      <div class="congrats-em">🎉</div>
+      <div class="congrats-ttl">Great work, Study Buddy!</div>
+      <div class="congrats-sub">You revised 15 banking terms today. Well done! 🏦💙</div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+</div><!-- /hw-content -->
+
+<!-- ══════════════════════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════════════════════ -->
+<script>
+/* ── UTILITIES ───────────────────────────────────────────── */
+function $(id){ return document.getElementById(id); }
+$('hw-date').textContent = new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+
+/* ── HERO NAVIGATION ─────────────────────────────────────── */
+function showTasks(){
+  const content = $('hw-content');
+  const btn = $('hero-start-btn');
+  if(content.classList.contains('visible')) return;
+  content.classList.add('visible');
+  btn.disabled = true;
+  btn.querySelector('span').textContent = 'Homework unlocked ✓';
+  requestAnimationFrame(() => {
+    content.scrollIntoView({ behavior:'smooth', block:'start' });
+  });
+}
+
+/* ── PROGRESS ────────────────────────────────────────────── */
+const TOTAL = 5;
+const done  = {};
+let   pts   = 0;
+
+function markDone(key, p, badge){
+  if(done[key]) return;
+  done[key] = true; pts += p;
+  if(badge){ const b=$(badge); if(b) b.classList.add('on'); }
+  const c = Object.keys(done).length;
+  $('prog-text').textContent = c + ' of ' + TOTAL + ' tasks done';
+  $('prog-fill').style.width = (c/TOTAL*100) + '%';
+  $('score-badge').textContent = '⭐ ' + pts + ' pts';
+}
+
+/* ── SPINNING WHEEL ──────────────────────────────────────── */
+let WORDS  = ['cash account','savings account','withdraw money','top up balance','max out','tap an account','make transactions','overdraft fee'];
+const COLORS = ['#3B6BEB','#7c5af4','#0891b2','#059669','#d97706','#e11d48','#1e40af','#065f46'];
+const cv  = $('wheel-cv');
+const ctx = cv.getContext('2d');
+const CX=145, CY=145, R=128;
+let wAng=0, spinning=false;
+
+function drawWheel(a){
+  const n=WORDS.length, seg=(Math.PI*2)/Math.max(n,1);
+  ctx.clearRect(0,0,cv.width,cv.height);
+  if(n===0){
+    ctx.beginPath(); ctx.arc(CX,CY,R,0,Math.PI*2);
+    ctx.fillStyle='#EEF2FF'; ctx.fill();
+    ctx.strokeStyle='#c7d5f8'; ctx.lineWidth=2.5; ctx.stroke();
+  } else {
+    for(let i=0;i<n;i++){
+      const s=a+i*seg, e=s+seg;
+      ctx.beginPath(); ctx.moveTo(CX,CY); ctx.arc(CX,CY,R,s,e); ctx.closePath();
+      ctx.fillStyle=COLORS[i%COLORS.length]; ctx.fill();
+      ctx.strokeStyle='#fff'; ctx.lineWidth=2.5; ctx.stroke();
+      ctx.save();
+      ctx.translate(CX,CY); ctx.rotate(s+seg/2);
+      ctx.textAlign='right'; ctx.fillStyle='rgba(255,255,255,.95)';
+      ctx.font='bold 10px -apple-system,sans-serif';
+      ctx.shadowColor='rgba(0,0,0,.4)'; ctx.shadowBlur=4;
+      ctx.fillText(WORDS[i], R-9, 4);
+      ctx.restore();
+    }
+  }
+  // hub
+  ctx.shadowColor='transparent';
+  ctx.beginPath(); ctx.arc(CX,CY,24,0,Math.PI*2);
+  ctx.fillStyle='#fff'; ctx.fill();
+  ctx.strokeStyle='#3B6BEB'; ctx.lineWidth=3; ctx.stroke();
+  ctx.font='18px sans-serif'; ctx.textAlign='center';
+  ctx.fillText('🏦',CX,CY+6);
+  // pointer ▼
+  ctx.beginPath(); ctx.moveTo(CX-12,3); ctx.lineTo(CX+12,3); ctx.lineTo(CX,27); ctx.closePath();
+  ctx.fillStyle='#fbbf24'; ctx.fill();
+  ctx.strokeStyle='#78350f'; ctx.lineWidth=1.5; ctx.stroke();
+}
+
+function spinWheel(){
+  if(spinning || WORDS.length===0) return;
+  spinning=true;
+  $('spin-btn').disabled = true;
+  $('wheel-word').textContent='🌀 Spinning…';
+  const extra=Math.PI*2*(6+Math.random()*6), dur=3200;
+  const t0=performance.now(), a0=wAng;
+  function step(now){
+    const p=Math.min((now-t0)/dur,1), ease=1-Math.pow(1-p,3);
+    wAng=a0+extra*ease; drawWheel(wAng);
+    if(p<1){ requestAnimationFrame(step); return; }
+    spinning=false;
+    $('spin-btn').disabled = false;
+    const seg=(Math.PI*2)/WORDS.length;
+    const rel=((-Math.PI/2-wAng)%(Math.PI*2)+Math.PI*2)%(Math.PI*2);
+    const idx=Math.floor(rel/seg)%WORDS.length;
+    const w=WORDS[idx];
+    $('wheel-word').innerHTML='🎯 Your word: <strong>"'+w+'"</strong> — write a sentence!';
+    $('wheel-sent').placeholder='Use "'+w+'" in a sentence…';
+    $('wheel-sent').focus();
+    WORDS.splice(idx,1);
+    if(WORDS.length===0){
+      $('spin-btn').disabled = true;
+      $('spin-btn').textContent = '🎉 All words used!';
+      $('wheel-empty').textContent = "You've used every word on the wheel — nicely done!";
+    } else {
+      $('wheel-empty').textContent = WORDS.length + ' word(s) left on the wheel.';
+    }
+    drawWheel(wAng);
+  }
+  requestAnimationFrame(step);
+}
+drawWheel(wAng);
+$('wheel-empty').textContent = WORDS.length + ' word(s) left on the wheel.';
+
+/* ── FILL IN THE BLANKS ──────────────────────────────────── */
+function checkFIB(){
+  let ok=0;
+  for(let i=1;i<=8;i++){
+    const inp=$('f'+i), fb=$('f'+i+'fb');
+    const v=inp.value.trim().toLowerCase(), a=inp.dataset.ans.toLowerCase();
+    if(!v){ inp.className='fib-in'; fb.className='fb'; continue; }
+    if(v===a){
+      inp.className='fib-in ok'; fb.className='fb ok'; fb.textContent='✅ Correct!'; ok++;
+    } else {
+      inp.className='fib-in bad'; fb.className='fb err';
+      fb.innerHTML='❌ Answer: <strong>'+inp.dataset.ans+'</strong>';
+    }
+  }
+  const tot=$('fib-tot');
+  if(ok===8){ tot.className='fb ok'; tot.textContent='🎉 Perfect! 8/8 — your banking vocabulary is solid today!'; markDone('fib',20,'bd-fib'); }
+  else if(ok>=5){ tot.className='fb ok'; tot.textContent='👍 Good! '+ok+'/8 correct. Check the red answers above.'; markDone('fib',12,'bd-fib'); }
+  else { tot.className='fb err'; tot.textContent='💪 '+ok+'/8. Look at the word list again and try!'; }
+}
+function resetFIB(){
+  for(let i=1;i<=8;i++){
+    $('f'+i).value=''; $('f'+i).className='fib-in';
+    const f=$('f'+i+'fb'); f.className='fb'; f.textContent='';
+  }
+  const t=$('fib-tot'); t.className='fb'; t.textContent='';
+}
+
+/* ── MATCH ───────────────────────────────────────────────── */
+let selW=null, selD=null, mCount=0;
+
+function bindMatch(){
+  document.querySelectorAll('.m-w').forEach(el=>{
+    el.onclick=function(){
+      if(this.dataset.matched) return;
+      document.querySelectorAll('.m-w.sel').forEach(e=>e.classList.remove('sel'));
+      this.classList.add('sel'); selW=this;
+      if(selD) tryPair();
+    };
+  });
+  document.querySelectorAll('.m-d').forEach(el=>{
+    el.onclick=function(){
+      if(this.dataset.matched) return;
+      document.querySelectorAll('.m-d.sel').forEach(e=>e.classList.remove('sel'));
+      this.classList.add('sel'); selD=this;
+      if(selW) tryPair();
+    };
+  });
+}
+
+function tryPair(){
+  const fb=$('match-fb');
+  if(selW.dataset.id===selD.dataset.id){
+    selW.className='m-w matched'; selW.dataset.matched='1';
+    selD.className='m-d matched'; selD.dataset.matched='1';
+    mCount++;
+    fb.className='fb ok';
+    if(mCount===6){ fb.textContent='🎉 You matched all 6! Excellent vocabulary work!'; markDone('match',20,'bd-match'); }
+    else { fb.textContent='✅ Correct match: "'+selW.textContent+'" ('+mCount+'/6)'; }
+  } else {
+    fb.className='fb err';
+    fb.textContent='❌ Not a match. Try again! Think about what "'+selW.textContent+'" means.';
+    selW.classList.add('flash'); selD.classList.add('flash');
+    const sw=selW, sd=selD;
+    setTimeout(()=>{ sw.classList.remove('flash','sel'); sd.classList.remove('flash','sel'); },400);
+  }
+  selW=null; selD=null;
+}
+
+function resetMatch(){
+  document.querySelectorAll('.m-w,.m-d').forEach(el=>{
+    el.className=el.classList.contains('m-w')?'m-w':'m-d';
+    delete el.dataset.matched;
+  });
+  selW=null; selD=null; mCount=0;
+  const f=$('match-fb'); f.className='fb'; f.textContent='';
+  bindMatch();
+}
+bindMatch();
+
+/* ── ERROR CORRECTION ────────────────────────────────────── */
+function checkErrs(){
+  let ok=0;
+  for(let i=1;i<=5;i++){
+    const inp=$('e'+i), fb=$('e'+i+'fb');
+    const v=inp.value.trim().toLowerCase(), a=inp.dataset.ans.toLowerCase();
+    if(!v){ inp.className=''; fb.className='fb'; continue; }
+    if(v.includes(a)){
+      inp.className='ok'; fb.className='fb ok'; fb.textContent='✅ Correct — nice, precise vocabulary!'; ok++;
+    } else {
+      inp.className='bad'; fb.className='fb err';
+      fb.innerHTML='❌ Try to include: <strong>'+inp.dataset.ans+'</strong>';
+    }
+  }
+  const tot=$('err-tot');
+  if(ok===5){ tot.className='fb ok'; tot.textContent='🎉 Excellent! 5/5 — you recalled every target word!'; markDone('err',20,'bd-err'); }
+  else if(ok>=3){ tot.className='fb ok'; tot.textContent='👍 '+ok+'/5 correct. Good work! Study the corrections above.'; markDone('err',12,'bd-err'); }
+  else { tot.className='fb err'; tot.textContent="💪 "+ok+"/5. Look back at the word list and try again!"; }
+}
+function resetErrs(){
+  for(let i=1;i<=5;i++){
+    $('e'+i).value=''; $('e'+i).className='';
+    $('e'+i+'fb').className='fb'; $('e'+i+'fb').textContent='';
+  }
+  $('err-tot').className='fb'; $('err-tot').textContent='';
+}
+
+/* ── READING ─────────────────────────────────────────────── */
+function toggleAns(id, btn){
+  const el=$(id); el.classList.toggle('on');
+  btn.textContent=el.classList.contains('on')? '🙈 Hide answer':'💡 Show answer';
+}
+function checkTF(ans,fbId){
+  // TRUE button clicked — this statement is actually false
+  const fb=$(fbId);
+  fb.className='fb err';
+  fb.textContent="❌ Not quite. The answer is FALSE — the advisor warned him NOT to deplete his savings account too quickly.";
+}
+function checkTF2(ans,fbId){
+  // FALSE button clicked — correct
+  const fb=$(fbId);
+  fb.className='fb ok';
+  fb.textContent="✅ Correct! FALSE — the advisor warned him not to deplete his savings account too quickly.";
+}
+function markReadDone(){
+  const b=$('read-btn'); b.textContent='✅ Reading done!'; b.disabled=true; b.style.background='#22c55e';
+  markDone('read',20,'bd-read');
+}
+
+/* ── CHATBOT ─────────────────────────────────────────────── */
+const flow=[
+  {
+    q:"Hello! 👋 I'm your bank advisor today.\nLet's talk about your own banking habits!\n\nDo you keep your money mostly in a cash account, or do you also use a savings account?",
+    r(a){ const l=a.toLowerCase(); return (l.match(/saving|cash|both|account/))?'Good — it sounds like you keep things organised. ':'Thanks for sharing! '; },
+    tip:"💡 Tip: Try 'I keep most of my money in a…' (cash account / savings account)"
+  },
+  {
+    q:"How often do you withdraw money or top up your balance? 💷",
+    r(a){ const l=a.toLowerCase();
+      if(l.match(/withdraw|top up|week|month|often/)) return 'That sounds like a sensible routine. ';
+      return 'Thanks — everyone has their own rhythm with money! '; },
+    tip:"💡 Tip: 'I usually withdraw money once a week.' / 'I top up my balance every month.'"
+  },
+  {
+    q:"Have you ever come close to maxing out a card, or paid an overdraft fee? 😅",
+    r(a){ const l=a.toLowerCase();
+      if(l.match(/yes|once|overdraft|max/)) return 'It happens to most of us at some point! ';
+      if(l.match(/no|never/)) return "That's great financial discipline! ";
+      return 'Thanks for sharing that. '; },
+    tip:"💡 Tip: 'I once maxed out my card on holiday.' / 'I've never paid an overdraft fee.'"
+  },
+  {
+    q:"Would you ever consider a brokerage account to invest some of your savings? 📈",
+    r(a){ const l=a.toLowerCase();
+      if(l.match(/yes|maybe|consider/)) return 'Investing can be a great way to make your savings work harder. ';
+      if(l.match(/no|never|risk/)) return 'That\'s a fair, cautious approach. ';
+      return 'Interesting thought! '; },
+    tip:"💡 Tip: 'I would consider a brokerage account.' / 'I prefer not to take that risk.'"
+  },
+  {
+    q:"Last question! 🏁\nWhat matters most to you when choosing where to keep your money — a good yield, low fees, or something else?",
+    r(){ return 'Great answer! You spoke about banking really clearly today! '; },
+    tip:"💡 Tip: 'What matters most to me is…' / 'I care more about… than…'"
+  }
+];
+let step=0;
+const msgs=$('chat-msgs');
+
+function bubble(txt,cls){
+  const d=document.createElement('div'); d.className='bubble '+cls;
+  d.textContent=txt; msgs.appendChild(d); msgs.scrollTop=msgs.scrollHeight; return d;
+}
+
+setTimeout(()=>bubble(flow[0].q,'b-t'),400);
+
+function sendChat(){
+  const inp=$('chat-in'), txt=inp.value.trim();
+  if(!txt||step>=flow.length) return;
+  bubble(txt,'b-s'); inp.value='';
+  const cur=flow[step], reply=cur.r(txt), tip=cur.tip;
+  step++;
+  const dot=bubble('Typing…','b-dot');
+  setTimeout(()=>{
+    dot.remove();
+    if(step<flow.length){
+      bubble(reply+flow[step].q,'b-t');
+    } else {
+      bubble(reply+'You finished all 5 questions! 🎉 Well done — your banking vocabulary is getting stronger every session!','b-t');
+      setTimeout(()=>{
+        bubble('✅ Chat complete! Scroll down for the discussion questions and reflection. 👇','b-t');
+        $('chat-foot').style.display='none';
+        markDone('chat',20,'bd-chat');
+      },800);
+    }
+    const tipEl=document.createElement('div'); tipEl.className='bubble b-tip';
+    tipEl.textContent=tip; msgs.appendChild(tipEl); msgs.scrollTop=msgs.scrollHeight;
+  },900);
+}
+</script>
+</body>
+</html>
