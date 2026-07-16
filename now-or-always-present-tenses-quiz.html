@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Now or Always? — Present Simple vs Present Continuous</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500&family=Work+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #EEF1EF;
+    --bg-dot: rgba(31,42,46,0.07);
+    --surface: #FFFFFF;
+    --ink: #1F2A2E;
+    --ink-soft: #5C6B6E;
+    --ink-faint: #93A0A2;
+    --border: #D7DEDB;
+
+    --now: #D98F4E;
+    --now-bg: #FBEADA;
+    --now-deep: #A2632A;
+    --habit: #3E8079;
+    --habit-bg: #DEEBE8;
+    --habit-deep: #2A5B55;
+
+    --correct: #3E8079;
+    --correct-bg: #DEEBE8;
+    --incorrect: #B85C4E;
+    --incorrect-bg: #F6E2DD;
+
+    --f-display: 'Newsreader', Georgia, serif;
+    --f-body: 'Work Sans', system-ui, sans-serif;
+    --f-mono: 'Space Mono', 'Courier New', monospace;
+
+    --radius: 16px;
+    --shadow: 0 1px 2px rgba(31,42,46,0.05), 0 10px 28px rgba(31,42,46,0.08);
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+
+  body{
+    background:
+      radial-gradient(circle at 1px 1px, var(--bg-dot) 1px, transparent 0) 0 0/24px 24px,
+      var(--bg);
+    color:var(--ink);
+    font-family:var(--f-body);
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:36px 16px 64px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; transition-duration:0.001ms !important; }
+  }
+
+  .wrap{ width:100%; max-width:660px; }
+
+  .top-link{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-family:var(--f-mono);
+    font-size:0.76rem;
+    color:var(--ink-soft);
+    text-decoration:none;
+    margin-bottom:22px;
+    transition:color 0.15s ease;
+  }
+  .top-link:hover{ color:var(--ink); }
+
+  /* ---------- Signature clock/loop mark ---------- */
+  .mark{ display:flex; justify-content:center; margin-bottom:14px; }
+  .mark svg{ width:64px; height:64px; }
+
+  header{ text-align:center; margin-bottom:8px; }
+  .eyebrow{
+    font-family:var(--f-mono);
+    font-size:0.72rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+  h1{
+    font-family:var(--f-display);
+    font-weight:600;
+    font-size:clamp(2rem, 6vw, 2.7rem);
+    line-height:1.08;
+    letter-spacing:-0.01em;
+    margin:10px 0 10px;
+  }
+  h1 .accent-now{ color:var(--now-deep); font-style:italic; }
+  h1 .accent-habit{ color:var(--habit-deep); font-style:italic; }
+  .lede{
+    font-size:0.98rem;
+    color:var(--ink-soft);
+    line-height:1.65;
+    max-width:46ch;
+    margin:0 auto;
+  }
+
+  /* ---------- Legend ---------- */
+  .legend{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    margin:26px 0 30px;
+    flex-wrap:wrap;
+  }
+  .legend-chip{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-family:var(--f-mono);
+    font-size:0.76rem;
+    padding:8px 13px;
+    border-radius:999px;
+    border:1px solid var(--border);
+    background:var(--surface);
+  }
+  .legend-chip .dot{ width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+  .legend-chip.now .dot{ background:var(--now); }
+  .legend-chip.habit .dot{ background:var(--habit); }
+
+  /* ---------- Buttons ---------- */
+  button{ font-family:var(--f-body); cursor:pointer; }
+
+  .btn-primary{
+    display:inline-block;
+    background:var(--ink);
+    color:#F4F2ED;
+    font-weight:600;
+    font-size:0.97rem;
+    border:none;
+    border-radius:999px;
+    padding:14px 30px;
+    transition:transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+    box-shadow:0 6px 18px rgba(31,42,46,0.18);
+  }
+  .btn-primary:hover:not(:disabled){ transform:translateY(-1px); }
+  .btn-primary:active:not(:disabled){ transform:translateY(0); }
+  .btn-primary:disabled{ opacity:0.35; cursor:not-allowed; box-shadow:none; }
+  .btn-primary:focus-visible{ outline:2px solid var(--now); outline-offset:3px; }
+
+  .btn-ghost{
+    background:transparent;
+    color:var(--ink);
+    border:1.5px solid var(--border);
+    font-weight:600;
+    font-size:0.9rem;
+    border-radius:999px;
+    padding:12px 22px;
+    transition:border-color 0.15s ease, background 0.15s ease;
+  }
+  .btn-ghost:hover:not(:disabled){ border-color:var(--ink-faint); background:var(--surface); }
+  .btn-ghost:disabled{ opacity:0.3; cursor:not-allowed; }
+  .btn-ghost:focus-visible{ outline:2px solid var(--now); outline-offset:3px; }
+
+  .start-actions{ text-align:center; margin-top:6px; }
+
+  /* ---------- Progress path ---------- */
+  .path{
+    display:flex;
+    align-items:center;
+    gap:4px;
+    margin:0 0 26px;
+  }
+  .node-link{ flex:1; height:2px; background:var(--border); }
+  .node-link.done{ background:var(--ink-faint); }
+  .node{
+    width:12px; height:12px;
+    border-radius:50%;
+    border:2px solid var(--border);
+    background:var(--bg);
+    flex-shrink:0;
+    transition:all 0.2s ease;
+  }
+  .node.current{ border-color:var(--ink); transform:scale(1.2); }
+  .node.correct{ background:var(--correct); border-color:var(--correct); }
+  .node.incorrect{ background:var(--incorrect); border-color:var(--incorrect); }
+
+  .topline{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    margin-bottom:14px;
+    font-family:var(--f-mono);
+    font-size:0.78rem;
+    color:var(--ink-soft);
+  }
+
+  .cat-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    font-family:var(--f-mono);
+    font-size:0.72rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    padding:6px 12px;
+    border-radius:999px;
+    margin-bottom:18px;
+  }
+  .cat-badge.now{ color:var(--now-deep); background:var(--now-bg); }
+  .cat-badge.habit{ color:var(--habit-deep); background:var(--habit-bg); }
+  .cat-badge .dot{ width:7px; height:7px; border-radius:50%; }
+  .cat-badge.now .dot{ background:var(--now); }
+  .cat-badge.habit .dot{ background:var(--habit); }
+
+  /* ---------- Card ---------- */
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:30px 28px;
+    animation:fadeSlide 0.3s ease both;
+  }
+  @keyframes fadeSlide{
+    from{ opacity:0; transform:translateY(6px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  .qtext{
+    font-family:var(--f-display);
+    font-weight:600;
+    font-size:clamp(1.2rem, 3.4vw, 1.42rem);
+    line-height:1.5;
+    margin:0 0 26px;
+    color:var(--ink);
+  }
+  .qtext .blank-hint{
+    font-family:var(--f-mono);
+    font-size:0.78em;
+    color:var(--ink-faint);
+    font-style:normal;
+  }
+
+  .options{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-bottom:6px;
+  }
+  .option{
+    text-align:left;
+    background:#FBFBFA;
+    border:1.5px solid var(--border);
+    color:var(--ink);
+    padding:14px 16px;
+    border-radius:11px;
+    font-size:0.98rem;
+    font-family:var(--f-body);
+    display:flex;
+    align-items:center;
+    gap:12px;
+    transition:border-color 0.12s ease, background 0.12s ease;
+  }
+  .option:hover:not(:disabled){ border-color:var(--ink-faint); }
+  .option:focus-visible{ outline:2px solid var(--now); outline-offset:2px; }
+  .option.selected{ border-color:var(--ink); background:#F1F0EC; }
+  .option.correct{ border-color:var(--correct); background:var(--correct-bg); color:var(--correct-deep, var(--ink)); font-weight:600; }
+  .option.incorrect{ border-color:var(--incorrect); background:var(--incorrect-bg); }
+  .option:disabled{ cursor:default; }
+  .opt-letter{
+    font-family:var(--f-mono);
+    font-size:0.74rem;
+    color:var(--ink-faint);
+    border:1px solid var(--border);
+    border-radius:50%;
+    width:20px; height:20px;
+    flex:none;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .option.correct .opt-letter{ border-color:var(--correct); color:var(--correct); }
+  .option.incorrect .opt-letter{ border-color:var(--incorrect); color:var(--incorrect); }
+
+  .feedback{
+    margin-top:20px;
+    padding:16px 18px;
+    border-radius:11px;
+    font-size:0.9rem;
+    line-height:1.6;
+    border:1px solid var(--border);
+    display:none;
+  }
+  .feedback.show{ display:block; animation:fadeSlide 0.25s ease both; }
+  .feedback.correct{ background:var(--correct-bg); border-color:rgba(62,128,121,0.35); color:var(--habit-deep); }
+  .feedback.incorrect{ background:var(--incorrect-bg); border-color:rgba(184,92,78,0.35); color:#7A3B31; }
+  .feedback-label{
+    font-family:var(--f-mono);
+    font-size:0.7rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    display:block;
+    margin-bottom:6px;
+  }
+
+  .actions{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:24px;
+  }
+
+  /* ---------- Results ---------- */
+  .score-hero{ text-align:center; padding:8px 0 26px; }
+  .score-num{
+    font-family:var(--f-display);
+    font-size:3.6rem;
+    font-weight:600;
+    line-height:1;
+    color:var(--ink);
+  }
+  .score-num span{ font-size:1.6rem; color:var(--ink-faint); font-weight:500; }
+  .band{
+    margin-top:12px;
+    font-size:1rem;
+    color:var(--ink-soft);
+    max-width:44ch;
+    margin-left:auto; margin-right:auto;
+    line-height:1.55;
+  }
+
+  .cat-breakdown{
+    display:flex;
+    gap:12px;
+    margin:24px 0 8px;
+  }
+  .cat-row{
+    flex:1;
+    border:1px solid var(--border);
+    border-radius:11px;
+    padding:14px 16px;
+    background:#FBFBFA;
+  }
+  .cat-row-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-family:var(--f-mono);
+    font-size:0.72rem;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    margin-bottom:9px;
+  }
+  .cat-row.now .cat-row-top{ color:var(--now-deep); }
+  .cat-row.habit .cat-row-top{ color:var(--habit-deep); }
+  .bar-track{ height:6px; background:var(--border); border-radius:4px; overflow:hidden; }
+  .bar-fill{ height:100%; border-radius:4px; }
+
+  hr.div{ border:none; border-top:1px solid var(--border); margin:28px 0 22px; }
+
+  .review-title{
+    font-family:var(--f-display);
+    font-size:1.2rem;
+    font-weight:600;
+    margin:0 0 4px;
+  }
+  .review-sub{ font-size:0.87rem; color:var(--ink-soft); margin:0 0 18px; }
+
+  .review-item{
+    border:1px solid var(--border);
+    border-radius:11px;
+    padding:18px 20px;
+    margin-bottom:12px;
+    background:#FBFBFA;
+  }
+  .review-q{
+    font-family:var(--f-display);
+    font-size:1.05rem;
+    line-height:1.5;
+    margin:8px 0 12px;
+  }
+  .review-row{ font-size:0.85rem; margin:3px 0; }
+  .review-row .lbl{ color:var(--ink-soft); margin-right:6px; }
+  .review-row .val.correct{ color:var(--correct); font-weight:600; }
+  .review-row .val.incorrect{ color:var(--incorrect); font-weight:600; text-decoration:line-through; text-decoration-color:var(--incorrect); }
+  .review-explain{
+    margin-top:12px;
+    padding-top:12px;
+    border-top:1px solid var(--border);
+    font-size:0.85rem;
+    color:var(--ink-soft);
+    line-height:1.6;
+  }
+  .all-correct-note{ text-align:center; font-size:0.92rem; color:var(--ink-soft); padding:18px 0; }
+
+  .result-actions{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    margin-top:28px;
+    flex-wrap:wrap;
+  }
+
+  footer.page-foot{
+    text-align:center;
+    margin-top:22px;
+    font-size:0.76rem;
+    color:var(--ink-faint);
+  }
+
+  @media (max-width:480px){
+    .card{ padding:24px 20px; }
+    .cat-breakdown{ flex-direction:column; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="top-link" href="index.html">&larr; All quizzes</a>
+  <div id="app"></div>
+  <footer class="page-foot">Original practice items on present simple vs. present continuous &middot; A2</footer>
+</div>
+
+<script>
+const CATEGORIES = {
+  now:   { name: "Right Now", color: "var(--now)",   deep: "var(--now-deep)"   },
+  habit: { name: "Every Day", color: "var(--habit)", deep: "var(--habit-deep)" }
+};
+
+const QUESTIONS = [
+  {
+    cat: "now",
+    text: "Shh, please be quiet — I ______ to your father on the phone.",
+    options: ["talk", "am talking", "talks", "do talk"],
+    correct: 1,
+    explain: "The action is happening right now, at the moment of speaking, so we use the present continuous: <em>am talking</em>."
+  },
+  {
+    cat: "habit",
+    text: "My sister ______ coffee at all — she only drinks tea.",
+    options: ["isn't liking", "not like", "doesn't like", "don't like"],
+    correct: 2,
+    explain: "<em>Like</em> is a state verb (a feeling, not an action), so it isn't normally used in the continuous. With <em>she</em>, the negative form is <em>doesn't like</em>."
+  },
+  {
+    cat: "now",
+    text: "Look out of the window! Those clouds ______ very dark.",
+    options: ["get", "gets", "are getting", "is getting"],
+    correct: 2,
+    explain: "\u2018Look!\u2019 signals something changing right now, so we need the present continuous. With <em>clouds</em> (plural), the verb is <em>are getting</em>."
+  },
+  {
+    cat: "habit",
+    text: "How often ______ your grandparents?",
+    options: ["do you visit", "are you visiting", "you visit", "does you visit"],
+    correct: 0,
+    explain: "<em>How often</em> asks about a routine or frequency, so we use the present simple question form: <em>do you visit</em>."
+  },
+  {
+    cat: "now",
+    text: "\u2018Where's Maria?\u2019 \u2018She ______ a shower — can you call back later?\u2019",
+    options: ["has", "is having", "have", "having"],
+    correct: 1,
+    explain: "Maria is in the middle of the action at this moment, so we use the present continuous: <em>is having</em> a shower."
+  },
+  {
+    cat: "habit",
+    text: "Water ______ at 100 degrees Celsius at sea level.",
+    options: ["is boiling", "boil", "boils", "boiling"],
+    correct: 2,
+    explain: "This is a permanent, general fact — always true, not just happening now — so we use the present simple: <em>boils</em>."
+  },
+  {
+    cat: "now",
+    text: "I can't come to the phone right now, I ______ dinner.",
+    options: ["cook", "cooks", "am cooking", "do cook"],
+    correct: 2,
+    explain: "\u2018Right now\u2019 tells us the action is in progress at this exact moment, so the present continuous <em>am cooking</em> is correct."
+  },
+  {
+    cat: "habit",
+    text: "He ______ breakfast before work — he says there's never enough time.",
+    options: ["never eats", "is never eating", "never eat", "doesn't never eat"],
+    correct: 0,
+    explain: "This describes a repeated habit, so we use the present simple. With <em>he</em>, the verb takes -s: <em>never eats</em>."
+  },
+  {
+    cat: "now",
+    text: "Who's that woman by the door? She ______ a bright yellow coat.",
+    options: ["wears", "is wearing", "wear", "does wear"],
+    correct: 1,
+    explain: "We're describing what someone is wearing at this moment (not a permanent habit), so English uses the present continuous: <em>is wearing</em>."
+  },
+  {
+    cat: "habit",
+    text: "______ this train ______ at every station?",
+    options: ["Is / stopping", "Does / stop", "Do / stop", "Is / stop"],
+    correct: 1,
+    explain: "This asks about the train's usual route or timetable — a general fact — so it needs the present simple question form: <em>Does it stop</em>."
+  },
+  {
+    cat: "now",
+    text: "______ you ______ to me? I've asked you three times already!",
+    options: ["Do / listen", "Are / listening", "Do / listening", "Does / listen"],
+    correct: 1,
+    explain: "This is frustration about something happening right now, so the present continuous question form is needed: <em>Are you listening</em>."
+  },
+  {
+    cat: "habit",
+    text: "I ______ exactly how you feel — I went through the same thing last year.",
+    options: ["am knowing", "know", "knows", "am know"],
+    correct: 1,
+    explain: "<em>Know</em> is a state verb (knowledge, not an action in progress), so it stays in the present simple: <em>know</em>."
+  },
+  {
+    cat: "now",
+    text: "The children ______ their homework right now — they're watching TV instead.",
+    options: ["don't do", "not doing", "aren't doing", "doesn't do"],
+    correct: 2,
+    explain: "\u2018Right now\u2019 points to the present moment, so the negative present continuous is needed: <em>aren't doing</em>."
+  },
+  {
+    cat: "habit",
+    text: "She ______ the office at six most days.",
+    options: ["is usually leaving", "usually leaves", "usually leave", "leaves usually"],
+    correct: 1,
+    explain: "This is a routine (\u2018most days\u2019), so it takes the present simple. Note the word order: the adverb <em>usually</em> goes before the main verb — <em>usually leaves</em>."
+  },
+  {
+    cat: "now",
+    text: "What ______ this weekend? Have you made any plans yet?",
+    options: ["do you do", "are you doing", "you are doing", "does you do"],
+    correct: 1,
+    explain: "This asks about a fixed plan or arrangement for a specific future time, which English also expresses with the present continuous: <em>are you doing</em>."
+  },
+  {
+    cat: "habit",
+    text: "We ______ French very well, so please speak slowly with us.",
+    options: ["aren't speaking", "not speak", "don't speak", "doesn't speak"],
+    correct: 2,
+    explain: "This describes a general ability/fact about the speakers, not a single moment, so it needs the present simple negative: <em>don't speak</em>."
+  }
+];
+
+const state = {
+  screen: 'start',
+  index: 0,
+  selected: null,
+  answers: new Array(QUESTIONS.length).fill(null)
+};
+
+function letterFor(i){ return ['A','B','C','D'][i]; }
+
+function renderMark(){
+  return `
+    <div class="mark">
+      <svg viewBox="0 0 64 64" fill="none">
+        <circle cx="24" cy="24" r="15" stroke="var(--now)" stroke-width="2.2"/>
+        <line x1="24" y1="24" x2="24" y2="15" stroke="var(--now)" stroke-width="2.2" stroke-linecap="round"/>
+        <line x1="24" y1="24" x2="30" y2="27" stroke="var(--now)" stroke-width="2.2" stroke-linecap="round"/>
+        <path d="M42 40a11 11 0 1 1 -3.2-7.8" stroke="var(--habit)" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        <path d="M38 32 L43 32.5 L42 27.5" stroke="var(--habit)" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>`;
+}
+
+function renderStart(){
+  return `
+    ${renderMark()}
+    <header>
+      <p class="eyebrow">A2 &middot; Use of English</p>
+      <h1>Is it happening <span class="accent-now">now</span>,<br>or is it <span class="accent-habit">always</span> true?</h1>
+      <p class="lede">Sixteen short exchanges. In each one, decide whether the missing verb describes an action in progress, or a routine, fact, or habit — then pick the correct form.</p>
+    </header>
+    <div class="legend">
+      <span class="legend-chip now"><span class="dot"></span>Right Now — present continuous</span>
+      <span class="legend-chip habit"><span class="dot"></span>Every Day — present simple</span>
+    </div>
+    <div class="start-actions">
+      <button class="btn-primary" onclick="startQuiz()">Start the quiz &rarr;</button>
+    </div>
+  `;
+}
+
+function renderPath(){
+  let html = '<div class="path">';
+  QUESTIONS.forEach((q, i) => {
+    const ans = state.answers[i];
+    let cls = 'node';
+    if (i === state.index && !ans) cls += ' current';
+    if (ans) cls += ans.correct ? ' correct' : ' incorrect';
+    html += `<div class="${cls}" title="Question ${i+1}"></div>`;
+    if (i < QUESTIONS.length - 1){
+      html += `<div class="node-link${ans ? ' done' : ''}"></div>`;
+    }
+  });
+  html += '</div>';
+  return html;
+}
+
+function renderQuestion(){
+  const q = QUESTIONS[state.index];
+  const cat = CATEGORIES[q.cat];
+  const ans = state.answers[state.index];
+  const checked = !!ans;
+
+  const optionsHtml = q.options.map((opt, i) => {
+    let cls = 'option';
+    let disabled = checked ? 'disabled' : '';
+    if (checked){
+      if (i === q.correct) cls += ' correct';
+      else if (i === ans.selected) cls += ' incorrect';
+    } else if (i === state.selected){
+      cls += ' selected';
+    }
+    return `<button class="${cls}" ${disabled} onclick="selectOption(${i})">
+      <span class="opt-letter">${letterFor(i)}</span><span>${opt}</span>
+    </button>`;
+  }).join('');
+
+  const isLast = state.index === QUESTIONS.length - 1;
+  const actionLabel = checked ? (isLast ? 'See results \u2192' : 'Next question \u2192') : 'Check answer';
+  const actionHandler = checked ? 'goNext()' : 'checkAnswer()';
+  const actionDisabled = (!checked && state.selected === null) ? 'disabled' : '';
+  const prevDisabled = state.index === 0 ? 'disabled' : '';
+
+  let feedbackHtml = '';
+  if (checked){
+    feedbackHtml = `
+      <div class="feedback show ${ans.correct ? 'correct' : 'incorrect'}">
+        <span class="feedback-label">${ans.correct ? 'Correct' : 'Not quite'}</span>
+        ${q.explain}
+      </div>`;
+  }
+
+  return `
+    ${renderPath()}
+    <div class="topline">
+      <span>Question ${state.index + 1} of ${QUESTIONS.length}</span>
+      <span>Score so far: ${state.answers.filter(a => a && a.correct).length}</span>
+    </div>
+    <span class="cat-badge ${q.cat}"><span class="dot"></span>${cat.name}</span>
+    <div class="card">
+      <p class="qtext">${q.text}</p>
+      <div class="options">${optionsHtml}</div>
+      ${feedbackHtml}
+      <div class="actions">
+        <button class="btn-ghost" ${prevDisabled} onclick="goPrev()">&larr; Previous</button>
+        <button class="btn-primary" ${actionDisabled} onclick="${actionHandler}">${actionLabel}</button>
+      </div>
+    </div>
+  `;
+}
+
+function scoreByCategory(){
+  const out = {};
+  Object.keys(CATEGORIES).forEach(k => out[k] = {correct:0, total:0});
+  QUESTIONS.forEach((q, i) => {
+    out[q.cat].total++;
+    if (state.answers[i] && state.answers[i].correct) out[q.cat].correct++;
+  });
+  return out;
+}
+
+function bandMessage(score, total){
+  const pct = score/total;
+  if (pct >= 0.87) return "Excellent \u2014 you're reading the time clues (\u2018right now\u2019, \u2018usually\u2019, \u2018look!\u2019) accurately and picking the right form almost every time.";
+  if (pct >= 0.6) return "Solid overall, with a specific gap worth targeting. Check the breakdown below to see whether it's the continuous or the simple form that needs more practice.";
+  return "A useful starting point. Go back through the explanations \u2014 the key is spotting whether a sentence describes a moment in progress or a repeated routine.";
+}
+
+function renderResults(){
+  const total = QUESTIONS.length;
+  const score = state.answers.filter(a => a && a.correct).length;
+  const byCat = scoreByCategory();
+
+  const rows = Object.entries(byCat).map(([key, v]) => {
+    const cat = CATEGORIES[key];
+    const pct = Math.round((v.correct / v.total) * 100);
+    return `
+      <div class="cat-row ${key}">
+        <div class="cat-row-top">
+          <span>${cat.name}</span>
+          <span>${v.correct}/${v.total}</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width:${pct}%; background:${cat.color}"></div></div>
+      </div>`;
+  }).join('');
+
+  return `
+    ${renderMark()}
+    <div class="score-hero">
+      <p class="eyebrow" style="text-align:center;">Results</p>
+      <div class="score-num">${score}<span> / ${total}</span></div>
+      <p class="band">${bandMessage(score, total)}</p>
+    </div>
+    <div class="cat-breakdown">${rows}</div>
+    <div class="result-actions">
+      <button class="btn-primary" onclick="showReview()">Review every answer</button>
+      <button class="btn-ghost" onclick="restartQuiz()">Retry quiz</button>
+    </div>
+  `;
+}
+
+function renderReview(){
+  const items = QUESTIONS.map((q, i) => {
+    const ans = state.answers[i];
+    const cat = CATEGORIES[q.cat];
+    return `
+      <div class="review-item">
+        <span class="cat-badge ${q.cat}"><span class="dot"></span>${cat.name} &middot; Q${i+1}</span>
+        <p class="review-q">${q.text}</p>
+        <div class="review-row"><span class="lbl">Your answer:</span><span class="val ${ans.correct ? 'correct' : 'incorrect'}">${q.options[ans.selected]}</span></div>
+        ${!ans.correct ? `<div class="review-row"><span class="lbl">Correct answer:</span><span class="val correct">${q.options[q.correct]}</span></div>` : ''}
+        <div class="review-explain">${q.explain}</div>
+      </div>`;
+  }).join('');
+
+  return `
+    <p class="eyebrow" style="text-align:center;">Full review</p>
+    <h1 style="text-align:center; font-size:1.9rem;">Every answer, explained</h1>
+    <div style="margin:24px 0;">${items}</div>
+    <div class="result-actions">
+      <button class="btn-ghost" onclick="restartQuiz()">Retry quiz</button>
+    </div>
+  `;
+}
+
+function render(){
+  const app = document.getElementById('app');
+  if (state.screen === 'start') app.innerHTML = renderStart();
+  else if (state.screen === 'question') app.innerHTML = renderQuestion();
+  else if (state.screen === 'results') app.innerHTML = renderResults();
+  else if (state.screen === 'review') app.innerHTML = renderReview();
+  window.scrollTo({top:0, behavior:'instant'});
+}
+
+function shuffleOptions(){
+  QUESTIONS.forEach(q => {
+    const correctValue = q.options[q.correct];
+    for (let i = q.options.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [q.options[i], q.options[j]] = [q.options[j], q.options[i]];
+    }
+    q.correct = q.options.indexOf(correctValue);
+  });
+}
+shuffleOptions();
+
+function startQuiz(){
+  state.screen = 'question';
+  state.index = 0;
+  render();
+}
+
+function selectOption(i){
+  if (state.answers[state.index]) return;
+  state.selected = i;
+  render();
+}
+
+function checkAnswer(){
+  if (state.selected === null) return;
+  const q = QUESTIONS[state.index];
+  state.answers[state.index] = { selected: state.selected, correct: state.selected === q.correct };
+  render();
+}
+
+function goNext(){
+  if (state.index < QUESTIONS.length - 1){
+    state.index++;
+    state.selected = null;
+    state.screen = 'question';
+  } else {
+    state.screen = 'results';
+  }
+  render();
+}
+
+function goPrev(){
+  if (state.index === 0) return;
+  state.index--;
+  state.selected = null;
+  state.screen = 'question';
+  render();
+}
+
+function showReview(){
+  state.screen = 'review';
+  render();
+}
+
+function restartQuiz(){
+  state.index = 0;
+  state.selected = null;
+  state.answers = new Array(QUESTIONS.length).fill(null);
+  state.screen = 'start';
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
