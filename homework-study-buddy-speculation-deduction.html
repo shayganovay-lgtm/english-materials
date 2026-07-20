@@ -1444,7 +1444,7 @@ const flow=[
   {
     q:"The disbursement hasn't arrived. What could have happened?",
     r(a){ const l=a.toLowerCase();
-      if(l.match(/must|can't|cannot|may|might|could/)) return '✅ Nice — that's a clear deduction. ';
+      if(l.match(/must|can't|cannot|may|might|could/)) return "✅ Nice — that's a clear deduction. ";
       return '🤔 Use could have / might have + past participle for a possibility. '; },
     tip:"💡 Tip: 'The bank might have delayed it.' / 'It could have gone to the wrong account.'"
   },
