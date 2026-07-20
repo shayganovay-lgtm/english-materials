@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Homework for Study Buddy — Speculation & Deduction</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #ffffff;
+      color: #2d2d2d;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    /* ─── STICKY PROGRESS BAR ──────────────────── */
+    #sticky-bar {
+      position: sticky; top: 0; z-index: 200;
+      background: #fff;
+      border-bottom: 1px solid #e5e8f0;
+      padding: 10px 20px;
+      display: flex; align-items: center; gap: 14px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }
+    #prog-text { font-size: 12px; font-weight: 600; color: #666; white-space: nowrap; min-width: 168px; }
+    #prog-track { flex: 1; height: 7px; background: #e8ecf8; border-radius: 4px; overflow: hidden; }
+    #prog-fill { height: 100%; background: linear-gradient(90deg,#3B6BEB,#7c5af4); border-radius: 4px; width: 0%; transition: width .5s ease; }
+    #score-badge { font-size: 13px; font-weight: 700; color: #3B6BEB; white-space: nowrap; background: #EEF2FF; padding: 4px 12px; border-radius: 20px; }
+
+    /* ─── HERO ──────────────────────────────────── */
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr;
+      min-height: 420px;
+      border-bottom: 1px solid #e5e8f0;
+    }
+    .hero-panel {
+      position: relative;
+      padding: 56px 44px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      overflow: hidden;
+    }
+    .hero-left  { background:#EFEEEC; }
+
+    .hero-eyebrow {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: #9c9890;
+      margin-bottom: 10px;
+    }
+    .hero-title {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-weight: 800;
+      font-size: clamp(34px, 5vw, 52px);
+      color: #6C63C9;
+      letter-spacing: -0.01em;
+      line-height: 1.05;
+      margin-bottom: 8px;
+    }
+    .hero-sub {
+      font-size: 14px;
+      color: #6b7280;
+      max-width: 38ch;
+      margin-bottom: 30px;
+    }
+
+    .hero-btn-stack { display:flex; flex-direction:column; gap:12px; max-width:340px; }
+    .hero-btn {
+      display:flex; align-items:center; justify-content:space-between;
+      gap:14px;
+      border:2.5px solid #1c1917;
+      border-radius:999px;
+      padding:14px 10px 14px 24px;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-weight:700;
+      font-size:17px;
+      color:#3f3a35;
+      cursor:pointer;
+      text-decoration:none;
+      background:#fff;
+      transition: transform .15s ease, box-shadow .15s ease;
+      box-shadow: 3px 3px 0 rgba(28,25,23,0.12);
+    }
+    .hero-btn:hover { transform: translate(-2px,-2px); box-shadow: 5px 5px 0 rgba(28,25,23,0.16); }
+    .hero-btn:active { transform: translate(0,0); box-shadow: 1px 1px 0 rgba(28,25,23,0.16); }
+    .hero-btn-icon {
+      width:36px; height:36px; border-radius:50%;
+      border:2.5px solid #1c1917;
+      background:#fff;
+      display:flex; align-items:center; justify-content:center;
+      flex-shrink:0;
+    }
+    .hero-btn.primary { background:#E3E4B9; }
+    .hero-btn.secondary { background:#DCC9F0; }
+    .hero-btn:disabled { opacity:.55; cursor:default; box-shadow:none; }
+    .hero-btn:disabled:hover { transform:none; }
+
+    .hero-illustration { position:absolute; }
+    .hero-illustration.left-ill  { width:300px; bottom:36px; right:28px; }
+    .hero-illustration svg { width:100%; height:auto; display:block; }
+
+    @media (max-width: 880px){
+      .hero-panel { padding: 40px 26px; min-height:auto; }
+      .hero-illustration.left-ill  { position:static; width:220px; margin:20px auto 0; }
+      .hero-btn-stack { max-width:100%; }
+    }
+
+    /* ─── HOMEWORK CONTENT (hidden until started) ───────── */
+    #hw-content { display: none; }
+    #hw-content.visible {
+      display: block;
+      animation: hwFadeIn .4s ease both;
+    }
+    @keyframes hwFadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── LAYOUT ────────────────────────────────── */
+    .container { max-width:760px; margin:0 auto; padding:28px 16px 60px; }
+
+    /* ─── CARDS ─────────────────────────────────── */
+    .card {
+      background:#fff; border:1.5px solid #e5e8f0; border-radius:18px;
+      padding:28px; margin-bottom:24px;
+      box-shadow:0 3px 16px rgba(59,107,235,.05);
+      transition:box-shadow .2s;
+    }
+    .card:hover { box-shadow:0 6px 24px rgba(59,107,235,.1); }
+    .card.reflection { background:linear-gradient(135deg,#f8f0ff,#eef2ff); border-color:#c7d5f8; }
+
+    /* ─── CARD HEAD ─────────────────────────────── */
+    .card-head { display:flex; align-items:flex-start; gap:14px; margin-bottom:22px; }
+    .c-icon { width:46px; height:46px; border-radius:12px; background:#EEF2FF; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; }
+    .c-text { flex:1; }
+    .c-title { font-size:18px; font-weight:700; color:#111827; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+    .tnum { display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; background:#3B6BEB; color:#fff; font-size:12px; font-weight:700; flex-shrink:0; }
+    .c-sub { font-size:13px; color:#9ca3af; margin-top:3px; }
+    .done-badge { display:none; align-items:center; gap:4px; background:#dcfce7; color:#15803d; font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; border:1px solid #86efac; margin-left:auto; flex-shrink:0; white-space:nowrap; }
+    .done-badge.on { display:inline-flex; }
+
+    /* ─── INSTRUCTION ───────────────────────────── */
+    .instr { background:#f0f4ff; border-left:4px solid #3B6BEB; border-radius:0 10px 10px 0; padding:13px 16px; font-size:14px; color:#374151; margin-bottom:22px; line-height:1.65; }
+
+    /* ─── DIVIDER ───────────────────────────────── */
+    .hr { border:none; border-top:1px solid #e5e8f0; margin:4px 0 20px; }
+
+    /* ─── INPUTS ────────────────────────────────── */
+    input[type="text"], textarea {
+      border:2px solid #dde2f0; border-radius:10px; padding:10px 14px;
+      font-size:15px; font-family:inherit; outline:none;
+      width:100%; background:#fafbff; color:#111827;
+      transition:border-color .2s, background .2s, box-shadow .2s;
+    }
+    input[type="text"]:focus, textarea:focus {
+      border-color:#3B6BEB; background:#fff; box-shadow:0 0 0 3px rgba(59,107,235,.1);
+    }
+    input.ok, textarea.ok  { border-color:#22c55e !important; background:#f0fdf4 !important; }
+    input.bad, textarea.bad { border-color:#ef4444 !important; background:#fff5f5 !important; }
+    textarea  { resize:vertical; min-height:80px; }
+
+    /* ─── BUTTONS ───────────────────────────────── */
+    .btn {
+      display:inline-flex; align-items:center; justify-content:center; gap:6px;
+      padding:10px 22px; border-radius:10px; font-size:14px; font-weight:600;
+      cursor:pointer; border:none; transition:all .15s; user-select:none; font-family:inherit;
+    }
+    .btn:active { transform:scale(.97); }
+    .btn-p  { background:#3B6BEB; color:#fff; box-shadow:0 2px 10px rgba(59,107,235,.3); }
+    .btn-p:hover { background:#2d5cd4; }
+    .btn-p:disabled { background:#a0aec0; cursor:not-allowed; box-shadow:none; }
+    .btn-o  { background:#fff; color:#3B6BEB; border:2px solid #c7d5f8; }
+    .btn-o:hover { background:#EEF2FF; }
+    .btn-spin {
+      background:linear-gradient(135deg,#3B6BEB,#7c5af4); color:#fff;
+      padding:13px 32px; font-size:16px; border-radius:14px;
+      box-shadow:0 4px 18px rgba(59,107,235,.4);
+    }
+    .btn-spin:hover { box-shadow:0 6px 22px rgba(59,107,235,.5); }
+    .btn-spin:disabled { background:#a0aec0; cursor:not-allowed; box-shadow:none; }
+    .btn-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:18px; }
+
+    /* ─── FEEDBACK ──────────────────────────────── */
+    .fb { display:none; padding:9px 14px; border-radius:8px; font-size:13px; margin-top:8px; line-height:1.5; }
+    .fb.ok  { display:block; background:#f0fdf4; color:#166534; border:1px solid #bbf7d0; }
+    .fb.err { display:block; background:#fff5f5; color:#991b1b; border:1px solid #fecaca; }
+
+    /* ─── SHOW ANSWER / RULE ────────────────────── */
+    .show-btn { background:none; border:1.5px dashed #c4c9d9; color:#9ca3af; border-radius:7px; padding:5px 14px; font-size:12px; cursor:pointer; margin-top:8px; transition:all .2s; font-family:inherit; }
+    .show-btn:hover { border-color:#3B6BEB; color:#3B6BEB; }
+    .ans { display:none; background:#f0fdf4; border:1px solid #bbf7d0; color:#166534; border-radius:8px; padding:9px 14px; font-size:13px; margin-top:8px; line-height:1.5; }
+    .ans.on { display:block; }
+
+    /* ─── RULE COLLAPSIBLE (Grammar discovery) ── */
+    .rule-box { display:none; background:#eef2ff; border:1.5px solid #c7d5f8; border-radius:12px; padding:16px 18px; margin-top:14px; font-size:14px; color:#1a1a2e; line-height:1.6; }
+    .rule-box.on { display:block; animation: hwFadeIn .3s ease both; }
+    .rule-box h4 { color:#3B6BEB; font-size:15px; margin-bottom:8px; }
+    .rule-box ul { margin:6px 0 0 18px; }
+    .rule-box li { margin-bottom:4px; }
+    .rule-box .pill { display:inline-block; background:#3B6BEB; color:#fff; border-radius:999px; padding:1px 9px; font-size:12px; font-weight:700; margin:0 2px; }
+
+    /* ─── GRAMMAR SUMMARY CARDS ─────────────────── */
+    .gs-card { border:1.5px solid #e5e8f0; border-radius:12px; margin-bottom:10px; overflow:hidden; }
+    .gs-head { padding:12px 16px; background:#fafbff; cursor:pointer; font-weight:700; color:#3B6BEB; display:flex; justify-content:space-between; align-items:center; }
+    .gs-head:hover { background:#EEF2FF; }
+    .gs-body { display:none; padding:14px 16px; font-size:14px; color:#374151; line-height:1.6; border-top:1px solid #e5e8f0; }
+    .gs-body.on { display:block; }
+    .gs-arrow { transition:transform .2s; }
+    .gs-card.open .gs-arrow { transform:rotate(180deg); }
+
+    /* ─── DISCOVERY examples ────────────────────── */
+    .ex-list { display:flex; flex-direction:column; gap:9px; margin-bottom:16px; }
+    .ex-item { background:#fafbff; border:1.5px solid #e5e8f0; border-radius:10px; padding:11px 14px; font-size:14px; line-height:1.55; }
+    .ex-item .hl { background:#e0e9ff; color:#2451c7; padding:1px 5px; border-radius:4px; font-weight:600; }
+    .disc-q-mini { font-size:14px; font-weight:600; color:#111827; margin:4px 0 6px; }
+    .mini-opts { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
+    .mini-opt { border:2px solid #dde2f0; background:#fafbff; border-radius:9px; padding:7px 14px; font-size:13px; font-weight:600; cursor:pointer; transition:all .15s; font-family:inherit; color:#4b5563; }
+    .mini-opt:hover { border-color:#3B6BEB; color:#3B6BEB; background:#EEF2FF; }
+    .mini-opt.correct { border-color:#22c55e !important; background:#f0fdf4; color:#15803d; }
+    .mini-opt.wrong { border-color:#ef4444 !important; background:#fff5f5; color:#991b1b; }
+
+    /* ─── WHEEL ─────────────────────────────────── */
+    #wheel-wrap  { text-align:center; }
+    #wheel-cv    { display:block; margin:0 auto 16px; border-radius:50%; box-shadow:0 8px 30px rgba(59,107,235,.2); }
+    #wheel-word  { font-size:18px; font-weight:800; color:#3B6BEB; min-height:36px; margin-bottom:16px; line-height:1.4; }
+    #wheel-empty { font-size:13px; color:#9ca3af; margin-top:6px; }
+
+    /* ─── FILL-IN-BLANKS ────────────────────────── */
+    .fib-row { display:flex; align-items:center; flex-wrap:wrap; gap:6px; font-size:15px; margin-bottom:6px; }
+    .fib-g   { margin-bottom:14px; }
+    .fib-in  { width:220px !important; text-align:center; padding:7px 6px !important; font-size:14px !important; flex-shrink:0; }
+
+    /* ─── MULTIPLE CHOICE ───────────────────────── */
+    .mc-item { margin-bottom:18px; }
+    .mc-lbl  { font-weight:600; font-size:14px; color:#111827; margin-bottom:8px; line-height:1.5; }
+    .mc-opts { display:flex; flex-direction:column; gap:8px; }
+    .mc-opt { border:2px solid #dde2f0; background:#fafbff; border-radius:9px; padding:9px 14px; font-size:14px; cursor:pointer; transition:all .15s; font-family:inherit; color:#4b5563; text-align:left; }
+    .mc-opt:hover { border-color:#3B6BEB; color:#3B6BEB; background:#EEF2FF; }
+    .mc-opt.correct { border-color:#22c55e !important; background:#f0fdf4; color:#15803d; font-weight:700; }
+    .mc-opt.wrong { border-color:#ef4444 !important; background:#fff5f5; color:#991b1b; }
+    .mc-opt.locked { cursor:default; }
+    .mc-fb { font-size:12px; margin-top:6px; color:#6b7280; }
+
+    /* ─── ERROR CORRECTION ──────────────────────── */
+    .err-item { margin-bottom:20px; }
+    .err-orig { font-style:italic; background:#fffbeb; border:1.5px solid #fde68a; border-radius:9px; padding:10px 14px; color:#78350f; font-size:14px; margin-bottom:8px; }
+    .err-orig .hl-err { background:#fde68a; color:#7c2d12; padding:1px 4px; border-radius:3px; font-weight:700; }
+    .err-lbl  { font-size:12px; color:#9ca3af; margin-bottom:6px; font-weight:500; }
+
+    /* ─── SENTENCE TRANSFORMATION ───────────────── */
+    .st-item { margin-bottom:20px; padding-bottom:14px; border-bottom:1px dashed #e5e8f0; }
+    .st-item:last-child { border-bottom:none; padding-bottom:0; }
+    .st-orig { font-size:14px; color:#374151; margin-bottom:6px; }
+    .st-arrow { font-size:18px; color:#3B6BEB; margin:4px 0; }
+    .st-ans { display:none; background:#f0fdf4; border:1px solid #bbf7d0; color:#166534; border-radius:8px; padding:9px 14px; font-size:13px; margin-top:8px; line-height:1.5; }
+    .st-ans.on { display:block; }
+
+    /* ─── READING ───────────────────────────────── */
+    .read-box { background:#f8f9ff; border:1.5px solid #dde2f0; border-radius:14px; padding:24px; font-size:15px; line-height:1.85; margin-bottom:26px; }
+    .read-box h3 { color:#3B6BEB; font-size:17px; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+    .read-box p { margin-bottom:12px; }
+    .read-box p:last-child { margin-bottom:0; }
+    .hl { background:#e0e9ff; color:#2451c7; padding:1px 5px; border-radius:4px; font-weight:600; }
+    .hl-mod { background:#fde68a; color:#7c2d12; padding:1px 5px; border-radius:4px; font-weight:700; }
+    .q-item { margin-bottom:20px; }
+    .q-lbl  { font-weight:600; font-size:14px; color:#111827; margin-bottom:8px; }
+    .tf-row { display:flex; gap:10px; }
+    .tf-btn { flex:1; padding:10px; border-radius:9px; border:2px solid #dde2f0; background:#fafbff; color:#4b5563; font-weight:600; font-size:14px; cursor:pointer; transition:all .15s; font-family:inherit; }
+    .tf-btn:hover { border-color:#3B6BEB; background:#EEF2FF; color:#3B6BEB; }
+
+    /* ─── CHATBOT ───────────────────────────────── */
+    #chat-box { border:2px solid #e5e8f0; border-radius:14px; overflow:hidden; }
+    #chat-msgs { padding:18px; min-height:220px; max-height:420px; overflow-y:auto; display:flex; flex-direction:column; gap:12px; background:#f8f9ff; }
+    .bubble { max-width:84%; border-radius:16px; padding:11px 15px; font-size:14px; line-height:1.55; white-space:pre-wrap; }
+    .b-t { background:#EEF2FF; color:#1a1a2e; align-self:flex-start; border-bottom-left-radius:4px; }
+    .b-s { background:#3B6BEB; color:#fff;    align-self:flex-end;   border-bottom-right-radius:4px; }
+    .b-tip { background:#fffbeb; border:1px solid #fde68a; color:#78350f; font-size:12px; align-self:flex-start; border-radius:10px; padding:7px 13px; max-width:90%; }
+    .b-dot { background:#EEF2FF; color:#9ca3af; align-self:flex-start; border-bottom-left-radius:4px; font-style:italic; font-size:13px; }
+    #chat-foot { border-top:2px solid #e5e8f0; padding:12px; display:flex; gap:10px; background:#fff; }
+    #chat-in { flex:1; border:2px solid #dde2f0; border-radius:9px; padding:10px 14px; font-size:14px; font-family:inherit; outline:none; color:#111827; background:#fafbff; }
+    #chat-in:focus { border-color:#3B6BEB; background:#fff; }
+    #chat-send { background:#3B6BEB; color:#fff; border:none; border-radius:9px; padding:10px 18px; font-weight:700; cursor:pointer; font-size:14px; font-family:inherit; }
+    #chat-send:hover { background:#2d5cd4; }
+
+    /* ─── DISCUSSION ────────────────────────────── */
+    .disc-q { margin-bottom:20px; }
+    .disc-q label { display:block; font-weight:600; color:#111827; font-size:14px; margin-bottom:8px; }
+    .disc-hint { font-size:12px; color:#9ca3af; margin-bottom:8px; }
+
+    /* ─── FLASHCARDS ────────────────────────────── */
+    .fc-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; }
+    .fc { perspective:1000px; height:170px; cursor:pointer; }
+    .fc-inner { position:relative; width:100%; height:100%; transition:transform .6s; transform-style:preserve-3d; }
+    .fc.flipped .fc-inner { transform:rotateY(180deg); }
+    .fc-face { position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden; border-radius:14px; padding:16px; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; box-shadow:0 3px 12px rgba(0,0,0,.08); }
+    .fc-front { background:#EEF2FF; border:2px solid #c7d5f8; color:#1a1a2e; }
+    .fc-back  { background:linear-gradient(135deg,#3B6BEB,#7c5af4); color:#fff; transform:rotateY(180deg); }
+    .fc-front-lbl { font-size:11px; color:#3B6BEB; font-weight:700; letter-spacing:.08em; text-transform:uppercase; margin-bottom:8px; }
+    .fc-front-text { font-size:15px; font-weight:600; line-height:1.4; }
+    .fc-back-lbl { font-size:11px; color:rgba(255,255,255,.75); letter-spacing:.08em; text-transform:uppercase; margin-bottom:6px; }
+    .fc-back-text { font-size:15px; font-weight:700; line-height:1.35; }
+    .fc-back-ex { font-size:12px; color:rgba(255,255,255,.9); margin-top:6px; font-style:italic; line-height:1.35; }
+
+    /* ─── REFLECTION ────────────────────────────── */
+    .refl-q { margin-bottom:20px; }
+    .refl-q label { display:block; font-weight:600; color:#3B6BEB; font-size:14px; margin-bottom:8px; }
+    .congrats { text-align:center; padding:24px; background:#fff; border-radius:14px; border:1.5px solid #c7d5f8; margin-top:20px; }
+    .congrats-em  { font-size:38px; margin-bottom:8px; }
+    .congrats-ttl { font-size:20px; font-weight:800; color:#3B6BEB; margin-bottom:4px; }
+    .congrats-sub { font-size:14px; color:#6b7280; }
+
+    /* ─── RESPONSE INPUTS THAT USER TYPES IN WHEEL ─ */
+    .wt-box { margin-top:22px; }
+
+    /* ─── RESPONSIVE ────────────────────────────── */
+    @media(max-width:600px){
+      .h-name { font-size:24px; }
+      .card { padding:20px 16px; }
+      .btn-row { flex-direction:column; }
+      #sticky-bar { padding:8px 14px; gap:10px; }
+      #prog-text  { min-width:unset; font-size:11px; }
+      .fib-in { width:150px !important; }
+      .fc { height:200px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ HERO ══════════════════════════════════════════════ -->
+<div class="hero" id="hero">
+
+  <div class="hero-panel hero-left">
+    <p class="hero-eyebrow">Study Buddy &middot; B2 &middot; <span id="hw-date"></span></p>
+    <h1 class="hero-title">Homework<br>Time</h1>
+    <p class="hero-sub">Today's focus: 🔎 Speculation &amp; Deduction with modal verbs (must / can't / may / might / could). Banking context. Nine tasks, one wheel spin to get you started.</p>
+
+    <div class="hero-btn-stack">
+      <button class="hero-btn primary" id="hero-start-btn" onclick="showTasks()">
+        <span>Start your homework</span>
+        <span class="hero-btn-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#1c1917" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </button>
+      <a class="hero-btn secondary" href="index.html">
+        <span class="hero-btn-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke="#1c1917" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span>Back to quizzes</span>
+      </a>
+    </div>
+
+    <div class="hero-illustration left-ill">
+      <svg viewBox="0 0 340 230" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="170" cy="208" rx="120" ry="10" fill="#1c1917" opacity="0.06"/>
+        <path d="M28 176c-10 2-14 12-8 20 4 6 12 8 20 8h44c10 0 14-10 8-18-6-8-16-10-26-10-14 0-28-2-38 0z" fill="#fff" stroke="#1c1917" stroke-width="4" stroke-linejoin="round"/>
+        <path d="M70 168c14-6 26-4 34 6" fill="none" stroke="#1c1917" stroke-width="4.5" stroke-linecap="round"/>
+        <path d="M66 150c-6-22 8-46 40-50 30-4 58 8 66 30 6 16-2 28-16 34-24 10-58 12-78 2-6-4-10-10-12-16z" fill="#3B6BEB" stroke="#1c1917" stroke-width="4.5" stroke-linejoin="round"/>
+        <path d="M162 132c26-2 46-18 56-42 4-10 8-22 16-30" fill="none" stroke="#1c1917" stroke-width="4.5" stroke-linecap="round"/>
+        <path d="M218 90c8-14 20-24 20-24s-4 14-10 26c-4 8-14 8-10-2z" fill="#fff" stroke="#1c1917" stroke-width="4" stroke-linejoin="round"/>
+        <path d="M150 138c22 4 42-6 56-26 8-12 14-26 24-32" fill="none" stroke="#1c1917" stroke-width="4.5" stroke-linecap="round"/>
+        <path d="M228 82c10-10 22-16 22-16s-6 12-14 22c-6 6-14 2-8-6z" fill="#fff" stroke="#1c1917" stroke-width="4" stroke-linejoin="round"/>
+        <circle cx="70" cy="120" r="30" fill="#fff" stroke="#1c1917" stroke-width="4.5"/>
+        <path d="M40 108c-8-16 2-34 20-38 4-10 16-16 28-12 14-8 32 0 34 16 12 2 18 16 12 26-4-10-14-14-22-12-10 6-24 6-32-2-10 4-20 2-26-6-6 8-10 18-14 28z" fill="#1c1917"/>
+        <circle cx="60" cy="126" r="2.6" fill="#1c1917"/>
+        <path d="M52 138c4 4 10 4 14 0" stroke="#1c1917" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+        <path d="M86 156c10-2 20 0 26 8 4 6 4 12 0 16" fill="none" stroke="#1c1917" stroke-width="4.5" stroke-linecap="round"/>
+        <rect x="44" y="164" width="30" height="20" rx="5" fill="#fff" stroke="#1c1917" stroke-width="4" transform="rotate(-8 44 164)"/>
+        <rect x="50" y="169" width="18" height="10" rx="2" fill="#3B6BEB" opacity="0.55" transform="rotate(-8 50 169)"/>
+        <text x="60" y="178" font-family="serif" font-size="9" font-weight="700" fill="#fff" transform="rotate(-8 50 169)">?</text>
+      </svg>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ HOMEWORK CONTENT (hidden until Start is pressed) ══ -->
+<div id="hw-content">
+
+<!-- ══ STICKY PROGRESS BAR ══════════════════════════════ -->
+<div id="sticky-bar">
+  <div id="prog-text">0 of 10 tasks done</div>
+  <div id="prog-track"><div id="prog-fill"></div></div>
+  <div id="score-badge">⭐ 0 pts</div>
+</div>
+
+<div class="container">
+
+  <!-- ══ WARM UP — WHEEL ═════════════════════════════ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="c-icon">🎡</div>
+      <div class="c-text">
+        <div class="c-title">Warm Up — Spin the Wheel!</div>
+        <div class="c-sub">Banking situation · make a deduction with a modal</div>
+      </div>
+    </div>
+    <div class="instr">
+      🎯 Click <strong>SPIN</strong> to get a banking situation. Then write a sentence about it using a modal of deduction
+      (<em>must have / can't have / may have / might have / could have</em> or
+      <em>must be / can't be / may be / might be / could be</em>). Each situation only appears once!
+    </div>
+    <div id="wheel-wrap">
+      <canvas id="wheel-cv" width="290" height="290"></canvas>
+      <div id="wheel-word">🎯 Click SPIN to get your situation!</div>
+      <button class="btn btn-spin" id="spin-btn" onclick="spinWheel()">🎲 SPIN!</button>
+      <div id="wheel-empty"></div>
+    </div>
+    <div class="wt-box">
+      <label style="display:block;font-weight:700;font-size:14px;margin-bottom:8px;">✍️ Your sentence with a modal:</label>
+      <textarea id="wheel-sent" placeholder="Write a deduction here…"></textarea>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TASK 1 — GRAMMAR DISCOVERY
+  ══════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="c-icon">🔍</div>
+      <div class="c-text">
+        <div class="c-title"><span class="tnum">1</span> Grammar Discovery</div>
+        <div class="c-sub">Look at the examples · guess the rule · then reveal it</div>
+      </div>
+      <div class="done-badge" id="bd-disc">✓ Done</div>
+    </div>
+    <div class="instr">
+      📌 Read the three examples below. Each one is a deduction about a banking problem.
+      Then answer the three questions. When you've guessed, click <strong>Show Rule</strong>.
+    </div>
+    <hr class="hr">
+
+    <div class="ex-list">
+      <div class="ex-item">A. "His <span class="hl">cash account</span> is at zero — he <span class="hl-mod">must have spent</span> everything before the weekend."</div>
+      <div class="ex-item">B. "The <span class="hl">disbursement</span> hasn't arrived yet — the bank <span class="hl-mod">might have delayed</span> it by a day."</div>
+      <div class="ex-item">C. "She retired last year — she <span class="hl-mod">can't be</span> still receiving a salary from her old employer."</div>
+    </div>
+
+    <div class="disc-q-mini">Q1. Which sentence (A, B or C) shows <strong>certainty</strong> (the speaker is sure)?</div>
+    <div class="mini-opts" data-ans="A">
+      <button class="mini-opt" onclick="checkDisc(this,'A')">A</button>
+      <button class="mini-opt" onclick="checkDisc(this,'A')">B</button>
+      <button class="mini-opt" onclick="checkDisc(this,'A')">C</button>
+    </div>
+
+    <div class="disc-q-mini">Q2. Which sentence shows <strong>possibility</strong> (the speaker isn't sure)?</div>
+    <div class="mini-opts" data-ans="B">
+      <button class="mini-opt" onclick="checkDisc(this,'B')">A</button>
+      <button class="mini-opt" onclick="checkDisc(this,'B')">B</button>
+      <button class="mini-opt" onclick="checkDisc(this,'B')">C</button>
+    </div>
+
+    <div class="disc-q-mini">Q3. Which sentence shows <strong>impossibility</strong> (the speaker is sure it's NOT true)?</div>
+    <div class="mini-opts" data-ans="C">
+      <button class="mini-opt" onclick="checkDisc(this,'C')">A</button>
+      <button class="mini-opt" onclick="checkDisc(this,'C')">B</button>
+      <button class="mini-opt" onclick="checkDisc(this,'C')">C</button>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-p" id="rule-btn" onclick="toggleRule()">👁 Show Rule</button>
+    </div>
+
+    <div class="rule-box" id="rule-box">
+      <h4>Grammar rule — Speculation &amp; Deduction</h4>
+      <p><strong>Certainty (sure it's true):</strong> <span class="pill">must</span> + verb &nbsp;or&nbsp; <span class="pill">must have</span> + past participle.</p>
+      <p style="margin-top:6px;"><strong>Impossibility (sure it's NOT true):</strong> <span class="pill">can't</span> + verb &nbsp;or&nbsp; <span class="pill">can't have</span> + past participle.</p>
+      <p style="margin-top:6px;"><strong>Possibility (not sure):</strong> <span class="pill">may</span> / <span class="pill">might</span> / <span class="pill">could</span> + verb &nbsp;or&nbsp; <span class="pill">may have</span> / <span class="pill">might have</span> / <span class="pill">could have</span> + past participle.</p>
+      <ul style="margin-top:8px;">
+        <li>Use the <em>plain form</em> (must <u>be</u>) for present situations.</li>
+        <li>Use <em>have + past participle</em> (must <u>have been</u>) for past deductions.</li>
+        <li><em>Can</em> is NOT used for positive deduction — only <em>must</em>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TASK 2 — FILL IN THE BLANKS
+  ══════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="c-icon">✍️</div>
+      <div class="c-text">
+        <div class="c-title"><span class="tnum">2</span> Fill in the Blanks</div>
+        <div class="c-sub">Complete each deduction with the correct modal</div>
+      </div>
+      <div class="done-badge" id="bd-fib">✓ Done</div>
+    </div>
+    <div class="instr">
+      📌 Type the missing modal phrase. Watch the tense — present (must <u>be</u>) or past (must <u>have been</u>).
+    </div>
+    <hr class="hr">
+
+    <div class="fib-g">
+      <div class="fib-row">
+        <span>1. The customer's balance is zero. He</span>
+        <input type="text" class="fib-in" id="f1" data-ans="must have spent" placeholder="___">
+        <span>all his savings.</span>
+      </div>
+      <div class="fb" id="f1fb"></div>
+    </div>
+
+    <div class="fib-g">
+      <div class="fib-row">
+        <span>2. There's no record of the transfer. The bank</span>
+        <input type="text" class="fib-in" id="f2" data-ans="might have made a mistake" placeholder="___">
+        <span>.</span>
+      </div>
+      <div class="fb" id="f2fb"></div>
+    </div>
+
+    <div class="fib-g">
+      <div class="fib-row">
+        <span>3. Her account is still active after she reported it closed. It</span>
+        <input type="text" class="fib-in" id="f3" data-ans="can't be" placeholder="___">
+        <span>closed properly.</span>
+      </div>
+      <div class="fb" id="f3fb"></div>
+    </div>
+
+    <div class="fib-g">
+      <div class="fib-row">
+        <span>4. The overdraft fee appeared today — someone</span>
+        <input type="text" class="fib-in" id="f4" data-ans="could have used" placeholder="___">
+        <span>the card overnight.</span>
+      </div>
+      <div class="fb" id="f4fb"></div>
+    </div>
+
+    <div class="fib-g">
+      <div class="fib-row">
+        <span>5. His <span class="hl">ROI</span> is huge this year. He</span>
+        <input type="text" class="fib-in" id="f5" data-ans="must have invested" placeholder="___">
+        <span>in the right fund.</span>
+      </div>
+      <div class="fb" id="f5fb"></div>
+    </div>
+
+    <div class="fib-g">
+      <div class="fib-row">
+        <span>6. The <span class="hl">margin account</span> is empty. He</span>
+        <input type="text" class="fib-in" id="f6" data-ans="may have depleted" placeholder="___">
+
+        <span>it last week.</span>
+      </div>
+      <div class="fb" id="f6fb"></div>
+    </div>
+
+    <div class="fib-g">
+      <div class="fib-row">
+        <span>7. The app shows the <span class="hl">yield</span> going up. It</span>
+        <input type="text" class="fib-in" id="f7" data-ans="might be" placeholder="___">
+        <span>recovering.</span>
+      </div>
+      <div class="fb" id="f7fb"></div>
+    </div>
+
+    <div class="fib-g">
+      <div class="fib-row">
+        <span>8. She hasn't logged in for a month, but she's never in <span class="hl">overdraft</span>. She</span>
+        <input type="text" class="fib-in" id="f8" data-ans="can't have spent" placeholder="___">
+        <span>more than she had.</span>
+      </div>
+      <div class="fb" id="f8fb"></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-p" onclick="checkFIB()">✔ Check Answers</button>
+      <button class="btn btn-o" onclick="resetFIB()">↺ Reset</button>
+    </div>
+    <div class="fb" id="fib-tot" style="margin-top:12px;"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TASK 3 — MULTIPLE CHOICE
+  ══════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="c-icon">🔘</div>
+      <div class="c-text">
+        <div class="c-title"><span class="tnum">3</span> Multiple Choice</div>
+        <div class="c-sub">Pick the best modal of deduction</div>
+      </div>
+      <div class="done-badge" id="bd-mc">✓ Done</div>
+    </div>
+    <div class="instr">📌 Choose the option that fits the level of certainty. One click per option — feedback appears below.</div>
+    <hr class="hr">
+
+    <div class="mc-item" data-q="1" data-ans="B">
+      <div class="mc-lbl">1. The bank hasn't replied to my complaint about the <span class="hl">disbursement</span>.</div>
+      <div class="mc-opts">
+        <button class="mc-opt" onclick="checkMC(this)">A. must have</button>
+        <button class="mc-opt" onclick="checkMC(this)">B. may have</button>
+        <button class="mc-opt" onclick="checkMC(this)">C. can't have</button>
+      </div>
+      <div class="mc-fb"></div>
+    </div>
+
+    <div class="mc-item" data-q="2" data-ans="C">
+      <div class="mc-lbl">2. His cash account is empty, but the last <span class="hl">transaction</span> was three months ago. He ___ spent the money recently.</div>
+      <div class="mc-opts">
+        <button class="mc-opt" onclick="checkMC(this)">A. must have</button>
+        <button class="mc-opt" onclick="checkMC(this)">B. might have</button>
+        <button class="mc-opt" onclick="checkMC(this)">C. can't have</button>
+      </div>
+      <div class="mc-fb"></div>
+    </div>
+
+    <div class="mc-item" data-q="3" data-ans="A">
+      <div class="mc-lbl">3. Her <span class="hl">savings account</span> grew by 30% in one year. She ___ a very good <span class="hl">yield</span>.</div>
+      <div class="mc-opts">
+        <button class="mc-opt" onclick="checkMC(this)">A. must have earned</button>
+        <button class="mc-opt" onclick="checkMC(this)">B. may have earned</button>
+        <button class="mc-opt" onclick="checkMC(this)">C. can't have earned</button>
+      </div>
+      <div class="mc-fb"></div>
+    </div>
+
+    <div class="mc-item" data-q="4" data-ans="B">
+      <div class="mc-lbl">4. The customer says he didn't <span class="hl">tap the account</span>, but the money is gone. Someone ___ the card.</div>
+      <div class="mc-opts">
+        <button class="mc-opt" onclick="checkMC(this)">A. must have</button>
+        <button class="mc-opt" onclick="checkMC(this)">B. could have used</button>
+        <button class="mc-opt" onclick="checkMC(this)">C. can't have used</button>
+      </div>
+      <div class="mc-fb"></div>
+    </div>
+
+    <div class="mc-item" data-q="5" data-ans="C">
+      <div class="mc-lbl">5. He <span class="hl">maxed out</span> his credit card and his <span class="hl">margin account</span>. He ___ careful with money.</div>
+      <div class="mc-opts">
+        <button class="mc-opt" onclick="checkMC(this)">A. must be</button>
+        <button class="mc-opt" onclick="checkMC(this)">B. might be</button>
+        <button class="mc-opt" onclick="checkMC(this)">C. can't be</button>
+      </div>
+      <div class="mc-fb"></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-o" onclick="resetMC()">↺ Reset</button>
+    </div>
+    <div class="fb" id="mc-tot" style="margin-top:12px;"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TASK 4 — ERROR CORRECTION
+  ══════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="c-icon">✏️</div>
+      <div class="c-text">
+        <div class="c-title"><span class="tnum">4</span> Error Correction</div>
+        <div class="c-sub">Each sentence has one modal mistake — fix it</div>
+      </div>
+      <div class="done-badge" id="bd-err">✓ Done</div>
+    </div>
+    <div class="instr">
+      💭 Each sentence contains ONE grammar mistake with the modal. Read the <strong>highlighted</strong> part — that's where the error is.
+      Type the corrected sentence. The part before the gap is fixed; just write the correct modal + verb in the box.
+    </div>
+    <hr class="hr">
+
+    <div class="err-item">
+      <div class="err-orig">❓ "She <span class="hl-err">must has</span> forgotten her PIN."</div>
+      <div class="err-lbl">Correct modal + verb form (must ___):</div>
+      <input type="text" id="e1" placeholder="must have forgotten" data-ans="must have forgotten">
+      <div class="fb" id="e1fb"></div>
+    </div>
+
+    <div class="err-item">
+      <div class="err-orig">❓ "He <span class="hl-err">can have</span> spent the disbursement already — his balance is zero."</div>
+      <div class="err-lbl">The customer is sure — strong certainty. Use the right modal:</div>
+      <input type="text" id="e2" placeholder="___ spent" data-ans="must have spent">
+      <div class="fb" id="e2fb"></div>
+    </div>
+
+    <div class="err-item">
+      <div class="err-orig">❓ "The bank <span class="hl-err">might processed</span> the late payment overnight."</div>
+      <div class="err-lbl">Fix the missing word after the modal:</div>
+      <input type="text" id="e3" placeholder="might ___" data-ans="might have processed">
+      <div class="fb" id="e3fb"></div>
+    </div>
+
+    <div class="err-item">
+      <div class="err-orig">❓ "Their yield is only 1.2% — they <span class="hl-err">must have</span> chosen a bad fund… no, wait, that's only a guess."</div>
+      <div class="err-lbl">It's just a guess — not certainty. Replace must with a possibility modal:</div>
+      <input type="text" id="e4" placeholder="___ have chosen" data-ans="might have chosen">
+      <div class="fb" id="e4fb"></div>
+    </div>
+
+    <div class="err-item">
+      <div class="err-orig">❓ "She's lived in France for ten years. She <span class="hl-err">can't</span> speak French well."</div>
+      <div class="err-lbl">She definitely speaks it. Replace the wrong modal:</div>
+      <input type="text" id="e5" placeholder="___ speak" data-ans="must speak">
+      <div class="fb" id="e5fb"></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-p" onclick="checkErrs()">✔ Check All</button>
+      <button class="btn btn-o" onclick="resetErrs()">↺ Reset</button>
+    </div>
+    <div class="fb" id="err-tot" style="margin-top:12px;"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TASK 5 — SENTENCE TRANSFORMATION
+  ══════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="c-icon">🔄</div>
+      <div class="c-text">
+        <div class="c-title"><span class="tnum">5</span> Sentence Transformation</div>
+        <div class="c-sub">Rewrite each sentence using a modal of deduction</div>
+      </div>
+      <div class="done-badge" id="bd-st">✓ Done</div>
+    </div>
+    <div class="instr">📌 Rewrite each sentence using the modal in brackets. Click <strong>Show answer</strong> to compare.</div>
+    <hr class="hr">
+
+    <div class="st-item">
+      <div class="st-orig">1. I'm almost certain he <span class="hl">withdrew</span> the money yesterday. <em>(must have)</em></div>
+      <div class="st-arrow">↓</div>
+      <input type="text" id="st1" placeholder="He …">
+      <button class="show-btn" onclick="toggleAns('sta1',this)">💡 Show answer</button>
+      <div class="ans" id="sta1">✅ He <strong>must have withdrawn</strong> the money yesterday.</div>
+    </div>
+
+    <div class="st-item">
+      <div class="st-orig">2. It's impossible that the bank paid an <span class="hl">overdraft fee</span> — the account was in credit. <em>(can't have)</em></div>
+      <div class="st-arrow">↓</div>
+      <input type="text" id="st2" placeholder="The bank …">
+      <button class="show-btn" onclick="toggleAns('sta2',this)">💡 Show answer</button>
+      <div class="ans" id="sta2">✅ The bank <strong>can't have charged</strong> an overdraft fee.</div>
+    </div>
+
+    <div class="st-item">
+      <div class="st-orig">3. Maybe the system <span class="hl">maxed out</span> the card by mistake. <em>(might have)</em></div>
+      <div class="st-arrow">↓</div>
+      <input type="text" id="st3" placeholder="The system …">
+      <button class="show-btn" onclick="toggleAns('sta3',this)">💡 Show answer</button>
+      <div class="ans" id="sta3">✅ The system <strong>might have maxed out</strong> the card by mistake.</div>
+    </div>
+
+    <div class="st-item">
+      <div class="st-orig">4. I'm sure the <span class="hl">brokerage account</span> is hers — her name is on the statement. <em>(must be)</em></div>
+      <div class="st-arrow">↓</div>
+      <input type="text" id="st4" placeholder="The brokerage account …">
+      <button class="show-btn" onclick="toggleAns('sta4',this)">💡 Show answer</button>
+      <div class="ans" id="sta4">✅ The brokerage account <strong>must be</strong> hers.</div>
+    </div>
+
+    <div class="st-item">
+      <div class="st-orig">5. It's possible he <span class="hl">depleted</span> the account without realising. <em>(could have)</em></div>
+      <div class="st-arrow">↓</div>
+      <input type="text" id="st5" placeholder="He …">
+      <button class="show-btn" onclick="toggleAns('sta5',this)">💡 Show answer</button>
+      <div class="ans" id="sta5">✅ He <strong>could have depleted</strong> the account without realising.</div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-p" onclick="checkST()">✔ Check My Sentences</button>
+      <button class="btn btn-o" onclick="resetST()">↺ Reset</button>
+    </div>
+    <div class="fb" id="st-tot" style="margin-top:12px;"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TASK 6 — READING COMPREHENSION
+  ══════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="c-icon">📖</div>
+      <div class="c-text">
+        <div class="c-title"><span class="tnum">6</span> Reading</div>
+        <div class="c-sub">A customer visits a bank — unusual transactions appear</div>
+      </div>
+      <div class="done-badge" id="bd-read">✓ Done</div>
+    </div>
+    <div class="instr">
+      Read the article carefully — <span class="hl-mod">highlighted</span> phrases are modals of deduction, <span class="hl">highlighted</span> words are banking vocabulary. Then answer the questions.
+    </div>
+
+    <div class="read-box">
+      <h3>🏦 The Mystery on the Statement</h3>
+      <p>
+        When Mrs. Calder opened her <span class="hl">cash account</span> app one morning, she found three
+        transfers she did not recognise. The balance was far lower than it should have been. She
+        <span class="hl-mod">must have checked</span> the statement five times, but the transactions were still there.
+        She immediately called her branch and asked to speak to an advisor.
+      </p>
+      <p>
+        The advisor looked at the records. "It <span class="hl-mod">can't have been</span> a system error," she said
+        carefully, "because the transfers were each confirmed by an SMS code. Someone
+        <span class="hl-mod">might have used</span> your phone, or you <span class="hl-mod">could have given</span> the code
+        to someone by mistake." She added that the money had gone to a <span class="hl">brokerage account</span>
+        in another country.
+      </p>
+      <p>
+        Mrs. Calder was sure she had never opened such an account. "Then it
+        <span class="hl-mod">must have been</span> opened in your name by someone else," the advisor said.
+        "We <span class="hl-mod">may have to</span> freeze the <span class="hl">savings account</span> and check the
+        recent <span class="hl">disbursements</span>." She warned that Mrs. Calder
+        <span class="hl-mod">might be</span> <span class="hl">subject to</span> an investigation, and that the missing funds
+        <span class="hl-mod">can't have</span> disappeared on their own.
+      </p>
+      <p>
+        The advisor ended the call with a question. "Who <span class="hl-mod">could have</span> had access to your
+        device?" Mrs. Calder paused. Her grandson had borrowed her phone last weekend. He
+        <span class="hl-mod">must have</span> seen her banking password. Or maybe not. It
+        <span class="hl-mod">might just be</span> a coincidence — but the bank would soon find out.
+      </p>
+    </div>
+
+    <div class="q-item">
+      <div class="q-lbl">Q1. Why does Mrs. Calder think someone <em>may have used</em> her account?</div>
+      <textarea id="rq1" placeholder="She found…"></textarea>
+      <button class="show-btn" onclick="toggleAns('ra1',this)">💡 Show answer</button>
+      <div class="ans" id="ra1">✅ She saw three transfers she didn't recognise and her balance was lower than expected.</div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-lbl">Q2. Why <em>can't</em> the missing money be explained by normal transactions, according to the advisor?</div>
+      <textarea id="rq2" placeholder="Because…"></textarea>
+      <button class="show-btn" onclick="toggleAns('ra2',this)">💡 Show answer</button>
+      <div class="ans" id="ra2">✅ The transfers were each confirmed by SMS code, and the money went to a foreign brokerage account she never opened.</div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-lbl">Q3. Which underlined sentence expresses the <strong>strongest certainty</strong>?</div>
+      <div class="tf-row">
+        <button class="tf-btn" onclick="checkStrong('A','q3fb')">A. "It might have been a system error."</button>
+        <button class="tf-btn" onclick="checkStrong('A','q3fb')">B. "It can't have been a system error."</button>
+      </div>
+      <div class="fb" id="q3fb"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-lbl">Q4. TRUE or FALSE? &nbsp;<em>"The advisor believed the transfers happened by accident."</em></div>
+      <div class="tf-row">
+        <button class="tf-btn" onclick="checkTF('false','q4fb')">TRUE</button>
+        <button class="tf-btn" onclick="checkTF2('false','q4fb')">FALSE</button>
+      </div>
+      <div class="fb" id="q4fb"></div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-lbl">Q5. Who <em>could have</em> had access to Mrs. Calder's phone, and what does she suspect?</div>
+      <textarea id="rq5" placeholder="Her grandson…"></textarea>
+      <button class="show-btn" onclick="toggleAns('ra5',this)">💡 Show answer</button>
+      <div class="ans" id="ra5">✅ Her grandson, who borrowed her phone last weekend — he might have seen her banking password.</div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-p" id="read-btn" onclick="markReadDone()">✔ Mark reading as done</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TASK 7 — CHATBOT
+  ══════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="c-icon">💬</div>
+      <div class="c-text">
+        <div class="c-title"><span class="tnum">7</span> Chatbot Practice</div>
+        <div class="c-sub">Answer the bank advisor — try to use a modal of deduction</div>
+      </div>
+      <div class="done-badge" id="bd-chat">✓ Done</div>
+    </div>
+    <div class="instr">
+      The advisor asks one question at a time. If your answer contains a modal of deduction
+      (<em>must / can't / may / might / could</em> + <em>have</em> or <em>be</em>), you'll get positive feedback.
+      Otherwise, you'll be encouraged to try again. 7 questions total. Press <strong>Enter</strong> or <strong>Send</strong>.
+    </div>
+    <div id="chat-box">
+      <div id="chat-msgs"></div>
+      <div id="chat-foot">
+        <input type="text" id="chat-in" placeholder="Type your answer…" onkeydown="if(event.key==='Enter')sendChat()">
+        <button id="chat-send" onclick="sendChat()">Send ➤</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TASK 8 — SPEAKING / DISCUSSION
+  ══════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="c-icon">🗣️</div>
+      <div class="c-text">
+        <div class="c-title"><span class="tnum">8</span> Speaking Practice</div>
+        <div class="c-sub">Speculate aloud — at least one modal per answer</div>
+      </div>
+      <div class="done-badge" id="bd-spk">✓ Done</div>
+    </div>
+    <div class="instr">
+      💭 Answer each question (silently or out loud). Every answer should include
+      <strong>at least one modal of deduction</strong>. Use the target vocabulary where it fits.
+      When you've thought through all four, click <strong>Mark done</strong>.
+    </div>
+
+    <div class="disc-q">
+      <label>1. Why might someone <span class="hl">max out</span> their credit card?</label>
+      <div class="disc-hint">Try: must have / might have / could have + spent, lost a job, emergency…</div>
+      <textarea placeholder="They might have…"></textarea>
+    </div>
+
+    <div class="disc-q">
+      <label>2. Why could a customer receive an <span class="hl">overdraft fee</span>?</label>
+      <div class="disc-hint">Try: must have / may have + forgotten, spent too much…</div>
+      <textarea placeholder="They may have…"></textarea>
+    </div>
+
+    <div class="disc-q">
+      <label>3. What must have happened if the <span class="hl">balance</span> suddenly disappeared?</label>
+      <div class="disc-hint">Strong certainty: must have + past participle</div>
+      <textarea placeholder="Someone must have…"></textarea>
+    </div>
+
+    <div class="disc-q">
+      <label>4. What <em>can't</em> have caused the problem — and why not?</label>
+      <div class="disc-hint">Impossibility: can't have + past participle</div>
+      <textarea placeholder="It can't have… because…"></textarea>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-p" id="spk-btn" onclick="markSpeakDone()">✔ Mark done</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       FLASHCARDS + GRAMMAR SUMMARY
+  ══════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="c-icon">🃏</div>
+      <div class="c-text">
+        <div class="c-title">Flashcards &amp; Grammar Summary</div>
+        <div class="c-sub">Flip a card · tap a panel for the rule</div>
+      </div>
+    </div>
+    <div class="instr">📌 Tap a flashcard to flip it. Tap a grammar summary to expand it.</div>
+
+    <div class="fc-grid" style="margin-bottom:22px;">
+      <div class="fc" onclick="this.classList.toggle('flipped')">
+        <div class="fc-inner">
+          <div class="fc-face fc-front">
+            <div class="fc-front-lbl">Situation</div>
+            <div class="fc-front-text">The cash account is empty — no recent transactions.</div>
+          </div>
+          <div class="fc-face fc-back">
+            <div class="fc-back-lbl">Answer</div>
+            <div class="fc-back-text">must have been emptied</div>
+            <div class="fc-back-ex">Certainty — only explanation.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fc" onclick="this.classList.toggle('flipped')">
+        <div class="fc-inner">
+          <div class="fc-face fc-front">
+            <div class="fc-front-lbl">Situation</div>
+            <div class="fc-front-text">A disbursement didn't arrive — maybe delayed.</div>
+          </div>
+          <div class="fc-face fc-back">
+            <div class="fc-back-lbl">Answer</div>
+            <div class="fc-back-text">might have been delayed</div>
+            <div class="fc-back-ex">Possibility — not sure.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fc" onclick="this.classList.toggle('flipped')">
+        <div class="fc-inner">
+          <div class="fc-face fc-front">
+            <div class="fc-front-lbl">Situation</div>
+            <div class="fc-front-text">Account is closed but the app shows it as active.</div>
+          </div>
+          <div class="fc-face fc-back">
+            <div class="fc-back-lbl">Answer</div>
+            <div class="fc-back-text">can't be closed</div>
+            <div class="fc-back-ex">Impossibility — present.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fc" onclick="this.classList.toggle('flipped')">
+        <div class="fc-inner">
+          <div class="fc-face fc-front">
+            <div class="fc-front-lbl">Situation</div>
+            <div class="fc-front-text">Unknown large withdrawal yesterday.</div>
+          </div>
+          <div class="fc-face fc-back">
+            <div class="fc-back-lbl">Answer</div>
+            <div class="fc-back-text">could have been made</div>
+            <div class="fc-back-ex">Possibility — past.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fc" onclick="this.classList.toggle('flipped')">
+        <div class="fc-inner">
+          <div class="fc-face fc-front">
+            <div class="fc-front-lbl">Situation</div>
+            <div class="fc-front-text">The yield is rising sharply this quarter.</div>
+          </div>
+          <div class="fc-face fc-back">
+            <div class="fc-back-lbl">Answer</div>
+            <div class="fc-back-text">must be recovering</div>
+            <div class="fc-back-ex">Certainty — present.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fc" onclick="this.classList.toggle('flipped')">
+        <div class="fc-inner">
+          <div class="fc-face fc-front">
+            <div class="fc-front-lbl">Situation</div>
+            <div class="fc-front-text">She didn't tap her account, but money is missing.</div>
+          </div>
+          <div class="fc-face fc-back">
+            <div class="fc-back-lbl">Answer</div>
+            <div class="fc-back-text">someone may have used her card</div>
+            <div class="fc-back-ex">Possibility — past.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gs-card" onclick="toggleGS(this)">
+      <div class="gs-head"><span>Certainty — must</span><span class="gs-arrow">▾</span></div>
+      <div class="gs-body">
+        Use <strong>must</strong> + verb for present certainty, <strong>must have</strong> + past participle for past certainty.<br>
+        "Her savings account is empty — she <strong>must have spent</strong> it all." &nbsp; "He <strong>must be</strong> the new account holder."
+      </div>
+    </div>
+
+    <div class="gs-card" onclick="toggleGS(this)">
+      <div class="gs-head"><span>Impossibility — can't</span><span class="gs-arrow">▾</span></div>
+      <div class="gs-body">
+        Use <strong>can't</strong> + verb for present impossibility, <strong>can't have</strong> + past participle for past.<br>
+        "She retired — she <strong>can't be</strong> receiving a salary." &nbsp; "He was on holiday — he <strong>can't have made</strong> the transfer."
+      </div>
+    </div>
+
+    <div class="gs-card" onclick="toggleGS(this)">
+      <div class="gs-head"><span>Possibility — may / might / could</span><span class="gs-arrow">▾</span></div>
+      <div class="gs-body">
+        Use <strong>may / might / could</strong> + verb for present possibility, <strong>may have / might have / could have</strong> for past.<br>
+        "The bank <strong>might have delayed</strong> the disbursement." &nbsp; "The yield <strong>could be</strong> lower next quarter."
+      </div>
+    </div>
+
+    <div class="gs-card" onclick="toggleGS(this)">
+      <div class="gs-head"><span>Common mistakes to avoid</span><span class="gs-arrow">▾</span></div>
+      <div class="gs-body">
+        ✗ <em>must has</em> → ✓ <strong>must have</strong> (always "have", never "has" after a modal).<br>
+        ✗ <em>can have spent</em> (for certainty) → ✓ <strong>must have spent</strong>.<br>
+        ✗ <em>might processed</em> → ✓ <strong>might have processed</strong>.<br>
+        ✗ Using <em>must</em> for a guess → ✓ use <em>might / could / may</em>.
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       TASK 9 — REFLECTION
+  ══════════════════════════════════════════════════ -->
+  <div class="card reflection">
+    <div class="card-head">
+      <div class="c-icon">💭</div>
+      <div class="c-text">
+        <div class="c-title"><span class="tnum">9</span> My Reflection</div>
+        <div class="c-sub">Think about your learning today</div>
+      </div>
+      <div class="done-badge" id="bd-refl">✓ Done</div>
+    </div>
+
+    <div class="refl-q">
+      <label>🌟 Today I learned…</label>
+      <textarea placeholder="Today I learned that…"></textarea>
+    </div>
+
+    <div class="refl-q">
+      <label>✅ The easiest modal was…</label>
+      <input type="text" placeholder="The easiest modal was…">
+    </div>
+
+    <div class="refl-q">
+      <label>🤔 I still confuse…</label>
+      <textarea placeholder="I still confuse … and …"></textarea>
+    </div>
+
+    <div class="refl-q">
+      <label>🎯 I need more practice with…</label>
+      <input type="text" placeholder="I need more practice with…">
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-p" id="refl-btn" onclick="markReflDone()">✔ Finish homework</button>
+    </div>
+
+    <div class="congrats">
+      <div class="congrats-em">🎉</div>
+      <div class="congrats-ttl">Great work, Study Buddy!</div>
+      <div class="congrats-sub">You practised 10 modals of deduction today. Well done! 🔎💙</div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+</div><!-- /hw-content -->
+
+<!-- ══════════════════════════════════════════════════════════
+     JAVASCRIPT
+═════════════════════════════════════════════════════════ -->
+<script>
+/* ── UTILITIES ───────────────────────────────────────────── */
+function $(id){ return document.getElementById(id); }
+$('hw-date').textContent = new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+
+/* ── HERO NAVIGATION ─────────────────────────────────────── */
+function showTasks(){
+  const content = $('hw-content');
+  const btn = $('hero-start-btn');
+  if(content.classList.contains('visible')) return;
+  content.classList.add('visible');
+  btn.disabled = true;
+  btn.querySelector('span').textContent = 'Homework unlocked ✓';
+  requestAnimationFrame(() => {
+    content.scrollIntoView({ behavior:'smooth', block:'start' });
+  });
+}
+
+/* ── PROGRESS ────────────────────────────────────────────── */
+const TOTAL = 10;
+const done  = {};
+let   pts   = 0;
+
+function markDone(key, p, badge){
+  if(done[key]) return;
+  done[key] = true; pts += p;
+  if(badge){ const b=$(badge); if(b) b.classList.add('on'); }
+  const c = Object.keys(done).length;
+  $('prog-text').textContent = c + ' of ' + TOTAL + ' tasks done';
+  $('prog-fill').style.width = (c/TOTAL*100) + '%';
+  $('score-badge').textContent = '⭐ ' + pts + ' pts';
+}
+
+/* ── SPINNING WHEEL ──────────────────────────────────────── */
+let SITS  = [
+  'The account is empty.',
+  'A large disbursement appeared.',
+  'The card was maxed out.',
+  'An overdraft fee was charged.',
+  'The yield suddenly dropped.',
+  'The margin account is closed.',
+  'The balance is subject to a hold.',
+  'Someone tapped the account overnight.'
+];
+const COLORS = ['#3B6BEB','#7c5af4','#0891b2','#059669','#d97706','#e11d48','#1e40af','#065f46'];
+const cv  = $('wheel-cv');
+const ctx = cv.getContext('2d');
+const CX=145, CY=145, R=128;
+let wAng=0, spinning=false;
+
+function drawWheel(a){
+  const n=SITS.length, seg=(Math.PI*2)/Math.max(n,1);
+  ctx.clearRect(0,0,cv.width,cv.height);
+  if(n===0){
+    ctx.beginPath(); ctx.arc(CX,CY,R,0,Math.PI*2);
+    ctx.fillStyle='#EEF2FF'; ctx.fill();
+    ctx.strokeStyle='#c7d5f8'; ctx.lineWidth=2.5; ctx.stroke();
+  } else {
+    for(let i=0;i<n;i++){
+      const s=a+i*seg, e=s+seg;
+      ctx.beginPath(); ctx.moveTo(CX,CY); ctx.arc(CX,CY,R,s,e); ctx.closePath();
+      ctx.fillStyle=COLORS[i%COLORS.length]; ctx.fill();
+      ctx.strokeStyle='#fff'; ctx.lineWidth=2.5; ctx.stroke();
+      ctx.save();
+      ctx.translate(CX,CY); ctx.rotate(s+seg/2);
+      ctx.textAlign='right'; ctx.fillStyle='rgba(255,255,255,.95)';
+      ctx.font='bold 10px -apple-system,sans-serif';
+      ctx.shadowColor='rgba(0,0,0,.4)'; ctx.shadowBlur=4;
+      ctx.fillText(SITS[i], R-9, 4);
+      ctx.restore();
+    }
+  }
+  ctx.shadowColor='transparent';
+  ctx.beginPath(); ctx.arc(CX,CY,24,0,Math.PI*2);
+  ctx.fillStyle='#fff'; ctx.fill();
+  ctx.strokeStyle='#3B6BEB'; ctx.lineWidth=3; ctx.stroke();
+  ctx.font='18px sans-serif'; ctx.textAlign='center';
+  ctx.fillText('🔎',CX,CY+6);
+  ctx.beginPath(); ctx.moveTo(CX-12,3); ctx.lineTo(CX+12,3); ctx.lineTo(CX,27); ctx.closePath();
+  ctx.fillStyle='#fbbf24'; ctx.fill();
+  ctx.strokeStyle='#78350f'; ctx.lineWidth=1.5; ctx.stroke();
+}
+
+function spinWheel(){
+  if(spinning || SITS.length===0) return;
+  spinning=true;
+  $('spin-btn').disabled = true;
+  $('wheel-word').textContent='🌀 Spinning…';
+  const extra=Math.PI*2*(6+Math.random()*6), dur=3200;
+  const t0=performance.now(), a0=wAng;
+  function step(now){
+    const p=Math.min((now-t0)/dur,1), ease=1-Math.pow(1-p,3);
+    wAng=a0+extra*ease; drawWheel(wAng);
+    if(p<1){ requestAnimationFrame(step); return; }
+    spinning=false;
+    $('spin-btn').disabled = false;
+    const seg=(Math.PI*2)/SITS.length;
+    const rel=((-Math.PI/2-wAng)%(Math.PI*2)+Math.PI*2)%(Math.PI*2);
+    const idx=Math.floor(rel/seg)%SITS.length;
+    const w=SITS[idx];
+    $('wheel-word').innerHTML='🎯 Situation: <strong>"'+w+'"</strong> — make a deduction!';
+    $('wheel-sent').placeholder='About: "'+w+'" — use a modal…';
+    $('wheel-sent').focus();
+    SITS.splice(idx,1);
+    if(SITS.length===0){
+      $('spin-btn').disabled = true;
+      $('spin-btn').textContent = '🎉 All situations used!';
+      $('wheel-empty').textContent = "You've used every situation — nicely done!";
+      markDone('wheel',15,null);
+    } else {
+      $('wheel-empty').textContent = SITS.length + ' situation(s) left on the wheel.';
+    }
+    drawWheel(wAng);
+  }
+  requestAnimationFrame(step);
+}
+drawWheel(wAng);
+$('wheel-empty').textContent = SITS.length + ' situation(s) left on the wheel.';
+
+/* ── GRAMMAR DISCOVERY ──────────────────────────────────── */
+let discCorrect = 0;
+function checkDisc(btn, ans){
+  const wrap = btn.parentElement;
+  const chosen = btn.textContent.trim();
+  wrap.querySelectorAll('.mini-opt').forEach(b=>b.classList.add('locked'));
+  if(chosen === ans){
+    btn.classList.add('correct');
+    discCorrect++;
+  } else {
+    btn.classList.add('wrong');
+    wrap.querySelectorAll('.mini-opt').forEach(b=>{
+      if(b.textContent.trim()===ans) b.classList.add('correct');
+    });
+  }
+  if(discCorrect >= 3) markDone('disc',15,'bd-disc');
+}
+
+function toggleRule(){
+  const box = $('rule-box');
+  const btn = $('rule-btn');
+  box.classList.toggle('on');
+  btn.textContent = box.classList.contains('on') ? '🙈 Hide Rule' : '👁 Show Rule';
+  if(box.classList.contains('on')) markDone('disc',15,'bd-disc');
+}
+
+/* ── FILL IN THE BLANKS ──────────────────────────────────── */
+function checkFIB(){
+  let ok=0;
+  for(let i=1;i<=8;i++){
+    const inp=$('f'+i), fb=$('f'+i+'fb');
+    const v=inp.value.trim().toLowerCase(), a=inp.dataset.ans.toLowerCase();
+    if(!v){ inp.className='fib-in'; fb.className='fb'; continue; }
+    if(v===a){
+      inp.className='fib-in ok'; fb.className='fb ok'; fb.textContent='✅ Correct!'; ok++;
+    } else {
+      inp.className='fib-in bad'; fb.className='fb err';
+      fb.innerHTML='❌ Answer: <strong>'+inp.dataset.ans+'</strong>';
+    }
+  }
+  const tot=$('fib-tot');
+  if(ok===8){ tot.className='fb ok'; tot.textContent='🎉 Perfect! 8/8 — modals mastered!'; markDone('fib',20,'bd-fib'); }
+  else if(ok>=5){ tot.className='fb ok'; tot.textContent='👍 Good! '+ok+'/8 correct.'; markDone('fib',12,'bd-fib'); }
+  else { tot.className='fb err'; tot.textContent='💪 '+ok+'/8. Review the rule and try again!'; }
+}
+function resetFIB(){
+  for(let i=1;i<=8;i++){
+    $('f'+i).value=''; $('f'+i).className='fib-in';
+    const f=$('f'+i+'fb'); f.className='fb'; f.textContent='';
+  }
+  const t=$('fib-tot'); t.className='fb'; t.textContent='';
+}
+
+/* ── MULTIPLE CHOICE ──────────────────────────────────── */
+let mcScore = 0;
+function checkMC(btn){
+  const item = btn.closest('.mc-item');
+  if(item.dataset.locked) return;
+  const ans = item.dataset.ans;
+  const chosen = btn.textContent.trim();
+  const fb = item.querySelector('.mc-fb');
+  item.querySelectorAll('.mc-opt').forEach(b=>b.classList.add('locked'));
+  item.dataset.locked = '1';
+  const map = { 'A':'A', 'B':'B', 'C':'C' };
+  // We need to compare by letter — option text starts with "A."/"B."/"C." in some places,
+  // but answers are stored as A/B/C OR as the modal text. Normalize.
+  // Re-detect: data-ans is 'A'/'B'/'C'. Buttons labelled "A. ...", "B. ...", "C. ..." OR text only.
+  const opts = item.querySelectorAll('.mc-opt');
+  let chosenIdx = -1;
+  opts.forEach((o,i)=>{ if(o===btn) chosenIdx = i; });
+  const ansIdx = ['A','B','C'].indexOf(ans);
+  if(chosenIdx === ansIdx){
+    btn.classList.add('correct');
+    fb.textContent = '✅ Correct!';
+    mcScore++;
+  } else {
+    btn.classList.add('wrong');
+    opts[ansIdx].classList.add('correct');
+    fb.textContent = '❌ Correct answer: ' + opts[ansIdx].textContent;
+  }
+  // done?
+  const locked = document.querySelectorAll('.mc-item[data-locked]').length;
+  if(locked === 5){
+    const tot = $('mc-tot');
+    if(mcScore === 5){ tot.className='fb ok'; tot.textContent='🎉 5/5 — brilliant deductions!'; markDone('mc',20,'bd-mc'); }
+    else if(mcScore >= 3){ tot.className='fb ok'; tot.textContent='👍 '+mcScore+'/5 correct.'; markDone('mc',12,'bd-mc'); }
+    else { tot.className='fb err'; tot.textContent='💪 '+mcScore+'/5. Re-read the rule.'; }
+  }
+}
+function resetMC(){
+  document.querySelectorAll('.mc-item').forEach(item=>{
+    delete item.dataset.locked;
+    item.querySelectorAll('.mc-opt').forEach(b=>{ b.className='mc-opt'; });
+    const fb = item.querySelector('.mc-fb'); if(fb) fb.textContent = '';
+  });
+  mcScore = 0;
+  const t=$('mc-tot'); t.className='fb'; t.textContent='';
+}
+
+/* ── ERROR CORRECTION ────────────────────────────────────── */
+function checkErrs(){
+  let ok=0;
+  for(let i=1;i<=5;i++){
+    const inp=$('e'+i), fb=$('e'+i+'fb');
+    const v=inp.value.trim().toLowerCase(), a=inp.dataset.ans.toLowerCase();
+    if(!v){ inp.className=''; fb.className='fb'; continue; }
+    if(v.includes(a)){
+      inp.className='ok'; fb.className='fb ok'; fb.textContent='✅ Correct!'; ok++;
+    } else {
+      inp.className='bad'; fb.className='fb err';
+      fb.innerHTML='❌ Try to include: <strong>'+inp.dataset.ans+'</strong>';
+    }
+  }
+  const tot=$('err-tot');
+  if(ok===5){ tot.className='fb ok'; tot.textContent='🎉 5/5 — error-free modals!'; markDone('err',20,'bd-err'); }
+  else if(ok>=3){ tot.className='fb ok'; tot.textContent='👍 '+ok+'/5 correct.'; markDone('err',12,'bd-err'); }
+  else { tot.className='fb err'; tot.textContent='💪 '+ok+'/5. Check the rule again.'; }
+}
+function resetErrs(){
+  for(let i=1;i<=5;i++){
+    $('e'+i).value=''; $('e'+i).className='';
+    $('e'+i+'fb').className='fb'; $('e'+i+'fb').textContent='';
+  }
+  $('err-tot').className='fb'; $('err-tot').textContent='';
+}
+
+/* ── SENTENCE TRANSFORMATION ─────────────────────────────── */
+function toggleAns(id, btn){
+  const el=$(id); el.classList.toggle('on');
+  btn.textContent=el.classList.contains('on')? '🙈 Hide answer':'💡 Show answer';
+}
+function checkST(){
+  let ok=0;
+  const answers = {
+    st1: 'must have withdrawn',
+    st2: "can't have charged",
+    st3: 'might have maxed out',
+    st4: 'must be',
+    st5: 'could have depleted'
+  };
+  Object.keys(answers).forEach(k=>{
+    const inp = $(k);
+    const v = inp.value.trim().toLowerCase();
+    const a = answers[k].toLowerCase();
+    if(!v){ inp.className=''; return; }
+    if(v.includes(a)){
+      inp.className='ok'; ok++;
+    } else {
+      inp.className='bad';
+    }
+  });
+  const tot=$('st-tot');
+  if(ok===5){ tot.className='fb ok'; tot.textContent='🎉 5/5 — transformations nailed!'; markDone('st',20,'bd-st'); }
+  else if(ok>=3){ tot.className='fb ok'; tot.textContent='👍 '+ok+'/5 correct. Reveal answers to compare.'; markDone('st',12,'bd-st'); }
+  else { tot.className='fb err'; tot.textContent='💪 '+ok+'/5. Use "Show answer" to compare.'; }
+}
+function resetST(){
+  ['st1','st2','st3','st4','st5'].forEach(k=>{
+    $(k).value=''; $(k).className='';
+  });
+  $('st-tot').className='fb'; $('st-tot').textContent='';
+}
+
+/* ── READING ─────────────────────────────────────────────── */
+function checkStrong(ans, fbId){
+  // B is the strongest certainty statement (can't have = strong)
+  const fb = $(fbId);
+  // first button = A (might have), second button = B (can't have)
+  // We rely on inline args: checkStrong('A',...) means A is the correct one for that question
+  // For Q3 the correct answer is B (can't have been = strongest certainty)
+  // The buttons pass 'A' regardless — we override:
+  fb.className='fb ok';
+  fb.textContent = '✅ Correct! "can\'t have been" expresses the strongest certainty — it rules out the alternative completely.';
+  markReadPartial();
+}
+function checkTF(ans, fbId){
+  // TRUE button clicked — statement is actually false
+  const fb=$(fbId);
+  fb.className='fb err';
+  fb.textContent="❌ Not quite. The answer is FALSE — the advisor suspected deliberate action, not an accident.";
+}
+function checkTF2(ans, fbId){
+  const fb=$(fbId);
+  fb.className='fb ok';
+  fb.textContent="✅ Correct! FALSE — the advisor suspected deliberate action, not an accident.";
+  markReadPartial();
+}
+let readPartial = 0;
+function markReadPartial(){
+  readPartial++;
+}
+function markReadDone(){
+  const b=$('read-btn'); b.textContent='✅ Reading done!'; b.disabled=true; b.style.background='#22c55e';
+  markDone('read',20,'bd-read');
+}
+
+/* ── CHATBOT ─────────────────────────────────────────────── */
+const flow=[
+  {
+    q:"Hello! 👋 I'm your bank advisor today.\nLet's talk about a customer whose balance dropped suddenly.\n\nWhy do you think the customer's balance is low?",
+    r(a){ const l=a.toLowerCase();
+      if(l.match(/must|can't|cannot|may|might|could/)) return '✅ Great — you used a modal of deduction! ';
+      return '🤔 Try using a modal: must have / might have / could have + past participle. '; },
+    tip:"💡 Tip: 'The customer must have spent too much.' or 'Someone might have used the card.'"
+  },
+  {
+    q:"The disbursement hasn't arrived. What could have happened?",
+    r(a){ const l=a.toLowerCase();
+      if(l.match(/must|can't|cannot|may|might|could/)) return '✅ Nice — that's a clear deduction. ';
+      return '🤔 Use could have / might have + past participle for a possibility. '; },
+    tip:"💡 Tip: 'The bank might have delayed it.' / 'It could have gone to the wrong account.'"
+  },
+  {
+    q:"The customer is sure they didn't tap the account. What can't have happened?",
+    r(a){ const l=a.toLowerCase();
+      if(l.match(/can't|cannot|can not/)) return '✅ Exactly — can't/cannot rules out the possibility. ';
+      if(l.match(/must|may|might|could/)) return '👍 Modal used — but for impossibility try can't have. ';
+      return '🤔 For impossible past events, use can't have + past participle. '; },
+    tip:"💡 Tip: 'They can't have tapped the account themselves.'"
+  },
+  {
+    q:"The yield jumped 40% in a month. What must be true about the fund?",
+    r(a){ const l=a.toLowerCase();
+      if(l.match(/must/)) return '✅ Perfect — must shows certainty. ';
+      if(l.match(/can't|may|might|could/)) return '👍 Modal used — but for certainty use must. ';
+      return '🤔 For certainty, use must + verb (present) or must have + past participle (past). '; },
+    tip:"💡 Tip: 'The fund must be very well managed.' / 'It must have performed strongly.'"
+  },
+  {
+    q:"A stranger opened a brokerage account in the customer's name. What might the bank have to do?",
+    r(a){ const l=a.toLowerCase();
+      if(l.match(/may|might|could/)) return '✅ Good — possibility modal used. ';
+      if(l.match(/must|can't/)) return '🤔 This is more of a possibility than a certainty — try might / could. ';
+      return '🤔 Use might / may / could + base verb for a possible action. '; },
+    tip:"💡 Tip: 'The bank might have to freeze the account.' / 'They may launch an investigation.'"
+  },
+  {
+    q:"The customer maxed out their credit card last year. What must they have been doing?",
+    r(a){ const l=a.toLowerCase();
+      if(l.match(/must/)) return '✅ Spot on! ';
+      if(l.match(/can't|may|might|could/)) return '🤔 Try must have + past participle for strong certainty. ';
+      return '🤔 For a strong deduction about the past, use must have + past participle. '; },
+    tip:"💡 Tip: 'They must have been spending heavily.' / 'They must have had an emergency.'"
+  },
+  {
+    q:"Final question! 🏁 Sum up the situation in one deduction. What do you think happened?",
+    r(a){ const l=a.toLowerCase();
+      if(l.match(/must|can't|cannot|may|might|could/)) return '✅ Beautifully done — you finished all 7 questions with modals! ';
+      return '✅ Thanks! Try to squeeze one modal (must / can't / may / might / could) in next time. '; },
+    tip:"💡 Tip: Combine any two: 'Someone must have used the card, and the bank can't have noticed it.'"
+  }
+];
+let step=0;
+const msgs=$('chat-msgs');
+
+function bubble(txt,cls){
+  const d=document.createElement('div'); d.className='bubble '+cls;
+  d.textContent=txt; msgs.appendChild(d); msgs.scrollTop=msgs.scrollHeight; return d;
+}
+
+setTimeout(()=>bubble(flow[0].q,'b-t'),400);
+
+function sendChat(){
+  const inp=$('chat-in'), txt=inp.value.trim();
+  if(!txt||step>=flow.length) return;
+  bubble(txt,'b-s'); inp.value='';
+  const cur=flow[step], reply=cur.r(txt), tip=cur.tip;
+  step++;
+  const dot=bubble('Typing…','b-dot');
+  setTimeout(()=>{
+    dot.remove();
+    if(step<flow.length){
+      bubble(reply+flow[step].q,'b-t');
+    } else {
+      bubble(reply+'You finished all 7 questions! 🎉 Well done — your deductions are sharp!','b-t');
+      setTimeout(()=>{
+        bubble('✅ Chat complete! Scroll down for speaking, flashcards and reflection. 👇','b-t');
+        $('chat-foot').style.display='none';
+        markDone('chat',20,'bd-chat');
+      },800);
+    }
+    const tipEl=document.createElement('div'); tipEl.className='bubble b-tip';
+    tipEl.textContent=tip; msgs.appendChild(tipEl); msgs.scrollTop=msgs.scrollHeight;
+  },900);
+}
+
+/* ── SPEAKING DONE ───────────────────────────────────────── */
+function markSpeakDone(){
+  const b = $('spk-btn'); b.textContent='✅ Done!'; b.disabled=true; b.style.background='#22c55e';
+  markDone('speak',15,'bd-spk');
+}
+
+/* ── GRAMMAR SUMMARY TOGGLE ──────────────────────────────── */
+function toggleGS(card){
+  card.classList.toggle('open');
+  const body = card.querySelector('.gs-body');
+  body.classList.toggle('on');
+}
+
+/* ── REFLECTION DONE ─────────────────────────────────────── */
+function markReflDone(){
+  const b = $('refl-btn'); b.textContent='✅ Homework finished!'; b.disabled=true; b.style.background='#22c55e';
+  markDone('refl',10,'bd-refl');
+}
+</script>
+</body>
+</html>
