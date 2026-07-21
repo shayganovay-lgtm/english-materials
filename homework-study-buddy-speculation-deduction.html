@@ -1451,9 +1451,9 @@ const flow=[
   {
     q:"The customer is sure they didn't tap the account. What can't have happened?",
     r(a){ const l=a.toLowerCase();
-      if(l.match(/can't|cannot|can not/)) return '✅ Exactly — can't/cannot rules out the possibility. ';
-      if(l.match(/must|may|might|could/)) return '👍 Modal used — but for impossibility try can't have. ';
-      return '🤔 For impossible past events, use can't have + past participle. '; },
+      if(l.match(/can't|cannot|can not/)) return "✅ Exactly — can't/cannot rules out the possibility. ";
+      if(l.match(/must|may|might|could/)) return "👍 Modal used — but for impossibility try can't have. ";
+      return "🤔 For impossible past events, use can't have + past participle. "; },
     tip:"💡 Tip: 'They can't have tapped the account themselves.'"
   },
   {
@@ -1484,7 +1484,7 @@ const flow=[
     q:"Final question! 🏁 Sum up the situation in one deduction. What do you think happened?",
     r(a){ const l=a.toLowerCase();
       if(l.match(/must|can't|cannot|may|might|could/)) return '✅ Beautifully done — you finished all 7 questions with modals! ';
-      return '✅ Thanks! Try to squeeze one modal (must / can't / may / might / could) in next time. '; },
+      return '✅ Thanks! Try to squeeze one modal (must / cannot / may / might / could) in next time. '; },
     tip:"💡 Tip: Combine any two: 'Someone must have used the card, and the bank can't have noticed it.'"
   }
 ];
