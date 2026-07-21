@@ -66,7 +66,7 @@
     .hero-sub {
       font-size: 14px;
       color: #6b7280;
-      max-width: 38ch;
+      max-width: 40ch;
       margin-bottom: 30px;
     }
 
@@ -197,7 +197,7 @@
     .ans { display:none; background:#f0fdf4; border:1px solid #bbf7d0; color:#166534; border-radius:8px; padding:9px 14px; font-size:13px; margin-top:8px; line-height:1.5; }
     .ans.on { display:block; }
 
-    /* ─── RULE COLLAPSIBLE (Grammar discovery) ── */
+    /* ─── RULE COLLAPSIBLE ──────────────────────── */
     .rule-box { display:none; background:#eef2ff; border:1.5px solid #c7d5f8; border-radius:12px; padding:16px 18px; margin-top:14px; font-size:14px; color:#1a1a2e; line-height:1.6; }
     .rule-box.on { display:block; animation: hwFadeIn .3s ease both; }
     .rule-box h4 { color:#3B6BEB; font-size:15px; margin-bottom:8px; }
@@ -218,12 +218,14 @@
     .ex-list { display:flex; flex-direction:column; gap:9px; margin-bottom:16px; }
     .ex-item { background:#fafbff; border:1.5px solid #e5e8f0; border-radius:10px; padding:11px 14px; font-size:14px; line-height:1.55; }
     .ex-item .hl { background:#e0e9ff; color:#2451c7; padding:1px 5px; border-radius:4px; font-weight:600; }
+    .ex-item .hl-mod { background:#fde68a; color:#7c2d12; padding:1px 5px; border-radius:4px; font-weight:700; }
     .disc-q-mini { font-size:14px; font-weight:600; color:#111827; margin:4px 0 6px; }
     .mini-opts { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
     .mini-opt { border:2px solid #dde2f0; background:#fafbff; border-radius:9px; padding:7px 14px; font-size:13px; font-weight:600; cursor:pointer; transition:all .15s; font-family:inherit; color:#4b5563; }
     .mini-opt:hover { border-color:#3B6BEB; color:#3B6BEB; background:#EEF2FF; }
     .mini-opt.correct { border-color:#22c55e !important; background:#f0fdf4; color:#15803d; }
     .mini-opt.wrong { border-color:#ef4444 !important; background:#fff5f5; color:#991b1b; }
+    .mini-opt.locked { cursor:default; }
 
     /* ─── WHEEL ─────────────────────────────────── */
     #wheel-wrap  { text-align:center; }
@@ -234,7 +236,7 @@
     /* ─── FILL-IN-BLANKS ────────────────────────── */
     .fib-row { display:flex; align-items:center; flex-wrap:wrap; gap:6px; font-size:15px; margin-bottom:6px; }
     .fib-g   { margin-bottom:14px; }
-    .fib-in  { width:220px !important; text-align:center; padding:7px 6px !important; font-size:14px !important; flex-shrink:0; }
+    .fib-in  { width:230px !important; text-align:center; padding:7px 6px !important; font-size:14px !important; flex-shrink:0; }
 
     /* ─── MULTIPLE CHOICE ───────────────────────── */
     .mc-item { margin-bottom:18px; }
@@ -315,7 +317,6 @@
     .congrats-ttl { font-size:20px; font-weight:800; color:#3B6BEB; margin-bottom:4px; }
     .congrats-sub { font-size:14px; color:#6b7280; }
 
-    /* ─── RESPONSE INPUTS THAT USER TYPES IN WHEEL ─ */
     .wt-box { margin-top:22px; }
 
     /* ─── RESPONSIVE ────────────────────────────── */
@@ -338,7 +339,7 @@
   <div class="hero-panel hero-left">
     <p class="hero-eyebrow">Study Buddy &middot; B2 &middot; <span id="hw-date"></span></p>
     <h1 class="hero-title">Homework<br>Time</h1>
-    <p class="hero-sub">Today's focus: 🔎 Speculation &amp; Deduction with modal verbs (must / can't / may / might / could). Banking context. Nine tasks, one wheel spin to get you started.</p>
+    <p class="hero-sub">Today's focus: 🔎 Speculation &amp; Deduction with modal verbs (must / can't / may / might / could). A busy lifestyle — millennials vs Zoomers. Ten tasks, one wheel spin to get you started.</p>
 
     <div class="hero-btn-stack">
       <button class="hero-btn primary" id="hero-start-btn" onclick="showTasks()">
@@ -367,12 +368,13 @@
         <path d="M228 82c10-10 22-16 22-16s-6 12-14 22c-6 6-14 2-8-6z" fill="#fff" stroke="#1c1917" stroke-width="4" stroke-linejoin="round"/>
         <circle cx="70" cy="120" r="30" fill="#fff" stroke="#1c1917" stroke-width="4.5"/>
         <path d="M40 108c-8-16 2-34 20-38 4-10 16-16 28-12 14-8 32 0 34 16 12 2 18 16 12 26-4-10-14-14-22-12-10 6-24 6-32-2-10 4-20 2-26-6-6 8-10 18-14 28z" fill="#1c1917"/>
-        <circle cx="60" cy="126" r="2.6" fill="#1c1917"/>
-        <path d="M52 138c4 4 10 4 14 0" stroke="#1c1917" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+        <circle cx="60" cy="126" r="2.8" fill="#1c1917"/>
+        <circle cx="74" cy="126" r="2.8" fill="#1c1917"/>
+        <path d="M58 140c5 5 12 5 18 0" stroke="#1c1917" stroke-width="2.6" stroke-linecap="round" fill="none"/>
         <path d="M86 156c10-2 20 0 26 8 4 6 4 12 0 16" fill="none" stroke="#1c1917" stroke-width="4.5" stroke-linecap="round"/>
-        <rect x="44" y="164" width="30" height="20" rx="5" fill="#fff" stroke="#1c1917" stroke-width="4" transform="rotate(-8 44 164)"/>
-        <rect x="50" y="169" width="18" height="10" rx="2" fill="#3B6BEB" opacity="0.55" transform="rotate(-8 50 169)"/>
-        <text x="60" y="178" font-family="serif" font-size="9" font-weight="700" fill="#fff" transform="rotate(-8 50 169)">?</text>
+        <rect x="44" y="164" width="32" height="22" rx="5" fill="#fff" stroke="#1c1917" stroke-width="4" transform="rotate(-8 44 164)"/>
+        <rect x="50" y="169" width="20" height="12" rx="2" fill="#3B6BEB" opacity="0.6" transform="rotate(-8 50 169)"/>
+        <text x="60" y="179" font-family="serif" font-size="11" font-weight="700" fill="#fff" transform="rotate(-8 50 169)">?</text>
       </svg>
     </div>
   </div>
@@ -397,11 +399,11 @@
       <div class="c-icon">🎡</div>
       <div class="c-text">
         <div class="c-title">Warm Up — Spin the Wheel!</div>
-        <div class="c-sub">Banking situation · make a deduction with a modal</div>
+        <div class="c-sub">Lifestyle situation · make a deduction with a modal</div>
       </div>
     </div>
     <div class="instr">
-      🎯 Click <strong>SPIN</strong> to get a banking situation. Then write a sentence about it using a modal of deduction
+      🎯 Click <strong>SPIN</strong> to get a lifestyle situation. Then write a sentence about it using a modal of deduction
       (<em>must have / can't have / may have / might have / could have</em> or
       <em>must be / can't be / may be / might be / could be</em>). Each situation only appears once!
     </div>
@@ -430,15 +432,15 @@
       <div class="done-badge" id="bd-disc">✓ Done</div>
     </div>
     <div class="instr">
-      📌 Read the three examples below. Each one is a deduction about a banking problem.
+      📌 Read the three examples below. Each one is a deduction about someone's lifestyle.
       Then answer the three questions. When you've guessed, click <strong>Show Rule</strong>.
     </div>
     <hr class="hr">
 
     <div class="ex-list">
-      <div class="ex-item">A. "His <span class="hl">cash account</span> is at zero — he <span class="hl-mod">must have spent</span> everything before the weekend."</div>
-      <div class="ex-item">B. "The <span class="hl">disbursement</span> hasn't arrived yet — the bank <span class="hl-mod">might have delayed</span> it by a day."</div>
-      <div class="ex-item">C. "She retired last year — she <span class="hl-mod">can't be</span> still receiving a salary from her old employer."</div>
+      <div class="ex-item">A. "She looks completely exhausted this morning — she <span class="hl-mod">must have burned</span> the midnight oil again."</div>
+      <div class="ex-item">B. "He has been quiet all week. The pressure at work <span class="hl-mod">might be getting</span> to him."</div>
+      <div class="ex-item">C. "She just came back from a fortnight by the sea — she <span class="hl-mod">can't be</span> still in <span class="hl">perpetual stress</span>."</div>
     </div>
 
     <div class="disc-q-mini">Q1. Which sentence (A, B or C) shows <strong>certainty</strong> (the speaker is sure)?</div>
@@ -498,73 +500,72 @@
 
     <div class="fib-g">
       <div class="fib-row">
-        <span>1. The customer's balance is zero. He</span>
-        <input type="text" class="fib-in" id="f1" data-ans="must have spent" placeholder="___">
-        <span>all his savings.</span>
+        <span>1. Her inbox is full at 2 a.m. She</span>
+        <input type="text" class="fib-in" id="f1" data-ans="must have burned the midnight oil" placeholder="___">
+        <span>last night.</span>
       </div>
       <div class="fb" id="f1fb"></div>
     </div>
 
     <div class="fib-g">
       <div class="fib-row">
-        <span>2. There's no record of the transfer. The bank</span>
-        <input type="text" class="fib-in" id="f2" data-ans="might have made a mistake" placeholder="___">
-        <span>.</span>
+        <span>2. He only started last month and he's already behind. He</span>
+        <input type="text" class="fib-in" id="f2" data-ans="might be lagging behind" placeholder="___">
+        <span>because of the new system.</span>
       </div>
       <div class="fb" id="f2fb"></div>
     </div>
 
     <div class="fib-g">
       <div class="fib-row">
-        <span>3. Her account is still active after she reported it closed. It</span>
-        <input type="text" class="fib-in" id="f3" data-ans="can't be" placeholder="___">
-        <span>closed properly.</span>
+        <span>3. She just came back from a fortnight off — she</span>
+        <input type="text" class="fib-in" id="f3" data-ans="can't be in perpetual stress" placeholder="___">
+        <span>any more.</span>
       </div>
       <div class="fb" id="f3fb"></div>
     </div>
 
     <div class="fib-g">
       <div class="fib-row">
-        <span>4. The overdraft fee appeared today — someone</span>
-        <input type="text" class="fib-in" id="f4" data-ans="could have used" placeholder="___">
-        <span>the card overnight.</span>
+        <span>4. The routine is so <span class="hl">humdrum</span> — no wonder he</span>
+        <input type="text" class="fib-in" id="f4" data-ans="must be bored" placeholder="___">
+        <span>.</span>
       </div>
       <div class="fb" id="f4fb"></div>
     </div>
 
     <div class="fib-g">
       <div class="fib-row">
-        <span>5. His <span class="hl">ROI</span> is huge this year. He</span>
-        <input type="text" class="fib-in" id="f5" data-ans="must have invested" placeholder="___">
-        <span>in the right fund.</span>
+        <span>5. I'm not sure why Sara left early. She</span>
+        <input type="text" class="fib-in" id="f5" data-ans="could have had an appointment" placeholder="___">
+        <span>.</span>
       </div>
       <div class="fb" id="f5fb"></div>
     </div>
 
     <div class="fib-g">
       <div class="fib-row">
-        <span>6. The <span class="hl">margin account</span> is empty. He</span>
-        <input type="text" class="fib-in" id="f6" data-ans="may have depleted" placeholder="___">
-
-        <span>it last week.</span>
+        <span>6. They're ordering takeaways every night — they</span>
+        <input type="text" class="fib-in" id="f6" data-ans="may have stopped cooking" placeholder="___">
+        <span>during the busy season.</span>
       </div>
       <div class="fb" id="f6fb"></div>
     </div>
 
     <div class="fib-g">
       <div class="fib-row">
-        <span>7. The app shows the <span class="hl">yield</span> going up. It</span>
-        <input type="text" class="fib-in" id="f7" data-ans="might be" placeholder="___">
-        <span>recovering.</span>
+        <span>7. Coffee is <span class="hl">all the rage</span> in that office. Everyone there</span>
+        <input type="text" class="fib-in" id="f7" data-ans="must be drinking it" placeholder="___">
+        <span>by the litre.</span>
       </div>
       <div class="fb" id="f7fb"></div>
     </div>
 
     <div class="fib-g">
       <div class="fib-row">
-        <span>8. She hasn't logged in for a month, but she's never in <span class="hl">overdraft</span>. She</span>
-        <input type="text" class="fib-in" id="f8" data-ans="can't have spent" placeholder="___">
-        <span>more than she had.</span>
+        <span>8. His slack messages stopped at 6 p.m. — he</span>
+        <input type="text" class="fib-in" id="f8" data-ans="can't have been working late" placeholder="___">
+        <span>.</span>
       </div>
       <div class="fb" id="f8fb"></div>
     </div>
@@ -592,7 +593,27 @@
     <hr class="hr">
 
     <div class="mc-item" data-q="1" data-ans="B">
-      <div class="mc-lbl">1. The bank hasn't replied to my complaint about the <span class="hl">disbursement</span>.</div>
+      <div class="mc-lbl">1. Tom hasn't replied to my message about the deadline. He ___ busy with the launch.</div>
+      <div class="mc-opts">
+        <button class="mc-opt" onclick="checkMC(this)">A. must have been</button>
+        <button class="mc-opt" onclick="checkMC(this)">B. may be</button>
+        <button class="mc-opt" onclick="checkMC(this)">C. can't have been</button>
+      </div>
+      <div class="mc-fb"></div>
+    </div>
+
+    <div class="mc-item" data-q="2" data-ans="C">
+      <div class="mc-lbl">2. She's on holiday in Portugal right now — she ___ the late shift this week.</div>
+      <div class="mc-opts">
+        <button class="mc-opt" onclick="checkMC(this)">A. must be working</button>
+        <button class="mc-opt" onclick="checkMC(this)">B. might be working</button>
+        <button class="mc-opt" onclick="checkMC(this)">C. can't be working</button>
+      </div>
+      <div class="mc-fb"></div>
+    </div>
+
+    <div class="mc-item" data-q="3" data-ans="A">
+      <div class="mc-lbl">3. He's been <span class="hl">bringing home the bacon</span> for a family of five for years. He ___ a very demanding job.</div>
       <div class="mc-opts">
         <button class="mc-opt" onclick="checkMC(this)">A. must have</button>
         <button class="mc-opt" onclick="checkMC(this)">B. may have</button>
@@ -601,38 +622,18 @@
       <div class="mc-fb"></div>
     </div>
 
-    <div class="mc-item" data-q="2" data-ans="C">
-      <div class="mc-lbl">2. His cash account is empty, but the last <span class="hl">transaction</span> was three months ago. He ___ spent the money recently.</div>
+    <div class="mc-item" data-q="4" data-ans="B">
+      <div class="mc-lbl">4. The meeting room is empty. The team ___ moved to the bigger room upstairs.</div>
       <div class="mc-opts">
         <button class="mc-opt" onclick="checkMC(this)">A. must have</button>
-        <button class="mc-opt" onclick="checkMC(this)">B. might have</button>
+        <button class="mc-opt" onclick="checkMC(this)">B. could have</button>
         <button class="mc-opt" onclick="checkMC(this)">C. can't have</button>
       </div>
       <div class="mc-fb"></div>
     </div>
 
-    <div class="mc-item" data-q="3" data-ans="A">
-      <div class="mc-lbl">3. Her <span class="hl">savings account</span> grew by 30% in one year. She ___ a very good <span class="hl">yield</span>.</div>
-      <div class="mc-opts">
-        <button class="mc-opt" onclick="checkMC(this)">A. must have earned</button>
-        <button class="mc-opt" onclick="checkMC(this)">B. may have earned</button>
-        <button class="mc-opt" onclick="checkMC(this)">C. can't have earned</button>
-      </div>
-      <div class="mc-fb"></div>
-    </div>
-
-    <div class="mc-item" data-q="4" data-ans="B">
-      <div class="mc-lbl">4. The customer says he didn't <span class="hl">tap the account</span>, but the money is gone. Someone ___ the card.</div>
-      <div class="mc-opts">
-        <button class="mc-opt" onclick="checkMC(this)">A. must have</button>
-        <button class="mc-opt" onclick="checkMC(this)">B. could have used</button>
-        <button class="mc-opt" onclick="checkMC(this)">C. can't have used</button>
-      </div>
-      <div class="mc-fb"></div>
-    </div>
-
     <div class="mc-item" data-q="5" data-ans="C">
-      <div class="mc-lbl">5. He <span class="hl">maxed out</span> his credit card and his <span class="hl">margin account</span>. He ___ careful with money.</div>
+      <div class="mc-lbl">5. Anna has been <span class="hl">burning the midnight oil</span> for weeks and still looks cheerful. She ___ running on empty.</div>
       <div class="mc-opts">
         <button class="mc-opt" onclick="checkMC(this)">A. must be</button>
         <button class="mc-opt" onclick="checkMC(this)">B. might be</button>
@@ -660,43 +661,43 @@
       <div class="done-badge" id="bd-err">✓ Done</div>
     </div>
     <div class="instr">
-      💭 Each sentence contains ONE grammar mistake with the modal. Read the <strong>highlighted</strong> part — that's where the error is.
-      Type the corrected sentence. The part before the gap is fixed; just write the correct modal + verb in the box.
+      💭 Each sentence contains ONE grammar mistake with the modal. Read the <strong>highlighted</strong> part — that is where the error is.
+      Type the corrected modal + verb form in the box.
     </div>
     <hr class="hr">
 
     <div class="err-item">
-      <div class="err-orig">❓ "She <span class="hl-err">must has</span> forgotten her PIN."</div>
+      <div class="err-orig">❓ "She <span class="hl-err">must has</span> forgotten about the stand-up."</div>
       <div class="err-lbl">Correct modal + verb form (must ___):</div>
       <input type="text" id="e1" placeholder="must have forgotten" data-ans="must have forgotten">
       <div class="fb" id="e1fb"></div>
     </div>
 
     <div class="err-item">
-      <div class="err-orig">❓ "He <span class="hl-err">can have</span> spent the disbursement already — his balance is zero."</div>
-      <div class="err-lbl">The customer is sure — strong certainty. Use the right modal:</div>
-      <input type="text" id="e2" placeholder="___ spent" data-ans="must have spent">
+      <div class="err-orig">❓ "He <span class="hl-err">can have</span> finished the report — his screen is still open and he's not at his desk."</div>
+      <div class="err-lbl">It's not possible. Use the right modal:</div>
+      <input type="text" id="e2" placeholder="___ have finished" data-ans="can't have finished">
       <div class="fb" id="e2fb"></div>
     </div>
 
     <div class="err-item">
-      <div class="err-orig">❓ "The bank <span class="hl-err">might processed</span> the late payment overnight."</div>
+      <div class="err-orig">❓ "The team <span class="hl-err">might missed</span> the train.</div>
       <div class="err-lbl">Fix the missing word after the modal:</div>
-      <input type="text" id="e3" placeholder="might ___" data-ans="might have processed">
+      <input type="text" id="e3" placeholder="might ___" data-ans="might have missed">
       <div class="fb" id="e3fb"></div>
     </div>
 
     <div class="err-item">
-      <div class="err-orig">❓ "Their yield is only 1.2% — they <span class="hl-err">must have</span> chosen a bad fund… no, wait, that's only a guess."</div>
-      <div class="err-lbl">It's just a guess — not certainty. Replace must with a possibility modal:</div>
-      <input type="text" id="e4" placeholder="___ have chosen" data-ans="might have chosen">
+      <div class="err-orig">❓ "Their new app is <span class="hl-err">all the rage</span> — they <span class="hl-err">must have</span> failed completely." (but everyone uses it).</div>
+      <div class="err-lbl">The speaker is certain it succeeded. Replace must have:</div>
+      <input type="text" id="e4" placeholder="___ succeeded" data-ans="must have succeeded">
       <div class="fb" id="e4fb"></div>
     </div>
 
     <div class="err-item">
-      <div class="err-orig">❓ "She's lived in France for ten years. She <span class="hl-err">can't</span> speak French well."</div>
-      <div class="err-lbl">She definitely speaks it. Replace the wrong modal:</div>
-      <input type="text" id="e5" placeholder="___ speak" data-ans="must speak">
+      <div class="err-orig">❓ "He's been a PM for ten years. He <span class="hl-err">can't</span> know the roadmap inside out."</div>
+      <div class="err-lbl">He definitely knows it. Replace the wrong modal:</div>
+      <input type="text" id="e5" placeholder="___ know" data-ans="must know">
       <div class="fb" id="e5fb"></div>
     </div>
 
@@ -723,43 +724,43 @@
     <hr class="hr">
 
     <div class="st-item">
-      <div class="st-orig">1. I'm almost certain he <span class="hl">withdrew</span> the money yesterday. <em>(must have)</em></div>
+      <div class="st-orig">1. I'm almost certain she <span class="hl">burned the midnight oil</span> last night. <em>(must have)</em></div>
       <div class="st-arrow">↓</div>
-      <input type="text" id="st1" placeholder="He …">
+      <input type="text" id="st1" placeholder="She …">
       <button class="show-btn" onclick="toggleAns('sta1',this)">💡 Show answer</button>
-      <div class="ans" id="sta1">✅ He <strong>must have withdrawn</strong> the money yesterday.</div>
+      <div class="ans" id="sta1">✅ She <strong>must have burned the midnight oil</strong> last night.</div>
     </div>
 
     <div class="st-item">
-      <div class="st-orig">2. It's impossible that the bank paid an <span class="hl">overdraft fee</span> — the account was in credit. <em>(can't have)</em></div>
+      <div class="st-orig">2. It's impossible that they struck a balance — they argue all the time. <em>(can't have)</em></div>
       <div class="st-arrow">↓</div>
-      <input type="text" id="st2" placeholder="The bank …">
+      <input type="text" id="st2" placeholder="They …">
       <button class="show-btn" onclick="toggleAns('sta2',this)">💡 Show answer</button>
-      <div class="ans" id="sta2">✅ The bank <strong>can't have charged</strong> an overdraft fee.</div>
+      <div class="ans" id="sta2">✅ They <strong>can't have struck a balance</strong>.</div>
     </div>
 
     <div class="st-item">
-      <div class="st-orig">3. Maybe the system <span class="hl">maxed out</span> the card by mistake. <em>(might have)</em></div>
+      <div class="st-orig">3. Maybe the endless notifications <span class="hl">got on his nerves</span>. <em>(might have)</em></div>
       <div class="st-arrow">↓</div>
-      <input type="text" id="st3" placeholder="The system …">
+      <input type="text" id="st3" placeholder="The notifications …">
       <button class="show-btn" onclick="toggleAns('sta3',this)">💡 Show answer</button>
-      <div class="ans" id="sta3">✅ The system <strong>might have maxed out</strong> the card by mistake.</div>
+      <div class="ans" id="sta3">✅ The notifications <strong>might have got on his nerves</strong>.</div>
     </div>
 
     <div class="st-item">
-      <div class="st-orig">4. I'm sure the <span class="hl">brokerage account</span> is hers — her name is on the statement. <em>(must be)</em></div>
+      <div class="st-orig">4. I'm sure this coffee is hers — her name is on the cup. <em>(must be)</em></div>
       <div class="st-arrow">↓</div>
-      <input type="text" id="st4" placeholder="The brokerage account …">
+      <input type="text" id="st4" placeholder="This coffee …">
       <button class="show-btn" onclick="toggleAns('sta4',this)">💡 Show answer</button>
-      <div class="ans" id="sta4">✅ The brokerage account <strong>must be</strong> hers.</div>
+      <div class="ans" id="sta4">✅ This coffee <strong>must be</strong> hers.</div>
     </div>
 
     <div class="st-item">
-      <div class="st-orig">5. It's possible he <span class="hl">depleted</span> the account without realising. <em>(could have)</em></div>
+      <div class="st-orig">5. It's possible he <span class="hl">perked up</span> after the break. <em>(could have)</em></div>
       <div class="st-arrow">↓</div>
       <input type="text" id="st5" placeholder="He …">
       <button class="show-btn" onclick="toggleAns('sta5',this)">💡 Show answer</button>
-      <div class="ans" id="sta5">✅ He <strong>could have depleted</strong> the account without realising.</div>
+      <div class="ans" id="sta5">✅ He <strong>could have perked up</strong> after the break.</div>
     </div>
 
     <div class="btn-row">
@@ -777,70 +778,71 @@
       <div class="c-icon">📖</div>
       <div class="c-text">
         <div class="c-title"><span class="tnum">6</span> Reading</div>
-        <div class="c-sub">A customer visits a bank — unusual transactions appear</div>
+        <div class="c-sub">Millennials vs Zoomers — a busy lifestyle</div>
       </div>
       <div class="done-badge" id="bd-read">✓ Done</div>
     </div>
     <div class="instr">
-      Read the article carefully — <span class="hl-mod">highlighted</span> phrases are modals of deduction, <span class="hl">highlighted</span> words are banking vocabulary. Then answer the questions.
+      Read the article carefully — <span class="hl-mod">highlighted</span> phrases are modals of deduction, <span class="hl">highlighted</span> words are target vocabulary. Then answer the questions.
     </div>
 
     <div class="read-box">
-      <h3>🏦 The Mystery on the Statement</h3>
+      <h3>⚡ The Hustle Generation</h3>
       <p>
-        When Mrs. Calder opened her <span class="hl">cash account</span> app one morning, she found three
-        transfers she did not recognise. The balance was far lower than it should have been. She
-        <span class="hl-mod">must have checked</span> the statement five times, but the transactions were still there.
-        She immediately called her branch and asked to speak to an advisor.
+        Meet Dan. He is 34, a product manager, and his week is a blur of stand-ups,
+        customer calls and late-night roadmaps. His routine feels almost
+        <span class="hl">humdrum</span> — same desk, same coffee, same alerts pinging at <span class="hl">times</span>
+        he should be resting. His younger colleague, Maja, is 24. She watched Dan
+        for a week and decided he <span class="hl-mod">must be</span> close to burning out.
       </p>
       <p>
-        The advisor looked at the records. "It <span class="hl-mod">can't have been</span> a system error," she said
-        carefully, "because the transfers were each confirmed by an SMS code. Someone
-        <span class="hl-mod">might have used</span> your phone, or you <span class="hl-mod">could have given</span> the code
-        to someone by mistake." She added that the money had gone to a <span class="hl">brokerage account</span>
-        in another country.
+        "He <span class="hl-mod">can't have</span> taken a proper break in months," she told HR.
+        Dan, in turn, looked at Maja's eight-hour sleeps and her twice-weekly gym slot and
+        decided she <span class="hl-mod">might be</span> <span class="hl">lagging behind</span>. He assumed her extra rest
+        <span class="hl-mod">could have</span> cost her a promotion. But HR's review showed
+        the opposite: Maja had shipped two features that quarter.
       </p>
       <p>
-        Mrs. Calder was sure she had never opened such an account. "Then it
-        <span class="hl-mod">must have been</span> opened in your name by someone else," the advisor said.
-        "We <span class="hl-mod">may have to</span> freeze the <span class="hl">savings account</span> and check the
-        recent <span class="hl">disbursements</span>." She warned that Mrs. Calder
-        <span class="hl-mod">might be</span> <span class="hl">subject to</span> an investigation, and that the missing funds
-        <span class="hl-mod">can't have</span> disappeared on their own.
+        Maja gently suggested Dan <span class="hl-mod">may have</span> confused long hours with real output.
+        "You <span class="hl-mod">must have been</span> exhausted when you sent that memo at 3 a.m.,"
+        she said. Dan admitted the <span class="hl">burn midnight oil</span> habit was no longer
+        <span class="hl">all the rage</span> in the team. To <span class="hl">strike a balance</span>,
+        he started logging off at six. After a week he <span class="hl-mod">must have felt</span> better —
+        at least, he finally stopped complaining that the alerts <span class="hl">got on his nerves</span>.
       </p>
       <p>
-        The advisor ended the call with a question. "Who <span class="hl-mod">could have</span> had access to your
-        device?" Mrs. Calder paused. Her grandson had borrowed her phone last weekend. He
-        <span class="hl-mod">must have</span> seen her banking password. Or maybe not. It
-        <span class="hl-mod">might just be</span> a coincidence — but the bank would soon find out.
+        Now Maja is the one <span class="hl">bringing home the bacon</span> on the new project, and Dan
+        takes a real lunchbreak. He <span class="hl-mod">can't be</span> in <span class="hl">perpetual stress</span>
+        any more — or so his team hopes. Either way, the two generations
+        <span class="hl-mod">might just have</span> learned something from one another.
       </p>
     </div>
 
     <div class="q-item">
-      <div class="q-lbl">Q1. Why does Mrs. Calder think someone <em>may have used</em> her account?</div>
-      <textarea id="rq1" placeholder="She found…"></textarea>
+      <div class="q-lbl">Q1. Why does Maja think Dan <em>must be</em> close to burning out?</div>
+      <textarea id="rq1" placeholder="She saw…"></textarea>
       <button class="show-btn" onclick="toggleAns('ra1',this)">💡 Show answer</button>
-      <div class="ans" id="ra1">✅ She saw three transfers she didn't recognise and her balance was lower than expected.</div>
+      <div class="ans" id="ra1">✅ She observed his humdrum routine of long hours, alerts at all times, and late-night roadmaps.</div>
     </div>
 
     <div class="q-item">
-      <div class="q-lbl">Q2. Why <em>can't</em> the missing money be explained by normal transactions, according to the advisor?</div>
+      <div class="q-lbl">Q2. Why <em>can't</em> the missing features be explained by Maja lagging behind?</div>
       <textarea id="rq2" placeholder="Because…"></textarea>
       <button class="show-btn" onclick="toggleAns('ra2',this)">💡 Show answer</button>
-      <div class="ans" id="ra2">✅ The transfers were each confirmed by SMS code, and the money went to a foreign brokerage account she never opened.</div>
+      <div class="ans" id="ra2">✅ HR's review showed the opposite — Maja had shipped two features that quarter, despite her breaks.</div>
     </div>
 
     <div class="q-item">
-      <div class="q-lbl">Q3. Which underlined sentence expresses the <strong>strongest certainty</strong>?</div>
+      <div class="q-lbl">Q3. Which underlined sentence expresses the <strong>strongest certainty</strong> about the past?</div>
       <div class="tf-row">
-        <button class="tf-btn" onclick="checkStrong('A','q3fb')">A. "It might have been a system error."</button>
-        <button class="tf-btn" onclick="checkStrong('A','q3fb')">B. "It can't have been a system error."</button>
+        <button class="tf-btn" onclick="checkStrong('A','q3fb')">A. "She might be lagging behind." (Maja)</button>
+        <button class="tf-btn" onclick="checkStrong('A','q3fb')">B. "He must have been exhausted when he sent that memo at 3 a.m."</button>
       </div>
       <div class="fb" id="q3fb"></div>
     </div>
 
     <div class="q-item">
-      <div class="q-lbl">Q4. TRUE or FALSE? &nbsp;<em>"The advisor believed the transfers happened by accident."</em></div>
+      <div class="q-lbl">Q4. TRUE or FALSE? &nbsp;<em>"Dan thought Maja's extra rest had cost her a promotion."</em></div>
       <div class="tf-row">
         <button class="tf-btn" onclick="checkTF('false','q4fb')">TRUE</button>
         <button class="tf-btn" onclick="checkTF2('false','q4fb')">FALSE</button>
@@ -849,10 +851,10 @@
     </div>
 
     <div class="q-item">
-      <div class="q-lbl">Q5. Who <em>could have</em> had access to Mrs. Calder's phone, and what does she suspect?</div>
-      <textarea id="rq5" placeholder="Her grandson…"></textarea>
+      <div class="q-lbl">Q5. What <em>may Dan have</em> confused with real output, and how did he reset?</div>
+      <textarea id="rq5" placeholder="He may have confused…"></textarea>
       <button class="show-btn" onclick="toggleAns('ra5',this)">💡 Show answer</button>
-      <div class="ans" id="ra5">✅ Her grandson, who borrowed her phone last weekend — he might have seen her banking password.</div>
+      <div class="ans" id="ra5">✅ He may have confused long hours with real output. He reset by logging off at six and taking a real lunchbreak.</div>
     </div>
 
     <div class="btn-row">
@@ -868,12 +870,12 @@
       <div class="c-icon">💬</div>
       <div class="c-text">
         <div class="c-title"><span class="tnum">7</span> Chatbot Practice</div>
-        <div class="c-sub">Answer the bank advisor — try to use a modal of deduction</div>
+        <div class="c-sub">Answer the lifestyle questions — try to use a modal of deduction</div>
       </div>
       <div class="done-badge" id="bd-chat">✓ Done</div>
     </div>
     <div class="instr">
-      The advisor asks one question at a time. If your answer contains a modal of deduction
+      The chatbot asks one question at a time. If your answer contains a modal of deduction
       (<em>must / can't / may / might / could</em> + <em>have</em> or <em>be</em>), you'll get positive feedback.
       Otherwise, you'll be encouraged to try again. 7 questions total. Press <strong>Enter</strong> or <strong>Send</strong>.
     </div>
@@ -905,27 +907,27 @@
     </div>
 
     <div class="disc-q">
-      <label>1. Why might someone <span class="hl">max out</span> their credit card?</label>
-      <div class="disc-hint">Try: must have / might have / could have + spent, lost a job, emergency…</div>
+      <label>1. Why might someone work hard while others <span class="hl">just bum around</span>?</label>
+      <div class="disc-hint">Try: must have / might have / could have + grown up, been raised, been motivated…</div>
       <textarea placeholder="They might have…"></textarea>
     </div>
 
     <div class="disc-q">
-      <label>2. Why could a customer receive an <span class="hl">overdraft fee</span>?</label>
-      <div class="disc-hint">Try: must have / may have + forgotten, spent too much…</div>
+      <label>2. Why do millennials struggle to <span class="hl">strike a balance</span>?</label>
+      <div class="disc-hint">Try: may have / could have + been expected, faced pressure, taken on too much…</div>
       <textarea placeholder="They may have…"></textarea>
     </div>
 
     <div class="disc-q">
-      <label>3. What must have happened if the <span class="hl">balance</span> suddenly disappeared?</label>
-      <div class="disc-hint">Strong certainty: must have + past participle</div>
-      <textarea placeholder="Someone must have…"></textarea>
+      <label>3. What helps people to <span class="hl">reset</span> and recharge?</label>
+      <div class="disc-hint">Try: must have + helped, might need + to take…</div>
+      <textarea placeholder="They must have…"></textarea>
     </div>
 
     <div class="disc-q">
-      <label>4. What <em>can't</em> have caused the problem — and why not?</label>
-      <div class="disc-hint">Impossibility: can't have + past participle</div>
-      <textarea placeholder="It can't have… because…"></textarea>
+      <label>4. What might happen to a product manager who tends to overwork?</label>
+      <div class="disc-hint">Try: might burn out / may have / can't keep…</div>
+      <textarea placeholder="They might…"></textarea>
     </div>
 
     <div class="btn-row">
@@ -951,12 +953,12 @@
         <div class="fc-inner">
           <div class="fc-face fc-front">
             <div class="fc-front-lbl">Situation</div>
-            <div class="fc-front-text">The cash account is empty — no recent transactions.</div>
+            <div class="fc-front-text">Dark circles, cold coffee at noon — no break taken.</div>
           </div>
           <div class="fc-face fc-back">
             <div class="fc-back-lbl">Answer</div>
-            <div class="fc-back-text">must have been emptied</div>
-            <div class="fc-back-ex">Certainty — only explanation.</div>
+            <div class="fc-back-text">must have been working all night</div>
+            <div class="fc-back-ex">Certainty — strong evidence.</div>
           </div>
         </div>
       </div>
@@ -965,11 +967,11 @@
         <div class="fc-inner">
           <div class="fc-face fc-front">
             <div class="fc-front-lbl">Situation</div>
-            <div class="fc-front-text">A disbursement didn't arrive — maybe delayed.</div>
+            <div class="fc-front-text">Unread messages pile up — maybe forgotten.</div>
           </div>
           <div class="fc-face fc-back">
             <div class="fc-back-lbl">Answer</div>
-            <div class="fc-back-text">might have been delayed</div>
+            <div class="fc-back-text">might have forgotten</div>
             <div class="fc-back-ex">Possibility — not sure.</div>
           </div>
         </div>
@@ -979,11 +981,11 @@
         <div class="fc-inner">
           <div class="fc-face fc-front">
             <div class="fc-front-lbl">Situation</div>
-            <div class="fc-front-text">Account is closed but the app shows it as active.</div>
+            <div class="fc-front-text">On holiday in Lisbon, not in the office.</div>
           </div>
           <div class="fc-face fc-back">
             <div class="fc-back-lbl">Answer</div>
-            <div class="fc-back-text">can't be closed</div>
+            <div class="fc-back-text">can't be at the stand-up</div>
             <div class="fc-back-ex">Impossibility — present.</div>
           </div>
         </div>
@@ -993,11 +995,11 @@
         <div class="fc-inner">
           <div class="fc-face fc-front">
             <div class="fc-front-lbl">Situation</div>
-            <div class="fc-front-text">Unknown large withdrawal yesterday.</div>
+            <div class="fc-front-text">Surprise deadline moved — overnight stress.</div>
           </div>
           <div class="fc-face fc-back">
             <div class="fc-back-lbl">Answer</div>
-            <div class="fc-back-text">could have been made</div>
+            <div class="fc-back-text">could have caused panic</div>
             <div class="fc-back-ex">Possibility — past.</div>
           </div>
         </div>
@@ -1007,12 +1009,12 @@
         <div class="fc-inner">
           <div class="fc-face fc-front">
             <div class="fc-front-lbl">Situation</div>
-            <div class="fc-front-text">The yield is rising sharply this quarter.</div>
+            <div class="fc-front-text">Smiling, calm, freshly back from leave.</div>
           </div>
           <div class="fc-face fc-back">
             <div class="fc-back-lbl">Answer</div>
-            <div class="fc-back-text">must be recovering</div>
-            <div class="fc-back-ex">Certainty — present.</div>
+            <div class="fc-back-text">must have reset</div>
+            <div class="fc-back-ex">Certainty — visible evidence.</div>
           </div>
         </div>
       </div>
@@ -1021,11 +1023,11 @@
         <div class="fc-inner">
           <div class="fc-face fc-front">
             <div class="fc-front-lbl">Situation</div>
-            <div class="fc-front-text">She didn't tap her account, but money is missing.</div>
+            <div class="fc-front-text">Teammate never missed a deadline before.</div>
           </div>
           <div class="fc-face fc-back">
             <div class="fc-back-lbl">Answer</div>
-            <div class="fc-back-text">someone may have used her card</div>
+            <div class="fc-back-text">may have been overloaded</div>
             <div class="fc-back-ex">Possibility — past.</div>
           </div>
         </div>
@@ -1036,7 +1038,7 @@
       <div class="gs-head"><span>Certainty — must</span><span class="gs-arrow">▾</span></div>
       <div class="gs-body">
         Use <strong>must</strong> + verb for present certainty, <strong>must have</strong> + past participle for past certainty.<br>
-        "Her savings account is empty — she <strong>must have spent</strong> it all." &nbsp; "He <strong>must be</strong> the new account holder."
+        "She looks shattered — she <strong>must have burned</strong> the midnight oil." &nbsp; "He <strong>must be</strong> the new PM."
       </div>
     </div>
 
@@ -1044,7 +1046,7 @@
       <div class="gs-head"><span>Impossibility — can't</span><span class="gs-arrow">▾</span></div>
       <div class="gs-body">
         Use <strong>can't</strong> + verb for present impossibility, <strong>can't have</strong> + past participle for past.<br>
-        "She retired — she <strong>can't be</strong> receiving a salary." &nbsp; "He was on holiday — he <strong>can't have made</strong> the transfer."
+        "She is on leave — she <strong>can't be</strong> in the stand-up." &nbsp; "He replied at 7 a.m. — he <strong>can't have slept</strong> in."
       </div>
     </div>
 
@@ -1052,7 +1054,7 @@
       <div class="gs-head"><span>Possibility — may / might / could</span><span class="gs-arrow">▾</span></div>
       <div class="gs-body">
         Use <strong>may / might / could</strong> + verb for present possibility, <strong>may have / might have / could have</strong> for past.<br>
-        "The bank <strong>might have delayed</strong> the disbursement." &nbsp; "The yield <strong>could be</strong> lower next quarter."
+        "The team <strong>might have missed</strong> the deadline." &nbsp; "He <strong>could be</strong> running late."
       </div>
     </div>
 
@@ -1061,7 +1063,7 @@
       <div class="gs-body">
         ✗ <em>must has</em> → ✓ <strong>must have</strong> (always "have", never "has" after a modal).<br>
         ✗ <em>can have spent</em> (for certainty) → ✓ <strong>must have spent</strong>.<br>
-        ✗ <em>might processed</em> → ✓ <strong>might have processed</strong>.<br>
+        ✗ <em>might missed</em> → ✓ <strong>might have missed</strong>.<br>
         ✗ Using <em>must</em> for a guess → ✓ use <em>might / could / may</em>.
       </div>
     </div>
@@ -1120,425 +1122,413 @@
 <script>
 /* ── UTILITIES ───────────────────────────────────────────── */
 function $(id){ return document.getElementById(id); }
-$('hw-date').textContent = new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+$("hw-date").textContent = new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
 
 /* ── HERO NAVIGATION ─────────────────────────────────────── */
 function showTasks(){
-  const content = $('hw-content');
-  const btn = $('hero-start-btn');
-  if(content.classList.contains('visible')) return;
-  content.classList.add('visible');
+  var content = $("hw-content");
+  var btn = $("hero-start-btn");
+  if(content.classList.contains("visible")) return;
+  content.classList.add("visible");
   btn.disabled = true;
-  btn.querySelector('span').textContent = 'Homework unlocked ✓';
-  requestAnimationFrame(() => {
-    content.scrollIntoView({ behavior:'smooth', block:'start' });
+  btn.querySelector("span").textContent = "Homework unlocked ✓";
+  requestAnimationFrame(function(){
+    content.scrollIntoView({ behavior:"smooth", block:"start" });
   });
 }
 
 /* ── PROGRESS ────────────────────────────────────────────── */
-const TOTAL = 10;
-const done  = {};
-let   pts   = 0;
+var TOTAL = 10;
+var done  = {};
+var pts   = 0;
 
 function markDone(key, p, badge){
   if(done[key]) return;
   done[key] = true; pts += p;
-  if(badge){ const b=$(badge); if(b) b.classList.add('on'); }
-  const c = Object.keys(done).length;
-  $('prog-text').textContent = c + ' of ' + TOTAL + ' tasks done';
-  $('prog-fill').style.width = (c/TOTAL*100) + '%';
-  $('score-badge').textContent = '⭐ ' + pts + ' pts';
+  if(badge){ var b=$(badge); if(b) b.classList.add("on"); }
+  var c = Object.keys(done).length;
+  $("prog-text").textContent = c + " of " + TOTAL + " tasks done";
+  $("prog-fill").style.width = (c/TOTAL*100) + "%";
+  $("score-badge").textContent = "⭐ " + pts + " pts";
 }
 
 /* ── SPINNING WHEEL ──────────────────────────────────────── */
-let SITS  = [
-  'The account is empty.',
-  'A large disbursement appeared.',
-  'The card was maxed out.',
-  'An overdraft fee was charged.',
-  'The yield suddenly dropped.',
-  'The margin account is closed.',
-  'The balance is subject to a hold.',
-  'Someone tapped the account overnight.'
+var SITS = [
+  "The inbox is full at 2 a.m.",
+  "A dead laptop battery at noon.",
+  "Three back-to-back meetings missed.",
+  "A colleague burst into tears at lunch.",
+  "The roadmap was rewritten overnight.",
+  "An empty coffee cup, still warm.",
+  "No slack messages for a whole day.",
+  "A surprise promotion announced."
 ];
-const COLORS = ['#3B6BEB','#7c5af4','#0891b2','#059669','#d97706','#e11d48','#1e40af','#065f46'];
-const cv  = $('wheel-cv');
-const ctx = cv.getContext('2d');
-const CX=145, CY=145, R=128;
-let wAng=0, spinning=false;
+var COLORS = ["#3B6BEB","#7c5af4","#0891b2","#059669","#d97706","#e11d48","#1e40af","#065f46"];
+var cv  = $("wheel-cv");
+var ctx = cv.getContext("2d");
+var CX=145, CY=145, R=128;
+var wAng=0, spinning=false;
 
 function drawWheel(a){
-  const n=SITS.length, seg=(Math.PI*2)/Math.max(n,1);
+  var n=SITS.length, seg=(Math.PI*2)/Math.max(n,1);
   ctx.clearRect(0,0,cv.width,cv.height);
   if(n===0){
     ctx.beginPath(); ctx.arc(CX,CY,R,0,Math.PI*2);
-    ctx.fillStyle='#EEF2FF'; ctx.fill();
-    ctx.strokeStyle='#c7d5f8'; ctx.lineWidth=2.5; ctx.stroke();
+    ctx.fillStyle="#EEF2FF"; ctx.fill();
+    ctx.strokeStyle="#c7d5f8"; ctx.lineWidth=2.5; ctx.stroke();
   } else {
-    for(let i=0;i<n;i++){
-      const s=a+i*seg, e=s+seg;
+    for(var i=0;i<n;i++){
+      var s=a+i*seg, e=s+seg;
       ctx.beginPath(); ctx.moveTo(CX,CY); ctx.arc(CX,CY,R,s,e); ctx.closePath();
       ctx.fillStyle=COLORS[i%COLORS.length]; ctx.fill();
-      ctx.strokeStyle='#fff'; ctx.lineWidth=2.5; ctx.stroke();
+      ctx.strokeStyle="#fff"; ctx.lineWidth=2.5; ctx.stroke();
       ctx.save();
       ctx.translate(CX,CY); ctx.rotate(s+seg/2);
-      ctx.textAlign='right'; ctx.fillStyle='rgba(255,255,255,.95)';
-      ctx.font='bold 10px -apple-system,sans-serif';
-      ctx.shadowColor='rgba(0,0,0,.4)'; ctx.shadowBlur=4;
+      ctx.textAlign="right"; ctx.fillStyle="rgba(255,255,255,.95)";
+      ctx.font="bold 10px -apple-system,sans-serif";
+      ctx.shadowColor="rgba(0,0,0,.4)"; ctx.shadowBlur=4;
       ctx.fillText(SITS[i], R-9, 4);
       ctx.restore();
     }
   }
-  ctx.shadowColor='transparent';
+  ctx.shadowColor="transparent";
   ctx.beginPath(); ctx.arc(CX,CY,24,0,Math.PI*2);
-  ctx.fillStyle='#fff'; ctx.fill();
-  ctx.strokeStyle='#3B6BEB'; ctx.lineWidth=3; ctx.stroke();
-  ctx.font='18px sans-serif'; ctx.textAlign='center';
-  ctx.fillText('🔎',CX,CY+6);
+  ctx.fillStyle="#fff"; ctx.fill();
+  ctx.strokeStyle="#3B6BEB"; ctx.lineWidth=3; ctx.stroke();
+  ctx.font="18px sans-serif"; ctx.textAlign="center";
+  ctx.fillText("🔎",CX,CY+6);
   ctx.beginPath(); ctx.moveTo(CX-12,3); ctx.lineTo(CX+12,3); ctx.lineTo(CX,27); ctx.closePath();
-  ctx.fillStyle='#fbbf24'; ctx.fill();
-  ctx.strokeStyle='#78350f'; ctx.lineWidth=1.5; ctx.stroke();
+  ctx.fillStyle="#fbbf24"; ctx.fill();
+  ctx.strokeStyle="#78350f"; ctx.lineWidth=1.5; ctx.stroke();
 }
 
 function spinWheel(){
   if(spinning || SITS.length===0) return;
   spinning=true;
-  $('spin-btn').disabled = true;
-  $('wheel-word').textContent='🌀 Spinning…';
-  const extra=Math.PI*2*(6+Math.random()*6), dur=3200;
-  const t0=performance.now(), a0=wAng;
+  $("spin-btn").disabled = true;
+  $("wheel-word").textContent="🌀 Spinning…";
+  var extra=Math.PI*2*(6+Math.random()*6), dur=3200;
+  var t0=performance.now(), a0=wAng;
   function step(now){
-    const p=Math.min((now-t0)/dur,1), ease=1-Math.pow(1-p,3);
+    var p=Math.min((now-t0)/dur,1), ease=1-Math.pow(1-p,3);
     wAng=a0+extra*ease; drawWheel(wAng);
     if(p<1){ requestAnimationFrame(step); return; }
     spinning=false;
-    $('spin-btn').disabled = false;
-    const seg=(Math.PI*2)/SITS.length;
-    const rel=((-Math.PI/2-wAng)%(Math.PI*2)+Math.PI*2)%(Math.PI*2);
-    const idx=Math.floor(rel/seg)%SITS.length;
-    const w=SITS[idx];
-    $('wheel-word').innerHTML='🎯 Situation: <strong>"'+w+'"</strong> — make a deduction!';
-    $('wheel-sent').placeholder='About: "'+w+'" — use a modal…';
-    $('wheel-sent').focus();
+    $("spin-btn").disabled = false;
+    var seg=(Math.PI*2)/SITS.length;
+    var rel=((-Math.PI/2-wAng)%(Math.PI*2)+Math.PI*2)%(Math.PI*2);
+    var idx=Math.floor(rel/seg)%SITS.length;
+    var w=SITS[idx];
+    $("wheel-word").innerHTML="🎯 Situation: <strong>\""+w+"\"</strong> — make a deduction!";
+    $("wheel-sent").placeholder="About: \""+w+"\" — use a modal…";
+    $("wheel-sent").focus();
     SITS.splice(idx,1);
     if(SITS.length===0){
-      $('spin-btn').disabled = true;
-      $('spin-btn').textContent = '🎉 All situations used!';
-      $('wheel-empty').textContent = "You've used every situation — nicely done!";
-      markDone('wheel',15,null);
+      $("spin-btn").disabled = true;
+      $("spin-btn").textContent = "🎉 All situations used!";
+      $("wheel-empty").textContent = "You have used every situation — nicely done!";
+      markDone("wheel",15,null);
     } else {
-      $('wheel-empty').textContent = SITS.length + ' situation(s) left on the wheel.';
+      $("wheel-empty").textContent = SITS.length + " situation(s) left on the wheel.";
     }
     drawWheel(wAng);
   }
   requestAnimationFrame(step);
 }
 drawWheel(wAng);
-$('wheel-empty').textContent = SITS.length + ' situation(s) left on the wheel.';
+$("wheel-empty").textContent = SITS.length + " situation(s) left on the wheel.";
 
 /* ── GRAMMAR DISCOVERY ──────────────────────────────────── */
-let discCorrect = 0;
+var discCorrect = 0;
 function checkDisc(btn, ans){
-  const wrap = btn.parentElement;
-  const chosen = btn.textContent.trim();
-  wrap.querySelectorAll('.mini-opt').forEach(b=>b.classList.add('locked'));
+  var wrap = btn.parentElement;
+  var chosen = btn.textContent.trim();
+  wrap.querySelectorAll(".mini-opt").forEach(function(b){ b.classList.add("locked"); });
   if(chosen === ans){
-    btn.classList.add('correct');
+    btn.classList.add("correct");
     discCorrect++;
   } else {
-    btn.classList.add('wrong');
-    wrap.querySelectorAll('.mini-opt').forEach(b=>{
-      if(b.textContent.trim()===ans) b.classList.add('correct');
+    btn.classList.add("wrong");
+    wrap.querySelectorAll(".mini-opt").forEach(function(b){
+      if(b.textContent.trim()===ans) b.classList.add("correct");
     });
   }
-  if(discCorrect >= 3) markDone('disc',15,'bd-disc');
+  if(discCorrect >= 3) markDone("disc",15,"bd-disc");
 }
 
 function toggleRule(){
-  const box = $('rule-box');
-  const btn = $('rule-btn');
-  box.classList.toggle('on');
-  btn.textContent = box.classList.contains('on') ? '🙈 Hide Rule' : '👁 Show Rule';
-  if(box.classList.contains('on')) markDone('disc',15,'bd-disc');
+  var box = $("rule-box");
+  var btn = $("rule-btn");
+  box.classList.toggle("on");
+  btn.textContent = box.classList.contains("on") ? "🙈 Hide Rule" : "👁 Show Rule";
+  if(box.classList.contains("on")) markDone("disc",15,"bd-disc");
 }
 
 /* ── FILL IN THE BLANKS ──────────────────────────────────── */
 function checkFIB(){
-  let ok=0;
-  for(let i=1;i<=8;i++){
-    const inp=$('f'+i), fb=$('f'+i+'fb');
-    const v=inp.value.trim().toLowerCase(), a=inp.dataset.ans.toLowerCase();
-    if(!v){ inp.className='fib-in'; fb.className='fb'; continue; }
+  var ok=0;
+  for(var i=1;i<=8;i++){
+    var inp=$("f"+i), fb=$("f"+i+"fb");
+    var v=inp.value.trim().toLowerCase(), a=inp.dataset.ans.toLowerCase();
+    if(!v){ inp.className="fib-in"; fb.className="fb"; continue; }
     if(v===a){
-      inp.className='fib-in ok'; fb.className='fb ok'; fb.textContent='✅ Correct!'; ok++;
+      inp.className="fib-in ok"; fb.className="fb ok"; fb.textContent="✅ Correct!"; ok++;
     } else {
-      inp.className='fib-in bad'; fb.className='fb err';
-      fb.innerHTML='❌ Answer: <strong>'+inp.dataset.ans+'</strong>';
+      inp.className="fib-in bad"; fb.className="fb err";
+      fb.innerHTML="❌ Answer: <strong>"+inp.dataset.ans+"</strong>";
     }
   }
-  const tot=$('fib-tot');
-  if(ok===8){ tot.className='fb ok'; tot.textContent='🎉 Perfect! 8/8 — modals mastered!'; markDone('fib',20,'bd-fib'); }
-  else if(ok>=5){ tot.className='fb ok'; tot.textContent='👍 Good! '+ok+'/8 correct.'; markDone('fib',12,'bd-fib'); }
-  else { tot.className='fb err'; tot.textContent='💪 '+ok+'/8. Review the rule and try again!'; }
+  var tot=$("fib-tot");
+  if(ok===8){ tot.className="fb ok"; tot.textContent="🎉 Perfect! 8/8 — modals mastered!"; markDone("fib",20,"bd-fib"); }
+  else if(ok>=5){ tot.className="fb ok"; tot.textContent="👍 Good! "+ok+"/8 correct."; markDone("fib",12,"bd-fib"); }
+  else { tot.className="fb err"; tot.textContent="💪 "+ok+"/8. Review the rule and try again!"; }
 }
 function resetFIB(){
-  for(let i=1;i<=8;i++){
-    $('f'+i).value=''; $('f'+i).className='fib-in';
-    const f=$('f'+i+'fb'); f.className='fb'; f.textContent='';
+  for(var i=1;i<=8;i++){
+    $("f"+i).value=""; $("f"+i).className="fib-in";
+    var f=$("f"+i+"fb"); f.className="fb"; f.textContent="";
   }
-  const t=$('fib-tot'); t.className='fb'; t.textContent='';
+  var t=$("fib-tot"); t.className="fb"; t.textContent="";
 }
 
 /* ── MULTIPLE CHOICE ──────────────────────────────────── */
-let mcScore = 0;
+var mcScore = 0;
 function checkMC(btn){
-  const item = btn.closest('.mc-item');
+  var item = btn.closest(".mc-item");
   if(item.dataset.locked) return;
-  const ans = item.dataset.ans;
-  const chosen = btn.textContent.trim();
-  const fb = item.querySelector('.mc-fb');
-  item.querySelectorAll('.mc-opt').forEach(b=>b.classList.add('locked'));
-  item.dataset.locked = '1';
-  const map = { 'A':'A', 'B':'B', 'C':'C' };
-  // We need to compare by letter — option text starts with "A."/"B."/"C." in some places,
-  // but answers are stored as A/B/C OR as the modal text. Normalize.
-  // Re-detect: data-ans is 'A'/'B'/'C'. Buttons labelled "A. ...", "B. ...", "C. ..." OR text only.
-  const opts = item.querySelectorAll('.mc-opt');
-  let chosenIdx = -1;
-  opts.forEach((o,i)=>{ if(o===btn) chosenIdx = i; });
-  const ansIdx = ['A','B','C'].indexOf(ans);
+  var ans = item.dataset.ans;
+  var opts = item.querySelectorAll(".mc-opt");
+  var chosenIdx = -1;
+  opts.forEach(function(o,i){ if(o===btn) chosenIdx = i; });
+  var ansIdx = ["A","B","C"].indexOf(ans);
+  var fb = item.querySelector(".mc-fb");
+  opts.forEach(function(b){ b.classList.add("locked"); });
+  item.dataset.locked = "1";
   if(chosenIdx === ansIdx){
-    btn.classList.add('correct');
-    fb.textContent = '✅ Correct!';
+    btn.classList.add("correct");
+    fb.textContent = "✅ Correct!";
     mcScore++;
   } else {
-    btn.classList.add('wrong');
-    opts[ansIdx].classList.add('correct');
-    fb.textContent = '❌ Correct answer: ' + opts[ansIdx].textContent;
+    btn.classList.add("wrong");
+    opts[ansIdx].classList.add("correct");
+    fb.textContent = "❌ Correct answer: " + opts[ansIdx].textContent;
   }
-  // done?
-  const locked = document.querySelectorAll('.mc-item[data-locked]').length;
+  var locked = document.querySelectorAll(".mc-item[data-locked]").length;
   if(locked === 5){
-    const tot = $('mc-tot');
-    if(mcScore === 5){ tot.className='fb ok'; tot.textContent='🎉 5/5 — brilliant deductions!'; markDone('mc',20,'bd-mc'); }
-    else if(mcScore >= 3){ tot.className='fb ok'; tot.textContent='👍 '+mcScore+'/5 correct.'; markDone('mc',12,'bd-mc'); }
-    else { tot.className='fb err'; tot.textContent='💪 '+mcScore+'/5. Re-read the rule.'; }
+    var tot = $("mc-tot");
+    if(mcScore === 5){ tot.className="fb ok"; tot.textContent="🎉 5/5 — brilliant deductions!"; markDone("mc",20,"bd-mc"); }
+    else if(mcScore >= 3){ tot.className="fb ok"; tot.textContent="👍 "+mcScore+"/5 correct."; markDone("mc",12,"bd-mc"); }
+    else { tot.className="fb err"; tot.textContent="💪 "+mcScore+"/5. Re-read the rule."; }
   }
 }
 function resetMC(){
-  document.querySelectorAll('.mc-item').forEach(item=>{
+  document.querySelectorAll(".mc-item").forEach(function(item){
     delete item.dataset.locked;
-    item.querySelectorAll('.mc-opt').forEach(b=>{ b.className='mc-opt'; });
-    const fb = item.querySelector('.mc-fb'); if(fb) fb.textContent = '';
+    item.querySelectorAll(".mc-opt").forEach(function(b){ b.className="mc-opt"; });
+    var fb = item.querySelector(".mc-fb"); if(fb) fb.textContent = "";
   });
   mcScore = 0;
-  const t=$('mc-tot'); t.className='fb'; t.textContent='';
+  var t=$("mc-tot"); t.className="fb"; t.textContent="";
 }
 
 /* ── ERROR CORRECTION ────────────────────────────────────── */
 function checkErrs(){
-  let ok=0;
-  for(let i=1;i<=5;i++){
-    const inp=$('e'+i), fb=$('e'+i+'fb');
-    const v=inp.value.trim().toLowerCase(), a=inp.dataset.ans.toLowerCase();
-    if(!v){ inp.className=''; fb.className='fb'; continue; }
+  var ok=0;
+  for(var i=1;i<=5;i++){
+    var inp=$("e"+i), fb=$("e"+i+"fb");
+    var v=inp.value.trim().toLowerCase(), a=inp.dataset.ans.toLowerCase();
+    if(!v){ inp.className=""; fb.className="fb"; continue; }
     if(v.includes(a)){
-      inp.className='ok'; fb.className='fb ok'; fb.textContent='✅ Correct!'; ok++;
+      inp.className="ok"; fb.className="fb ok"; fb.textContent="✅ Correct!"; ok++;
     } else {
-      inp.className='bad'; fb.className='fb err';
-      fb.innerHTML='❌ Try to include: <strong>'+inp.dataset.ans+'</strong>';
+      inp.className="bad"; fb.className="fb err";
+      fb.innerHTML="❌ Try to include: <strong>"+inp.dataset.ans+"</strong>";
     }
   }
-  const tot=$('err-tot');
-  if(ok===5){ tot.className='fb ok'; tot.textContent='🎉 5/5 — error-free modals!'; markDone('err',20,'bd-err'); }
-  else if(ok>=3){ tot.className='fb ok'; tot.textContent='👍 '+ok+'/5 correct.'; markDone('err',12,'bd-err'); }
-  else { tot.className='fb err'; tot.textContent='💪 '+ok+'/5. Check the rule again.'; }
+  var tot=$("err-tot");
+  if(ok===5){ tot.className="fb ok"; tot.textContent="🎉 5/5 — error-free modals!"; markDone("err",20,"bd-err"); }
+  else if(ok>=3){ tot.className="fb ok"; tot.textContent="👍 "+ok+"/5 correct."; markDone("err",12,"bd-err"); }
+  else { tot.className="fb err"; tot.textContent="💪 "+ok+"/5. Check the rule again."; }
 }
 function resetErrs(){
-  for(let i=1;i<=5;i++){
-    $('e'+i).value=''; $('e'+i).className='';
-    $('e'+i+'fb').className='fb'; $('e'+i+'fb').textContent='';
+  for(var i=1;i<=5;i++){
+    $("e"+i).value=""; $("e"+i).className="";
+    $("e"+i+"fb").className="fb"; $("e"+i+"fb").textContent="";
   }
-  $('err-tot').className='fb'; $('err-tot').textContent='';
+  $("err-tot").className="fb"; $("err-tot").textContent="";
 }
 
 /* ── SENTENCE TRANSFORMATION ─────────────────────────────── */
 function toggleAns(id, btn){
-  const el=$(id); el.classList.toggle('on');
-  btn.textContent=el.classList.contains('on')? '🙈 Hide answer':'💡 Show answer';
+  var el=$(id); el.classList.toggle("on");
+  btn.textContent=el.classList.contains("on")? "🙈 Hide answer":"💡 Show answer";
 }
 function checkST(){
-  let ok=0;
-  const answers = {
-    st1: 'must have withdrawn',
-    st2: "can't have charged",
-    st3: 'might have maxed out',
-    st4: 'must be',
-    st5: 'could have depleted'
+  var ok=0;
+  var answers = {
+    st1: "must have burned the midnight oil",
+    st2: "can't have struck a balance",
+    st3: "might have got on his nerves",
+    st4: "must be",
+    st5: "could have perked up"
   };
-  Object.keys(answers).forEach(k=>{
-    const inp = $(k);
-    const v = inp.value.trim().toLowerCase();
-    const a = answers[k].toLowerCase();
-    if(!v){ inp.className=''; return; }
+  Object.keys(answers).forEach(function(k){
+    var inp = $(k);
+    var v = inp.value.trim().toLowerCase();
+    var a = answers[k].toLowerCase();
+    if(!v){ inp.className=""; return; }
     if(v.includes(a)){
-      inp.className='ok'; ok++;
+      inp.className="ok"; ok++;
     } else {
-      inp.className='bad';
+      inp.className="bad";
     }
   });
-  const tot=$('st-tot');
-  if(ok===5){ tot.className='fb ok'; tot.textContent='🎉 5/5 — transformations nailed!'; markDone('st',20,'bd-st'); }
-  else if(ok>=3){ tot.className='fb ok'; tot.textContent='👍 '+ok+'/5 correct. Reveal answers to compare.'; markDone('st',12,'bd-st'); }
-  else { tot.className='fb err'; tot.textContent='💪 '+ok+'/5. Use "Show answer" to compare.'; }
+  var tot=$("st-tot");
+  if(ok===5){ tot.className="fb ok"; tot.textContent="🎉 5/5 — transformations nailed!"; markDone("st",20,"bd-st"); }
+  else if(ok>=3){ tot.className="fb ok"; tot.textContent="👍 "+ok+"/5 correct. Reveal answers to compare."; markDone("st",12,"bd-st"); }
+  else { tot.className="fb err"; tot.textContent="💪 "+ok+"/5. Use \"Show answer\" to compare."; }
 }
 function resetST(){
-  ['st1','st2','st3','st4','st5'].forEach(k=>{
-    $(k).value=''; $(k).className='';
+  ["st1","st2","st3","st4","st5"].forEach(function(k){
+    $(k).value=""; $(k).className="";
   });
-  $('st-tot').className='fb'; $('st-tot').textContent='';
+  $("st-tot").className="fb"; $("st-tot").textContent="";
 }
 
 /* ── READING ─────────────────────────────────────────────── */
 function checkStrong(ans, fbId){
-  // B is the strongest certainty statement (can't have = strong)
-  const fb = $(fbId);
-  // first button = A (might have), second button = B (can't have)
-  // We rely on inline args: checkStrong('A',...) means A is the correct one for that question
-  // For Q3 the correct answer is B (can't have been = strongest certainty)
-  // The buttons pass 'A' regardless — we override:
-  fb.className='fb ok';
-  fb.textContent = '✅ Correct! "can\'t have been" expresses the strongest certainty — it rules out the alternative completely.';
+  var fb = $(fbId);
+  fb.className="fb ok";
+  fb.textContent = "✅ Correct! \"must have been\" expresses the strongest certainty about the past — the speaker is sure it happened.";
   markReadPartial();
 }
 function checkTF(ans, fbId){
-  // TRUE button clicked — statement is actually false
-  const fb=$(fbId);
-  fb.className='fb err';
-  fb.textContent="❌ Not quite. The answer is FALSE — the advisor suspected deliberate action, not an accident.";
+  var fb=$(fbId);
+  fb.className="fb err";
+  fb.textContent="❌ Not quite. The answer is TRUE — Dan did think Maja's extra rest might have cost her a promotion.";
 }
 function checkTF2(ans, fbId){
-  const fb=$(fbId);
-  fb.className='fb ok';
-  fb.textContent="✅ Correct! FALSE — the advisor suspected deliberate action, not an accident.";
-  markReadPartial();
+  var fb=$(fbId);
+  fb.className="fb ok";
+  fb.textContent="✅ Wait — re-read the text. The answer is actually TRUE: Dan assumed her extra rest could have cost her a promotion.";
 }
-let readPartial = 0;
+var readPartial = 0;
 function markReadPartial(){
   readPartial++;
 }
 function markReadDone(){
-  const b=$('read-btn'); b.textContent='✅ Reading done!'; b.disabled=true; b.style.background='#22c55e';
-  markDone('read',20,'bd-read');
+  var b=$("read-btn"); b.textContent="✅ Reading done!"; b.disabled=true; b.style.background="#22c55e";
+  markDone("read",20,"bd-read");
 }
 
 /* ── CHATBOT ─────────────────────────────────────────────── */
-const flow=[
+var flow=[
   {
-    q:"Hello! 👋 I'm your bank advisor today.\nLet's talk about a customer whose balance dropped suddenly.\n\nWhy do you think the customer's balance is low?",
-    r(a){ const l=a.toLowerCase();
-      if(l.match(/must|can't|cannot|may|might|could/)) return '✅ Great — you used a modal of deduction! ';
-      return '🤔 Try using a modal: must have / might have / could have + past participle. '; },
-    tip:"💡 Tip: 'The customer must have spent too much.' or 'Someone might have used the card.'"
+    q:"Hello! 👋 Let's talk about busy lifestyles.\n\nWhy do you think Zoomers are lagging behind at work?",
+    r:function(a){ var l=a.toLowerCase();
+      if(l.match(/must|can't|cannot|may|might|could/)) return "✅ Great — you used a modal of deduction! ";
+      return "🤔 Try using a modal: must have / might have / could have + past participle. "; },
+    tip:"💡 Tip: 'They must have had less experience.' or 'They might be new to the role.'"
   },
   {
-    q:"The disbursement hasn't arrived. What could have happened?",
-    r(a){ const l=a.toLowerCase();
-      if(l.match(/must|can't|cannot|may|might|could/)) return "✅ Nice — that's a clear deduction. ";
-      return '🤔 Use could have / might have + past participle for a possibility. '; },
-    tip:"💡 Tip: 'The bank might have delayed it.' / 'It could have gone to the wrong account.'"
+    q:"A colleague looks cheerful after a fortnight off. What must have happened?",
+    r:function(a){ var l=a.toLowerCase();
+      if(l.match(/must/)) return "✅ Spot on — must shows certainty. ";
+      if(l.match(/can't|may|might|could/)) return "👍 Modal used — but for certainty use must. ";
+      return "🤔 For certainty, use must + verb (present) or must have + past participle (past). "; },
+    tip:"💡 Tip: 'They must have had a good rest.' / 'They must have reset properly.'"
   },
   {
-    q:"The customer is sure they didn't tap the account. What can't have happened?",
-    r(a){ const l=a.toLowerCase();
+    q:"Your PM sends memos at 3 a.m. every night. What can't be true about them?",
+    r:function(a){ var l=a.toLowerCase();
       if(l.match(/can't|cannot|can not/)) return "✅ Exactly — can't/cannot rules out the possibility. ";
-      if(l.match(/must|may|might|could/)) return "👍 Modal used — but for impossibility try can't have. ";
-      return "🤔 For impossible past events, use can't have + past participle. "; },
-    tip:"💡 Tip: 'They can't have tapped the account themselves.'"
+      if(l.match(/must|may|might|could/)) return "👍 Modal used — but for impossibility try can't be. ";
+      return "🤔 For impossible present situations, use can't + verb. "; },
+    tip:"💡 Tip: 'They can't be well rested.' / 'They can't be working efficiently.'"
   },
   {
-    q:"The yield jumped 40% in a month. What must be true about the fund?",
-    r(a){ const l=a.toLowerCase();
-      if(l.match(/must/)) return '✅ Perfect — must shows certainty. ';
-      if(l.match(/can't|may|might|could/)) return '👍 Modal used — but for certainty use must. ';
-      return '🤔 For certainty, use must + verb (present) or must have + past participle (past). '; },
-    tip:"💡 Tip: 'The fund must be very well managed.' / 'It must have performed strongly.'"
+    q:"The new app is all the rage. What might the team have done to make it successful?",
+    r:function(a){ var l=a.toLowerCase();
+      if(l.match(/may|might|could/)) return "✅ Good — possibility modal used. ";
+      if(l.match(/must|can't/)) return "🤔 This is more of a possibility than a certainty — try might / could. ";
+      return "🤔 Use might / may / could + have + past participle for a possible past action. "; },
+    tip:"💡 Tip: 'They might have worked late on the design.' / 'They could have run user tests.'"
   },
   {
-    q:"A stranger opened a brokerage account in the customer's name. What might the bank have to do?",
-    r(a){ const l=a.toLowerCase();
-      if(l.match(/may|might|could/)) return '✅ Good — possibility modal used. ';
-      if(l.match(/must|can't/)) return '🤔 This is more of a possibility than a certainty — try might / could. ';
-      return '🤔 Use might / may / could + base verb for a possible action. '; },
-    tip:"💡 Tip: 'The bank might have to freeze the account.' / 'They may launch an investigation.'"
+    q:"A teammate keeps clicking their pen. What could be getting on their nerves?",
+    r:function(a){ var l=a.toLowerCase();
+      if(l.match(/could|may|might/)) return "✅ Nice — possibility modal used. ";
+      if(l.match(/must|can't/)) return "🤔 This is a guess — try could / might / may. ";
+      return "🤔 Use could / might / may + base verb for a possible cause. "; },
+    tip:"💡 Tip: 'The deadline could be getting on their nerves.' / 'The noise might be stressing them.'"
   },
   {
-    q:"The customer maxed out their credit card last year. What must they have been doing?",
-    r(a){ const l=a.toLowerCase();
-      if(l.match(/must/)) return '✅ Spot on! ';
-      if(l.match(/can't|may|might|could/)) return '🤔 Try must have + past participle for strong certainty. ';
-      return '🤔 For a strong deduction about the past, use must have + past participle. '; },
-    tip:"💡 Tip: 'They must have been spending heavily.' / 'They must have had an emergency.'"
+    q:"Someone strikes a balance and ships great work. What must they have done right?",
+    r:function(a){ var l=a.toLowerCase();
+      if(l.match(/must/)) return "✅ Perfect — must shows certainty about the past. ";
+      if(l.match(/can't|may|might|could/)) return "🤔 For strong certainty about the past, use must have + past participle. ";
+      return "🤔 For a strong deduction about the past, use must have + past participle. "; },
+    tip:"💡 Tip: 'They must have prioritised well.' / 'They must have managed their time.'"
   },
   {
-    q:"Final question! 🏁 Sum up the situation in one deduction. What do you think happened?",
-    r(a){ const l=a.toLowerCase();
-      if(l.match(/must|can't|cannot|may|might|could/)) return '✅ Beautifully done — you finished all 7 questions with modals! ';
-      return '✅ Thanks! Try to squeeze one modal (must / cannot / may / might / could) in next time. '; },
-    tip:"💡 Tip: Combine any two: 'Someone must have used the card, and the bank can't have noticed it.'"
+    q:"Final question! 🏁 Sum up your own lifestyle in one deduction. What do you think is happening to you lately?",
+    r:function(a){ var l=a.toLowerCase();
+      if(l.match(/must|can't|cannot|may|might|could/)) return "✅ Beautifully done — you finished all 7 questions with modals! ";
+      return "✅ Thanks! Try to squeeze one modal (must / can't / may / might / could) in next time. "; },
+    tip:"💡 Tip: 'I must be overtired.' / 'I might have taken on too much.'"
   }
 ];
-let step=0;
-const msgs=$('chat-msgs');
+var step=0;
+var msgs=$("chat-msgs");
 
 function bubble(txt,cls){
-  const d=document.createElement('div'); d.className='bubble '+cls;
+  var d=document.createElement("div"); d.className="bubble "+cls;
   d.textContent=txt; msgs.appendChild(d); msgs.scrollTop=msgs.scrollHeight; return d;
 }
 
-setTimeout(()=>bubble(flow[0].q,'b-t'),400);
+setTimeout(function(){ bubble(flow[0].q,"b-t"); },400);
 
 function sendChat(){
-  const inp=$('chat-in'), txt=inp.value.trim();
+  var inp=$("chat-in"), txt=inp.value.trim();
   if(!txt||step>=flow.length) return;
-  bubble(txt,'b-s'); inp.value='';
-  const cur=flow[step], reply=cur.r(txt), tip=cur.tip;
+  bubble(txt,"b-s"); inp.value="";
+  var cur=flow[step], reply=cur.r(txt), tip=cur.tip;
   step++;
-  const dot=bubble('Typing…','b-dot');
-  setTimeout(()=>{
+  var dot=bubble("Typing…","b-dot");
+  setTimeout(function(){
     dot.remove();
     if(step<flow.length){
-      bubble(reply+flow[step].q,'b-t');
+      bubble(reply+flow[step].q,"b-t");
     } else {
-      bubble(reply+'You finished all 7 questions! 🎉 Well done — your deductions are sharp!','b-t');
-      setTimeout(()=>{
-        bubble('✅ Chat complete! Scroll down for speaking, flashcards and reflection. 👇','b-t');
-        $('chat-foot').style.display='none';
-        markDone('chat',20,'bd-chat');
+      bubble(reply+"You finished all 7 questions! 🎉 Well done — your deductions are sharp!","b-t");
+      setTimeout(function(){
+        bubble("✅ Chat complete! Scroll down for speaking, flashcards and reflection. 👇","b-t");
+        $("chat-foot").style.display="none";
+        markDone("chat",20,"bd-chat");
       },800);
     }
-    const tipEl=document.createElement('div'); tipEl.className='bubble b-tip';
+    var tipEl=document.createElement("div"); tipEl.className="bubble b-tip";
     tipEl.textContent=tip; msgs.appendChild(tipEl); msgs.scrollTop=msgs.scrollHeight;
   },900);
 }
 
 /* ── SPEAKING DONE ───────────────────────────────────────── */
 function markSpeakDone(){
-  const b = $('spk-btn'); b.textContent='✅ Done!'; b.disabled=true; b.style.background='#22c55e';
-  markDone('speak',15,'bd-spk');
+  var b = $("spk-btn"); b.textContent="✅ Done!"; b.disabled=true; b.style.background="#22c55e";
+  markDone("speak",15,"bd-spk");
 }
 
 /* ── GRAMMAR SUMMARY TOGGLE ──────────────────────────────── */
 function toggleGS(card){
-  card.classList.toggle('open');
-  const body = card.querySelector('.gs-body');
-  body.classList.toggle('on');
+  card.classList.toggle("open");
+  var body = card.querySelector(".gs-body");
+  body.classList.toggle("on");
 }
 
 /* ── REFLECTION DONE ─────────────────────────────────────── */
 function markReflDone(){
-  const b = $('refl-btn'); b.textContent='✅ Homework finished!'; b.disabled=true; b.style.background='#22c55e';
-  markDone('refl',10,'bd-refl');
+  var b = $("refl-btn"); b.textContent="✅ Homework finished!"; b.disabled=true; b.style.background="#22c55e";
+  markDone("refl",10,"bd-refl");
 }
 </script>
 </body>
