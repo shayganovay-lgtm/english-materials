@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Progress Test · Study Buddy · A2</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#F7F8FB; --surface:#fff; --ink:#1F2937; --muted:#6B7280; --line:#E5E7EB;
+  --accent:#5B6BF0; --accent-dark:#4453D6; --accent-soft:#EEF0FE;
+  --ok:#16A34A; --ok-bg:#F0FDF4; --ok-line:#BBF7D0;
+  --err:#DC2626; --err-bg:#FEF2F2; --err-line:#FECACA;
+  --gold:#F59E0B; --gold-bg:#FFFBEB; --gold-line:#FDE68A;
+  --radius:16px; --shadow:0 4px 18px rgba(31,41,55,.06);
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;}
+.serif{font-family:Georgia,'Times New Roman',serif;}
+
+/* ── TOP BAR ── */
+.topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:14px clamp(16px,5vw,48px);display:flex;align-items:center;gap:16px;}
+.brand{font-family:Georgia,serif;font-weight:800;font-size:17px;color:var(--ink);white-space:nowrap;}
+.brand .dot{color:var(--accent);}
+.topbar-quiz{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.04em;}
+#prog-wrap{flex:1;display:flex;align-items:center;gap:12px;min-width:120px;}
+#prog-track{flex:1;height:8px;background:var(--accent-soft);border-radius:99px;overflow:hidden;}
+#prog-fill{height:100%;width:0;background:linear-gradient(90deg,var(--accent),#8B8BF7);border-radius:99px;transition:width .5s ease;}
+#prog-txt{font-size:12px;font-weight:700;color:var(--accent);white-space:nowrap;min-width:52px;text-align:right;}
+#score-pill{background:var(--accent-soft);color:var(--accent);font-size:12px;font-weight:700;padding:5px 12px;border-radius:99px;white-space:nowrap;}
+
+/* ── HERO ── */
+.hero{padding:clamp(32px,6vw,56px) clamp(16px,5vw,48px);display:flex;justify-content:center;}
+.hero-inner{max-width:680px;}
+.eyebrow{font-family:Georgia,serif;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+.eyebrow::before{content:'';width:22px;height:2px;background:var(--accent);border-radius:2px;}
+h1{font-family:Georgia,serif;font-size:clamp(28px,5vw,42px);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:14px;}
+h1 em{font-style:normal;color:var(--accent);}
+.hero-sub{font-size:16px;color:var(--muted);line-height:1.7;margin-bottom:28px;max-width:60ch;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px;}
+.chip{font-size:12px;font-weight:600;padding:6px 13px;border-radius:99px;background:#fff;border:1px solid var(--line);color:var(--ink);}
+.chip.accent{background:var(--accent-soft);color:var(--accent);border-color:transparent;}
+.start-btn{display:inline-flex;align-items:center;gap:10px;background:var(--accent);color:#fff;border:none;border-radius:99px;padding:15px 30px;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 8px 22px rgba(91,107,240,.32);transition:transform .15s ease, box-shadow .15s ease;}
+.start-btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(91,107,240,.4);}
+.start-btn:active{transform:translateY(0);}
+.start-btn:disabled{background:#C4C9D9;cursor:default;box-shadow:none;}
+
+/* ── TEST CONTENT ── */
+#test{display:none;max-width:760px;margin:0 auto;padding:0 clamp(16px,5vw,48px) 80px;}
+#test.visible{display:block;animation:fadeIn .4s ease both;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:clamp(20px,4vw,32px);margin-bottom:22px;box-shadow:var(--shadow);scroll-margin-top:80px;}
+.card-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:18px;}
+.q-num{flex-shrink:0;width:34px;height:34px;border-radius:10px;background:var(--accent-soft);color:var(--accent);font-family:Georgia,serif;font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center;}
+.q-body{flex:1;min-width:0;}
+.q-tag{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:3px 9px;border-radius:99px;margin-bottom:9px;}
+.q-text{font-weight:600;font-size:16px;color:var(--ink);line-height:1.55;}
+
+/* ── SECTION DIVIDER ── */
+.section-div{text-align:center;margin:34px 0 20px;position:relative;}
+.section-div span{position:relative;background:var(--bg);padding:0 14px;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);z-index:1;}
+.section-div::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:var(--line);}
+
+/* ── MCQ ── */
+.opts{display:flex;flex-direction:column;gap:10px;margin-top:4px;}
+.opt{display:flex;align-items:center;gap:12px;border:2px solid var(--line);background:#FAFBFE;border-radius:12px;padding:12px 16px;font-size:15px;cursor:pointer;transition:all .16s ease;color:var(--ink);text-align:left;font-family:inherit;width:100%;}
+.opt:hover{border-color:var(--accent);background:var(--accent-soft);}
+.opt .mark{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:transparent;transition:all .16s;}
+.opt.correct{border-color:var(--ok);background:var(--ok-bg);}
+.opt.correct .mark{border-color:var(--ok);background:var(--ok);color:#fff;}
+.opt.wrong{border-color:var(--err);background:var(--err-bg);}
+.opt.wrong .mark{border-color:var(--err);background:var(--err);color:#fff;}
+.opt.locked{cursor:default;}
+.opt.locked:hover{transform:none;}
+
+/* ── INPUT ── */
+.gapin{border:2px solid var(--line);border-radius:10px;padding:10px 14px;font-size:15px;font-family:inherit;background:#FAFBFE;width:100%;color:var(--ink);outline:none;transition:all .16s;min-width:90px;}
+.gapin:focus{border-color:var(--accent);background:#fff;box-shadow:0 0 0 3px rgba(91,107,240,.12);}
+.gapin.ok{border-color:var(--ok) !important;background:var(--ok-bg) !important;color:var(--ok);}
+.gapin.bad{border-color:var(--err) !important;background:var(--err-bg) !important;color:var(--err);}
+.gap-line{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:14px;font-size:15px;}
+.gap-line .gapin{flex:1;min-width:120px;max-width:260px;}
+
+/* ── ERROR ── */
+.err-orig{font-size:15px;color:var(--muted);background:#FAFBFE;border-left:3px solid var(--line);padding:10px 14px;border-radius:0 8px 8px 0;margin-bottom:8px;font-style:italic;}
+.err-orig .bad-mark{background:#FEE2E2;color:#991B1B;padding:1px 5px;border-radius:4px;font-weight:700;}
+.err-lbl{font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:600;}
+
+/* ── MATCHING ── */
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px;}
+@media(max-width:540px){.match-grid{grid-template-columns:1fr;}}
+.m-col{display:flex;flex-direction:column;gap:10px;}
+.m-it{border:2px solid var(--line);background:#FAFBFE;border-radius:11px;padding:11px 14px;cursor:pointer;font-size:14px;transition:all .15s;user-select:none;line-height:1.45;}
+.m-it:hover{border-color:var(--accent);}
+.m-it.sel{border-color:var(--accent);background:var(--accent-soft);color:var(--accent);font-weight:700;}
+.m-it.matched{border-color:var(--ok);background:var(--ok-bg);color:var(--ok);cursor:default;font-weight:700;}
+.m-it.mismatch{border-color:var(--err);background:var(--err-bg);color:var(--err);animation:shake .32s ease;}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+/* ── DRAG & DROP ── */
+.dnd-bank{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:16px;padding:14px;background:#F3F4F6;border:1.5px dashed var(--line);border-radius:12px;min-height:62px;}
+.dnd-chip{display:inline-flex;align-items:center;background:#fff;border:1.5px solid var(--line);border-radius:99px;padding:8px 16px;font-size:14px;font-weight:600;cursor:grab;transition:all .15s;user-select:none;}
+.dnd-chip:hover{border-color:var(--accent);color:var(--accent);box-shadow:0 2px 8px rgba(91,107,240,.16);}
+.dnd-chip.dragged{opacity:.4;}
+.dnd-chip.placed{opacity:.5;cursor:default;}
+.dnd-rows{display:flex;flex-direction:column;gap:10px;}
+.dnd-row{display:flex;align-items:center;flex-wrap:wrap;gap:8px;font-size:15px;border:1.5px solid var(--line);border-radius:12px;padding:11px 14px;background:#FAFBFE;}
+.dnd-slot{display:inline-flex;min-width:110px;min-height:38px;border:2px dashed var(--line);border-radius:9px;align-items:center;justify-content:center;padding:4px 10px;transition:all .15s;font-size:14px;font-weight:600;color:var(--ink);}
+.dnd-slot.over{border-color:var(--accent);background:var(--accent-soft);}
+.dnd-slot.filled{border-style:solid;border-color:var(--accent);background:#fff;}
+.dnd-slot.ok{border-color:var(--ok);background:var(--ok-bg);color:var(--ok);}
+.dnd-slot.bad{border-color:var(--err);background:var(--err-bg);color:var(--err);}
+
+/* ── UNSCRAMBLE ── */
+.scram-bank{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;min-height:50px;}
+.s-chip{background:var(--accent-soft);color:var(--accent-dark);border:1.5px solid transparent;border-radius:9px;padding:9px 14px;font-size:14px;font-weight:700;cursor:pointer;transition:all .14s;user-select:none;}
+.s-chip:hover{background:var(--accent);color:#fff;}
+.s-chip.used{opacity:.3;cursor:default;}
+.scram-line{display:flex;flex-wrap:wrap;align-items:center;gap:8px;min-height:50px;border:1.5px dashed var(--line);border-radius:12px;padding:11px 14px;background:#FAFBFE;margin-bottom:8px;}
+.s-token{background:#fff;border:1.5px solid var(--accent);color:var(--accent-dark);border-radius:9px;padding:8px 13px;font-size:14px;font-weight:700;cursor:pointer;transition:all .14s;}
+.s-token:hover{background:var(--accent-soft);}
+.s-token.ok{border-color:var(--ok);color:var(--ok);background:var(--ok-bg);}
+.s-token.bad{border-color:var(--err);color:var(--err);background:var(--err-bg);}
+
+/* ── FEEDBACK ── */
+.fb{display:none;padding:11px 15px;border-radius:10px;font-size:13.5px;margin-top:14px;line-height:1.55;}
+.fb.ok{display:block;background:var(--ok-bg);color:#15803D;border:1px solid var(--ok-line);}
+.fb.err{display:block;background:var(--err-bg);color:#991B1B;border:1px solid var(--err-line);}
+.fb .ans{font-weight:700;}
+
+/* ── BUTTONS ── */
+.btn-row{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:11px 24px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;border:none;font-family:inherit;transition:all .15s;}
+.btn:active{transform:scale(.97);}
+.btn-p{background:var(--accent);color:#fff;box-shadow:0 3px 10px rgba(91,107,240,.3);}
+.btn-p:hover{background:var(--accent-dark);}
+.btn-p:disabled{background:#C4C9D9;cursor:default;box-shadow:none;}
+.btn-o{background:#fff;color:var(--accent);border:2px solid var(--accent-soft);}
+.btn-o:hover{background:var(--accent-soft);}
+.btn-g{color:var(--accent);background:none;border:none;cursor:pointer;font-size:13px;font-weight:700;font-family:inherit;padding:6px 0;margin-top:10px;}
+.btn-g:hover{text-decoration:underline;}
+
+/* ── READING ── */
+.read-box{background:#F8F9FE;border:1.5px solid var(--line);border-radius:14px;padding:20px 22px;font-size:15px;line-height:1.8;margin-bottom:24px;}
+.read-box h4{color:var(--accent);font-size:16px;margin-bottom:10px;}
+.read-box .hl{background:#FCE7F3;color:#BE185D;padding:1px 5px;border-radius:4px;font-weight:600;}
+.read-box .hl-g{background:var(--gold-bg);color:#92400E;padding:1px 5px;border-radius:4px;font-weight:600;}
+
+/* ── DIALOGUE ── */
+.dlg{display:flex;flex-direction:column;gap:10px;margin-bottom:18px;}
+.dlg-line{padding:11px 15px;border-radius:14px;font-size:14.5px;max-width:88%;line-height:1.55;}
+.dlg-l{background:#F1F2F6;color:var(--ink);align-self:flex-start;border-bottom-left-radius:4px;}
+.dlg-r{background:var(--accent);color:#fff;align-self:flex-end;border-bottom-right-radius:4px;}
+.dlg-line .gapin{background:rgba(255,255,255,.85);margin:0 4px;max-width:150px;}
+
+/* ── COMPLETE TEST BTN ── */
+.center-cta{text-align:center;margin:10px 0 0;}
+.big-btn{background:var(--accent);color:#fff;border:none;border-radius:14px;padding:16px 38px;font-size:17px;font-weight:800;font-family:inherit;cursor:pointer;box-shadow:0 8px 26px rgba(91,107,240,.34);transition:all .16s;}
+.big-btn:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(91,107,240,.42);}
+.big-btn:active{transform:translateY(0);}
+.big-btn:disabled{background:#C4C9D9;cursor:default;box-shadow:none;}
+
+/* ── RESULTS ── */
+#results{display:none;max-width:680px;margin:0 auto;padding:0 clamp(16px,5vw,48px) 80px;}
+#results.visible{display:block;animation:fadeIn .5s ease both;}
+.score-hero{text-align:center;padding:36px 0 28px;}
+.score-emoji{font-size:54px;margin-bottom:8px;}
+.score-pct{font-family:Georgia,serif;font-size:clamp(56px,12vw,96px);font-weight:800;line-height:1;letter-spacing:-.03em;background:linear-gradient(135deg,var(--accent),#8B8BF7);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px;}
+.score-band{display:inline-block;font-size:15px;font-weight:800;padding:7px 20px;border-radius:99px;margin-bottom:10px;}
+.score-msg{font-size:15px;color:var(--muted);max-width:44ch;margin:0 auto;}
+
+.score-rows{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:26px 0;}
+.score-row{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow);}
+.score-row .lbl{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.score-row .val{font-family:Georgia,serif;font-size:30px;font-weight:800;color:var(--ink);line-height:1;}
+.score-row .bar{height:6px;background:var(--line);border-radius:99px;margin-top:10px;overflow:hidden;}
+.score-row .bar > div{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),#8B8BF7);transition:width .8s ease;}
+
+.revs{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin-bottom:16px;box-shadow:var(--shadow);}
+.revs h3{font-size:15px;font-weight:800;color:var(--ink);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.revs ul{margin:0;padding-left:20px;}
+.revs li{font-size:14px;color:var(--muted);margin-bottom:6px;line-height:1.5;}
+
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:1000;display:none;}
+.confetti.on{display:block;}
+
+footer{border-top:1px solid var(--line);padding:20px clamp(16px,5vw,48px);font-size:12px;color:var(--muted);text-align:center;}
+
+@media(max-width:540px){
+  .topbar{flex-wrap:wrap;gap:10px;}
+  #prog-wrap{order:3;flex-basis:100%;}
+  .brand{font-size:15px;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="brand">Study Buddy<span class="dot">.</span></div>
+  <div id="prog-wrap"><div id="prog-track"><div id="prog-fill"></div></div><div id="prog-txt">0/42</div></div>
+  <div id="score-pill">⭐ 0</div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <p class="eyebrow">Progress Test · A2 · Units 1–2</p>
+    <h1>How much have you <em>learned</em>?</h1>
+    <p class="hero-sub">A 42-question check of the grammar and vocabulary from English File Pre-intermediate, Units 1 and 2 — Present Simple, possessive adjectives, Present Continuous, daily routine, appearance, nationalities, special occasions, phrasal verbs and collocations.</p>
+    <div class="chips">
+      <span class="chip accent">Present Simple</span>
+      <span class="chip">Possessive adjectives</span>
+      <span class="chip">Present Continuous</span>
+      <span class="chip">Daily Routine</span>
+      <span class="chip">Appearance</span>
+      <span class="chip">Nationalities</span>
+      <span class="chip">Special Occasions</span>
+      <span class="chip">Phrasal verbs</span>
+      <span class="chip">Collocations</span>
+    </div>
+    <button class="start-btn" id="start-btn" onclick="startTest()">
+      <span>Start the test</span>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+</section>
+
+<!-- TEST -->
+<main id="test"></main>
+
+<!-- RESULTS -->
+<section id="results"></section>
+
+<canvas class="confetti" id="confetti"></canvas>
+
+<footer>Study Buddy · English File Pre-intermediate · Progress Test · Self-contained HTML</footer>
+
+<script>
+var Q = [
+/* ───────── PART 1 · EASY ───────── */
+{t:"mcq",tag:"Present Simple",q:"She ____ to the gym three times a week.",opts:["go","goes","going","is going"],a:1,ex:"Present Simple adds -s for he/she/it ('she goes')."},
+{t:"mcq",tag:"Possessive adjectives",q:"This is Anna, and this is ____ book.",opts:["her","his","she","their"],a:0,ex:"Anna is a woman → her book."},
+{t:"mcq",tag:"Daily routine",q:"I usually ____ at 6.30 a.m.",opts:["wake up","wake on","wake off","wake out"],a:0,ex:"The phrasal verb for 'stop sleeping' is 'wake up'."},
+{t:"mcq",tag:"Appearance",q:"He hasn't got straight hair — his hair is ____.",opts:["curly","skinny","chubby","beard"],a:0,ex:"Hair can be straight or curly."},
+{t:"mcq",tag:"Nationalities",q:"She is from Spain, so she is ____.",opts:["Spainish","Spanish","Spaniard","Spain"],a:1,ex:"From Spain → Spanish."},
+{t:"gap",tag:"Present Continuous",pre:"Look! The cat ",gap:"is sleeping",post:" on the bed now.",ex:"Present Continuous = be + -ing for actions happening now."},
+{t:"gap",tag:"Present Simple",pre:"Water ",gap:"boils",post:" at 100°C.",ex:"Scientific facts use Present Simple."},
+{t:"gap",tag:"Possessive adjectives",pre:"We are students. ",gap:"Our",post:" teacher is kind.",ex:"We → our."},
+{t:"mcq",tag:"Daily routine",q:"In the evening I ____ at about 11.",opts:["go to bed","go to a bed","go bed","go to the bed"],a:0,ex:"go to bed (no article) means start sleeping."},
+{t:"mcq",tag:"Phrasal verbs",q:"I ____ with my sister — we never argue.",opts:["get on well","get off","go out","stay away from"],a:0,ex:"get on well (with) = have a good relationship."},
+{t:"mcq",tag:"Idioms",q:"Oh, cinema? It's not really my ____.",opts:["a no-no","a cup of tea","a foodie","break the bank"],a:1,ex:"Not my cup of tea = not something I enjoy."},
+{t:"mcq",tag:"Appearance",q:"He has a ____ on his upper lip, but no beard.",opts:["moustache","curly hair","chubby","skincare"],a:0,ex:"A moustache = hair above the upper lip."},
+
+/* ───────── PART 2 · MEDIUM ───────── */
+{t:"err",tag:"Present Continuous",orig:"She are studying English right now.",ans:"She <span class='bad-mark'>are</span> studying → She <strong>is</strong> studying.",fix:"is studying",ex:"She takes is + -ing."},
+{t:"err",tag:"Present Simple",orig:"Do she like pizza?",ans:"Do she → Does she.",fix:"Does she like",ex:"For he/she/it the question word is 'does'."},
+{t:"err",tag:"Possessive adjectives",orig:"My brother is tall. She hair is dark.",ans:"<span class='bad-mark'>She</span> hair → <strong>His</strong> hair.",fix:"His hair",ex:"Brother → his."},
+{t:"err",tag:"Present Simple",orig:"He don't work on Sundays.",ans:"<span class='bad-mark'>don't</span> → <strong>doesn't</strong>.",fix:"doesn't work",ex:"he/she/it uses doesn't."},
+{t:"err",tag:"Phrasal verbs",orig:"They go out on Friday night — the cinema is their go-to favour.",ans:"go-to <span class='bad-mark'>favour</span> → go-to <strong>favourite</strong>.",fix:"go-to favourite",ex:"The word is 'favourite' (n.), not 'favour'."},
+{t:"trans",tag:"Present Simple",from:"She is happy.",to:"She ____ ____.",gap:"is always",ex:"Add a frequency adverb before the main verb: 'is always happy'."},
+{t:"trans",tag:"Appearance",from:"Her hair is not straight.",to:"She ____ ____ hair.",gap:"has curly",ex:"Opposite of straight hair = curly hair."},
+{t:"trans",tag:"Present Continuous",from:"Every day I walk to work.",to:"Today I ____ ____.",gap:"am walking",ex:"Present Continuous = be + -ing shows 'today' routines shifted."},
+{t:"match",tag:"Phrasal verbs",pairs:[
+  ["get on well","have a good relationship"],
+  ["get off","leave a bus or train"],
+  ["go out","leave home to have fun"],
+  ["stay away from","avoid"]
+]},
+{t:"match",tag:"Collocations",pairs:[
+  ["be keen on","like or enjoy (doing) something"],
+  ["off the beaten track","far from usual tourist routes"],
+  ["take photos","use a camera to capture images"],
+  ["have a busy schedule","have many things to do"]
+]},
+{t:"dnd",tag:"Special occasions",q:"Arrange the text in order.",rows:[
+  ["We","always","have","a big","dinner","on New Year's Eve."],
+  ["My","sister","decorates","the","tree","before the party."],
+  ["At","midnight","we","give","each other","presents."]
+]},
+{t:"scramble",tag:"Present Continuous",words:["She","is","not","working","today"],correct:"She is not working today",ex:"she + is + not + working + today."},
+{t:"mcq",tag:"Phrasal verbs",q:"I want to ____ this weekend — let's go to the cinema!",opts:["go out","work out","get off","stay away from"],a:0,ex:"go out = leave home for fun."},
+{t:"mcq",tag:"Collocations",q:"Her ____ spot is a small café near the river.",opts:["go-to favourite","off the beaten track","get cultured","a no-no"],a:0,ex:"go-to favourite = the spot one always chooses."},
+{t:"mcq",tag:"Idioms",q:"Fancy dinner? That won't ____.",opts:["break the bank","bring home the bacon","be my cup of tea","be a foodie"],a:0,ex:"Won't break the bank = won't cost too much."},
+{t:"mcq",tag:"Vocabulary",q:"He's quite ____ — he loves cooking and trying new flavours.",opts:["a foodie","a no-no","off the beaten track","a cup of tea"],a:0,ex:"a foodie = someone who loves food."},
+{t:"mcq",tag:"Appearance",q:"Her figure has beautiful ____.",opts:["curves","moustache","chubby","skinny"],a:0,ex:"curves (n., plural) = shape of the body."},
+{t:"gap",tag:"Daily routine",pre:"I don't eat breakfast — I ",gap:"skip breakfast",post:" and grab a coffee instead.",ex:"skip breakfast = not eat breakfast."},
+{t:"gap",tag:"Phrasal verbs",pre:"Let's ",gap:"go for",post:" a walk after lunch.",ex:"go for + walk/run/swim."},
+{t:"gap",tag:"Daily routine",pre:"I always ",gap:"set an alarm",post:" before an early meeting.",ex:"set an alarm = turn on the alarm clock."},
+{t:"gap",tag:"Special occasions",q:"On her birthday she always likes to ____ with champagne.",opts:["splash out","work out","get off","go for"],a:0,ex:"splash out = spend more money than usual on a treat.",gap:"splash out"},
+{t:"gap",tag:"Idioms",pre:"Working long hours is a ",gap:"no-no",post:" for me.",ex:"a no-no = something not allowed or disliked."},
+{t:"gap",tag:"Collocations",pre:"On holiday she loves to ",gap:"get cultured",post:" by visiting museums.",ex:"get cultured = enjoy art, history, etc."},
+
+/* ───────── PART 3 · CHALLENGING ───────── */
+{t:"mcq",tag:"Vocabulary",q:"She's quite ____ — she should eat a bit more.",opts:["skinny","curvy","chubby","overweight"],a:0,ex:"skinny = very thin (here, mildly negative)."},
+{t:"mcq",tag:"Vocabulary",q:"He's a little ____ — perhaps a diet would help.",opts:["chubby","skinny","curvy","straight"],a:0,ex:"chubby = slightly fat (often for babies or cheeks)."},
+{t:"mcq",tag:"Present Simple vs Continuous",q:"Be quiet! The baby ____.",opts:["sleeps","is sleeping","sleep","are sleeping"],a:1,ex:"An action happening right now uses Present Continuous."},
+{t:"mcq",tag:"Phrasal verbs",q:"If you want to be fit, you should ____ three times a week.",opts:["work out","get off","stay away from","go out"],a:0,ex:"work out = do exercise."},
+{t:"mcq",tag:"Possessive adjectives",q:"Tom and I are engineers. ____ office is upstairs.",opts:["Our","Their","My","Your"],a:0,ex:"Tom and I = we → our."},
+{t:"err",tag:"Present Continuous",orig:"What are you do now?",ans:"are you <span class='bad-mark'>do</span> → are you <strong>doing</strong>.",fix:"are you doing",ex:"Present Continuous needs -ing."},
+{t:"err",tag:"Collocations",orig:"We booked an accommodation for the trip.",ans:"an <span class='bad-mark'>accommodation</span> → <strong>accommodation</strong>.",fix:"booked accommodation",ex:"Accommodation is uncountable — no article."},
+{t:"trans",tag:"Present Continuous",from:"I go to the gym every Monday.",to:"This Monday I ____ ____.",gap:"am going",ex:"Shift Present Simple → Continuous for a one-time change."},
+{t:"trans",tag:"Phrasal verbs",from:"Please, don't approach that area.",to:"Please ____ ____ ____ that area.",gap:"stay away from",ex:"stay away from = avoid."},
+{t:"scramble",tag:"Possessive adjectives",words:["Their","new","boss","is","from","Mexico"],correct:"Their new boss is from Mexico",ex:"Their + new boss + is + from + Mexico."},
+{t:"match",tag:"Vocabulary",pairs:[
+  ["beard","hair on the chin and cheeks"],
+  ["moustache","hair above the upper lip"],
+  ["curly hair","hair with curls"],
+  ["chubby","slightly fat, in a soft way"]
+]},
+{t:"dialogue",q:"Complete the dialogue with the correct words.",lines:[
+  {who:"l",text:"Morning! You look tired today. What time did you ?"},
+  {who:"r",text:"I late — at 2 a.m. I a film."},
+  {who:"l",text:"A film? You went out?"},
+  {who:"r",text:"No, I didn't . I just on the sofa with popcorn."}
+],gaps:["wake up","went to bed","go out","stayed in"],ex:"wake up / went to bed / go out / stayed in."},
+{t:"read",tag:"Mini Reading",text:"Every Saturday, Marta does the same things. She <span class='hl-g'>wakes up</span> early, <span class='hl-g'>skips breakfast</span> and grabs a coffee on the way to the gym. After she <span class='hl-g'>works out</span>, she goes home and has a long shower. She is quite <span class='hl'>skinny</span> and has long, <span class='hl'>curly hair</span>. Her brother Marco is different — he is <span class='hl'>chubby</span> and never <span class='hl-g'>goes out</span>. Marco prefers to stay at home and <span class='hl-g'>brings home the bacon</span> as a freelancer. 'Staying at home is my <span class='hl-g'>cup of tea</span>,' he says. Marta, on the other hand, loves to <span class='hl-g'>splash out</span> on concerts.",
+  qs:[
+    {q:"What does Marta <em>skip</em> on Saturday mornings?",opts:["breakfast","a shower","the gym","her hair"],a:0,ex:"'skips breakfast' in line 1."},
+    {q:"How does Marta get to the gym? — She doesn't ___.",opts:["work out","go out","skip breakfast","stay away from coffee"],a:1,ex:"She already works out at the gym — 'go out' is not mentioned."},
+    {q:"Marco is ____ and Marta is ____.",opts:["chubby / skinny","skinny / chubby","both chubby","both skinny"],a:0,ex:"Mario is chubby; Marta is skinny."},
+    {q:"Marco's favourite phrase is ___.",opts:["a cup of tea","a foodie","a no-no","break the bank"],a:0,ex:"'Staying at home is my cup of tea.'"},
+    {q:"Marta likes to ____ on concerts.",opts:["splash out","get off","stay away from","bring home the bacon"],a:0,ex:"The text says she 'likes to splash out on concerts'."}]
+}
+];
+
+var state = {answered:0, correct:0, g:0, v:0, gTotal:0, vTotal:0, byTag:{},finished:false};
+var BODY = $("test");
+
+function $(id){return document.getElementById(id);}
+
+function startTest(){
+  $("start-btn").disabled = true;
+  $("start-btn").querySelector("span").textContent = "Test unlocked ✓";
+  render();
+  $("test").classList.add("visible");
+  requestAnimationFrame(function(){
+    document.querySelector(".card").scrollIntoView({behavior:"smooth",block:"start"});
+  });
+}
+
+function tagCategory(tag){
+  var grammarTags = ["Present Simple","Possessive adjectives","Present Continuous","Present Simple vs Continuous"];
+  if(grammarTags.indexOf(tag) >= 0) return "g";
+  return "v";
+}
+
+function render(){
+  BODY.innerHTML = "";
+  var html = "";
+  var partLabels = ["Part 1 · Easy","Part 2 · Medium","Part 3 · Challenging"];
+  var partStarts = [0,12,33];
+  var idx = 0;
+  var partListed = -1;
+  Q.forEach(function(q,i){
+    partStarts.forEach(function(s,pi){ if(i===s) partListed = pi; });
+    if(partListed>=0 && i===partStarts[partListed]){
+      html += '<div class="section-div"><span>'+partLabels[partListed]+'</span></div>';
+      partListed = -1;
+    }
+    idx++;
+    var cat = tagCategory(q.tag);
+    if(cat==="g") state.gTotal++; else state.vTotal++;
+    state.byTag[q.tag] = state.byTag[q.tag] || {c:0,total:0};
+    state.byTag[q.tag].total++;
+
+    html += '<div class="card" id="q'+i+'">';
+    html += '<div class="card-head"><div class="q-num">'+idx+'</div><div class="q-body">';
+    html += '<span class="q-tag">'+q.tag+'</span>';
+    if(q.q) html += '<div class="q-text">'+q.q+'</div>';
+    else if(q.text) {} else if(q.from) html += '<div class="q-text">Transform: <em>'+q.from+'</em><br>→ <em>'+q.to+'</em></div>';
+    else if(q.orig) html += '<div class="q-text">Correct the mistake in one word.</div>';
+    html += '</div></div>';
+
+    if(q.t==="mcq") html += renderMCQ(q,i);
+    else if(q.t==="gap") html += renderGap(q,i);
+    else if(q.t==="err") html += renderErr(q,i);
+    else if(q.t==="trans") html += renderTrans(q,i);
+    else if(q.t==="match") html += renderMatch(q,i);
+    else if(q.t==="dnd") html += renderDnD(q,i);
+    else if(q.t==="scramble") html += renderScramble(q,i);
+    else if(q.t==="dialogue") html += renderDialogue(q,i);
+    else if(q.t==="read") html += renderRead(q,i);
+
+    html += '<div class="fb" id="fb-'+i+'"></div>';
+    html += '<div class="btn-row"><button class="btn btn-p" onclick="checkQ('+i+')">✔ Check</button></div>';
+    html += '</div>';
+  });
+  html += '<div class="center-cta"><button class="big-btn" onclick="finishTest()">Finish test & see my score →</button></div>';
+  BODY.innerHTML = html;
+}
+
+function renderMCQ(q,i){
+  var h='<div class="opts">';
+  q.opts.forEach(function(o,j){
+    h+='<button class="opt" data-i="'+i+'" data-j="'+j+'" onclick="pickMCQ(this,'+j+','+q.a+')"><span class="mark">'+String.fromCharCode(65+j)+'</span><span>'+o+'</span></button>';
+  });
+  h+='</div>';
+  return h;
+}
+
+function pickMCQ(btn,j,a){
+  var card=btn.closest(".card");
+  if(card.dataset.locked) return;
+  card.querySelectorAll(".opt").forEach(function(o){o.classList.remove("sel");});
+  btn.classList.add("sel");
+  card.dataset.pick=j;
+  var others=card.querySelectorAll(".opt");
+  others.forEach(function(o){o.classList.remove("correct","wrong");o.classList.add("locked");});
+  var ok = (j===a);
+  btn.classList.add(ok?"correct":"wrong");
+  if(!ok) others[a].classList.add("correct");
+  var fb=$("fb-"+card.id.replace("q",""));
+  showFb(fb,ok,
+    ok?'Correct! <span class="ans">'+(q?q.ex||"":"")+'</span>':
+       'Incorrect. <span class="ans">'+Q[card.id.slice(1)].ex+'</span>',
+    Q[card.id.slice(1)].ex
+  );
+  lock(card,ok,card.id.slice(1));
+}
+
+function renderGap(q,i){
+  var pre = q.pre||"";
+  var post = q.post||"";
+  return '<div class="gap-line">'+(pre||"")+'<input class="gapin" id="g-'+i+'" data-ans="'+q.gap+'" placeholder="type here"> '+(post||"")+'</div>';
+}
+
+function renderErr(q,i){
+  return '<div class="err-orig">'+q.orig+'</div>'+
+    '<div class="err-lbl">Type the corrected phrase:</div>'+
+    '<input class="gapin" id="e-'+i+'" data-ans="'+q.fix+'" placeholder="e.g. is studying">';
+}
+
+function renderTrans(q,i){
+  return '<div class="q-text" style="margin-bottom:10px;">Transform: <em>'+q.from+'</em> → <em>'+q.to.replace(/____/g,'___')+'</em></div>'+
+    '<input class="gapin" id="tr-'+i+'" data-ans="'+q.gap+'" placeholder="type the missing words">';
+}
+
+function renderMatch(q,i){
+  var left=q.pairs.map(function(p){return p[0];});
+  var right=q.pairs.map(function(p){return p[1];});
+  right=shuffle(right.slice());
+  q._right=right;
+  var h='<div class="match-grid"><div class="m-col">';
+  left.forEach(function(w,j){h+='<div class="m-it" data-side="L" data-i="'+i+'" data-v="'+w+'" onclick="pickM(this)">'+w+'</div>';});
+  h+='</div><div class="m-col">';
+  right.forEach(function(d,j){h+='<div class="m-it" data-side="R" data-i="'+i+'" data-v="'+d+'" onclick="pickM(this)">'+d+'</div>';});
+  h+='</div></div>';
+  return h;
+}
+
+var selM = {};
+function pickM(el){
+  var i=el.dataset.i;
+  if(el.classList.contains("matched")||el.classList.contains("mismatch")) return;
+  selM[i]=selM[i]||{};
+  var side=el.dataset.side;
+  if(selM[i][side]) selM[i][side].classList.remove("sel");
+  selM[i][side]=el;
+  el.classList.add("sel");
+  if(selM[i].L && selM[i].R){
+    var L=selM[i].L, R=selM[i].R;
+    var correctPair = Q[i].pairs.find(function(p){return p[0]===L.dataset.v;});
+    if(correctPair && correctPair[1]===R.dataset.v){
+      L.classList.add("matched"); R.classList.add("matched");
+      L.classList.remove("sel"); R.classList.remove("sel");
+      selM[i]={};
+      var done=Q[i]._done||0; Q[i]._done=done+1;
+      if(Q[i]._done===Q[i].pairs.length){
+        fb=$("fb-"+i); showFb(fb,true,"All matched! "+Q[i].ex,Q[i].ex);
+        lock($("q"+i),true,i);
+      }
+    } else {
+      L.classList.add("mismatch"); R.classList.add("mismatch");
+      var LL=L, RR=R;
+      setTimeout(function(){LL.classList.remove("mismatch","sel");RR.classList.remove("mismatch","sel");},380);
+      selM[i]={};
+    }
+  }
+}
+
+function renderDnD(q,i){
+  var h='<div class="dnd-bank" id="bank-'+i+'">';
+  q._words=[];
+  q.rows.forEach(function(r){r.forEach(function(w){q._words.push(w);});});
+  var all = q._words.slice(); all=shuffle(all);
+  all.forEach(function(w,j){
+    h+='<div class="dnd-chip" draggable="true" data-w="'+w+'" id="chip-'+i+'-'+j+'">'+w+'</div>';
+  });
+  h+='</div><div class="dnd-rows">';
+  q.rows.forEach(function(r,ri){
+    h+='<div class="dnd-row">Sentence '+(ri+1)+': ';
+    r.forEach(function(w,wi){
+      if(wi===0) h+='<div class="dnd-slot" data-i="'+i+'" data-ri="'+ri+'" data-wi="'+wi+'" data-w="'+w+'" ondragover="return overSlot(event)" ondrop="dropSlot(event)" ondragleave="leaveSlot(event)">'+w+'</div> ';
+      else h+='<div class="dnd-slot" data-i="'+i+'" data-ri="'+ri+'" data-wi="'+wi+'" data-w="'+w+'" ondragover="return overSlot(event)" ondrop="dropSlot(event)" ondragleave="leaveSlot(event)">___</div> ';
+    });
+    h+='</div>';
+  });
+  h+='</div><p class="btn-g" onclick="checkDnD('+i+')">Check arrangement</p>';
+  return h;
+}
+
+function overSlot(e){e.preventDefault();e.currentTarget.classList.add("over");return true;}
+function leaveSlot(e){e.currentTarget.classList.remove("over");}
+function dropSlot(e){
+  e.preventDefault();
+  e.currentTarget.classList.remove("over");
+  var chipId=e.dataTransfer.getData("text");
+  var chip=document.getElementById(chipId);
+  if(!chip) return;
+  var slot=e.currentTarget;
+  var oldW = slot.textContent.trim()===slot.dataset.w?slot.dataset.w:slot.textContent.trim();
+  if(slot.classList.contains("filled") && slot.dataset.placedChip){
+    var oldChip=document.getElementById(slot.dataset.placedChip);
+    if(oldChip){oldChip.classList.remove("placed");oldChip.classList.add("dnd-chip");}
+  }
+  slot.textContent = chip.dataset.w;
+  slot.classList.add("filled");
+  slot.dataset.placedChip = chip.id;
+  chip.classList.add("placed");
+}
+
+function checkDnD(i){
+  var q=Q[i];
+  var ok=true;
+  q.rows.forEach(function(r,ri){
+    r.forEach(function(w,wi){
+      var slot=document.querySelector('.dnd-slot[data-i="'+i+'"][data-ri="'+ri+'"][data-wi="'+wi+'"]');
+      if(slot.textContent.trim()!==w){ok=false;}
+      slot.classList.remove("ok","bad");
+      slot.classList.add(slot.textContent.trim()===w?"ok":"bad");
+    });
+  });
+  var fb=$("fb-"+i);
+  showFb(fb,ok,(ok?'Correct! ':'Not quite yet. ')+q.ex,q.ex);
+  if(ok) lock($("q"+i),true,i);
+}
+
+var dragId="";
+document.addEventListener("dragstart",function(e){
+  if(e.target.classList.contains("dnd-chip")){
+    dragId=e.target.id;
+    e.dataTransfer.setData("text",e.target.id);
+    e.target.classList.add("dragged");
+  }
+});
+document.addEventListener("dragend",function(e){
+  if(e.target.classList.contains("dnd-chip")) e.target.classList.remove("dragged");
+});
+
+function renderScramble(q,i){
+  var ws = q.words.slice();
+  ws = shuffle(ws);
+  var h='<div class="scram-bank" id="sb-'+i+'">';
+  ws.forEach(function(w,j){
+    h+='<div class="s-chip" data-w="'+w+'" id="sc-'+i+'-'+j+'" onclick="pickScram(this)">'+w+'</div>';
+  });
+  h+='</div><div class="scram-line" id="sl-'+i+'"></div><p class="btn-g" onclick="checkScram('+i+')">Check sentence</p>';
+  return h;
+}
+
+function pickScram(el){
+  var line = el.parentNode.nextElementSibling;
+  if(el.classList.contains("used")) return;
+  var token=document.createElement("span");
+  token.className="s-token";
+  token.textContent=el.dataset.w;
+  token.dataset.from=el.id;
+  token.onclick=function(){
+    var orig=document.getElementById(token.dataset.from);
+    if(orig){orig.classList.remove("used");}
+    token.remove();
+  };
+  line.appendChild(token);
+  el.classList.add("used");
+}
+
+function checkScram(i){
+  var line=$("sl-"+i);
+  var tokens=line.querySelectorAll(".s-token");
+  var parts=[];
+  tokens.forEach(function(tk){parts.push(tk.textContent);});
+  var sentence=parts.join(" ");
+  var ok = sentence.toLowerCase()===Q[i].correct.toLowerCase();
+  tokens.forEach(function(tk){tk.classList.remove("ok","bad");tk.classList.add(ok?"ok":"bad");});
+  var fb=$("fb-"+i);
+  showFb(fb,ok,(ok?'Correct! ':'Incorrect. ')+Q[i].ex,Q[i].ex);
+  if(ok) lock($("q"+i),true,i);
+}
+
+function renderDialogue(q,i){
+  var h='<div class="dlg">';
+  q.lines.forEach(function(l,li){
+    h+='<div class="dlg-line dlg-'+(l.who==="l"?"l":"r")+'">';
+    var t=l.text;
+    var ang=t.match(/\?/);
+    if(l.who==="l"){
+      h+=t.replace(/\?/,' <input class="gapin" id="dl-'+i+'-'+li+'" data-ans="'+q.gaps[li]+'">');
+    } else {
+      var matches=t.match(/\s/g);
+      var pos=0, out="", gi=0;
+      var words=t.split(" ");
+      words.forEach(function(w,wi){
+        if(w==="" && gi<q.gaps.length){
+          out+='<input class="gapin" id="dl-'+i+'-'+li+'-'+gi+'" data-ans="'+q.gaps[li]+'"> ';
+          gi++;
+        } else {
+          out+=w+" ";
+        }
+      });
+      h+=t;
+    }
+    h+='</div>';
+  });
+  h+='</div>';
+  return h;
+}
+
+function renderRead(q,i){
+  var h='<div class="read-box"><h4>📖 Saturday Routine</h4>'+q.text+'</div>';
+  q.qs.forEach(function(qq,qi){
+    h+='<div class="card-head" style="margin-top:16px;"><div class="q-num">R</div><div class="q-body"><span class="q-tag">Reading</span><div class="q-text">'+qq.q+'</div></div></div>';
+    h+='<div class="opts">';
+    qq.opts.forEach(function(o,oj){
+      h+='<button class="opt" data-read="'+i+'" data-q="'+qi+'" data-j="'+oj+'" onclick="pickRead(this,'+qq.a+')"><span class="mark">'+String.fromCharCode(65+oj)+'</span><span>'+o+'</span></button>';
+    });
+    h+='</div><div class="fb" id="rfb-'+i+'-'+qi+'"></div>';
+  });
+  return h;
+}
+
+function pickRead(btn,a){
+  var i=btn.dataset.read, qi=btn.dataset.q;
+  var j=parseInt(btn.dataset.j);
+  var card=btn.closest(".card");
+  if(card.querySelector('input[data-locked-r="'+i+'-'+qi+'"]')) return;
+  var opts=card.querySelectorAll('.opt[data-read="'+i+'"][data-q="'+qi+'"]');
+  opts.forEach(function(o){o.classList.add("locked");o.classList.remove("sel");});
+  var ok=(j===a);
+  btn.classList.add(ok?"correct":"wrong");
+  if(!ok) opts[a].classList.add("correct");
+  var fb=$("rfb-"+i+"-"+qi);
+  showFb(fb,ok,(ok?'Correct! ':'Incorrect. ')+Q[i].qs[qi].ex,Q[i].qs[qi].ex);
+}
+
+function checkQ(i){
+  var q=Q[i];
+  var card=$("q"+i);
+  if(card.dataset.locked) return;
+  var ok=false;
+  if(q.t==="mcq"||q.t==="read"){
+    return;
+  } else if(q.t==="gap"){
+    var inp=$("g-"+i);
+    var v=inp.value.trim().toLowerCase();
+    ok = (v===q.gap.toLowerCase());
+    inp.classList.remove("ok","bad");
+    inp.classList.add(ok?"ok":"bad");
+    var fb=$("fb-"+i);
+    showFb(fb,ok,(ok?'Correct! ':'Incorrect. ')+q.ex+' '+(ok?'':'Answer: <span class="ans">'+q.gap+'</span>'),q.ex);
+  } else if(q.t==="err"){
+    var inp=$("e-"+i);
+    var v=inp.value.trim().toLowerCase();
+    ok = v.includes(q.fix.toLowerCase());
+    inp.classList.remove("ok","bad");
+    inp.classList.add(ok?"ok":"bad");
+    var fb=$("fb-"+i);
+    showFb(fb,ok,(ok?'Correct! ':'Incorrect. ')+q.ex+' '+(ok?'':'Answer: <span class="ans">'+q.fix+'</span>'),q.ex);
+  } else if(q.t==="trans"){
+    var inp=$("tr-"+i);
+    var v=inp.value.trim().toLowerCase();
+    ok = v.includes(q.gap.toLowerCase());
+    inp.classList.remove("ok","bad");
+    inp.classList.add(ok?"ok":"bad");
+    var fb=$("fb-"+i);
+    showFb(fb,ok,(ok?'Correct! ':'Incorrect. ')+q.ex+' '+(ok?'':'Answer: <span class="ans">'+q.gap+'</span>'),q.ex);
+  } else if(q.t==="match"){
+    var done=q._done||0;
+    if(done===q.pairs.length){ok=true;}
+    var fb=$("fb-"+i);
+    if(!ok){showFb(fb,false,"Match all pairs first! "+q.ex,q.ex);return;}
+  } else if(q.t==="dnd"||q.t==="scramble"){
+    return;
+  } else if(q.t==="dialogue"){
+    var allOk=true;
+    q.lines.forEach(function(l,li){
+      var inp=$("dl-"+i+"-"+li);
+      if(!inp){return;}
+      var v=inp.value.trim().toLowerCase();
+      var ans=q.gaps[li].toLowerCase();
+      if(v!==ans){allOk=false;}
+      inp.classList.remove("ok","bad");
+      inp.classList.add(v===ans?"ok":"bad");
+    });
+    ok=allOk;
+    var fb=$("fb-"+i);
+    showFb(fb,ok,(ok?'Correct! ':'Not all correct yet. ')+q.ex,q.ex);
+  }
+  if(ok || q.t==="gap"||q.t==="err"||q.t==="trans"||q.t==="dialogue") lock(card,ok,i);
+}
+
+function showFb(fb,ok,html,ex){
+  fb.className="fb "+(ok?"ok":"err");
+  fb.innerHTML=html;
+}
+
+function lock(card,ok,i){
+  if(card.dataset.locked) return;
+  card.dataset.locked="1";
+  state.answered++;
+  if(ok){
+    state.correct++;
+    var cat=tagCategory(Q[i].tag);
+    if(cat==="g") state.g++; else state.v++;
+    state.byTag[Q[i].tag].c++;
+  }
+  updateProgress();
+}
+
+function updateProgress(){
+  var pct=Math.round((state.answered/Q.length)*100);
+  $("prog-fill").style.width=pct+"%";
+  $("prog-txt").textContent=state.answered+"/"+Q.length;
+  $("score-pill").textContent="⭐ "+state.correct;
+}
+
+function shuffle(a){
+  for(var i=a.length-1;i>0;i--){
+    var j=Math.floor(Math.random()*(i+1));
+    var t=a[i];a[i]=a[j];a[j]=t;
+  }
+  return a;
+}
+
+function finishTest(){
+  if(state.finished) return;
+  state.finished=true;
+  var total=Q.length;
+  var pct=Math.round((state.correct/total)*100);
+  var gpct = state.gTotal?Math.round((state.g/state.gTotal)*100):0;
+  var vpct = state.vTotal?Math.round((state.v/state.vTotal)*100):0;
+  var band, bandClass, msg;
+  if(pct>=90){band="Outstanding";bandClass="background:#dcfce7;color:#15803d;border:1px solid #86efac;";msg="Outstanding work, Study Buddy! Your A2 foundation is rock solid.";}
+  else if(pct>=75){band="Excellent";bandClass="background:#e0e9ff;color:#2451c7;border:1px solid #c7d5f8;";msg="Excellent effort — just a few small things to polish.";}
+  else if(pct>=60){band="Good";bandClass="background:#fef9c3;color:#854d0e;border:1px solid #fde68a;";msg="Good progress! A bit more review will lift you to excellent.";}
+  else if(pct>=40){band="Needs Revision";bandClass="background:#ffedd5;color:#9a3412;border:1px solid #fed7aa;";msg="You're on the way — revisit the tricky topics and try again.";}
+  else {band="Review Required";bandClass="background:#fee2e2;color:#991b1b;border:1px solid #fecaca;";msg="Don't worry — let's review Unit 1–2 together and rebuild confidence.";}
+
+  var grammarRevise=[], vocabRevise=[];
+  Object.keys(state.byTag).forEach(function(tg){
+    var d=state.byTag[tg];
+    if(d.c < d.total){
+      if(tagCategory(tg)==="g") grammarRevise.push(tg+" ("+d.c+"/"+d.total+")");
+      else vocabRevise.push(tg+" ("+d.c+"/"+d.total+")");
+    }
+  });
+  if(!grammarRevise.length) grammarRevise.push("Nothing — all grammar topics solid!");
+  if(!vocabRevise.length) vocabRevise.push("Nothing — all vocabulary solid!");
+
+  var h='<div class="score-hero"><div class="score-emoji">🎉</div><div class="score-pct">'+pct+'%</div><div class="score-band" style="'+bandClass+'">'+band+'</div><p class="score-msg">'+msg+'</p></div>';
+  h+='<div class="score-rows">'+
+     '<div class="score-row"><div class="lbl">Overall</div><div class="val">'+state.correct+'<span style="font-size:16px;color:#9ca3af;">/'+total+'</span></div><div class="bar"><div style="width:'+pct+'%"></div></div></div>'+
+     '<div class="score-row"><div class="lbl">Grammar</div><div class="val">'+state.g+'<span style="font-size:16px;color:#9ca3af;">/'+state.gTotal+'</span></div><div class="bar"><div style="width:'+gpct+'%"></div></div></div>'+
+     '<div class="score-row"><div class="lbl">Vocabulary</div><div class="val">'+state.v+'<span style="font-size:16px;color:#9ca3af;">/'+state.vTotal+'</span></div><div class="bar"><div style="width:'+vpct+'%"></div></div></div>'+
+     '</div>';
+  h+='<div class="revs"><h3>📚 Grammar to revise</h3><ul>'+grammarRevise.map(function(g){return '<li>'+g+'</li>';}).join("")+'</ul></div>';
+  h+='<div class="revs"><h3>💬 Vocabulary to revise</h3><ul>'+vocabRevise.map(function(v){return '<li>'+v+'</li>';}).join("")+'</ul></div>';
+  h+='<div class="revs" style="background:linear-gradient(135deg,#eef0fe,#f8f9fe);"><h3>🚀 Motivation</h3><p style="font-size:14px;color:#374151;line-height:1.65;">Every mistake you make in a progress test is one you <em>won\'t</em> make in the real exam. Keep going, Study Buddy — you\'re building real A2 momentum! 💪</p></div>';
+  $('results').innerHTML=h;
+  $('test').style.display='none';
+  $('results').classList.add('visible');
+  $('results').scrollIntoView({behavior:'smooth'});
+
+  if(pct>=90) confetti();
+}
+
+function confetti(){
+  var cv=$('confetti');
+  cv.width=window.innerWidth; cv.height=window.innerHeight;
+  var ctx=cv.getContext('2d');
+  var colours=['#5B6BF0','#8B8BF7','#F59E0B','#16A34A','#EC4899'];
+  var parts=[];
+  for(var i=0;i<140;i++){
+    parts.push({x:Math.random()*cv.width,y:Math.random()*-cv.height,vx:(Math.random()-.5)*4,vy:Math.random()*3+2,size:Math.random()*7+4,color:colours[Math.floor(Math.random()*colours.length)],rot:Math.random()*Math.PI, vr:(Math.random()-.5)*.3});
+  }
+  var n=0;
+  function frame(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    parts.forEach(function(p){
+      p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr;
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+      ctx.fillStyle=p.color; ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size);
+      ctx.restore();
+    });
+    n++;
+    if(n<180) requestAnimationFrame(frame);
+    else cv.classList.remove('on');
+  }
+  cv.classList.add('on');
+  requestAnimationFrame(frame);
+}
+</script>
+</body>
+</html>
