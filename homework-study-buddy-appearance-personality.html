@@ -239,7 +239,7 @@ textarea{resize:vertical;min-height:80px;}
 <div id="hw-content">
 
 <div id="sticky-bar">
-  <div id="prog-text">0 of 8 tasks done</div>
+  <div id="prog-text">0 of 7 tasks done</div>
   <div id="prog-track"><div id="prog-fill"></div></div>
   <div id="score-badge">⭐ 0 pts</div>
 </div>
@@ -254,8 +254,7 @@ textarea{resize:vertical;min-height:80px;}
     <a class="nav-link" data-target="card-fc"><span class="nico">🃏</span>Flashcards</a>
     <a class="nav-link" data-target="card-fib"><span class="nico">✍️</span>Fill in</a>
     <a class="nav-link" data-target="card-match"><span class="nico">🔗</span>Match</a>
-    <a class="nav-link" data-target="card-err"><span class="nico">✏️</span>Errors</a>
-    <a class="nav-link" data-target="card-read"><span class="nico">📖</span>Reading</a>
+    <a class="nav-link" data-target="card-read"><span class="nico">📖</span>True / False</a>
     <a class="nav-link" data-target="card-chat"><span class="nico">💬</span>Chatbot</a>
     <a class="nav-link" data-target="card-disc"><span class="nico">🗣️</span>Speaking</a>
     <a class="nav-link" data-target="card-refl"><span class="nico">💭</span>Reflection</a>
@@ -347,19 +346,19 @@ textarea{resize:vertical;min-height:80px;}
       <div class="c-icon">🃏</div>
       <div class="c-text">
         <div class="c-title">Flashcards</div>
-        <div class="c-sub">Tap a card to flip it · front = word, back = meaning</div>
+        <div class="c-sub">Tap a card to flip it · front = English word, back = Russian translation</div>
       </div>
     </div>
     <div class="instr">📌 Tap any card to flip it. Test yourself before you check!</div>
     <div class="fc-grid">
-      <div class="fc" onclick="this.classList.toggle('flipped')"><div class="fc-inner"><div class="fc-face fc-front"><div class="fc-front-lbl">Word</div><div class="fc-front-text">beard</div></div><div class="fc-face fc-back"><div class="fc-back-lbl">Meaning</div><div class="fc-back-text">hair on a man's chin and cheeks</div></div></div></div>
-      <div class="fc" onclick="this.classList.toggle('flipped')"><div class="fc-inner"><div class="fc-face fc-front"><div class="fc-front-lbl">Word</div><div class="fc-front-text">moustache</div></div><div class="fc-face fc-back"><div class="fc-back-lbl">Meaning</div><div class="fc-back-text">hair above the upper lip</div></div></div></div>
-      <div class="fc" onclick="this.classList.toggle('flipped')"><div class="fc-inner"><div class="fc-face fc-front"><div class="fc-front-lbl">Word</div><div class="fc-front-text">chubby</div></div><div class="fc-face fc-back"><div class="fc-back-lbl">Meaning</div><div class="fc-back-text">slightly fat, in a soft way</div></div></div></div>
-      <div class="fc" onclick="this.classList.toggle('flipped')"><div class="fc-inner"><div class="fc-face fc-front"><div class="fc-front-lbl">Word</div><div class="fc-front-text">skinny</div></div><div class="fc-face fc-back"><div class="fc-back-lbl">Meaning</div><div class="fc-back-text">very thin</div></div></div></div>
-      <div class="fc" onclick="this.classList.toggle('flipped')"><div class="fc-inner"><div class="fc-face fc-front"><div class="fc-front-lbl">Word</div><div class="fc-front-text">outgoing</div></div><div class="fc-face fc-back"><div class="fc-back-lbl">Meaning</div><div class="fc-back-text">friendly and confident socially</div></div></div></div>
-      <div class="fc" onclick="this.classList.toggle('flipped')"><div class="fc-inner"><div class="fc-face fc-front"><div class="fc-front-lbl">Word</div><div class="fc-front-text">bubbly</div></div><div class="fc-face fc-back"><div class="fc-back-lbl">Meaning</div><div class="fc-back-text">very cheerful and lively</div></div></div></div>
-      <div class="fc" onclick="this.classList.toggle('flipped')"><div class="fc-inner"><div class="fc-face fc-front"><div class="fc-front-lbl">Word</div><div class="fc-front-text">generous</div></div><div class="fc-face fc-back"><div class="fc-back-lbl">Meaning</div><div class="fc-back-text">happy to give and share</div></div></div></div>
-      <div class="fc" onclick="this.classList.toggle('flipped')"><div class="fc-inner"><div class="fc-face fc-front"><div class="fc-front-lbl">Word</div><div class="fc-front-text">break up</div></div><div class="fc-face fc-back"><div class="fc-back-lbl">Meaning</div><div class="fc-back-text">end a romantic relationship</div></div></div></div>
+      <div class="fc" onclick="this.classList.toggle('flipped')"><div class="fc-inner"><div class="fc-face fc-front"><div class="fc-front-lbl">Word</div><div class="fc-front-text">beard</div></div><div class="fc-face fc-back"><div class="fc-back-lbl">Перевод</div><div class="fc-back-text">борода</div></div></div></div>
+      <div class="fc" onclick="this.classList.toggle('flipped')"><div class="fc-inner"><div class="fc-face fc-front"><div class="fc-front-lbl">Word</div><div class="fc-front-text">moustache</div></div><div class="fc-face fc-back"><div class="fc-back-lbl">Перевод</div><div class="fc-back-text">усы</div></div></div></div>
+      <div class="fc" onclick="this.classList.toggle('flipped')"><div class="fc-inner"><div class="fc-face fc-front"><div class="fc-front-lbl">Word</div><div class="fc-front-text">chubby</div></div><div class="fc-face fc-back"><div class="fc-back-lbl">Перевод</div><div class="fc-back-text">пухлый</div></div></div></div>
+      <div class="fc" onclick="this.classList.toggle('flipped')"><div class="fc-inner"><div class="fc-face fc-front"><div class="fc-front-lbl">Word</div><div class="fc-front-text">skinny</div></div><div class="fc-face fc-back"><div class="fc-back-lbl">Перевод</div><div class="fc-back-text">худой</div></div></div></div>
+      <div class="fc" onclick="this.classList.toggle('flipped')"><div class="fc-inner"><div class="fc-face fc-front"><div class="fc-front-lbl">Word</div><div class="fc-front-text">outgoing</div></div><div class="fc-face fc-back"><div class="fc-back-lbl">Перевод</div><div class="fc-back-text">общительный</div></div></div></div>
+      <div class="fc" onclick="this.classList.toggle('flipped')"><div class="fc-inner"><div class="fc-face fc-front"><div class="fc-front-lbl">Word</div><div class="fc-front-text">bubbly</div></div><div class="fc-face fc-back"><div class="fc-back-lbl">Перевод</div><div class="fc-back-text">жизнерадостный</div></div></div></div>
+      <div class="fc" onclick="this.classList.toggle('flipped')"><div class="fc-inner"><div class="fc-face fc-front"><div class="fc-front-lbl">Word</div><div class="fc-front-text">generous</div></div><div class="fc-face fc-back"><div class="fc-back-lbl">Перевод</div><div class="fc-back-text">щедрый</div></div></div></div>
+      <div class="fc" onclick="this.classList.toggle('flipped')"><div class="fc-inner"><div class="fc-face fc-front"><div class="fc-front-lbl">Word</div><div class="fc-front-text">break up</div></div><div class="fc-face fc-back"><div class="fc-back-lbl">Перевод</div><div class="fc-back-text">расстаться</div></div></div></div>
     </div>
   </div>
 
@@ -373,17 +372,51 @@ textarea{resize:vertical;min-height:80px;}
       </div>
       <div class="done-badge" id="bd-fib">✓ Done</div>
     </div>
-    <div class="instr">📌 Type the missing word. Words come from today's lesson: beard, moustache, skinny, chubby, overweight, medium height, curly hair, straight hair, grey hair, tall, short, rude, outgoing, generous, bubbly, kind, curves, argue, get on well, relationship, date someone, break up.</div>
+    <div class="instr">📌 Choose the correct word for each gap. Click the option you think is right, then click <strong>Check Answers</strong>.</div>
     <hr class="hr">
 
-    <div class="fib-g"><div class="fib-row"><span>1. My grandad is 70. He is</span><input type="text" class="fib-in" id="f1" data-ans="tall" placeholder="___"><span>and has a long grey</span><input type="text" class="fib-in" id="f1b" data-ans="beard" placeholder="___"><span>.</span></div><div class="fb" id="f1fb"></div></div>
-    <div class="fib-g"><div class="fib-row"><span>2. She is not tall or short — she is</span><input type="text" class="fib-in" id="f2" data-ans="medium height" placeholder="___"><span>.</span></div><div class="fb" id="f2fb"></div></div>
-    <div class="fib-g"><div class="fib-row"><span>3. Her hair is not straight — she has</span><input type="text" class="fib-in" id="f3" data-ans="curly hair" placeholder="___"><span>.</span></div><div class="fb" id="f3fb"></div></div>
-    <div class="fib-g"><div class="fib-row"><span>4. He is very thin — I would say he is</span><input type="text" class="fib-in" id="f4" data-ans="skinny" placeholder="___"><span>.</span></div><div class="fb" id="f4fb"></div></div>
-    <div class="fib-g"><div class="fib-row"><span>5. Maria loves people and parties. She is very</span><input type="text" class="fib-in" id="f5" data-ans="outgoing" placeholder="___"><span>and bubbly.</span></div><div class="fb" id="f5fb"></div></div>
-    <div class="fib-g"><div class="fib-row"><span>6. My brother and I never</span><input type="text" class="fib-in" id="f6" data-ans="argue" placeholder="___"><span>— we get on well.</span></div><div class="fb" id="f6fb"></div></div>
-    <div class="fib-g"><div class="fib-row"><span>7. They have been in a</span><input type="text" class="fib-in" id="f7" data-ans="relationship" placeholder="___"><span>for two years and they are very happy.</span></div><div class="fb" id="f7fb"></div></div>
-    <div class="fib-g"><div class="fib-row"><span>8. He is not kind — in fact, he can be quite</span><input type="text" class="fib-in" id="f8" data-ans="rude" placeholder="___"><span>to strangers.</span></div><div class="fb" id="f8fb"></div></div>
+    <style>
+      .fib-opt{display:inline-block;border:2px solid #dde2f0;background:#fafbff;border-radius:8px;padding:6px 12px;font-size:13px;cursor:pointer;margin:3px 4px 3px 0;transition:all .15s;font-family:inherit;color:#4b5563;user-select:none;}
+      .fib-opt:hover{border-color:#3B6BEB;color:#3B6BEB;}
+      .fib-opt.sel{border-color:#3B6BEB;background:#EEF2FF;color:#3B6BEB;font-weight:700;}
+      .fib-opt.correct{border-color:#22c55e;background:#f0fdf4;color:#15803d;font-weight:700;}
+      .fib-opt.wrong{border-color:#ef4444;background:#fff5f5;color:#991b1b;}
+      .fib-opt.locked{cursor:default;}
+      .fib-opts-wrap{margin-top:6px;}
+    </style>
+
+    <div class="fib-g">
+      <div class="fib-row"><span>1. My grandad is 70. He is</span><span class="fib-opts-wrap" id="f1-opts"></span><span>and has a long grey beard.</span></div>
+      <div class="fb" id="f1fb"></div>
+    </div>
+    <div class="fib-g">
+      <div class="fib-row"><span>2. She is not tall or short — she is</span><span class="fib-opts-wrap" id="f2-opts"></span><span>.</span></div>
+      <div class="fb" id="f2fb"></div>
+    </div>
+    <div class="fib-g">
+      <div class="fib-row"><span>3. Her hair is not straight — she has</span><span class="fib-opts-wrap" id="f3-opts"></span><span>.</span></div>
+      <div class="fb" id="f3fb"></div>
+    </div>
+    <div class="fib-g">
+      <div class="fib-row"><span>4. He is very thin — I would say he is</span><span class="fib-opts-wrap" id="f4-opts"></span><span>.</span></div>
+      <div class="fb" id="f4fb"></div>
+    </div>
+    <div class="fib-g">
+      <div class="fib-row"><span>5. Maria loves people and parties. She is very</span><span class="fib-opts-wrap" id="f5-opts"></span><span>and bubbly.</span></div>
+      <div class="fb" id="f5fb"></div>
+    </div>
+    <div class="fib-g">
+      <div class="fib-row"><span>6. My brother and I never</span><span class="fib-opts-wrap" id="f6-opts"></span><span>— we get on well.</span></div>
+      <div class="fb" id="f6fb"></div>
+    </div>
+    <div class="fib-g">
+      <div class="fib-row"><span>7. They have been in a</span><span class="fib-opts-wrap" id="f7-opts"></span><span>for two years and they are very happy.</span></div>
+      <div class="fb" id="f7fb"></div>
+    </div>
+    <div class="fib-g">
+      <div class="fib-row"><span>8. He is not kind — in fact, he can be quite</span><span class="fib-opts-wrap" id="f8-opts"></span><span>to strangers.</span></div>
+      <div class="fb" id="f8fb"></div>
+    </div>
 
     <div class="btn-row">
       <button class="btn btn-p" onclick="checkFIB()">✔ Check Answers</button>
@@ -402,7 +435,7 @@ textarea{resize:vertical;min-height:80px;}
       </div>
       <div class="done-badge" id="bd-match">✓ Done</div>
     </div>
-    <div class="instr">Click a <strong>word</strong> on the left, then click the correct <strong>definition</strong> on the right. Match all 6 pairs!</div>
+    <div class="instr">Click an <strong>English word</strong> on the left, then click the correct <strong>Russian translation</strong> on the right. Match all 6 pairs!</div>
     <div class="match-grid">
       <div class="m-col" id="mw-col">
         <div class="m-w" data-id="generous">generous</div>
@@ -413,80 +446,29 @@ textarea{resize:vertical;min-height:80px;}
         <div class="m-w" data-id="datesomeone">date someone</div>
       </div>
       <div class="m-col" id="md-col">
-        <div class="m-d" data-id="getonwell">have a good relationship</div>
-        <div class="m-d" data-id="breakup">end a romantic relationship</div>
-        <div class="m-d" data-id="mediumheight">neither tall nor short</div>
-        <div class="m-d" data-id="generous">happy to give money, time, or help</div>
-        <div class="m-d" data-id="datesomeone">go out with someone romantically</div>
-        <div class="m-d" data-id="outgoing">friendly and confident socially</div>
+        <div class="m-d" data-id="getonwell">ладить друг с другом</div>
+        <div class="m-d" data-id="breakup">расстаться</div>
+        <div class="m-d" data-id="mediumheight">средний рост</div>
+        <div class="m-d" data-id="generous">щедрый</div>
+        <div class="m-d" data-id="datesomeone">встречаться с кем-то</div>
+        <div class="m-d" data-id="outgoing">общительный</div>
       </div>
     </div>
     <div class="fb" id="match-fb" style="margin-top:16px;"></div>
     <div class="btn-row"><button class="btn btn-o" onclick="resetMatch()">↺ Reset</button></div>
   </div>
 
-  <!-- ══ TASK 3 — ERROR CORRECTION ══ -->
-  <div class="card" id="card-err">
-    <div class="card-head">
-      <div class="c-icon">✏️</div>
-      <div class="c-text">
-        <div class="c-title"><span class="tnum">3</span> Error Correction</div>
-        <div class="c-sub">Each sentence has one wrong word from today's lesson</div>
-      </div>
-      <div class="done-badge" id="bd-err">✓ Done</div>
-    </div>
-    <div class="instr">💭 Each sentence uses the <strong>wrong</strong> vocabulary word. Read the <strong>highlighted</strong> part and rewrite the sentence with the correct target word.</div>
-    <hr class="hr">
-
-    <div class="err-item">
-      <div class="err-orig">❓ "My uncle has a <span class="hl-err">moustache</span> on his chin and cheeks — he's had it for years."</div>
-      <div class="err-lbl">A moustache is above the lip. The hair on the chin is the…</div>
-      <input type="text" id="e1" placeholder="He has a…" data-ans="beard">
-      <div class="fb" id="e1fb"></div>
-    </div>
-    <div class="err-item">
-      <div class="err-orig">❓ "My sister is so <span class="hl-err">rude</span> — she is always smiling and loves parties! Everyone likes her."</div>
-      <div class="err-lbl">These are positive qualities. Replace rude with a positive personality word:</div>
-      <input type="text" id="e2" placeholder="She is so…" data-ans="bubbly">
-      <div class="fb" id="e2fb"></div>
-    </div>
-    <div class="err-item">
-      <div class="err-orig">❓ "They had a big <span class="hl-err">argument</span> last week, but now they get on well."</div>
-      <div class="err-lbl">Replace <em>argument</em> (noun) with the verb from today's lesson:</div>
-      <input type="text" id="e3" placeholder="They…" data-ans="argued">
-      <div class="fb" id="e3fb"></div>
-    </div>
-    <div class="err-item">
-      <div class="err-orig">❓ "Tom wants to <span class="hl-err">make a break</span> with Sara — he says they argue all the time."</div>
-      <div class="err-lbl">Replace <em>make a break</em> with the right phrasal verb:</div>
-      <input type="text" id="e4" placeholder="Tom wants to…" data-ans="break up">
-      <div class="fb" id="e4fb"></div>
-    </div>
-    <div class="err-item">
-      <div class="err-orig">❓ "Her hair is not curly — it is <span class="hl-err">grey</span>."</div>
-      <div class="err-lbl">Grey is a colour, not the opposite of curly. Replace with the right word:</div>
-      <input type="text" id="e5" placeholder="Her hair is…" data-ans="straight">
-      <div class="fb" id="e5fb"></div>
-    </div>
-
-    <div class="btn-row">
-      <button class="btn btn-p" onclick="checkErrs()">✔ Check All</button>
-      <button class="btn btn-o" onclick="resetErrs()">↺ Reset</button>
-    </div>
-    <div class="fb" id="err-tot" style="margin-top:12px;"></div>
-  </div>
-
-  <!-- ══ TASK 4 — READING ══ -->
+  <!-- ══ TASK 3 — TRUE OR FALSE ══ -->
   <div class="card" id="card-read">
     <div class="card-head">
       <div class="c-icon">📖</div>
       <div class="c-text">
-        <div class="c-title"><span class="tnum">4</span> Reading</div>
-        <div class="c-sub">My best friend</div>
+        <div class="c-title"><span class="tnum">3</span> True or False</div>
+        <div class="c-sub">Read the text, then decide if each statement is true or false</div>
       </div>
       <div class="done-badge" id="bd-read">✓ Done</div>
     </div>
-    <div class="instr">Read the text carefully. Highlighted words are today's target vocabulary. Then answer the questions.</div>
+    <div class="instr">Read the text carefully. Highlighted words are today's target vocabulary. Then answer <strong>True</strong> or <strong>False</strong> for each statement.</div>
     <div class="read-box">
       <h3>👭 My Best Friend</h3>
       <p>
@@ -494,8 +476,7 @@ textarea{resize:vertical;min-height:80px;}
         <span class="hl">medium height</span> — okay, okay, just tall! She has long,
         <span class="hl">curly hair</span> and beautiful <span class="hl">curves</span>.
         Her dad is older now, with <span class="hl">grey hair</span> and a neat
-        <span class="hl">beard</span>, and her mum has a sweet <span class="hl">moustache</span> —
-        no, not really, I'm joking about the moustache.
+        <span class="hl">beard</span>.
       </p>
       <p>
         Personality-wise, Sara is <span class="hl">bubbly</span>, <span class="hl">outgoing</span>
@@ -511,32 +492,66 @@ textarea{resize:vertical;min-height:80px;}
       </p>
     </div>
 
+    <style>
+      .tf-row{display:flex;gap:10px;margin-top:6px;}
+      .tf-btn{flex:1;padding:10px;border-radius:9px;border:2px solid #dde2f0;background:#fafbff;color:#4b5563;font-weight:600;font-size:14px;cursor:pointer;transition:all .15s;font-family:inherit;max-width:120px;}
+      .tf-btn:hover{border-color:#3B6BEB;background:#EEF2FF;color:#3B6BEB;}
+      .tf-btn.correct{border-color:#22c55e;background:#f0fdf4;color:#15803d;}
+      .tf-btn.wrong{border-color:#ef4444;background:#fff5f5;color:#991b1b;}
+      .tf-btn.locked{cursor:default;}
+    </style>
+
     <div class="q-item">
-      <div class="q-lbl">Q1. What does Sara look like? (mention at least three things)</div>
-      <textarea id="rq1" placeholder="She is tall, she has…"></textarea>
-      <button class="show-btn" onclick="toggleAns('ra1',this)">💡 Show answer</button>
-      <div class="ans" id="ra1">✅ She is tall, has long curly hair, and has beautiful curves. (Also: her dad has grey hair and a beard.)</div>
+      <div class="q-lbl">1. Sara is short and has straight hair.</div>
+      <div class="tf-row" data-q="1" data-ans="false">
+        <button class="tf-btn" onclick="checkTF(this,'false')">TRUE</button>
+        <button class="tf-btn" onclick="checkTF(this,'false')">FALSE</button>
+      </div>
+      <div class="fb" id="tf1fb"></div>
     </div>
     <div class="q-item">
-      <div class="q-lbl">Q2. Name three positive adjectives that describe Sara's personality.</div>
-      <textarea id="rq2" placeholder="She is…"></textarea>
-      <button class="show-btn" onclick="toggleAns('ra2',this)">💡 Show answer</button>
-      <div class="ans" id="ra2">✅ Bubbly, outgoing, generous (and kind — any three are correct).</div>
+      <div class="q-lbl">2. Sara's dad has grey hair and a beard.</div>
+      <div class="tf-row" data-q="2" data-ans="true">
+        <button class="tf-btn" onclick="checkTF(this,'true')">TRUE</button>
+        <button class="tf-btn" onclick="checkTF(this,'true')">FALSE</button>
+      </div>
+      <div class="fb" id="tf2fb"></div>
     </div>
     <div class="q-item">
-      <div class="q-lbl">Q3. Why do the writer and Sara have a good relationship?</div>
-      <textarea id="rq3" placeholder="Because…"></textarea>
-      <button class="show-btn" onclick="toggleAns('ra3',this)">💡 Show answer</button>
-      <div class="ans" id="ra3">✅ Because they get on well and almost never argue.</div>
+      <div class="q-lbl">3. Sara is rude to people she doesn't know.</div>
+      <div class="tf-row" data-q="3" data-ans="false">
+        <button class="tf-btn" onclick="checkTF(this,'false')">TRUE</button>
+        <button class="tf-btn" onclick="checkTF(this,'false')">FALSE</button>
+      </div>
+      <div class="fb" id="tf3fb"></div>
     </div>
     <div class="q-item">
-      <div class="q-lbl">Q4. What does Sara do, and who is Leo?</div>
-      <textarea id="rq4" placeholder="Sara is…"></textarea>
-      <button class="show-btn" onclick="toggleAns('ra4',this)">💡 Show answer</button>
-      <div class="ans" id="ra4">✅ Sara is an influencer, and Leo is the photographer she dates.</div>
+      <div class="q-lbl">4. The writer and Sara argue all the time.</div>
+      <div class="tf-row" data-q="4" data-ans="false">
+        <button class="tf-btn" onclick="checkTF(this,'false')">TRUE</button>
+        <button class="tf-btn" onclick="checkTF(this,'false')">FALSE</button>
+      </div>
+      <div class="fb" id="tf4fb"></div>
     </div>
+    <div class="q-item">
+      <div class="q-lbl">5. Sara is an influencer and dates a photographer called Leo.</div>
+      <div class="tf-row" data-q="5" data-ans="true">
+        <button class="tf-btn" onclick="checkTF(this,'true')">TRUE</button>
+        <button class="tf-btn" onclick="checkTF(this,'true')">FALSE</button>
+      </div>
+      <div class="fb" id="tf5fb"></div>
+    </div>
+    <div class="q-item">
+      <div class="q-lbl">6. Sara and Leo have broken up many times.</div>
+      <div class="tf-row" data-q="6" data-ans="false">
+        <button class="tf-btn" onclick="checkTF(this,'false')">TRUE</button>
+        <button class="tf-btn" onclick="checkTF(this,'false')">FALSE</button>
+      </div>
+      <div class="fb" id="tf6fb"></div>
+    </div>
+
     <div class="btn-row">
-      <button class="btn btn-p" id="read-btn" onclick="markReadDone()">✔ Mark reading done</button>
+      <button class="btn btn-p" id="read-btn" onclick="markReadDone()">✔ Mark done</button>
     </div>
   </div>
 
@@ -545,7 +560,7 @@ textarea{resize:vertical;min-height:80px;}
     <div class="card-head">
       <div class="c-icon">💬</div>
       <div class="c-text">
-        <div class="c-title"><span class="tnum">5</span> Chatbot Practice</div>
+        <div class="c-title"><span class="tnum">4</span> Chatbot Practice</div>
         <div class="c-sub">Answer 7 questions about appearance & personality — try to use today's words</div>
       </div>
       <div class="done-badge" id="bd-chat">✓ Done</div>
@@ -565,7 +580,7 @@ textarea{resize:vertical;min-height:80px;}
     <div class="card-head">
       <div class="c-icon">🗣️</div>
       <div class="c-text">
-        <div class="c-title"><span class="tnum">6</span> Speaking Practice</div>
+        <div class="c-title"><span class="tnum">5</span> Speaking Practice</div>
         <div class="c-sub">Answer using at least one word from today's lesson</div>
       </div>
       <div class="done-badge" id="bd-spk">✓ Done</div>
@@ -601,7 +616,7 @@ textarea{resize:vertical;min-height:80px;}
     <div class="card-head">
       <div class="c-icon">💭</div>
       <div class="c-text">
-        <div class="c-title"><span class="tnum">7</span> My Reflection</div>
+        <div class="c-title"><span class="tnum">6</span> My Reflection</div>
         <div class="c-sub">Think about your learning today</div>
       </div>
       <div class="done-badge" id="bd-refl">✓ Done</div>
@@ -647,7 +662,7 @@ function showTasks(){
 }
 
 /* ── PROGRESS ── */
-var TOTAL=8;
+var TOTAL=7;
 var done={};
 var pts=0;
 function markDone(key,p,badge){
@@ -748,23 +763,55 @@ function toggleRulesCard(btn){
   btn.textContent=hidden?"🙈 Hide rules":"👁 Show rules";
 }
 
-/* ── FILL IN THE BLANKS ── */
+/* ── FILL IN THE BLANKS (multiple choice) ── */
+var FIB_DATA=[
+  {id:1,ans:"tall",opts:["tall","short","skinny","rude"]},
+  {id:2,ans:"medium height",opts:["medium height","tall","chubby","kind"]},
+  {id:3,ans:"curly hair",opts:["curly hair","straight hair","grey hair","beard"]},
+  {id:4,ans:"skinny",opts:["skinny","chubby","overweight","tall"]},
+  {id:5,ans:"outgoing",opts:["outgoing","rude","generous","kind"]},
+  {id:6,ans:"argue",opts:["argue","break up","date someone","get on well"]},
+  {id:7,ans:"relationship",opts:["relationship","beard","curves","bubbly"]},
+  {id:8,ans:"rude",opts:["rude","generous","outgoing","bubbly"]}
+];
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+FIB_DATA.forEach(function(item){
+  var wrap=$("f"+item.id+"-opts");
+  if(!wrap) return;
+  var opts=shuffle(item.opts.slice());
+  opts.forEach(function(o){
+    var b=document.createElement("button");
+    b.className="fib-opt";
+    b.textContent=o;
+    b.onclick=function(){pickFIB(this,item.id);};
+    wrap.appendChild(b);
+  });
+});
+var fibPicks={};
+function pickFIB(btn,id){
+  var wrap=btn.parentNode;
+  if(wrap.dataset.locked) return;
+  wrap.querySelectorAll(".fib-opt").forEach(function(o){o.classList.remove("sel");});
+  btn.classList.add("sel");
+  fibPicks[id]=btn.textContent;
+}
 function checkFIB(){
-  var pairs=[[1,"f1"],[2,"f2"],[3,"f3"],[4,"f4"],[5,"f5"],[6,"f6"],[7,"f7"],[8,"f8"]];
   var ok=0;
-  pairs.forEach(function(p,idx){
-    var id=p[1];
-    var inp=$(id);
-    if(!inp){return;}
-    var fb=$(id+"fb");
-    if(!fb){fb=$(id.slice(0,-1)+"fb");}
-    var v=inp.value.trim().toLowerCase();
-    var a=inp.dataset.ans.toLowerCase();
-    if(!v){inp.className="fib-in";if(fb){fb.className="fb";fb.textContent="";}return;}
-    if(v===a){
-      inp.className="fib-in ok";if(fb){fb.className="fb ok";fb.textContent="✅ Correct!";}ok++;
+  FIB_DATA.forEach(function(item){
+    var wrap=$("f"+item.id+"-opts");
+    var fb=$("f"+item.id+"fb");
+    if(!wrap||!fb) return;
+    var pick=fibPicks[item.id]||"";
+    wrap.querySelectorAll(".fib-opt").forEach(function(o){o.classList.add("locked");o.classList.remove("sel");});
+    if(pick===item.ans){
+      wrap.querySelectorAll(".fib-opt").forEach(function(o){if(o.textContent===item.ans)o.classList.add("correct");});
+      fb.className="fb ok";fb.textContent="✅ Correct!";ok++;
     } else {
-      inp.className="fib-in bad";if(fb){fb.className="fb err";fb.innerHTML="❌ Answer: <strong>"+inp.dataset.ans+"</strong>";}
+      wrap.querySelectorAll(".fib-opt").forEach(function(o){
+        if(o.textContent===item.ans)o.classList.add("correct");
+        if(o.textContent===pick)o.classList.add("wrong");
+      });
+      fb.className="fb err";fb.innerHTML="❌ Answer: <strong>"+item.ans+"</strong>";
     }
   });
   var tot=$("fib-tot");
@@ -773,13 +820,13 @@ function checkFIB(){
   else {tot.className="fb err";tot.textContent="💪 "+ok+"/8. Review the flashcards and try again!";}
 }
 function resetFIB(){
-  ["f1","f1b","f2","f3","f4","f5","f6","f7","f8"].forEach(function(id){
-    var el=$(id);if(!el)return;
-    el.value="";el.className="fib-in";
+  FIB_DATA.forEach(function(item){
+    var wrap=$("f"+item.id+"-opts");
+    var fb=$("f"+item.id+"fb");
+    if(wrap){wrap.querySelectorAll(".fib-opt").forEach(function(o){o.classList.remove("sel","correct","wrong","locked");});}
+    if(fb){fb.className="fb";fb.textContent="";}
   });
-  ["f1fb","f2fb","f3fb","f4fb","f5fb","f6fb","f7fb","f8fb"].forEach(function(id){
-    var el=$(id);if(el){el.className="fb";el.textContent="";}
-  });
+  fibPicks={};
   var t=$("fib-tot");t.className="fb";t.textContent="";
 }
 
@@ -832,34 +879,37 @@ function resetMatch(){
 }
 bindMatch();
 
-/* ── ERROR CORRECTION ── */
-function checkErrs(){
-  var ok=0;
-  for(var i=1;i<=5;i++){
-    var inp=$("e"+i), fb=$("e"+i+"fb");
-    var v=inp.value.trim().toLowerCase(), a=inp.dataset.ans.toLowerCase();
-    if(!v){inp.className="";fb.className="fb";continue;}
-    if(v.includes(a)){
-      inp.className="ok";fb.className="fb ok";fb.textContent="✅ Correct!";ok++;
-    } else {
-      inp.className="bad";fb.className="fb err";
-      fb.innerHTML="❌ Try to include: <strong>"+inp.dataset.ans+"</strong>";
-    }
+/* ── TRUE OR FALSE ── */
+var tfAnswered=0;
+var tfTotal=6;
+function checkTF(btn,ansStr){
+  var row=btn.parentNode;
+  if(row.dataset.locked) return;
+  var buttons=row.querySelectorAll(".tf-btn");
+  var chosen=btn.textContent.trim().toLowerCase();
+  var correct=(chosen===ansStr);
+  buttons.forEach(function(b){b.classList.add("locked");b.classList.remove("sel");});
+  if(correct){
+    btn.classList.add("correct");
+  } else {
+    btn.classList.add("wrong");
+    buttons.forEach(function(b){if(b.textContent.trim().toLowerCase()===ansStr)b.classList.add("correct");});
   }
-  var tot=$("err-tot");
-  if(ok===5){tot.className="fb ok";tot.textContent="🎉 5/5 — error-free!";markDone("err",20,"bd-err");}
-  else if(ok>=3){tot.className="fb ok";tot.textContent="👍 "+ok+"/5 correct.";markDone("err",12,"bd-err");}
-  else {tot.className="fb err";tot.textContent="💪 "+ok+"/5. Check the flashcards again.";}
-}
-function resetErrs(){
-  for(var i=1;i<=5;i++){
-    $("e"+i).value="";$("e"+i).className="";
-    $("e"+i+"fb").className="fb";$("e"+i+"fb").textContent="";
+  var qNum=row.dataset.q;
+  var fb=$("tf"+qNum+"fb");
+  if(correct){
+    fb.className="fb ok";
+    fb.textContent="✅ Correct!";
+    tfAnswered++;
+  } else {
+    fb.className="fb err";
+    fb.textContent="❌ The correct answer is "+ansStr.toUpperCase()+".";
+    tfAnswered++;
   }
-  $("err-tot").className="fb";$("err-tot").textContent="";
+  if(tfAnswered===tfTotal){markDone("read",20,"bd-read");}
 }
 
-/* ── READING ── */
+/* ── READING (legacy helpers) ── */
 function toggleAns(id,btn){
   var el=$(id);el.classList.toggle("on");
   btn.textContent=el.classList.contains("on")?"🙈 Hide answer":"💡 Show answer";
