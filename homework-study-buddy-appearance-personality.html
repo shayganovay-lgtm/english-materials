@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Homework for Study Buddy — Appearance & Personality</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:#fff;color:#2d2d2d;font-size:16px;line-height:1.6;}
+
+/* ── HERO ── */
+.hero{display:grid;grid-template-columns:1fr;min-height:420px;border-bottom:1px solid #e5e8f0;}
+.hero-panel{position:relative;padding:56px 44px;display:flex;flex-direction:column;justify-content:flex-start;overflow:hidden;background:#EFEEEC;}
+.hero-eyebrow{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9c9890;margin-bottom:10px;}
+.hero-title{font-family:Georgia,'Times New Roman',serif;font-weight:800;font-size:clamp(34px,5vw,52px);color:#6C63C9;letter-spacing:-.01em;line-height:1.05;margin-bottom:8px;}
+.hero-sub{font-size:14px;color:#6b7280;max-width:42ch;margin-bottom:30px;}
+.hero-btn-stack{display:flex;flex-direction:column;gap:12px;max-width:340px;}
+.hero-btn{display:flex;align-items:center;justify-content:space-between;gap:14px;border:2.5px solid #1c1917;border-radius:999px;padding:14px 10px 14px 24px;font-family:Georgia,'Times New Roman',serif;font-weight:700;font-size:17px;color:#3f3a35;cursor:pointer;text-decoration:none;background:#fff;transition:transform .15s ease,box-shadow .15s ease;box-shadow:3px 3px 0 rgba(28,25,23,.12);}
+.hero-btn:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 rgba(28,25,23,.16);}
+.hero-btn:active{transform:translate(0,0);box-shadow:1px 1px 0 rgba(28,25,23,.16);}
+.hero-btn-icon{width:36px;height:36px;border-radius:50%;border:2.5px solid #1c1917;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.hero-btn.primary{background:#E3E4B9;}
+.hero-btn.secondary{background:#DCC9F0;}
+.hero-btn:disabled{opacity:.55;cursor:default;box-shadow:none;}
+.hero-btn:disabled:hover{transform:none;}
+.hero-illustration{position:absolute;width:300px;bottom:36px;right:28px;}
+.hero-illustration svg{width:100%;height:auto;display:block;}
+@media(max-width:880px){.heroPanel{padding:40px 26px;min-height:auto;}.hero-illustration{position:static;width:220px;margin:20px auto 0;}.hero-btn-stack{max-width:100%;}}
+
+/* ── HOMEWORK CONTENT ── */
+#hw-content{display:none;}
+#hw-content.visible{display:block;animation:hwFadeIn .4s ease both;}
+@keyframes hwFadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── STICKY PROGRESS ── */
+#sticky-bar{position:sticky;top:0;z-index:200;background:#fff;border-bottom:1px solid #e5e8f0;padding:10px 20px;display:flex;align-items:center;gap:14px;box-shadow:0 2px 10px rgba(0,0,0,0.06);}
+#prog-text{font-size:12px;font-weight:600;color:#666;white-space:nowrap;min-width:140px;}
+#prog-track{flex:1;height:7px;background:#e8ecf8;border-radius:4px;overflow:hidden;}
+#prog-fill{height:100%;background:linear-gradient(90deg,#3B6BEB,#7c5af4);border-radius:4px;width:0;transition:width .5s ease;}
+#score-badge{font-size:13px;font-weight:700;color:#3B6BEB;white-space:nowrap;background:#EEF2FF;padding:4px 12px;border-radius:20px;}
+
+/* ── LAYOUT + SIDEBAR ── */
+.layout{display:grid;grid-template-columns:170px 1fr;gap:24px;max-width:960px;margin:0 auto;padding:28px 16px 60px;}
+.sidebar{position:sticky;top:72px;align-self:start;max-height:calc(100vh - 84px);overflow-y:auto;}
+.sidebar h4{font-family:Georgia,serif;font-size:13px;color:#9ca3af;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;}
+.nav-link{display:block;font-size:14px;color:#6b7280;text-decoration:none;padding:8px 12px;border-radius:8px;margin-bottom:4px;transition:all .15s;cursor:pointer;}
+.nav-link:hover{background:#EEF2FF;color:#3B6BEB;}
+.nav-link.active{background:#3B6BEB;color:#fff;font-weight:700;}
+.nav-link .nico{margin-right:6px;}
+@media(max-width:720px){.layout{grid-template-columns:1fr;}.sidebar{position:static;max-height:none;display:flex;flex-wrap:wrap;gap:6px;overflow-x:auto;}.sidebar h4{width:100%;}.nav-link{margin-bottom:0;}}
+
+/* ── CARDS ── */
+.container{min-width:0;}
+.card{background:#fff;border:1.5px solid #e5e8f0;border-radius:18px;padding:28px;margin-bottom:24px;box-shadow:0 3px 16px rgba(59,107,235,.05);scroll-margin-top:80px;}
+.card.reflection{background:linear-gradient(135deg,#f8f0ff,#eef2ff);border-color:#c7d5f8;}
+.card-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:22px;}
+.c-icon{width:46px;height:46px;border-radius:12px;background:#EEF2FF;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.c-text{flex:1;}
+.c-title{font-size:18px;font-weight:700;color:#111827;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.tnum{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#3B6BEB;color:#fff;font-size:12px;font-weight:700;flex-shrink:0;}
+.c-sub{font-size:13px;color:#9ca3af;margin-top:3px;}
+.done-badge{display:none;align-items:center;gap:4px;background:#dcfce7;color:#15803d;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;border:1px solid #86efac;margin-left:auto;flex-shrink:0;white-space:nowrap;}
+.done-badge.on{display:inline-flex;}
+.instr{background:#f0f4ff;border-left:4px solid #3B6BEB;border-radius:0 10px 10px 0;padding:13px 16px;font-size:14px;color:#374151;margin-bottom:22px;line-height:1.65;}
+.hr{border:none;border-top:1px solid #e5e8f0;margin:4px 0 20px;}
+
+/* ── INPUTS ── */
+input[type="text"],textarea{border:2px solid #dde2f0;border-radius:10px;padding:10px 14px;font-size:15px;font-family:inherit;outline:none;width:100%;background:#fafbff;color:#111827;transition:border-color .2s,background .2s,box-shadow .2s;}
+input[type="text"]:focus,textarea:focus{border-color:#3B6BEB;background:#fff;box-shadow:0 0 0 3px rgba(59,107,235,.1);}
+input.ok,textarea.ok{border-color:#22c55e !important;background:#f0fdf4 !important;}
+input.bad,textarea.bad{border-color:#ef4444 !important;background:#fff5f5 !important;}
+textarea{resize:vertical;min-height:80px;}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 22px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:all .15s;user-select:none;font-family:inherit;}
+.btn:active{transform:scale(.97);}
+.btn-p{background:#3B6BEB;color:#fff;box-shadow:0 2px 10px rgba(59,107,235,.3);}
+.btn-p:hover{background:#2d5cd4;}
+.btn-p:disabled{background:#a0aec0;cursor:not-allowed;box-shadow:none;}
+.btn-o{background:#fff;color:#3B6BEB;border:2px solid #c7d5f8;}
+.btn-o:hover{background:#EEF2FF;}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;}
+
+/* ── FEEDBACK ── */
+.fb{display:none;padding:9px 14px;border-radius:8px;font-size:13px;margin-top:8px;line-height:1.5;}
+.fb.ok{display:block;background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;}
+.fb.err{display:block;background:#fff5f5;color:#991b1b;border:1px solid #fecaca;}
+
+/* ── SHOW ANSWER ── */
+.show-btn{background:none;border:1.5px dashed #c4c9d9;color:#9ca3af;border-radius:7px;padding:5px 14px;font-size:12px;cursor:pointer;margin-top:8px;transition:all .2s;font-family:inherit;}
+.show-btn:hover{border-color:#3B6BEB;color:#3B6BEB;}
+.ans{display:none;background:#f0fdf4;border:1px solid #bbf7d0;color:#166534;border-radius:8px;padding:9px 14px;font-size:13px;margin-top:8px;line-height:1.5;}
+.ans.on{display:block;}
+
+/* ── WHEEL ── */
+#wheel-wrap{text-align:center;}
+#wheel-cv{display:block;margin:0 auto 16px;border-radius:50%;box-shadow:0 8px 30px rgba(59,107,235,.2);}
+#wheel-word{font-size:19px;font-weight:800;color:#3B6BEB;min-height:36px;margin-bottom:16px;line-height:1.4;}
+#wheel-empty{font-size:13px;color:#9ca3af;margin-top:6px;}
+.btn-spin{background:linear-gradient(135deg,#3B6BEB,#7c5af4);color:#fff;padding:13px 32px;font-size:16px;border-radius:14px;box-shadow:0 4px 18px rgba(59,107,235,.4);border:none;cursor:pointer;font-family:inherit;font-weight:700;transition:all .15s;}
+.btn-spin:hover{box-shadow:0 6px 22px rgba(59,107,235,.5);}
+.btn-spin:disabled{background:#a0aec0;cursor:not-allowed;box-shadow:none;}
+
+/* ── FILL-IN ── */
+.fib-row{display:flex;align-items:center;flex-wrap:wrap;gap:6px;font-size:15px;margin-bottom:6px;}
+.fib-g{margin-bottom:14px;}
+.fib-in{width:230px !important;text-align:center;padding:7px 6px !important;font-size:14px !important;flex-shrink:0;}
+
+/* ── MATCHING ── */
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:500px){.match-grid{grid-template-columns:1fr;}}
+.m-col{display:flex;flex-direction:column;gap:8px;}
+.m-w,.m-d{border-radius:9px;padding:10px 13px;cursor:pointer;font-size:14px;transition:all .15s;user-select:none;}
+.m-w{background:#EEF2FF;border:2px solid #c7d5f8;color:#3B6BEB;font-weight:700;text-align:center;}
+.m-d{background:#fafbff;border:2px solid #e5e8f0;color:#4b5563;line-height:1.4;}
+.m-w.sel,.m-d.sel{border-color:#3B6BEB;background:#3B6BEB;color:#fff;}
+.m-w.matched,.m-d.matched{background:#f0fdf4;border-color:#22c55e;color:#166534;cursor:default;}
+.m-w.flash,.m-d.flash{background:#fff5f5;border-color:#ef4444;animation:shake .3s ease;}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+/* ── ERROR CORRECTION ── */
+.err-item{margin-bottom:20px;}
+.err-orig{font-style:italic;background:#fffbeb;border:1.5px solid #fde68a;border-radius:9px;padding:10px 14px;color:#78350f;font-size:14px;margin-bottom:8px;}
+.err-orig .hl-err{background:#fde68a;color:#7c2d12;padding:1px 4px;border-radius:3px;font-weight:700;}
+.err-lbl{font-size:12px;color:#9ca3af;margin-bottom:6px;font-weight:500;}
+
+/* ── READING ── */
+.read-box{background:#f8f9ff;border:1.5px solid #dde2f0;border-radius:14px;padding:24px;font-size:15px;line-height:1.85;margin-bottom:26px;}
+.read-box h3{color:#3B6BEB;font-size:17px;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.read-box p{margin-bottom:12px;}
+.read-box p:last-child{margin-bottom:0;}
+.hl{background:#e0e9ff;color:#2451c7;padding:1px 5px;border-radius:4px;font-weight:600;}
+.q-item{margin-bottom:20px;}
+.q-lbl{font-weight:600;font-size:14px;color:#111827;margin-bottom:8px;}
+
+/* ── CHATBOT ── */
+#chat-box{border:2px solid #e5e8f0;border-radius:14px;overflow:hidden;}
+#chat-msgs{padding:18px;min-height:220px;max-height:420px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;background:#f8f9ff;}
+.bubble{max-width:84%;border-radius:16px;padding:11px 15px;font-size:14px;line-height:1.55;white-space:pre-wrap;}
+.b-t{background:#EEF2FF;color:#1a1a2e;align-self:flex-start;border-bottom-left-radius:4px;}
+.b-s{background:#3B6BEB;color:#fff;align-self:flex-end;border-bottom-right-radius:4px;}
+.b-tip{background:#fffbeb;border:1px solid #fde68a;color:#78350f;font-size:12px;align-self:flex-start;border-radius:10px;padding:7px 13px;max-width:90%;}
+.b-dot{background:#EEF2FF;color:#9ca3af;align-self:flex-start;border-bottom-left-radius:4px;font-style:italic;font-size:13px;}
+#chat-foot{border-top:2px solid #e5e8f0;padding:12px;display:flex;gap:10px;background:#fff;}
+#chat-in{flex:1;border:2px solid #dde2f0;border-radius:9px;padding:10px 14px;font-size:14px;font-family:inherit;outline:none;color:#111827;background:#fafbff;}
+#chat-in:focus{border-color:#3B6BEB;background:#fff;}
+#chat-send{background:#3B6BEB;color:#fff;border:none;border-radius:9px;padding:10px 18px;font-weight:700;cursor:pointer;font-size:14px;font-family:inherit;}
+#chat-send:hover{background:#2d5cd4;}
+
+/* ── DISCUSSION ── */
+.disc-q{margin-bottom:20px;}
+.disc-q label{display:block;font-weight:600;color:#111827;font-size:14px;margin-bottom:8px;}
+.disc-hint{font-size:12px;color:#9ca3af;margin-bottom:8px;}
+
+/* ── REFLECTION ── */
+.refl-q{margin-bottom:20px;}
+.refl-q label{display:block;font-weight:600;color:#3B6BEB;font-size:14px;margin-bottom:8px;}
+.congrats{text-align:center;padding:24px;background:#fff;border-radius:14px;border:1.5px solid #c7d5f8;margin-top:20px;}
+.congrats-em{font-size:38px;margin-bottom:8px;}
+.congrats-ttl{font-size:20px;font-weight:800;color:#3B6BEB;margin-bottom:4px;}
+.congrats-sub{font-size:14px;color:#6b7280;}
+
+/* ── RULE TABS / TOGGLES ── */
+.rule-tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+.rule-tab{padding:8px 16px;border-radius:10px;border:2px solid #e5e8f0;background:#fff;color:#6b7280;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s;}
+.rule-tab:hover{border-color:#c7d5f8;color:#3B6BEB;}
+.rule-tab.active{background:#3B6BEB;color:#fff;border-color:#3B6BEB;}
+.slider-wrap{overflow:hidden;position:relative;}
+.slider{display:flex;transition:transform .45s ease;width:200%;}
+.slider>div{width:50%;padding:0 4px;box-sizing:border-box;}
+.rule-slide{background:#f8f9ff;border:1.5px solid #dde2f0;border-radius:14px;padding:20px;font-size:14px;color:#374151;line-height:1.7;}
+.rule-slide h4{color:#3B6BEB;font-size:15px;margin-bottom:10px;}
+.rule-slide .hl{background:#e0e9ff;color:#2451c7;padding:1px 5px;border-radius:4px;font-weight:600;}
+.rule-slide ul{margin:6px 0 0 18px;}
+.rule-slide li{margin-bottom:6px;}
+.slider-dots{display:flex;justify-content:center;gap:6px;margin-top:12px;}
+.s-dot{width:8px;height:8px;border-radius:50%;background:#dde2f0;cursor:pointer;transition:background .2s;}
+.s-dot.active{background:#3B6BEB;}
+
+/* ── FLASHCARDS ── */
+.fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;}
+.fc{perspective:1000px;height:180px;cursor:pointer;}
+.fc-inner{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d;}
+.fc.flipped .fc-inner{transform:rotateY(180deg);}
+.fc-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:14px;padding:16px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;box-shadow:0 3px 12px rgba(0,0,0,.08);}
+.fc-front{background:#EEF2FF;border:2px solid #c7d5f8;color:#1a1a2e;}
+.fc-back{background:linear-gradient(135deg,#3B6BEB,#7c5af4);color:#fff;transform:rotateY(180deg);}
+.fc-front-lbl{font-size:11px;color:#3B6BEB;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;}
+.fc-front-text{font-size:16px;font-weight:700;line-height:1.4;}
+.fc-back-lbl{font-size:11px;color:rgba(255,255,255,.75);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;}
+.fc-back-text{font-size:14px;font-weight:600;line-height:1.35;}
+
+@media(max-width:600px){.card{padding:20px 16px;}.btn-row{flex-direction:column;}.fc{height:200px;}}
+</style>
+</head>
+<body>
+
+<!-- ══ HERO ══ -->
+<div class="hero" id="hero">
+  <div class="hero-panel">
+    <p class="hero-eyebrow">Study Buddy &middot; A2 &middot; <span id="hw-date"></span></p>
+    <h1 class="hero-title">Homework<br>Time</h1>
+    <p class="hero-sub">Today's focus: 👤 Appearance &amp; Personality. 21 target words — faces, bodies, character, relationships. Spin the wheel, learn the rules, chat with an influencer, and describe the people you know best.</p>
+    <div class="hero-btn-stack">
+      <button class="hero-btn primary" id="hero-start-btn" onclick="showTasks()">
+        <span>Start your homework</span>
+        <span class="hero-btn-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#1c1917" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </button>
+      <a class="hero-btn secondary" href="index.html">
+        <span class="hero-btn-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke="#1c1917" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span>Back to quizzes</span>
+      </a>
+    </div>
+    <div class="hero-illustration">
+      <svg viewBox="0 0 340 230" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="170" cy="208" rx="120" ry="10" fill="#1c1917" opacity="0.06"/>
+        <path d="M28 176c-10 2-14 12-8 20 4 6 12 8 20 8h44c10 0 14-10 8-18-6-8-16-10-26-10-14 0-28-2-38 0z" fill="#fff" stroke="#1c1917" stroke-width="4" stroke-linejoin="round"/>
+        <path d="M70 168c14-6 26-4 34 6" fill="none" stroke="#1c1917" stroke-width="4.5" stroke-linecap="round"/>
+        <path d="M66 150c-6-22 8-46 40-50 30-4 58 8 66 30 6 16-2 28-16 34-24 10-58 12-78 2-6-4-10-10-12-16z" fill="#3B6BEB" stroke="#1c1917" stroke-width="4.5" stroke-linejoin="round"/>
+        <path d="M162 132c26-2 46-18 56-42 4-10 8-22 16-30" fill="none" stroke="#1c1917" stroke-width="4.5" stroke-linecap="round"/>
+        <path d="M218 90c8-14 20-24 20-24s-4 14-10 26c-4 8-14 8-10-2z" fill="#fff" stroke="#1c1917" stroke-width="4" stroke-linejoin="round"/>
+        <path d="M150 138c22 4 42-6 56-26 8-12 14-26 24-32" fill="none" stroke="#1c1917" stroke-width="4.5" stroke-linecap="round"/>
+        <path d="M228 82c10-10 22-16 22-16s-6 12-14 22c-6 6-14 2-8-6z" fill="#fff" stroke="#1c1917" stroke-width="4" stroke-linejoin="round"/>
+        <circle cx="70" cy="120" r="30" fill="#fff" stroke="#1c1917" stroke-width="4.5"/>
+        <path d="M40 108c-8-16 2-34 20-38 4-10 16-16 28-12 14-8 32 0 34 16 12 2 18 16 12 26-4-10-14-14-22-12-10 6-24 6-32-2-10 4-20 2-26-6-6 8-10 18-14 28z" fill="#1c1917"/>
+        <circle cx="60" cy="126" r="2.8" fill="#1c1917"/>
+        <circle cx="74" cy="126" r="2.8" fill="#1c1917"/>
+        <path d="M58 140c5 5 12 5 18 0" stroke="#1c1917" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+        <path d="M86 156c10-2 20 0 26 8 4 6 4 12 0 16" fill="none" stroke="#1c1917" stroke-width="4.5" stroke-linecap="round"/>
+        <rect x="44" y="164" width="34" height="22" rx="5" fill="#fff" stroke="#1c1917" stroke-width="4" transform="rotate(-8 44 164)"/>
+        <rect x="50" y="169" width="22" height="12" rx="2" fill="#3B6BEB" opacity="0.6" transform="rotate(-8 50 169)"/>
+        <text x="61" y="179" font-family="serif" font-size="11" font-weight="700" fill="#fff" transform="rotate(-8 50 169)">A?</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- ══ HOMEWORK CONTENT ══ -->
+<div id="hw-content">
+
+<div id="sticky-bar">
+  <div id="prog-text">0 of 8 tasks done</div>
+  <div id="prog-track"><div id="prog-fill"></div></div>
+  <div id="score-badge">⭐ 0 pts</div>
+</div>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <h4>Tasks</h4>
+    <a class="nav-link" data-target="card-wheel"><span class="nico">🎡</span>Wheel</a>
+    <a class="nav-link" data-target="card-rules"><span class="nico">📐</span>Rules</a>
+    <a class="nav-link" data-target="card-fc"><span class="nico">🃏</span>Flashcards</a>
+    <a class="nav-link" data-target="card-fib"><span class="nico">✍️</span>Fill in</a>
+    <a class="nav-link" data-target="card-match"><span class="nico">🔗</span>Match</a>
+    <a class="nav-link" data-target="card-err"><span class="nico">✏️</span>Errors</a>
+    <a class="nav-link" data-target="card-read"><span class="nico">📖</span>Reading</a>
+    <a class="nav-link" data-target="card-chat"><span class="nico">💬</span>Chatbot</a>
+    <a class="nav-link" data-target="card-disc"><span class="nico">🗣️</span>Speaking</a>
+    <a class="nav-link" data-target="card-refl"><span class="nico">💭</span>Reflection</a>
+  </aside>
+
+  <div class="container">
+
+  <!-- ══ WARM UP — WHEEL ══ -->
+  <div class="card" id="card-wheel">
+    <div class="card-head">
+      <div class="c-icon">🎡</div>
+      <div class="c-text">
+        <div class="c-title">Warm Up — Spin the Wheel!</div>
+        <div class="c-sub">Get a word · make a sentence about someone's appearance or personality</div>
+      </div>
+    </div>
+    <div class="instr">🎯 Click <strong>SPIN</strong> to get a word from today's lesson. Then write a sentence describing someone using that word. Each word only appears once!</div>
+    <div id="wheel-wrap">
+      <canvas id="wheel-cv" width="290" height="290"></canvas>
+      <div id="wheel-word">🎯 Click SPIN to get your word!</div>
+      <button class="btn-spin" id="spin-btn" onclick="spinWheel()">🎲 SPIN!</button>
+      <div id="wheel-empty"></div>
+    </div>
+    <div style="margin-top:22px;">
+      <label style="display:block;font-weight:700;font-size:14px;margin-bottom:8px;">✍️ Your sentence:</label>
+      <textarea id="wheel-sent" placeholder="Describe someone with this word…"></textarea>
+    </div>
+  </div>
+
+  <!-- ══ GRAMMAR & USAGE RULES — TABS + SLIDING ══ -->
+  <div class="card" id="card-rules">
+    <div class="card-head">
+      <div class="c-icon">📐</div>
+      <div class="c-text">
+        <div class="c-title">Rules to Remember</div>
+        <div class="c-sub">Swipe between slides · hide at any time</div>
+      </div>
+      <button class="btn btn-o" id="hide-rules-btn" onclick="toggleRulesCard(this)">🙈 Hide rules</button>
+    </div>
+    <div id="rules-body">
+      <div class="rule-tabs">
+        <button class="rule-tab active" onclick="slideTo(0,this)">Appearance</button>
+        <button class="rule-tab" onclick="slideTo(1,this)">Personality</button>
+      </div>
+      <div class="slider-wrap">
+        <div class="slider" id="slider">
+          <div>
+            <div class="rule-slide">
+              <h4>Describe appearance 👤</h4>
+              <p>We use <span class="hl">be</span> + adjectives to describe people <em>right now</em> or in general:</p>
+              <ul>
+                <li><strong>Build:</strong> skinny · chubby · overweight · has curves</li>
+                <li><strong>Height:</strong> tall · short · medium height</li>
+                <li><strong>Hair:</strong> curly hair · straight hair · grey hair</li>
+                <li><strong>Face:</strong> beard · moustache</li>
+              </ul>
+              <p style="margin-top:8px;"><em>He <span class="hl">is</span> tall and has a grey beard.</em><br><em>She <span class="hl">has</span> curly hair and beautiful curves.</em></p>
+            </div>
+          </div>
+          <div>
+            <div class="rule-slide">
+              <h4>Describe personality 💬</h4>
+              <p>Personality adjectives are also used with <span class="hl">be</span>:</p>
+              <ul>
+                <li>outgoing · bubbly · generous · kind → positive</li>
+                <li>rude → negative</li>
+              </ul>
+              <p style="margin-top:8px;"><em>My sister <span class="hl">is</span> very bubbly and outgoing — she loves parties.</em></p>
+              <h4 style="margin-top:14px;">Relationships 🤝</h4>
+              <ul>
+                <li><strong>get on well (with)</strong> — have a good relationship</li>
+                <li><strong>argue</strong> — disagree noisily</li>
+                <li><strong>date someone</strong> · <strong>break up</strong> · <strong>relationship</strong></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slider-dots">
+        <span class="s-dot active" onclick="slideTo(0,this)"></span>
+        <span class="s-dot" onclick="slideTo(1,this)"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ FLASHCARDS ══ -->
+  <div class="card" id="card-fc">
+    <div class="card-head">
+      <div class="c-icon">🃏</div>
+      <div class="c-text">
+        <div class="c-title">Flashcards</div>
+        <div class="c-sub">Tap a card to flip it · front = word, back = meaning</div>
+      </div>
+    </div>
+    <div class="instr">📌 Tap any card to flip it. Test yourself before you check!</div>
+    <div class="fc-grid">
+      <div class="fc" onclick="this.classList.toggle('flipped')"><div class="fc-inner"><div class="fc-face fc-front"><div class="fc-front-lbl">Word</div><div class="fc-front-text">beard</div></div><div class="fc-face fc-back"><div class="fc-back-lbl">Meaning</div><div class="fc-back-text">hair on a man's chin and cheeks</div></div></div></div>
+      <div class="fc" onclick="this.classList.toggle('flipped')"><div class="fc-inner"><div class="fc-face fc-front"><div class="fc-front-lbl">Word</div><div class="fc-front-text">moustache</div></div><div class="fc-face fc-back"><div class="fc-back-lbl">Meaning</div><div class="fc-back-text">hair above the upper lip</div></div></div></div>
+      <div class="fc" onclick="this.classList.toggle('flipped')"><div class="fc-inner"><div class="fc-face fc-front"><div class="fc-front-lbl">Word</div><div class="fc-front-text">chubby</div></div><div class="fc-face fc-back"><div class="fc-back-lbl">Meaning</div><div class="fc-back-text">slightly fat, in a soft way</div></div></div></div>
+      <div class="fc" onclick="this.classList.toggle('flipped')"><div class="fc-inner"><div class="fc-face fc-front"><div class="fc-front-lbl">Word</div><div class="fc-front-text">skinny</div></div><div class="fc-face fc-back"><div class="fc-back-lbl">Meaning</div><div class="fc-back-text">very thin</div></div></div></div>
+      <div class="fc" onclick="this.classList.toggle('flipped')"><div class="fc-inner"><div class="fc-face fc-front"><div class="fc-front-lbl">Word</div><div class="fc-front-text">outgoing</div></div><div class="fc-face fc-back"><div class="fc-back-lbl">Meaning</div><div class="fc-back-text">friendly and confident socially</div></div></div></div>
+      <div class="fc" onclick="this.classList.toggle('flipped')"><div class="fc-inner"><div class="fc-face fc-front"><div class="fc-front-lbl">Word</div><div class="fc-front-text">bubbly</div></div><div class="fc-face fc-back"><div class="fc-back-lbl">Meaning</div><div class="fc-back-text">very cheerful and lively</div></div></div></div>
+      <div class="fc" onclick="this.classList.toggle('flipped')"><div class="fc-inner"><div class="fc-face fc-front"><div class="fc-front-lbl">Word</div><div class="fc-front-text">generous</div></div><div class="fc-face fc-back"><div class="fc-back-lbl">Meaning</div><div class="fc-back-text">happy to give and share</div></div></div></div>
+      <div class="fc" onclick="this.classList.toggle('flipped')"><div class="fc-inner"><div class="fc-face fc-front"><div class="fc-front-lbl">Word</div><div class="fc-front-text">break up</div></div><div class="fc-face fc-back"><div class="fc-back-lbl">Meaning</div><div class="fc-back-text">end a romantic relationship</div></div></div></div>
+    </div>
+  </div>
+
+  <!-- ══ TASK 1 — FILL IN THE BLANKS ══ -->
+  <div class="card" id="card-fib">
+    <div class="card-head">
+      <div class="c-icon">✍️</div>
+      <div class="c-text">
+        <div class="c-title"><span class="tnum">1</span> Fill in the Blanks</div>
+        <div class="c-sub">Use target vocabulary to describe people</div>
+      </div>
+      <div class="done-badge" id="bd-fib">✓ Done</div>
+    </div>
+    <div class="instr">📌 Type the missing word. Words come from today's lesson: beard, moustache, skinny, chubby, overweight, medium height, curly hair, straight hair, grey hair, tall, short, rude, outgoing, generous, bubbly, kind, curves, argue, get on well, relationship, date someone, break up.</div>
+    <hr class="hr">
+
+    <div class="fib-g"><div class="fib-row"><span>1. My grandad is 70. He is</span><input type="text" class="fib-in" id="f1" data-ans="tall" placeholder="___"><span>and has a long grey</span><input type="text" class="fib-in" id="f1b" data-ans="beard" placeholder="___"><span>.</span></div><div class="fb" id="f1fb"></div></div>
+    <div class="fib-g"><div class="fib-row"><span>2. She is not tall or short — she is</span><input type="text" class="fib-in" id="f2" data-ans="medium height" placeholder="___"><span>.</span></div><div class="fb" id="f2fb"></div></div>
+    <div class="fib-g"><div class="fib-row"><span>3. Her hair is not straight — she has</span><input type="text" class="fib-in" id="f3" data-ans="curly hair" placeholder="___"><span>.</span></div><div class="fb" id="f3fb"></div></div>
+    <div class="fib-g"><div class="fib-row"><span>4. He is very thin — I would say he is</span><input type="text" class="fib-in" id="f4" data-ans="skinny" placeholder="___"><span>.</span></div><div class="fb" id="f4fb"></div></div>
+    <div class="fib-g"><div class="fib-row"><span>5. Maria loves people and parties. She is very</span><input type="text" class="fib-in" id="f5" data-ans="outgoing" placeholder="___"><span>and bubbly.</span></div><div class="fb" id="f5fb"></div></div>
+    <div class="fib-g"><div class="fib-row"><span>6. My brother and I never</span><input type="text" class="fib-in" id="f6" data-ans="argue" placeholder="___"><span>— we get on well.</span></div><div class="fb" id="f6fb"></div></div>
+    <div class="fib-g"><div class="fib-row"><span>7. They have been in a</span><input type="text" class="fib-in" id="f7" data-ans="relationship" placeholder="___"><span>for two years and they are very happy.</span></div><div class="fb" id="f7fb"></div></div>
+    <div class="fib-g"><div class="fib-row"><span>8. He is not kind — in fact, he can be quite</span><input type="text" class="fib-in" id="f8" data-ans="rude" placeholder="___"><span>to strangers.</span></div><div class="fb" id="f8fb"></div></div>
+
+    <div class="btn-row">
+      <button class="btn btn-p" onclick="checkFIB()">✔ Check Answers</button>
+      <button class="btn btn-o" onclick="resetFIB()">↺ Reset</button>
+    </div>
+    <div class="fb" id="fib-tot" style="margin-top:12px;"></div>
+  </div>
+
+  <!-- ══ TASK 2 — MATCH THE WORDS ══ -->
+  <div class="card" id="card-match">
+    <div class="card-head">
+      <div class="c-icon">🔗</div>
+      <div class="c-text">
+        <div class="c-title"><span class="tnum">2</span> Match the Words</div>
+        <div class="c-sub">Word → definition</div>
+      </div>
+      <div class="done-badge" id="bd-match">✓ Done</div>
+    </div>
+    <div class="instr">Click a <strong>word</strong> on the left, then click the correct <strong>definition</strong> on the right. Match all 6 pairs!</div>
+    <div class="match-grid">
+      <div class="m-col" id="mw-col">
+        <div class="m-w" data-id="generous">generous</div>
+        <div class="m-w" data-id="outgoing">outgoing</div>
+        <div class="m-w" data-id="breakup">break up</div>
+        <div class="m-w" data-id="getonwell">get on well</div>
+        <div class="m-w" data-id="mediumheight">medium height</div>
+        <div class="m-w" data-id="datesomeone">date someone</div>
+      </div>
+      <div class="m-col" id="md-col">
+        <div class="m-d" data-id="getonwell">have a good relationship</div>
+        <div class="m-d" data-id="breakup">end a romantic relationship</div>
+        <div class="m-d" data-id="mediumheight">neither tall nor short</div>
+        <div class="m-d" data-id="generous">happy to give money, time, or help</div>
+        <div class="m-d" data-id="datesomeone">go out with someone romantically</div>
+        <div class="m-d" data-id="outgoing">friendly and confident socially</div>
+      </div>
+    </div>
+    <div class="fb" id="match-fb" style="margin-top:16px;"></div>
+    <div class="btn-row"><button class="btn btn-o" onclick="resetMatch()">↺ Reset</button></div>
+  </div>
+
+  <!-- ══ TASK 3 — ERROR CORRECTION ══ -->
+  <div class="card" id="card-err">
+    <div class="card-head">
+      <div class="c-icon">✏️</div>
+      <div class="c-text">
+        <div class="c-title"><span class="tnum">3</span> Error Correction</div>
+        <div class="c-sub">Each sentence has one wrong word from today's lesson</div>
+      </div>
+      <div class="done-badge" id="bd-err">✓ Done</div>
+    </div>
+    <div class="instr">💭 Each sentence uses the <strong>wrong</strong> vocabulary word. Read the <strong>highlighted</strong> part and rewrite the sentence with the correct target word.</div>
+    <hr class="hr">
+
+    <div class="err-item">
+      <div class="err-orig">❓ "My uncle has a <span class="hl-err">moustache</span> on his chin and cheeks — he's had it for years."</div>
+      <div class="err-lbl">A moustache is above the lip. The hair on the chin is the…</div>
+      <input type="text" id="e1" placeholder="He has a…" data-ans="beard">
+      <div class="fb" id="e1fb"></div>
+    </div>
+    <div class="err-item">
+      <div class="err-orig">❓ "My sister is so <span class="hl-err">rude</span> — she is always smiling and loves parties! Everyone likes her."</div>
+      <div class="err-lbl">These are positive qualities. Replace rude with a positive personality word:</div>
+      <input type="text" id="e2" placeholder="She is so…" data-ans="bubbly">
+      <div class="fb" id="e2fb"></div>
+    </div>
+    <div class="err-item">
+      <div class="err-orig">❓ "They had a big <span class="hl-err">argument</span> last week, but now they get on well."</div>
+      <div class="err-lbl">Replace <em>argument</em> (noun) with the verb from today's lesson:</div>
+      <input type="text" id="e3" placeholder="They…" data-ans="argued">
+      <div class="fb" id="e3fb"></div>
+    </div>
+    <div class="err-item">
+      <div class="err-orig">❓ "Tom wants to <span class="hl-err">make a break</span> with Sara — he says they argue all the time."</div>
+      <div class="err-lbl">Replace <em>make a break</em> with the right phrasal verb:</div>
+      <input type="text" id="e4" placeholder="Tom wants to…" data-ans="break up">
+      <div class="fb" id="e4fb"></div>
+    </div>
+    <div class="err-item">
+      <div class="err-orig">❓ "Her hair is not curly — it is <span class="hl-err">grey</span>."</div>
+      <div class="err-lbl">Grey is a colour, not the opposite of curly. Replace with the right word:</div>
+      <input type="text" id="e5" placeholder="Her hair is…" data-ans="straight">
+      <div class="fb" id="e5fb"></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-p" onclick="checkErrs()">✔ Check All</button>
+      <button class="btn btn-o" onclick="resetErrs()">↺ Reset</button>
+    </div>
+    <div class="fb" id="err-tot" style="margin-top:12px;"></div>
+  </div>
+
+  <!-- ══ TASK 4 — READING ══ -->
+  <div class="card" id="card-read">
+    <div class="card-head">
+      <div class="c-icon">📖</div>
+      <div class="c-text">
+        <div class="c-title"><span class="tnum">4</span> Reading</div>
+        <div class="c-sub">My best friend</div>
+      </div>
+      <div class="done-badge" id="bd-read">✓ Done</div>
+    </div>
+    <div class="instr">Read the text carefully. Highlighted words are today's target vocabulary. Then answer the questions.</div>
+    <div class="read-box">
+      <h3>👭 My Best Friend</h3>
+      <p>
+        My best friend is called Sara. She is <span class="hl">tall</span> and of
+        <span class="hl">medium height</span> — okay, okay, just tall! She has long,
+        <span class="hl">curly hair</span> and beautiful <span class="hl">curves</span>.
+        Her dad is older now, with <span class="hl">grey hair</span> and a neat
+        <span class="hl">beard</span>, and her mum has a sweet <span class="hl">moustache</span> —
+        no, not really, I'm joking about the moustache.
+      </p>
+      <p>
+        Personality-wise, Sara is <span class="hl">bubbly</span>, <span class="hl">outgoing</span>
+        and very <span class="hl">generous</span>. She is never <span class="hl">rude</span> —
+        she is always <span class="hl">kind</span> to everyone. We have a great
+        <span class="hl">relationship</span> because we <span class="hl">get on well</span> and we
+        almost never <span class="hl">argue</span>.
+      </p>
+      <p>
+        Sara is an influencer, and she <span class="hl">dates</span> a photographer called Leo.
+        They are not the kind of couple to <span class="hl">break up</span> over small things.
+        In fact, they have been together for three years now. Lucky her!
+      </p>
+    </div>
+
+    <div class="q-item">
+      <div class="q-lbl">Q1. What does Sara look like? (mention at least three things)</div>
+      <textarea id="rq1" placeholder="She is tall, she has…"></textarea>
+      <button class="show-btn" onclick="toggleAns('ra1',this)">💡 Show answer</button>
+      <div class="ans" id="ra1">✅ She is tall, has long curly hair, and has beautiful curves. (Also: her dad has grey hair and a beard.)</div>
+    </div>
+    <div class="q-item">
+      <div class="q-lbl">Q2. Name three positive adjectives that describe Sara's personality.</div>
+      <textarea id="rq2" placeholder="She is…"></textarea>
+      <button class="show-btn" onclick="toggleAns('ra2',this)">💡 Show answer</button>
+      <div class="ans" id="ra2">✅ Bubbly, outgoing, generous (and kind — any three are correct).</div>
+    </div>
+    <div class="q-item">
+      <div class="q-lbl">Q3. Why do the writer and Sara have a good relationship?</div>
+      <textarea id="rq3" placeholder="Because…"></textarea>
+      <button class="show-btn" onclick="toggleAns('ra3',this)">💡 Show answer</button>
+      <div class="ans" id="ra3">✅ Because they get on well and almost never argue.</div>
+    </div>
+    <div class="q-item">
+      <div class="q-lbl">Q4. What does Sara do, and who is Leo?</div>
+      <textarea id="rq4" placeholder="Sara is…"></textarea>
+      <button class="show-btn" onclick="toggleAns('ra4',this)">💡 Show answer</button>
+      <div class="ans" id="ra4">✅ Sara is an influencer, and Leo is the photographer she dates.</div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-p" id="read-btn" onclick="markReadDone()">✔ Mark reading done</button>
+    </div>
+  </div>
+
+  <!-- ══ TASK 5 — CHATBOT ══ -->
+  <div class="card" id="card-chat">
+    <div class="card-head">
+      <div class="c-icon">💬</div>
+      <div class="c-text">
+        <div class="c-title"><span class="tnum">5</span> Chatbot Practice</div>
+        <div class="c-sub">Answer 7 questions about appearance & personality — try to use today's words</div>
+      </div>
+      <div class="done-badge" id="bd-chat">✓ Done</div>
+    </div>
+    <div class="instr">The influencer-bot asks one question at a time. If your answer contains a word from today's lesson, you'll get positive feedback. Otherwise, you'll be encouraged to try again. Press <strong>Enter</strong> or <strong>Send</strong>.</div>
+    <div id="chat-box">
+      <div id="chat-msgs"></div>
+      <div id="chat-foot">
+        <input type="text" id="chat-in" placeholder="Type your answer…" onkeydown="if(event.key==='Enter')sendChat()">
+        <button id="chat-send" onclick="sendChat()">Send ➤</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ TASK 6 — SPEAKING / DISCUSSION ══ -->
+  <div class="card" id="card-disc">
+    <div class="card-head">
+      <div class="c-icon">🗣️</div>
+      <div class="c-text">
+        <div class="c-title"><span class="tnum">6</span> Speaking Practice</div>
+        <div class="c-sub">Answer using at least one word from today's lesson</div>
+      </div>
+      <div class="done-badge" id="bd-spk">✓ Done</div>
+    </div>
+    <div class="instr">💭 Answer each question (silently or out loud). Every answer should include <strong>at least one target word</strong>. When you've thought through all four, click <strong>Mark done</strong>.</div>
+    <div class="disc-q">
+      <label>1. Describe your best friend's appearance using three words from today.</label>
+      <div class="disc-hint">Try: tall / curly hair / beard…</div>
+      <textarea placeholder="My best friend is…"></textarea>
+    </div>
+    <div class="disc-q">
+      <label>2. Describe your best friend's personality using three words.</label>
+      <div class="disc-hint">Try: bubbly / generous / kind…</div>
+      <textarea placeholder="They are…"></textarea>
+    </div>
+    <div class="disc-q">
+      <label>3. Why is it important to <strong>get on well</strong> with your partner?</label>
+      <div class="disc-hint">Try: get on well / argue / relationship…</div>
+      <textarea placeholder="It's important because…"></textarea>
+    </div>
+    <div class="disc-q">
+      <label>4. What might cause two people to <strong>break up</strong>?</label>
+      <div class="disc-hint">Try: argue / break up / rude…</div>
+      <textarea placeholder="They might…"></textarea>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-p" id="spk-btn" onclick="markSpeakDone()">✔ Mark done</button>
+    </div>
+  </div>
+
+  <!-- ══ TASK 7 — REFLECTION ══ -->
+  <div class="card reflection" id="card-refl">
+    <div class="card-head">
+      <div class="c-icon">💭</div>
+      <div class="c-text">
+        <div class="c-title"><span class="tnum">7</span> My Reflection</div>
+        <div class="c-sub">Think about your learning today</div>
+      </div>
+      <div class="done-badge" id="bd-refl">✓ Done</div>
+    </div>
+    <div class="refl-q">
+      <label>🌟 Which word from today do you want to remember?</label>
+      <input type="text" placeholder="The word I want to remember is…">
+    </div>
+    <div class="refl-q">
+      <label>🤔 Which word was hardest to recall today, and why?</label>
+      <textarea placeholder="The hardest word was… because…"></textarea>
+    </div>
+    <div class="refl-q">
+      <label>🎯 Write ONE sentence describing yourself using a word from today's lesson:</label>
+      <input type="text" placeholder="I am…">
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-p" id="refl-btn" onclick="markReflDone()">✔ Finish homework</button>
+    </div>
+    <div class="congrats">
+      <div class="congrats-em">🎉</div>
+      <div class="congrats-ttl">Great work, Study Buddy!</div>
+      <div class="congrats-sub">You revised 21 words for appearance &amp; personality today. Well done! 👤💙</div>
+    </div>
+  </div>
+
+  </div><!-- /container -->
+</div><!-- /layout -->
+</div><!-- /hw-content -->
+
+<script>
+function $(id){return document.getElementById(id);}
+$("hw-date").textContent = new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+
+function showTasks(){
+  var content=$("hw-content");
+  var btn=$("hero-start-btn");
+  if(content.classList.contains("visible")) return;
+  content.classList.add("visible");
+  btn.disabled=true;
+  btn.querySelector("span").textContent="Homework unlocked ✓";
+  requestAnimationFrame(function(){content.scrollIntoView({behavior:"smooth",block:"start"});});
+}
+
+/* ── PROGRESS ── */
+var TOTAL=8;
+var done={};
+var pts=0;
+function markDone(key,p,badge){
+  if(done[key]) return;
+  done[key]=true; pts+=p;
+  if(badge){var b=$(badge);if(b)b.classList.add("on");}
+  var c=Object.keys(done).length;
+  $("prog-text").textContent=c+" of "+TOTAL+" tasks done";
+  $("prog-fill").style.width=(c/TOTAL*100)+"%";
+  $("score-badge").textContent="⭐ "+pts+" pts";
+}
+
+/* ── WHEEL ── */
+var WORDS=["beard","moustache","skinny","chubby","overweight","medium height","curly hair","straight hair","grey hair","tall","short","rude","outgoing","generous","bubbly","kind","curves","argue","get on well","relationship","date someone","break up"];
+var COLORS=["#3B6BEB","#7c5af4","#0891b2","#059669","#d97706","#e11d48","#1e40af","#065f46","#5B6BF0","#F59E0B","#0891b2","#e11d48","#16A34A","#2451CC","#7c5af4","#0A8F65","#D98F4E","#3E8079","#C4551F"];
+var cv=$("wheel-cv"), ctx=cv.getContext("2d");
+var CX=145,CY=145,R=128,wAng=0,spinning=false;
+function drawWheel(a){
+  var n=WORDS.length, seg=(Math.PI*2)/Math.max(n,1);
+  ctx.clearRect(0,0,cv.width,cv.height);
+  if(n===0){
+    ctx.beginPath();ctx.arc(CX,CY,R,0,Math.PI*2);
+    ctx.fillStyle="#EEF2FF";ctx.fill();
+    ctx.strokeStyle="#c7d5f8";ctx.lineWidth=2.5;ctx.stroke();
+  } else {
+    for(var i=0;i<n;i++){
+      var s=a+i*seg, e=s+seg;
+      ctx.beginPath();ctx.moveTo(CX,CY);ctx.arc(CX,CY,R,s,e);ctx.closePath();
+      ctx.fillStyle=COLORS[i%COLORS.length];ctx.fill();
+      ctx.strokeStyle="#fff";ctx.lineWidth=2.5;ctx.stroke();
+      ctx.save();
+      ctx.translate(CX,CY);ctx.rotate(s+seg/2);
+      ctx.textAlign="right";ctx.fillStyle="rgba(255,255,255,.95)";
+      ctx.font="bold 10px -apple-system,sans-serif";
+      ctx.shadowColor="rgba(0,0,0,.4)";ctx.shadowBlur=4;
+      ctx.fillText(WORDS[i],R-9,4);
+      ctx.restore();
+    }
+  }
+  ctx.shadowColor="transparent";
+  ctx.beginPath();ctx.arc(CX,CY,24,0,Math.PI*2);
+  ctx.fillStyle="#fff";ctx.fill();
+  ctx.strokeStyle="#3B6BEB";ctx.lineWidth=3;ctx.stroke();
+  ctx.font="18px sans-serif";ctx.textAlign="center";
+  ctx.fillText("👤",CX,CY+6);
+  ctx.beginPath();ctx.moveTo(CX-12,3);ctx.lineTo(CX+12,3);ctx.lineTo(CX,27);ctx.closePath();
+  ctx.fillStyle="#fbbf24";ctx.fill();
+  ctx.strokeStyle="#78350f";ctx.lineWidth=1.5;ctx.stroke();
+}
+function spinWheel(){
+  if(spinning||WORDS.length===0) return;
+  spinning=true;
+  $("spin-btn").disabled=true;
+  $("wheel-word").textContent="🌀 Spinning…";
+  var extra=Math.PI*2*(6+Math.random()*6), dur=3200;
+  var t0=performance.now(), a0=wAng;
+  function step(now){
+    var p=Math.min((now-t0)/dur,1), ease=1-Math.pow(1-p,3);
+    wAng=a0+extra*ease;drawWheel(wAng);
+    if(p<1){requestAnimationFrame(step);return;}
+    spinning=false;
+    $("spin-btn").disabled=false;
+    var seg=(Math.PI*2)/WORDS.length;
+    var rel=((-Math.PI/2-wAng)%(Math.PI*2)+Math.PI*2)%(Math.PI*2);
+    var idx=Math.floor(rel/seg)%WORDS.length;
+    var w=WORDS[idx];
+    $("wheel-word").innerHTML="🎯 Word: <strong>\""+w+"\"</strong> — describe someone!";
+    $("wheel-sent").placeholder="Use \""+w+"\" in a sentence…";
+    $("wheel-sent").focus();
+    WORDS.splice(idx,1);
+    if(WORDS.length===0){
+      $("spin-btn").disabled=true;
+      $("spin-btn").textContent="🎉 All words used!";
+      $("wheel-empty").textContent="You used every word — nicely done!";
+      markDone("wheel",15,null);
+    } else {
+      $("wheel-empty").textContent=WORDS.length+" word(s) left on the wheel.";
+    }
+    drawWheel(wAng);
+  }
+  requestAnimationFrame(step);
+}
+drawWheel(wAng);
+$("wheel-empty").textContent=WORDS.length+" word(s) left on the wheel.";
+
+/* ── RULES SLIDER ── */
+function slideTo(i,btn){
+  var slider=$("slider");
+  slider.style.transform="translateX(-"+(i*50)+"%)";
+  document.querySelectorAll(".rule-tab").forEach(function(t){t.classList.remove("active");});
+  if(btn && btn.classList.contains("rule-tab")) btn.classList.add("active");
+  document.querySelectorAll(".s-dot").forEach(function(d,di){d.classList.toggle("active",di===i);});
+}
+function toggleRulesCard(btn){
+  var body=$("rules-body");
+  var hidden=body.style.display==="none";
+  body.style.display=hidden?"block":"none";
+  btn.textContent=hidden?"🙈 Hide rules":"👁 Show rules";
+}
+
+/* ── FILL IN THE BLANKS ── */
+function checkFIB(){
+  var pairs=[[1,"f1"],[2,"f2"],[3,"f3"],[4,"f4"],[5,"f5"],[6,"f6"],[7,"f7"],[8,"f8"]];
+  var ok=0;
+  pairs.forEach(function(p,idx){
+    var id=p[1];
+    var inp=$(id);
+    if(!inp){return;}
+    var fb=$(id+"fb");
+    if(!fb){fb=$(id.slice(0,-1)+"fb");}
+    var v=inp.value.trim().toLowerCase();
+    var a=inp.dataset.ans.toLowerCase();
+    if(!v){inp.className="fib-in";if(fb){fb.className="fb";fb.textContent="";}return;}
+    if(v===a){
+      inp.className="fib-in ok";if(fb){fb.className="fb ok";fb.textContent="✅ Correct!";}ok++;
+    } else {
+      inp.className="fib-in bad";if(fb){fb.className="fb err";fb.innerHTML="❌ Answer: <strong>"+inp.dataset.ans+"</strong>";}
+    }
+  });
+  var tot=$("fib-tot");
+  if(ok===8){tot.className="fb ok";tot.textContent="🎉 Perfect! 8/8 — vocabulary nailed!";markDone("fib",20,"bd-fib");}
+  else if(ok>=5){tot.className="fb ok";tot.textContent="👍 "+ok+"/8 correct.";markDone("fib",12,"bd-fib");}
+  else {tot.className="fb err";tot.textContent="💪 "+ok+"/8. Review the flashcards and try again!";}
+}
+function resetFIB(){
+  ["f1","f1b","f2","f3","f4","f5","f6","f7","f8"].forEach(function(id){
+    var el=$(id);if(!el)return;
+    el.value="";el.className="fib-in";
+  });
+  ["f1fb","f2fb","f3fb","f4fb","f5fb","f6fb","f7fb","f8fb"].forEach(function(id){
+    var el=$(id);if(el){el.className="fb";el.textContent="";}
+  });
+  var t=$("fib-tot");t.className="fb";t.textContent="";
+}
+
+/* ── MATCH ── */
+var selW=null, selD=null, mCount=0;
+function bindMatch(){
+  document.querySelectorAll(".m-w").forEach(function(el){
+    el.onclick=function(){
+      if(this.dataset.matched) return;
+      document.querySelectorAll(".m-w.sel").forEach(function(e){e.classList.remove("sel");});
+      this.classList.add("sel");selW=this;
+      if(selD) tryPair();
+    };
+  });
+  document.querySelectorAll(".m-d").forEach(function(el){
+    el.onclick=function(){
+      if(this.dataset.matched) return;
+      document.querySelectorAll(".m-d.sel").forEach(function(e){e.classList.remove("sel");});
+      this.classList.add("sel");selD=this;
+      if(selW) tryPair();
+    };
+  });
+}
+function tryPair(){
+  var fb=$("match-fb");
+  if(selW.dataset.id===selD.dataset.id){
+    selW.className="m-w matched";selW.dataset.matched="1";
+    selD.className="m-d matched";selD.dataset.matched="1";
+    mCount++;
+    fb.className="fb ok";
+    if(mCount===6){fb.textContent="🎉 You matched all 6!";markDone("match",20,"bd-match");}
+    else {fb.textContent="✅ Correct match ("+mCount+"/6)";}
+  } else {
+    fb.className="fb err";
+    fb.textContent="❌ Not a match. Try again!";
+    var sw=selW, sd=selD;
+    sw.classList.add("flash");sd.classList.add("flash");
+    setTimeout(function(){sw.classList.remove("flash","sel");sd.classList.remove("flash","sel");},400);
+  }
+  selW=null;selD=null;
+}
+function resetMatch(){
+  document.querySelectorAll(".m-w,.m-d").forEach(function(el){
+    el.className=el.classList.contains("m-w")?"m-w":"m-d";
+    delete el.dataset.matched;
+  });
+  selW=null;selD=null;mCount=0;
+  var f=$("match-fb");f.className="fb";f.textContent="";
+  bindMatch();
+}
+bindMatch();
+
+/* ── ERROR CORRECTION ── */
+function checkErrs(){
+  var ok=0;
+  for(var i=1;i<=5;i++){
+    var inp=$("e"+i), fb=$("e"+i+"fb");
+    var v=inp.value.trim().toLowerCase(), a=inp.dataset.ans.toLowerCase();
+    if(!v){inp.className="";fb.className="fb";continue;}
+    if(v.includes(a)){
+      inp.className="ok";fb.className="fb ok";fb.textContent="✅ Correct!";ok++;
+    } else {
+      inp.className="bad";fb.className="fb err";
+      fb.innerHTML="❌ Try to include: <strong>"+inp.dataset.ans+"</strong>";
+    }
+  }
+  var tot=$("err-tot");
+  if(ok===5){tot.className="fb ok";tot.textContent="🎉 5/5 — error-free!";markDone("err",20,"bd-err");}
+  else if(ok>=3){tot.className="fb ok";tot.textContent="👍 "+ok+"/5 correct.";markDone("err",12,"bd-err");}
+  else {tot.className="fb err";tot.textContent="💪 "+ok+"/5. Check the flashcards again.";}
+}
+function resetErrs(){
+  for(var i=1;i<=5;i++){
+    $("e"+i).value="";$("e"+i).className="";
+    $("e"+i+"fb").className="fb";$("e"+i+"fb").textContent="";
+  }
+  $("err-tot").className="fb";$("err-tot").textContent="";
+}
+
+/* ── READING ── */
+function toggleAns(id,btn){
+  var el=$(id);el.classList.toggle("on");
+  btn.textContent=el.classList.contains("on")?"🙈 Hide answer":"💡 Show answer";
+}
+function markReadDone(){
+  var b=$("read-btn");b.textContent="✅ Reading done!";b.disabled=true;b.style.background="#22c55e";
+  markDone("read",20,"bd-read");
+}
+
+/* ── CHATBOT ── */
+var flow=[
+  {q:"Hi! 👋 I make travel videos for a living. What about you — what do you do? Are you outgoing or more quiet?",
+   r:function(a){var l=a.toLowerCase();
+     if(l.match(/outgoing|bubbly|kind|generous|rude|quiet|skinny|tall|short/)) return "✅ Nice — great vocabulary! ";
+     return "🤔 Try using one of today's words: outgoing, bubbly, kind, generous, rude… ";},
+   tip:"💡 Tip: 'I am quite outgoing — I love meeting new people.'"},
+  {q:"Cool! Now describe what you look like. Are you tall, short, medium height?",
+   r:function(a){var l=a.toLowerCase();
+     if(l.match(/tall|short|medium height|skinny|chubby|overweight|curly|straight|grey|beard|moustache/)) return "✅ Great — you used an appearance word! ";
+     return "🤔 Try one of: tall, short, medium height, skinny, chubby, curly hair, beard… ";},
+   tip:"💡 Tip: 'I am medium height with straight hair and no beard.'"},
+  {q:"Tell me about your best friend. What is their personality like?",
+   r:function(a){var l=a.toLowerCase();
+     if(l.match(/bubbly|outgoing|generous|kind|rude|chubby|skinny/)) return "✅ Nice — a clear personality word. ";
+     return "🤔 Try a personality adjective: bubbly, outgoing, generous, kind, rude… ";},
+   tip:"💡 Tip: 'She is very bubbly and generous — she loves helping people.'"},
+  {q:"Do you get on well with your family? Have you ever had a big argument?",
+   r:function(a){var l=a.toLowerCase();
+     if(l.match(/get on well|argue|relationship|rude/)) return "✅ Great — relationship vocabulary used! ";
+     return "🤔 Use get on well, argue, or relationship. ";},
+   tip:"💡 Tip: 'We get on well most of the time, but we sometimes argue about small things.'"},
+  {q:"When did you last date someone, or do you have a partner now? Tell me about them.",
+   r:function(a){var l=a.toLowerCase();
+     if(l.match(/date|relationship|partner|break up|argue/)) return "✅ Nice — relationship mode engaged! ";
+     return "🤔 Try date someone, relationship, or break up. ";},
+   tip:"💡 Tip: 'I date someone funny and kind. We have a good relationship.'"},
+  {q:"What can cause two people to break up?",
+   r:function(a){var l=a.toLowerCase();
+     if(l.match(/argue|rude|break up|relationship/)) return "✅ Spot on! ";
+     return "🤔 Try argue, rude, or break up. ";},
+   tip:"💡 Tip: 'They might break up if they argue all the time, or if one is rude.'"},
+  {q:"Last one! 🏁 Describe yourself in one full sentence using two words from today.",
+   r:function(a){var l=a.toLowerCase();
+     if(l.match(/bubbly|outgoing|generous|kind|rude|tall|short|skinny|chubby|curly|straight|beard|moustache|argue|get on well|relationship/)) return "✅ Beautifully done — you finished all 7 questions! ";
+     return "✅ Thanks! Try to use two target words next time. ";},
+   tip:"💡 Tip: 'I am medium height with curly hair, and I am quite outgoing.'"}
+];
+var step=0;
+var msgs=$("chat-msgs");
+function bubble(txt,cls){
+  var d=document.createElement("div");d.className="bubble "+cls;
+  d.textContent=txt;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;return d;
+}
+setTimeout(function(){bubble(flow[0].q,"b-t");},400);
+function sendChat(){
+  var inp=$("chat-in"), txt=inp.value.trim();
+  if(!txt||step>=flow.length) return;
+  bubble(txt,"b-s");inp.value="";
+  var cur=flow[step], reply=cur.r(txt), tip=cur.tip;
+  step++;
+  var dot=bubble("Typing…","b-dot");
+  setTimeout(function(){
+    dot.remove();
+    if(step<flow.length){
+      bubble(reply+flow[step].q,"b-t");
+    } else {
+      bubble(reply+"You finished all 7 questions! 🎉 Well done — your appearance and personality vocabulary is sharp!","b-t");
+      setTimeout(function(){
+        bubble("✅ Chat complete! Scroll down for speaking and reflection. 👇","b-t");
+        $("chat-foot").style.display="none";
+        markDone("chat",20,"bd-chat");
+      },800);
+    }
+    var tipEl=document.createElement("div");tipEl.className="bubble b-tip";
+    tipEl.textContent=tip;msgs.appendChild(tipEl);msgs.scrollTop=msgs.scrollHeight;
+  },900);
+}
+
+/* ── SPEAKING DONE ── */
+function markSpeakDone(){
+  var b=$("spk-btn");b.textContent="✅ Done!";b.disabled=true;b.style.background="#22c55e";
+  markDone("speak",15,"bd-spk");
+}
+
+/* ── REFLECTION DONE ── */
+function markReflDone(){
+  var b=$("refl-btn");b.textContent="✅ Homework finished!";b.disabled=true;b.style.background="#22c55e";
+  markDone("refl",10,"bd-refl");
+}
+
+/* ── SIDEBAR NAV SCROLL + ACTIVE ── */
+document.querySelectorAll(".nav-link").forEach(function(link){
+  link.addEventListener("click",function(){
+    var target=link.dataset.target;
+    var el=$(target);
+    if(el){el.scrollIntoView({behavior:"smooth",block:"start"});}
+  });
+});
+window.addEventListener("scroll",function(){
+  var cards=document.querySelectorAll(".card");
+  var cur=null;
+  cards.forEach(function(c){
+    var rect=c.getBoundingClientRect();
+    if(rect.top < 120) cur=c;
+  });
+  document.querySelectorAll(".nav-link").forEach(function(l){l.classList.remove("active");});
+  if(cur){
+    var link=document.querySelector('.nav-link[data-target="'+cur.id+'"]');
+    if(link) link.classList.add("active");
+  }
+});
+</script>
+</body>
+</html>
