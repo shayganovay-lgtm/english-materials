@@ -260,8 +260,10 @@ footer{border-top:1px solid var(--line);padding:20px clamp(16px,5vw,48px);font-s
 </section>
 
 <!-- TEST -->
-<main id="test">
-  <div class="vocab-strip" id="vocab-strip">
+<main id="test"></main>
+
+<!-- VOCAB STRIP (outside #test, kept across renders) -->
+<div class="vocab-strip" id="vocab-strip" style="display:none;">
     <span class="vs-lbl">📚 Target vocab · tap a word</span>
     <span class="v-chip" data-vocab="condemn">condemn</span>
     <span class="v-chip" data-vocab="crippling">crippling</span>
@@ -275,7 +277,6 @@ footer{border-top:1px solid var(--line);padding:20px clamp(16px,5vw,48px);font-s
     <span class="v-chip" data-vocab="pushover">pushover</span>
     <span class="v-chip" data-vocab="intervene">intervene</span>
   </div>
-</main>
 
 <!-- RESULTS -->
 <section id="results"></section>
@@ -382,6 +383,9 @@ function startTest(){
   $("start-btn").querySelector("span").textContent = "Test unlocked ✓";
   render();
   $("test").classList.add("visible");
+  var strip=$("vocab-strip");
+  if(strip) strip.style.display="flex";
+  bindPopovers();
   requestAnimationFrame(function(){
     document.querySelector(".card").scrollIntoView({behavior:"smooth",block:"start"});
   });
@@ -394,8 +398,6 @@ function tagCategory(tag){
 }
 
 function render(){
-  var strip=$("vocab-strip");
-  if(strip) strip.remove();
   BODY.innerHTML = "";
   var html = "";
   var partLabels = ["Part 1 · Easy","Part 2 · Medium","Part 3 · Challenging"];
@@ -439,8 +441,6 @@ function render(){
   });
   html += '<div class="center-cta"><button class="big-btn" onclick="finishTest()">Finish test & see my score →</button></div>';
   BODY.innerHTML = html;
-  if(strip) BODY.insertBefore(strip, BODY.firstChild);
-  bindPopovers();
 }
 
 function renderMCQ(q,i){
