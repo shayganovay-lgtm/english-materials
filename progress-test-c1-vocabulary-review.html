@@ -88,15 +88,25 @@ h1 em{font-style:normal;color:var(--accent);}
 
 /* ── MCQ ── */
 .opts{display:flex;flex-direction:column;gap:10px;margin-top:4px;}
-.opt{display:flex;align-items:center;gap:12px;border:2px solid var(--line);background:#FAFBFE;border-radius:12px;padding:12px 16px;font-size:15px;cursor:pointer;transition:all .16s ease;color:var(--ink);text-align:left;font-family:inherit;width:100%;}
-.opt:hover{border-color:var(--accent);background:var(--accent-soft);}
-.opt .mark{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:transparent;transition:all .16s;}
+.opt{display:flex;align-items:center;gap:12px;border:2px solid var(--line);background:#FAFBFE;border-radius:12px;padding:12px 16px;font-size:15px;cursor:pointer;transition:border-color .16s ease, background .16s ease; color:var(--ink);text-align:left;font-family:inherit;width:100%;}
+.opt:hover:not(.locked){border-color:var(--accent);background:var(--accent-soft);}
+.opt:focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
+.opt .mark{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:transparent;transition:all .16s;position:relative;}
+.opt .mark::after{content:'';position:absolute;width:10px;height:10px;border-radius:50%;background:var(--accent);opacity:0;transform:scale(.4);transition:opacity .15s ease, transform .15s ease;}
+.opt:hover:not(.locked) .mark::after,.opt:focus-visible .mark::after{opacity:.6;transform:scale(1);}
+.opt.sel .mark::after{opacity:0;}
+.opt.sel .mark{border-color:var(--accent);background:var(--accent);color:#fff;}
+.opt.sel .mark::after{opacity:0;}
 .opt.correct{border-color:var(--ok);background:var(--ok-bg);}
 .opt.correct .mark{border-color:var(--ok);background:var(--ok);color:#fff;}
+.opt.correct .mark::after{opacity:0;}
 .opt.wrong{border-color:var(--err);background:var(--err-bg);}
 .opt.wrong .mark{border-color:var(--err);background:var(--err);color:#fff;}
+.opt.wrong .mark::after{opacity:0;}
 .opt.locked{cursor:default;}
 .opt.locked:hover{transform:none;}
+.opt.locked .mark::after{opacity:0 !important;}
+@media(hover:none){.opt:hover:not(.locked) .mark::after{opacity:0;transform:scale(.4);}}
 
 /* ── INPUT ── */
 .gapin{border:2px solid var(--line);border-radius:10px;padding:10px 14px;font-size:15px;font-family:inherit;background:#FAFBFE;width:100%;color:var(--ink);outline:none;transition:all .16s;min-width:90px;}
