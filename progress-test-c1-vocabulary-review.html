@@ -395,8 +395,8 @@ function tagCategory(tag){
 
 function render(){
   var strip=$("vocab-strip");
-  BODY.innerHTML="";
-  if(strip) BODY.appendChild(strip);
+  if(strip) strip.remove();
+  BODY.innerHTML = "";
   var html = "";
   var partLabels = ["Part 1 · Easy","Part 2 · Medium","Part 3 · Challenging"];
   var partStarts = [0,12,33];
@@ -439,6 +439,8 @@ function render(){
   });
   html += '<div class="center-cta"><button class="big-btn" onclick="finishTest()">Finish test & see my score →</button></div>';
   BODY.innerHTML = html;
+  if(strip) BODY.insertBefore(strip, BODY.firstChild);
+  bindPopovers();
 }
 
 function renderMCQ(q,i){
@@ -939,61 +941,47 @@ var VOCAB = {
   "intervene":{pos:"verb",ipa:"/ˌɪn.təˈviːn/",def:"To become involved in a situation in order to change or influence it.",ru:"вмешиваться",ex:"The teacher had to intervene when the argument became too heated.",syn:"step in · interpose"}
 };
 var activeChip=null;
-document.addEventListener("DOMContentLoaded",function(){
+function buildPopover(v,info){
+  return '<div class="vp-caret"></div>'+
+    '<div class="vp-head"><span class="vp-word">'+v+'</span><span class="vp-pos">'+info.pos+'</span></div>'+
+    '<div class="vp-ipa">'+info.ipa+'</div>'+
+    '<div class="vp-def">'+info.def+'</div>'+
+    '<div class="vp-ru">🇷🇺 '+info.ru+'</div>'+
+    '<div class="vp-ex">Example: '+info.ex+'</div>'+
+    '<div class="vp-syn">Synonyms: <strong>'+info.syn+'</strong></div>';
+}
+function showPopoverFor(chip){
+  var v=chip.dataset.vocab;
+  var info=VOCAB[v];
+  if(!info) return;
+  closePopover();
+  activeChip=chip;
+  chip.classList.add("active");
+  var pop=document.createElement("div");
+  pop.className="v-pop";
+  pop.id="v-pop-current";
+  pop.innerHTML=buildPopover(v,info);
+  chip.appendChild(pop);
+  requestAnimationFrame(function(){pop.classList.add("on");});
+}
+function bindPopovers(){
   document.querySelectorAll(".v-chip").forEach(function(chip){
-    chip.addEventListener("click",function(e){
+    chip.onclick=function(e){
       e.stopPropagation();
-      var v=chip.dataset.vocab;
-      var info=VOCAB[v];
-      if(!info) return;
       if(activeChip===chip){closePopover();return;}
-      closePopover();
-      activeChip=chip;
-      chip.classList.add("active");
-      var pop=document.createElement("div");
-      pop.className="v-pop";
-      pop.id="v-pop-current";
-      pop.innerHTML='<div class="vp-caret"></div>'+
-        '<div class="vp-head"><span class="vp-word">'+v+'</span><span class="vp-pos">'+info.pos+'</span></div>'+
-        '<div class="vp-ipa">'+info.ipa+'</div>'+
-        '<div class="vp-def">'+info.def+'</div>'+
-        '<div class="vp-ru">🇷🇺 '+info.ru+'</div>'+
-        '<div class="vp-ex">Example: '+info.ex+'</div>'+
-        '<div class="vp-syn">Synonyms: <strong>'+info.syn+'</strong></div>';
-      chip.appendChild(pop);
-      requestAnimationFrame(function(){pop.classList.add("on");});
-    });
-    chip.addEventListener("mouseenter",function(e){
+      showPopoverFor(chip);
+    };
+    chip.onmouseenter=function(){
       if(activeChip) return;
-      var v=chip.dataset.vocab;
-      var info=VOCAB[v];
-      if(!info) return;
-      closePopover();
-      activeChip=chip;
-      chip.classList.add("active");
-      var pop=document.createElement("div");
-      pop.className="v-pop";
-      pop.id="v-pop-current";
-      pop.innerHTML='<div class="vp-caret"></div>'+
-        '<div class="vp-head"><span class="vp-word">'+v+'</span><span class="vp-pos">'+info.pos+'</span></div>'+
-        '<div class="vp-ipa">'+info.ipa+'</div>'+
-        '<div class="vp-def">'+info.def+'</div>'+
-        '<div class="vp-ru">🇷🇺 '+info.ru+'</div>'+
-        '<div class="vp-ex">Example: '+info.ex+'</div>'+
-        '<div class="vp-syn">Synonyms: <strong>'+info.syn+'</strong></div>';
-      chip.appendChild(pop);
-      requestAnimationFrame(function(){pop.classList.add("on");});
-    });
-    chip.addEventListener("mouseleave",function(){
-      if(activeChip===chip && chip.classList.contains("active")){
-        // keep open if clicked; only close hover if not "locked"
-        if(!chip.dataset.locked) {closePopover();}
-      }
-    });
+      showPopoverFor(chip);
+    };
+    chip.onmouseleave=function(){
+      if(activeChip===chip){closePopover();}
+    };
   });
-  document.addEventListener("click",function(e){
-    if(!e.target.closest(".v-chip")) closePopover();
-  });
+}
+document.addEventListener("click",function(e){
+  if(!e.target.closest(".v-chip")) closePopover();
 });
 function closePopover(){
   var old=document.getElementById("v-pop-current");
