@@ -47,6 +47,12 @@ h1 em{font-style:normal;color:var(--accent);}
 .back-btn{display:inline-flex;align-items:center;gap:8px;color:var(--muted);text-decoration:none;font-size:14px;font-weight:600;padding:13px 18px;border-radius:99px;background:#fff;border:1.5px solid var(--line);transition:all .15s ease;}
 .back-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft);}
 
+/* ── VOCAB STRIP ── */
+.vocab-strip{position:sticky;top:56px;z-index:40;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:9px clamp(16px,5vw,48px);display:flex;flex-wrap:wrap;gap:6px;align-items:center;box-shadow:0 2px 8px rgba(31,41,55,.04);}
+.vocab-strip .vs-lbl{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-right:8px;white-space:nowrap;}
+.vocab-strip .v-chip{font-size:12px;font-weight:600;padding:4px 11px;border-radius:99px;background:var(--accent-soft);color:var(--accent);border:1px solid transparent;white-space:nowrap;}
+@media(max-width:540px){.vocab-strip{top:50px;}.vocab-strip .vs-lbl{font-size:10px;}}
+
 /* ── TEST CONTENT ── */
 #test{display:none;max-width:760px;margin:0 auto;padding:0 clamp(16px,5vw,48px) 80px;}
 #test.visible{display:block;animation:fadeIn .4s ease both;}
@@ -238,7 +244,22 @@ footer{border-top:1px solid var(--line);padding:20px clamp(16px,5vw,48px);font-s
 </section>
 
 <!-- TEST -->
-<main id="test"></main>
+<main id="test">
+  <div class="vocab-strip" id="vocab-strip">
+    <span class="vs-lbl">📚 Target vocab</span>
+    <span class="v-chip">condemn</span>
+    <span class="v-chip">crippling</span>
+    <span class="v-chip">doormat</span>
+    <span class="v-chip">fend off</span>
+    <span class="v-chip">societal</span>
+    <span class="v-chip">a nuisance</span>
+    <span class="v-chip">exacerbate</span>
+    <span class="v-chip">lily-livered</span>
+    <span class="v-chip">unsettling</span>
+    <span class="v-chip">pushover</span>
+    <span class="v-chip">intervene</span>
+  </div>
+</main>
 
 <!-- RESULTS -->
 <section id="results"></section>
@@ -357,7 +378,9 @@ function tagCategory(tag){
 }
 
 function render(){
-  BODY.innerHTML = "";
+  var strip=$("vocab-strip");
+  BODY.innerHTML="";
+  if(strip) BODY.appendChild(strip);
   var html = "";
   var partLabels = ["Part 1 · Easy","Part 2 · Medium","Part 3 · Challenging"];
   var partStarts = [0,12,33];
