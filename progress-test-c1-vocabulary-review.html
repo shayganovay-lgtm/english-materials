@@ -48,7 +48,7 @@ h1 em{font-style:normal;color:var(--accent);}
 .back-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft);}
 
 /* ── VOCAB STRIP ── */
-.vocab-strip{position:sticky;top:56px;z-index:40;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:9px clamp(16px,5vw,48px);display:flex;flex-wrap:wrap;gap:6px;align-items:center;box-shadow:0 2px 8px rgba(31,41,55,.04);}
+.vocab-strip{position:sticky;top:56px;z-index:60;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:9px clamp(16px,5vw,48px);display:flex;flex-wrap:wrap;gap:6px;align-items:center;box-shadow:0 2px 8px rgba(31,41,55,.04);overflow:visible;}
 .vocab-strip .vs-lbl{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-right:8px;white-space:nowrap;}
 .vocab-strip .v-chip{font-size:12px;font-weight:600;padding:4px 11px;border-radius:99px;background:var(--accent-soft);color:var(--accent);border:1px solid transparent;white-space:nowrap;cursor:pointer;position:relative;transition:all .15s ease;}
 .vocab-strip .v-chip:hover,.vocab-strip .v-chip.active{background:var(--accent);color:#fff;border-color:var(--accent);}
@@ -964,6 +964,7 @@ function showPopoverFor(chip){
   chip.appendChild(pop);
   requestAnimationFrame(function(){pop.classList.add("on");});
 }
+var hoverTimer=null;
 function bindPopovers(){
   document.querySelectorAll(".v-chip").forEach(function(chip){
     chip.onclick=function(e){
@@ -973,10 +974,12 @@ function bindPopovers(){
     };
     chip.onmouseenter=function(){
       if(activeChip) return;
-      showPopoverFor(chip);
+      if(hoverTimer) clearTimeout(hoverTimer);
+      hoverTimer=setTimeout(function(){showPopoverFor(chip);},120);
     };
     chip.onmouseleave=function(){
-      if(activeChip===chip){closePopover();}
+      if(hoverTimer) clearTimeout(hoverTimer);
+      if(activeChip===chip && !chip.dataset.locked){closePopover();}
     };
   });
 }
