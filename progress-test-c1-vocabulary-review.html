@@ -247,6 +247,7 @@ footer{border-top:1px solid var(--line);padding:20px clamp(16px,5vw,48px);font-s
 
 <footer>Study Buddy · English File Advanced · C1 Vocabulary Review · Self-contained HTML</footer>
 
+<style>.hl-vocab-err{background:#fde68a;color:#7c2d12;padding:1px 5px;border-radius:4px;font-weight:700;}</style>
 <script>
 var Q = [
 /* ───────── PART 1 · EASY ───────── */
@@ -255,20 +256,20 @@ var Q = [
 {t:"mcq",tag:"Vocabulary",q:"Something that causes great fear or anxiety and is hard to deal with can be described as ____.",opts:["crippling","societal","unsettling","lily-livered"],a:0,ex:"Crippling means causing severe and overwhelming difficulty or fear."},
 {t:"mcq",tag:"Vocabulary",q:"To push away or defend yourself against something unwanted is to ____ it ____.",opts:["fend off","get off","put off","take off"],a:0,ex:"Fend off = to defend yourself against something unwanted."},
 {t:"mcq",tag:"Vocabulary",q:"Related to society as a whole, rather than individuals, means ____.",opts:["societal","socialise","socially","society"],a:0,ex:"Societal = relating to society as a whole."},
-{t:"gap",tag:"Vocabulary",pre:"The criticism only served to ",gap:"exacerbate",post:" the situation, making everyone more upset.",ex:"Exacerbate = to make a bad situation worse."},
-{t:"gap",tag:"Vocabulary",pre:"The neighbours' loud music was becoming ",gap:"a nuisance",post:" so we asked them to turn it down.",ex:"A nuisance = something annoying or inconvenient."},
-{t:"gap",tag:"Vocabulary",pre:"She found the documentary about cults deeply ",gap:"unsettling",post:".",ex:"Unsettling = making you feel uneasy or nervous."},
+{t:"gap",tag:"Vocabulary",pre:"The criticism only served to ",gap:"exacerbate",post:" the situation, making everyone more upset.",ex:"Exacerbate = to make a bad situation worse.",hint:"e…"},
+{t:"gap",tag:"Vocabulary",pre:"The neighbours' loud music was becoming ",gap:"a nuisance",post:" so we asked them to turn it down.",ex:"A nuisance = something annoying or inconvenient.",hint:"a…"},
+{t:"gap",tag:"Vocabulary",pre:"She found the documentary about cults deeply ",gap:"unsettling",post:".",ex:"Unsettling = making you feel uneasy or nervous.",hint:"u…"},
 {t:"mcq",tag:"Vocabulary",q:"Someone who is easily frightened and lacks courage is ____.",opts:["lily-livered","a nuisance","societal","a pushover"],a:0,ex:"Lily-livered = cowardly, easily frightened."},
 {t:"mcq",tag:"Vocabulary",q:"An informal word for someone who is easily persuaded or manipulated is a ____.",opts:["pushover","doormat","lily-livered","nuisance"],a:0,ex:"Pushover (informal) = someone easy to persuade or manipulate."},
 {t:"mcq",tag:"Vocabulary",q:"To step in and become involved in a situation to change it is to ____.",opts:["intervene","exacerbate","condemn","fend off"],a:0,ex:"Intervene = to become involved in a situation to change it."},
 {t:"mcq",tag:"Vocabulary",q:"If you ____ someone's behaviour, you express strong moral disapproval of it.",opts:["condemn","unsettle","fend off","intervene"],a:0,ex:"Condemn = to express strong disapproval of someone's behaviour."},
 
 /* ───────── PART 2 · MEDIUM ───────── */
-{t:"err",tag:"Vocabulary",orig:"The new policy was condemmed by the opposition.",ans:"<span class='bad-mark'>condemmed</span> → <strong>condemned</strong>.",fix:"condemned",ex:"Condemn → condemned (double n, not double m)."},
-{t:"err",tag:"Vocabulary",orig:"Her anxiety was crippling and it made worse her social life.",ans:"made <span class='bad-mark'>worse</span> → <strong>exacerbated</strong>.",fix:"exacerbated",ex:"Exacerbate = to make a bad situation worse (more advanced than 'make worse')."},
-{t:"err",tag:"Vocabulary",orig:"He never says no — he's such a lily-livered.",ans:"<span class='bad-mark'>lily-livered</span> → <strong>pushover / doormat</strong> here.",fix:"pushover",ex:"Lily-livered means cowardly. For 'can't say no', use pushover or doormat."},
-{t:"err",tag:"Vocabulary",orig:"The teacher intervening in the argument to stop the fight.",ans:"intervening → <strong>intervened</strong> (past tense needed).",fix:"intervened",ex:"Past tense 'intervened' is needed here, not -ing form."},
-{t:"err",tag:"Vocabulary",orig:"The dog was societal nuisance in the park.",ans:"societal → <strong>a nuisance</strong> (article needed, wrong word).",fix:"a nuisance",ex:"Societal relates to society; here it should be 'a nuisance' (annoying thing)."},
+{t:"err",tag:"Vocabulary",orig:"The new policy was <span class='hl-vocab-err'>condemmed</span> by the opposition.",ans:"<span class='bad-mark'>condemmed</span> → <strong>condemned</strong>.",fix:"condemned",ex:"Condemn → condemned (double n, not double m)."},
+{t:"err",tag:"Vocabulary",orig:"Her anxiety was <span class='hl-vocab-err'>crippling</span> and it made worse her social life.",ans:"made <span class='bad-mark'>worse</span> → <strong>exacerbated</strong>.",fix:"exacerbated",ex:"Exacerbate = to make a bad situation worse (more advanced than 'make worse')."},
+{t:"err",tag:"Vocabulary",orig:"He never says no — he's such a <span class='hl-vocab-err'>lily-livered</span>.",ans:"<span class='bad-mark'>lily-livered</span> → <strong>pushover</strong> here.",fix:"pushover",ex:"Lily-livered means cowardly. For 'can't say no', use pushover or doormat."},
+{t:"err",tag:"Vocabulary",orig:"The teacher <span class='hl-vocab-err'>intervening</span> in the argument to stop the fight.",ans:"<span class='bad-mark'>intervening</span> → <strong>intervened</strong>.",fix:"intervened",ex:"Past tense 'intervened' is needed here, not -ing form."},
+{t:"err",tag:"Vocabulary",orig:"The dog was <span class='hl-vocab-err'>societal</span> nuisance in the park.",ans:"<span class='bad-mark'>societal</span> → <strong>a nuisance</strong>.",fix:"a nuisance",ex:"Societal relates to society; here it should be 'a nuisance' (annoying thing)."},
 {t:"trans",tag:"Vocabulary",from:"The government strongly disapproved of the protests.",to:"The government ____ the protests.",gap:"condemned",ex:"Condemn = to strongly disapprove of something publicly."},
 {t:"trans",tag:"Vocabulary",from:"Her fear of public speaking made her career progression more difficult.",to:"Her fear of public speaking ____ her career progression.",gap:"exacerbated",ex:"Exacerbate = to make a problem worse."},
 {t:"trans",tag:"Vocabulary",from:"He always lets people take advantage of him.",to:"He's such a ____ — he never says no.",gap:"pushover",ex:"Pushover (informal) = someone who can never say no."},
@@ -284,10 +285,10 @@ var Q = [
   ["pushover","someone easily persuaded or manipulated"],
   ["unsettling","making you feel uneasy or nervous"]
 ]},
-{t:"dnd",tag:"Vocabulary",q:"Arrange the sentence parts in order.",rows:[
-  ["The","criticism","exacerbated","an","already","unsettling","situation."],
-  ["He","felt","too","lily-livered","to","fend off","the bullies."],
-  ["Societal","pressure","can","condemn","anyone","who","dares","to","differ."]
+{t:"scramble-multi",tag:"Vocabulary",q:"Unscramble each sentence. Words are given for each sentence separately.",sentences:[
+  {words:["criticism","The","exacerbated","unsettling","an","already","situation."],correct:"The criticism exacerbated an already unsettling situation.",ex:"The + criticism + exacerbated + an already unsettling + situation."},
+  {words:["fend","bullies.","too","lily-livered","was","He","to","off","the"],correct:"He was too lily-livered to fend off the bullies.",ex:"He + was too lily-livered + to fend off + the bullies."},
+  {words:["dares","condemn","can","Societal","who","pressure","to","anyone","differ."],correct:"Societal pressure can condemn anyone who dares to differ.",ex:"Societal pressure + can condemn + anyone who dares to differ."}
 ]},
 {t:"scramble",tag:"Vocabulary",words:["She","was","too","much","of","a","pushover","to","say","no"],correct:"She was too much of a pushover to say no",ex:"She + was + too much of a pushover + to say no."},
 {t:"mcq",tag:"Vocabulary",q:"The constant noise from the construction site was becoming ____.",opts:["a nuisance","societal","lily-livered","condemn"],a:0,ex:"A nuisance = something annoying or inconvenient."},
@@ -307,8 +308,8 @@ var Q = [
 {t:"mcq",tag:"Vocabulary",q:"He was too ____ to ____ the bully, so he just stood there and took it.",opts:["lily-livered / fend off","a nuisance / intervene","societal / condemn","unsettling / exacerbate"],a:0,ex:"Lily-livered (cowardly) + fend off (defend against) fits the meaning."},
 {t:"mcq",tag:"Vocabulary",q:"The article ____ the ____ pressures that make people afraid of rejection.",opts:["condemned / societal","exacerbated / unsettling","intervened / crippling","fended / lily-livered"],a:0,ex:"Condemned (strongly disapproved) + societal (related to society) fits the meaning."},
 {t:"mcq",tag:"Vocabulary",q:"Being a ____ is not the same as being ____ — the first is about being easily manipulated, the second about being easily frightened.",opts:["pushover / lily-livered","doormat / a nuisance","nuisance / unsettling","societal / crippling"],a:0,ex:"Pushover = easily manipulated; lily-livered = easily frightened."},
-{t:"err",tag:"Vocabulary",orig:"The unsettling film exacerbated her existing fears.",ans:"<span class='bad-mark'>unsettling</span> → correct, but check the meaning: the sentence is fine as is.",fix:"unsettling",ex:"This sentence is already correct — unsettling = making you feel uneasy."},
-{t:"err",tag:"Vocabulary",orig:"She tried to intervene the attack but couldn't stop it.",ans:"intervene <span class='bad-mark'>the attack</span> → 'intervene in' the attack.",fix:"intervene in",ex:"Intervene is followed by 'in' before a noun."},
+{t:"err",tag:"Vocabulary",orig:"She tried to <span class='hl-vocab-err'>intervene</span> the attack but couldn't stop it.",ans:"intervene <span class='bad-mark'>the attack</span> → <strong>intervene in</strong> the attack.",fix:"intervene in",ex:"Intervene is followed by 'in' before a noun."},
+{t:"err",tag:"Vocabulary",orig:"The manager tried to <span class='hl-vocab-err'>intercede</span> when the argument got out of hand.",ans:"<span class='bad-mark'>intercede</span> → <strong>intervene</strong>.",fix:"intervene",ex:"Intercede means to plead on someone's behalf; here the correct word is intervene (to step in to change a situation)."},
 {t:"trans",tag:"Vocabulary",from:"He's so cowardly that he can't even make a phone complaint.",to:"He's so ____ he can't even make a phone complaint.",gap:"lily-livered",ex:"Lily-livered = cowardly, easily frightened."},
 {t:"trans",tag:"Vocabulary",from:"The societal pressure to conform only made her anxiety worse.",to:"The societal pressure to conform only ____ her anxiety.",gap:"exacerbated",ex:"Exacerbate = to make a bad situation worse."},
 {t:"scramble",tag:"Vocabulary",words:["Societal","pressure","exacerbated","her","crippling","fear","of","rejection"],correct:"Societal pressure exacerbated her crippling fear of rejection",ex:"Societal pressure + exacerbated + her crippling fear + of rejection."},
@@ -389,6 +390,7 @@ function render(){
     else if(q.t==="match") html += renderMatch(q,i);
     else if(q.t==="dnd") html += renderDnD(q,i);
     else if(q.t==="scramble") html += renderScramble(q,i);
+    else if(q.t==="scramble-multi") html += renderScrambleMulti(q,i);
     else if(q.t==="dialogue") html += renderDialogue(q,i);
     else if(q.t==="read") html += renderRead(q,i);
 
@@ -415,24 +417,13 @@ function pickMCQ(btn,j,a){
   card.querySelectorAll(".opt").forEach(function(o){o.classList.remove("sel");});
   btn.classList.add("sel");
   card.dataset.pick=j;
-  var others=card.querySelectorAll(".opt");
-  others.forEach(function(o){o.classList.remove("correct","wrong");o.classList.add("locked");});
-  var ok = (j===a);
-  btn.classList.add(ok?"correct":"wrong");
-  if(!ok) others[a].classList.add("correct");
-  var fb=$("fb-"+card.id.replace("q",""));
-  showFb(fb,ok,
-    ok?'Correct! <span class="ans">'+(q?q.ex||"":"")+'</span>':
-       'Incorrect. <span class="ans">'+Q[card.id.slice(1)].ex+'</span>',
-    Q[card.id.slice(1)].ex
-  );
-  lock(card,ok,card.id.slice(1));
 }
 
 function renderGap(q,i){
   var pre = q.pre||"";
   var post = q.post||"";
-  return '<div class="gap-line">'+(pre||"")+'<input class="gapin" id="g-'+i+'" data-ans="'+q.gap+'" placeholder="type here"> '+(post||"")+'</div>';
+  var hint = q.hint||((q.gap||"").charAt(0).toUpperCase()+"…");
+  return '<div class="gap-line">'+(pre||"")+'<input class="gapin" id="g-'+i+'" data-ans="'+q.gap+'" placeholder="'+hint+'"> '+(post||"")+'</div>';
 }
 
 function renderErr(q,i){
@@ -506,7 +497,7 @@ function renderDnD(q,i){
     });
     h+='</div>';
   });
-  h+='</div><p class="btn-g" onclick="checkDnD('+i+')">Check arrangement</p>';
+  h+='</div>';
   return h;
 }
 
@@ -565,8 +556,59 @@ function renderScramble(q,i){
   ws.forEach(function(w,j){
     h+='<div class="s-chip" data-w="'+w+'" id="sc-'+i+'-'+j+'" onclick="pickScram(this)">'+w+'</div>';
   });
-  h+='</div><div class="scram-line" id="sl-'+i+'"></div><p class="btn-g" onclick="checkScram('+i+')">Check sentence</p>';
+  h+='</div><div class="scram-line" id="sl-'+i+'"></div>';
   return h;
+}
+
+function renderScrambleMulti(q,i){
+  var h="";
+  q.sentences.forEach(function(s,si){
+    var ws=s.words.slice(); ws=shuffle(ws);
+    h+='<div style="margin-bottom:18px;padding:14px;background:#FAFBFE;border:1.5px solid var(--line);border-radius:12px;">';
+    h+='<div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:10px;">Sentence '+(si+1)+':</div>';
+    h+='<div class="scram-bank" id="sb-'+i+'-'+si+'">';
+    ws.forEach(function(w,j){
+      h+='<div class="s-chip" data-w="'+w+'" data-si="'+si+'" id="sc-'+i+'-'+si+'-'+j+'" onclick="pickScramMulti(this,'+i+','+si+')">'+w+'</div>';
+    });
+    h+='</div><div class="scram-line" id="sl-'+i+'-'+si+'"></div>';
+    h+='<div class="fb" id="scfb-'+i+'-'+si+'"></div>';
+    h+='</div>';
+  });
+  return h;
+}
+
+function pickScramMulti(el,qi,si){
+  var line=$("sl-"+qi+"-"+si);
+  if(el.classList.contains("used")) return;
+  var token=document.createElement("span");
+  token.className="s-token";
+  token.textContent=el.dataset.w;
+  token.dataset.from=el.id;
+  token.onclick=function(){
+    var orig=document.getElementById(token.dataset.from);
+    if(orig){orig.classList.remove("used");}
+    token.remove();
+  };
+  line.appendChild(token);
+  el.classList.add("used");
+}
+
+function checkScramMulti(i){
+  var q=Q[i];
+  var allOk=true;
+  q.sentences.forEach(function(s,si){
+    var line=$("sl-"+i+"-"+si);
+    var tokens=line.querySelectorAll(".s-token");
+    var parts=[];
+    tokens.forEach(function(tk){parts.push(tk.textContent);});
+    var sentence=parts.join(" ");
+    var ok=sentence.toLowerCase()===s.correct.toLowerCase();
+    tokens.forEach(function(tk){tk.classList.remove("ok","bad");tk.classList.add(ok?"ok":"bad");});
+    var fb=$("scfb-"+i+"-"+si);
+    showFb(fb,ok,(ok?'Correct! ':'Incorrect. ')+s.ex,s.ex);
+    if(!ok) allOk=false;
+  });
+  return allOk;
 }
 
 function pickScram(el){
@@ -627,7 +669,7 @@ function renderDialogue(q,i){
 }
 
 function renderRead(q,i){
-  var h='<div class="read-box"><h4>📖 Saturday Routine</h4>'+q.text+'</div>';
+  var h='<div class="read-box"><h4>📖 The Fear of Rejection</h4>'+q.text+'</div>';
   q.qs.forEach(function(qq,qi){
     h+='<div class="card-head" style="margin-top:16px;"><div class="q-num">R</div><div class="q-body"><span class="q-tag">Reading</span><div class="q-text">'+qq.q+'</div></div></div>';
     h+='<div class="opts">';
@@ -645,12 +687,9 @@ function pickRead(btn,a){
   var card=btn.closest(".card");
   if(card.querySelector('input[data-locked-r="'+i+'-'+qi+'"]')) return;
   var opts=card.querySelectorAll('.opt[data-read="'+i+'"][data-q="'+qi+'"]');
-  opts.forEach(function(o){o.classList.add("locked");o.classList.remove("sel");});
-  var ok=(j===a);
-  btn.classList.add(ok?"correct":"wrong");
-  if(!ok) opts[a].classList.add("correct");
-  var fb=$("rfb-"+i+"-"+qi);
-  showFb(fb,ok,(ok?'Correct! ':'Incorrect. ')+Q[i].qs[qi].ex,Q[i].qs[qi].ex);
+  opts.forEach(function(o){o.classList.remove("sel");});
+  btn.classList.add("sel");
+  btn.dataset.pick=j;
 }
 
 function checkQ(i){
@@ -658,8 +697,35 @@ function checkQ(i){
   var card=$("q"+i);
   if(card.dataset.locked) return;
   var ok=false;
-  if(q.t==="mcq"||q.t==="read"){
-    return;
+  if(q.t==="mcq"){
+    if(card.dataset.pick===undefined){showFb($("fb-"+i),false,"Pick an answer first!",q.ex);return;}
+    var j=parseInt(card.dataset.pick);
+    ok=(j===q.a);
+    var optBtns=card.querySelectorAll(".opt");
+    optBtns.forEach(function(o){o.classList.add("locked");o.classList.remove("sel");});
+    if(ok){optBtns[j].classList.add("correct");}
+    else{optBtns[j].classList.add("wrong");optBtns[q.a].classList.add("correct");}
+    showFb($("fb-"+i),ok,(ok?'Correct! ':'Incorrect. ')+q.ex+(ok?'':' Answer: <span class="ans">'+q.opts[q.a]+'</span>'),q.ex);
+    lock(card,ok,i);
+  } else if(q.t==="read"){
+    var allOk=true, anyPicked=false;
+    var fbTot=$("fb-"+i);
+    q.qs.forEach(function(qq,qi){
+      var opts=card.querySelectorAll('.opt[data-read="'+i+'"][data-q="'+qi+'"]');
+      var picked=-1;
+      opts.forEach(function(o){if(o.classList.contains("sel"))picked=parseInt(o.dataset.j);});
+      if(picked===-1){allOk=false;anyPicked=anyPicked||false;return;}
+      anyPicked=true;
+      opts.forEach(function(o){o.classList.add("locked");o.classList.remove("sel");});
+      if(picked===qq.a){opts[picked].classList.add("correct");}
+      else{opts[picked].classList.add("wrong");opts[qq.a].classList.add("correct");allOk=false;}
+      var rfb=$("rfb-"+i+"-"+qi);
+      showFb(rfb,(picked===qq.a),(picked===qq.a?'Correct! ':'Incorrect. ')+qq.ex,qq.ex);
+    });
+    if(!anyPicked){showFb(fbTot,false,"Pick an answer for each question first!",q.ex);return;}
+    ok=allOk;
+    showFb(fbTot,ok,(ok?'All correct! ':'Some answers were wrong. ')+q.ex,q.ex);
+    lock(card,ok,i);
   } else if(q.t==="gap"){
     var inp=$("g-"+i);
     var v=inp.value.trim().toLowerCase();
@@ -689,7 +755,15 @@ function checkQ(i){
     if(done===q.pairs.length){ok=true;}
     var fb=$("fb-"+i);
     if(!ok){showFb(fb,false,"Match all pairs first! "+q.ex,q.ex);return;}
-  } else if(q.t==="dnd"||q.t==="scramble"){
+    showFb(fb,true,"All matched! "+q.ex,q.ex);
+  } else if(q.t==="dnd"){
+    return checkDnD(i);
+  } else if(q.t==="scramble"){
+    return checkScram(i);
+  } else if(q.t==="scramble-multi"){
+    var allOk=checkScramMulti(i);
+    showFb($("fb-"+i),allOk,(allOk?'All correct! ':'Some sentences need another look. '),q.ex);
+    lock($("q"+i),allOk,i);
     return;
   } else if(q.t==="dialogue"){
     var allOk=true;
@@ -706,7 +780,7 @@ function checkQ(i){
     var fb=$("fb-"+i);
     showFb(fb,ok,(ok?'Correct! ':'Not all correct yet. ')+q.ex,q.ex);
   }
-  if(ok || q.t==="gap"||q.t==="err"||q.t==="trans"||q.t==="dialogue") lock(card,ok,i);
+  if(ok || q.t==="gap"||q.t==="err"||q.t==="trans"||q.t==="dialogue"||q.t==="mcq"||q.t==="read"||q.t==="match") lock(card,ok,i);
 }
 
 function showFb(fb,ok,html,ex){
