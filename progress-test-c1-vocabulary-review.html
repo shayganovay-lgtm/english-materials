@@ -50,8 +50,24 @@ h1 em{font-style:normal;color:var(--accent);}
 /* ── VOCAB STRIP ── */
 .vocab-strip{position:sticky;top:56px;z-index:40;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:9px clamp(16px,5vw,48px);display:flex;flex-wrap:wrap;gap:6px;align-items:center;box-shadow:0 2px 8px rgba(31,41,55,.04);}
 .vocab-strip .vs-lbl{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-right:8px;white-space:nowrap;}
-.vocab-strip .v-chip{font-size:12px;font-weight:600;padding:4px 11px;border-radius:99px;background:var(--accent-soft);color:var(--accent);border:1px solid transparent;white-space:nowrap;}
-@media(max-width:540px){.vocab-strip{top:50px;}.vocab-strip .vs-lbl{font-size:10px;}}
+.vocab-strip .v-chip{font-size:12px;font-weight:600;padding:4px 11px;border-radius:99px;background:var(--accent-soft);color:var(--accent);border:1px solid transparent;white-space:nowrap;cursor:pointer;position:relative;transition:all .15s ease;}
+.vocab-strip .v-chip:hover,.vocab-strip .v-chip.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+
+/* ── VOCAB POPOVER ── */
+.v-pop{position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);width:280px;max-width:78vw;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 12px 36px rgba(31,41,55,.18);padding:14px 16px;z-index:100;display:none;text-align:left;font-weight:400;color:var(--ink);}
+.v-pop.on{display:block;animation:popIn .18s ease both;}
+@keyframes popIn{from{opacity:0;transform:translateX(-50%) translateY(-4px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
+.v-pop .vp-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:6px;}
+.v-pop .vp-word{font-family:Georgia,serif;font-weight:800;font-size:16px;color:var(--ink);}
+.v-pop .vp-pos{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.06em;text-transform:uppercase;}
+.v-pop .vp-ipa{font-size:12px;color:var(--muted);margin-bottom:8px;font-style:italic;}
+.v-pop .vp-def{font-size:13px;color:var(--ink);line-height:1.5;margin-bottom:8px;}
+.v-pop .vp-ru{font-size:12px;color:#7c3aed;margin-bottom:8px;font-weight:600;}
+.v-pop .vp-ex{font-size:12px;color:var(--muted);line-height:1.5;font-style:italic;background:#F8F9FE;border-left:3px solid var(--accent);padding:7px 10px;border-radius:0 8px 8px 0;margin-bottom:6px;}
+.v-pop .vp-syn{font-size:11px;color:var(--muted);}
+.v-pop .vp-syn strong{color:var(--accent);}
+.v-pop .vp-caret{position:absolute;top:-6px;left:50%;transform:translateX(-50%) rotate(45deg);width:10px;height:10px;background:#fff;border-top:1px solid var(--line);border-left:1px solid var(--line);}
+@media(max-width:540px){.vocab-strip{top:50px;}.vocab-strip .vs-lbl{font-size:10px;}.v-pop{left:0;transform:none;}.v-pop.on{transform:none;}}
 
 /* ── TEST CONTENT ── */
 #test{display:none;max-width:760px;margin:0 auto;padding:0 clamp(16px,5vw,48px) 80px;}
@@ -246,18 +262,18 @@ footer{border-top:1px solid var(--line);padding:20px clamp(16px,5vw,48px);font-s
 <!-- TEST -->
 <main id="test">
   <div class="vocab-strip" id="vocab-strip">
-    <span class="vs-lbl">📚 Target vocab</span>
-    <span class="v-chip">condemn</span>
-    <span class="v-chip">crippling</span>
-    <span class="v-chip">doormat</span>
-    <span class="v-chip">fend off</span>
-    <span class="v-chip">societal</span>
-    <span class="v-chip">a nuisance</span>
-    <span class="v-chip">exacerbate</span>
-    <span class="v-chip">lily-livered</span>
-    <span class="v-chip">unsettling</span>
-    <span class="v-chip">pushover</span>
-    <span class="v-chip">intervene</span>
+    <span class="vs-lbl">📚 Target vocab · tap a word</span>
+    <span class="v-chip" data-vocab="condemn">condemn</span>
+    <span class="v-chip" data-vocab="crippling">crippling</span>
+    <span class="v-chip" data-vocab="doormat">doormat</span>
+    <span class="v-chip" data-vocab="fend off">fend off</span>
+    <span class="v-chip" data-vocab="societal">societal</span>
+    <span class="v-chip" data-vocab="a nuisance">a nuisance</span>
+    <span class="v-chip" data-vocab="exacerbate">exacerbate</span>
+    <span class="v-chip" data-vocab="lily-livered">lily-livered</span>
+    <span class="v-chip" data-vocab="unsettling">unsettling</span>
+    <span class="v-chip" data-vocab="pushover">pushover</span>
+    <span class="v-chip" data-vocab="intervene">intervene</span>
   </div>
 </main>
 
@@ -907,6 +923,82 @@ function confetti(){
   }
   cv.classList.add('on');
   requestAnimationFrame(frame);
+}
+/* ── VOCAB POPOVERS ── */
+var VOCAB = {
+  "condemn":{pos:"verb",ipa:"/kənˈdem/",def:"To express strong public disapproval of something or someone.",ru:"осуждать",ex:"The UN condemned the attack as a clear violation of human rights.",syn:"denounce · censure"},
+  "crippling":{pos:"adjective",ipa:"/ˈkrɪp.lɪŋ/",def:"Causing severe, almost unbearable difficulty or pain.",ru:"изнурительный; тяжёлый",ex:"Her crippling anxiety made it impossible for her to give presentations.",syn:"overwhelming · disabling"},
+  "doormat":{pos:"noun",ipa:"/ˈdɔː.mæt/",def:"A person who lets others treat them badly without defending themselves.",ru:"тряпка (о человеке)",ex:"Don't be such a doormat — tell him you disagree.",syn:"pushover · soft touch"},
+  "fend off":{pos:"phrasal verb",ipa:"/fend ɒf/",def:"To defend oneself against something unwanted; to repel.",ru:"отгонять; отбивать",ex:"She managed to fend off the critics by citing the latest research.",syn:"ward off · fight off"},
+  "societal":{pos:"adjective",ipa:"/səˈsaɪ.ə.təl/",def:"Relating to society as a whole, rather than individuals.",ru:"общественный; социальный",ex:"There is growing societal pressure to look perfect on social media.",syn:"social · communal"},
+  "a nuisance":{pos:"noun phrase",ipa:"/ə ˈnjuː.səns/",def:"Something or someone that is annoying or causes inconvenience.",ru:"досаждение; неприятность",ex:"The constant notifications were a nuisance during the meeting.",syn:"an annoyance · a pest"},
+  "exacerbate":{pos:"verb",ipa:"/ɪɡˈzæs.ə.beɪt/",def:"To make an already bad situation worse.",ru:"усугублять",ex:"His harsh reply only exacerbated the conflict.",syn:"worsen · aggravate"},
+  "lily-livered":{pos:"adjective",ipa:"/ˈlɪl.iˈlɪv.əd/",def:"Easily frightened; lacking courage.",ru:"трусливый",ex:"She called him lily-livered for refusing to board the plane.",syn:"cowardly · faint-hearted"},
+  "unsettling":{pos:"adjective",ipa:"/ʌnˈset.lɪŋ/",def:"Making you feel uneasy, nervous, or disturbed.",ru:"тревожный; беспокоящий",ex:"The documentary had an unsettling effect on the whole audience.",syn:"disturbing · disconcerting"},
+  "pushover":{pos:"noun (informal)",ipa:"/ˈpʊʃ.əʊ.vər/",def:"Someone who is easily persuaded, defeated or manipulated.",ru:"безотказный человек",ex:"He's a pushover — lend him any money and you'll never see it again.",syn:"soft touch · walkover"},
+  "intervene":{pos:"verb",ipa:"/ˌɪn.təˈviːn/",def:"To become involved in a situation in order to change or influence it.",ru:"вмешиваться",ex:"The teacher had to intervene when the argument became too heated.",syn:"step in · interpose"}
+};
+var activeChip=null;
+document.addEventListener("DOMContentLoaded",function(){
+  document.querySelectorAll(".v-chip").forEach(function(chip){
+    chip.addEventListener("click",function(e){
+      e.stopPropagation();
+      var v=chip.dataset.vocab;
+      var info=VOCAB[v];
+      if(!info) return;
+      if(activeChip===chip){closePopover();return;}
+      closePopover();
+      activeChip=chip;
+      chip.classList.add("active");
+      var pop=document.createElement("div");
+      pop.className="v-pop";
+      pop.id="v-pop-current";
+      pop.innerHTML='<div class="vp-caret"></div>'+
+        '<div class="vp-head"><span class="vp-word">'+v+'</span><span class="vp-pos">'+info.pos+'</span></div>'+
+        '<div class="vp-ipa">'+info.ipa+'</div>'+
+        '<div class="vp-def">'+info.def+'</div>'+
+        '<div class="vp-ru">🇷🇺 '+info.ru+'</div>'+
+        '<div class="vp-ex">Example: '+info.ex+'</div>'+
+        '<div class="vp-syn">Synonyms: <strong>'+info.syn+'</strong></div>';
+      chip.appendChild(pop);
+      requestAnimationFrame(function(){pop.classList.add("on");});
+    });
+    chip.addEventListener("mouseenter",function(e){
+      if(activeChip) return;
+      var v=chip.dataset.vocab;
+      var info=VOCAB[v];
+      if(!info) return;
+      closePopover();
+      activeChip=chip;
+      chip.classList.add("active");
+      var pop=document.createElement("div");
+      pop.className="v-pop";
+      pop.id="v-pop-current";
+      pop.innerHTML='<div class="vp-caret"></div>'+
+        '<div class="vp-head"><span class="vp-word">'+v+'</span><span class="vp-pos">'+info.pos+'</span></div>'+
+        '<div class="vp-ipa">'+info.ipa+'</div>'+
+        '<div class="vp-def">'+info.def+'</div>'+
+        '<div class="vp-ru">🇷🇺 '+info.ru+'</div>'+
+        '<div class="vp-ex">Example: '+info.ex+'</div>'+
+        '<div class="vp-syn">Synonyms: <strong>'+info.syn+'</strong></div>';
+      chip.appendChild(pop);
+      requestAnimationFrame(function(){pop.classList.add("on");});
+    });
+    chip.addEventListener("mouseleave",function(){
+      if(activeChip===chip && chip.classList.contains("active")){
+        // keep open if clicked; only close hover if not "locked"
+        if(!chip.dataset.locked) {closePopover();}
+      }
+    });
+  });
+  document.addEventListener("click",function(e){
+    if(!e.target.closest(".v-chip")) closePopover();
+  });
+});
+function closePopover(){
+  var old=document.getElementById("v-pop-current");
+  if(old) old.remove();
+  if(activeChip){activeChip.classList.remove("active");activeChip=null;}
 }
 </script>
 </body>
