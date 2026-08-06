@@ -372,49 +372,43 @@ textarea{resize:vertical;min-height:80px;}
       </div>
       <div class="done-badge" id="bd-fib">✓ Done</div>
     </div>
-    <div class="instr">📌 Choose the correct word for each gap. Click the option you think is right, then click <strong>Check Answers</strong>.</div>
+    <div class="instr">📌 Type the correct word in each gap. The <strong>first letter</strong> of each word is given as a hint. Then click <strong>Check Answers</strong>.</div>
     <hr class="hr">
 
     <style>
-      .fib-opt{display:inline-block;border:2px solid #dde2f0;background:#fafbff;border-radius:8px;padding:6px 12px;font-size:13px;cursor:pointer;margin:3px 4px 3px 0;transition:all .15s;font-family:inherit;color:#4b5563;user-select:none;}
-      .fib-opt:hover{border-color:#3B6BEB;color:#3B6BEB;}
-      .fib-opt.sel{border-color:#3B6BEB;background:#EEF2FF;color:#3B6BEB;font-weight:700;}
-      .fib-opt.correct{border-color:#22c55e;background:#f0fdf4;color:#15803d;font-weight:700;}
-      .fib-opt.wrong{border-color:#ef4444;background:#fff5f5;color:#991b1b;}
-      .fib-opt.locked{cursor:default;}
-      .fib-opts-wrap{margin-top:6px;}
+      .fib-in{width:170px !important;text-align:center;}
     </style>
 
     <div class="fib-g">
-      <div class="fib-row"><span>1. My grandad is 70. He is</span><span class="fib-opts-wrap" id="f1-opts"></span><span>and has a long grey beard.</span></div>
+      <div class="fib-row"><span>1. My grandad is 70. He is</span><input type="text" class="fib-in" id="f1-opts"><span>and has a long grey beard.</span></div>
       <div class="fb" id="f1fb"></div>
     </div>
     <div class="fib-g">
-      <div class="fib-row"><span>2. She is not tall or short — she is</span><span class="fib-opts-wrap" id="f2-opts"></span><span>.</span></div>
+      <div class="fib-row"><span>2. She is not tall or short — she is</span><input type="text" class="fib-in" id="f2-opts"><span>.</span></div>
       <div class="fb" id="f2fb"></div>
     </div>
     <div class="fib-g">
-      <div class="fib-row"><span>3. Her hair is not straight — she has</span><span class="fib-opts-wrap" id="f3-opts"></span><span>.</span></div>
+      <div class="fib-row"><span>3. Her hair is not straight — she has</span><input type="text" class="fib-in" id="f3-opts"><span>.</span></div>
       <div class="fb" id="f3fb"></div>
     </div>
     <div class="fib-g">
-      <div class="fib-row"><span>4. He is very thin — I would say he is</span><span class="fib-opts-wrap" id="f4-opts"></span><span>.</span></div>
+      <div class="fib-row"><span>4. He is very thin — I would say he is</span><input type="text" class="fib-in" id="f4-opts"><span>.</span></div>
       <div class="fb" id="f4fb"></div>
     </div>
     <div class="fib-g">
-      <div class="fib-row"><span>5. Maria loves people and parties. She is very</span><span class="fib-opts-wrap" id="f5-opts"></span><span>and bubbly.</span></div>
+      <div class="fib-row"><span>5. Maria loves people and parties. She is very</span><input type="text" class="fib-in" id="f5-opts"><span>and bubbly.</span></div>
       <div class="fb" id="f5fb"></div>
     </div>
     <div class="fib-g">
-      <div class="fib-row"><span>6. My brother and I never</span><span class="fib-opts-wrap" id="f6-opts"></span><span>— we get on well.</span></div>
+      <div class="fib-row"><span>6. My brother and I never</span><input type="text" class="fib-in" id="f6-opts"><span>— we get on well.</span></div>
       <div class="fb" id="f6fb"></div>
     </div>
     <div class="fib-g">
-      <div class="fib-row"><span>7. They have been in a</span><span class="fib-opts-wrap" id="f7-opts"></span><span>for two years and they are very happy.</span></div>
+      <div class="fib-row"><span>7. They have been in a</span><input type="text" class="fib-in" id="f7-opts"><span>for two years and they are very happy.</span></div>
       <div class="fb" id="f7fb"></div>
     </div>
     <div class="fib-g">
-      <div class="fib-row"><span>8. He is not kind — in fact, he can be quite</span><span class="fib-opts-wrap" id="f8-opts"></span><span>to strangers.</span></div>
+      <div class="fib-row"><span>8. He is not kind — in fact, he can be quite</span><input type="text" class="fib-in" id="f8-opts"><span>to strangers.</span></div>
       <div class="fb" id="f8fb"></div>
     </div>
 
@@ -431,27 +425,59 @@ textarea{resize:vertical;min-height:80px;}
       <div class="c-icon">🔗</div>
       <div class="c-text">
         <div class="c-title"><span class="tnum">2</span> Match the Words</div>
-        <div class="c-sub">Word → definition</div>
+        <div class="c-sub">Word → Russian translation</div>
       </div>
       <div class="done-badge" id="bd-match">✓ Done</div>
     </div>
-    <div class="instr">Click an <strong>English word</strong> on the left, then click the correct <strong>Russian translation</strong> on the right. Match all 6 pairs!</div>
+    <div class="instr">Click an <strong>English word</strong> on the left, then click the correct <strong>Russian translation</strong> on the right. Match all 22 pairs!</div>
     <div class="match-grid">
       <div class="m-col" id="mw-col">
-        <div class="m-w" data-id="generous">generous</div>
-        <div class="m-w" data-id="outgoing">outgoing</div>
-        <div class="m-w" data-id="breakup">break up</div>
-        <div class="m-w" data-id="getonwell">get on well</div>
+        <div class="m-w" data-id="beard">beard</div>
+        <div class="m-w" data-id="moustache">moustache</div>
+        <div class="m-w" data-id="skinny">skinny</div>
+        <div class="m-w" data-id="chubby">chubby</div>
+        <div class="m-w" data-id="overweight">overweight</div>
         <div class="m-w" data-id="mediumheight">medium height</div>
+        <div class="m-w" data-id="tall">tall</div>
+        <div class="m-w" data-id="short">short</div>
+        <div class="m-w" data-id="curlyhair">curly hair</div>
+        <div class="m-w" data-id="straighthair">straight hair</div>
+        <div class="m-w" data-id="greyhair">grey hair</div>
+        <div class="m-w" data-id="curves">curves</div>
+        <div class="m-w" data-id="outgoing">outgoing</div>
+        <div class="m-w" data-id="bubbly">bubbly</div>
+        <div class="m-w" data-id="generous">generous</div>
+        <div class="m-w" data-id="kind">kind</div>
+        <div class="m-w" data-id="rude">rude</div>
+        <div class="m-w" data-id="argue">argue</div>
+        <div class="m-w" data-id="getonwell">get on well</div>
+        <div class="m-w" data-id="relationship">relationship</div>
         <div class="m-w" data-id="datesomeone">date someone</div>
+        <div class="m-w" data-id="breakup">break up</div>
       </div>
       <div class="m-col" id="md-col">
-        <div class="m-d" data-id="getonwell">ладить друг с другом</div>
-        <div class="m-d" data-id="breakup">расстаться</div>
-        <div class="m-d" data-id="mediumheight">средний рост</div>
-        <div class="m-d" data-id="generous">щедрый</div>
         <div class="m-d" data-id="datesomeone">встречаться с кем-то</div>
+        <div class="m-d" data-id="getonwell">ладить друг с другом</div>
+        <div class="m-d" data-id="curlyhair">кудрявые волосы</div>
+        <div class="m-d" data-id="rude">грубый</div>
+        <div class="m-d" data-id="breakup">расстаться</div>
+        <div class="m-d" data-id="bubbly">жизнерадостный</div>
+        <div class="m-d" data-id="mediumheight">средний рост</div>
+        <div class="m-d" data-id="skinny">худой</div>
+        <div class="m-d" data-id="relationship">отношения</div>
+        <div class="m-d" data-id="beard">борода</div>
         <div class="m-d" data-id="outgoing">общительный</div>
+        <div class="m-d" data-id="curves">аппетитная фигура</div>
+        <div class="m-d" data-id="straighthair">прямые волосы</div>
+        <div class="m-d" data-id="kind">добрый</div>
+        <div class="m-d" data-id="argue">спорить</div>
+        <div class="m-d" data-id="tall">высокий</div>
+        <div class="m-d" data-id="moustache">усы</div>
+        <div class="m-d" data-id="greyhair">седые волосы</div>
+        <div class="m-d" data-id="chubby">пухлый</div>
+        <div class="m-d" data-id="generous">щедрый</div>
+        <div class="m-d" data-id="short">невысокий</div>
+        <div class="m-d" data-id="overweight">с избыточным весом</div>
       </div>
     </div>
     <div class="fb" id="match-fb" style="margin-top:16px;"></div>
@@ -763,54 +789,36 @@ function toggleRulesCard(btn){
   btn.textContent=hidden?"🙈 Hide rules":"👁 Show rules";
 }
 
-/* ── FILL IN THE BLANKS (multiple choice) ── */
+/* ── FILL IN THE BLANKS (type answer with first-letter hint) ── */
 var FIB_DATA=[
-  {id:1,ans:"tall",opts:["tall","short","skinny","rude"]},
-  {id:2,ans:"medium height",opts:["medium height","tall","chubby","kind"]},
-  {id:3,ans:"curly hair",opts:["curly hair","straight hair","grey hair","beard"]},
-  {id:4,ans:"skinny",opts:["skinny","chubby","overweight","tall"]},
-  {id:5,ans:"outgoing",opts:["outgoing","rude","generous","kind"]},
-  {id:6,ans:"argue",opts:["argue","break up","date someone","get on well"]},
-  {id:7,ans:"relationship",opts:["relationship","beard","curves","bubbly"]},
-  {id:8,ans:"rude",opts:["rude","generous","outgoing","bubbly"]}
+  {id:1,ans:"tall"},
+  {id:2,ans:"medium height"},
+  {id:3,ans:"curly hair"},
+  {id:4,ans:"skinny"},
+  {id:5,ans:"outgoing"},
+  {id:6,ans:"argue"},
+  {id:7,ans:"relationship"},
+  {id:8,ans:"rude"}
 ];
-function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function norm(s){return s.trim().toLowerCase().replace(/\s+/g," ");}
 FIB_DATA.forEach(function(item){
-  var wrap=$("f"+item.id+"-opts");
-  if(!wrap) return;
-  var opts=shuffle(item.opts.slice());
-  opts.forEach(function(o){
-    var b=document.createElement("button");
-    b.className="fib-opt";
-    b.textContent=o;
-    b.onclick=function(){pickFIB(this,item.id);};
-    wrap.appendChild(b);
-  });
+  var inp=$("f"+item.id+"-opts");
+  if(!inp) return;
+  inp.placeholder=item.ans.split(" ").map(function(w){return w.charAt(0)+"…";}).join(" ");
 });
-var fibPicks={};
-function pickFIB(btn,id){
-  var wrap=btn.parentNode;
-  if(wrap.dataset.locked) return;
-  wrap.querySelectorAll(".fib-opt").forEach(function(o){o.classList.remove("sel");});
-  btn.classList.add("sel");
-  fibPicks[id]=btn.textContent;
-}
 function checkFIB(){
   var ok=0;
   FIB_DATA.forEach(function(item){
-    var wrap=$("f"+item.id+"-opts");
+    var inp=$("f"+item.id+"-opts");
     var fb=$("f"+item.id+"fb");
-    if(!wrap||!fb) return;
-    var pick=fibPicks[item.id]||"";
-    wrap.querySelectorAll(".fib-opt").forEach(function(o){o.classList.add("locked");o.classList.remove("sel");});
-    if(pick===item.ans){
-      wrap.querySelectorAll(".fib-opt").forEach(function(o){if(o.textContent===item.ans)o.classList.add("correct");});
+    if(!inp||!fb) return;
+    var pick=norm(inp.value);
+    inp.disabled=true;
+    if(pick===norm(item.ans)){
+      inp.classList.add("ok");
       fb.className="fb ok";fb.textContent="✅ Correct!";ok++;
     } else {
-      wrap.querySelectorAll(".fib-opt").forEach(function(o){
-        if(o.textContent===item.ans)o.classList.add("correct");
-        if(o.textContent===pick)o.classList.add("wrong");
-      });
+      inp.classList.add("bad");
       fb.className="fb err";fb.innerHTML="❌ Answer: <strong>"+item.ans+"</strong>";
     }
   });
@@ -821,17 +829,17 @@ function checkFIB(){
 }
 function resetFIB(){
   FIB_DATA.forEach(function(item){
-    var wrap=$("f"+item.id+"-opts");
+    var inp=$("f"+item.id+"-opts");
     var fb=$("f"+item.id+"fb");
-    if(wrap){wrap.querySelectorAll(".fib-opt").forEach(function(o){o.classList.remove("sel","correct","wrong","locked");});}
+    if(inp){inp.disabled=false;inp.value="";inp.classList.remove("ok","bad");}
     if(fb){fb.className="fb";fb.textContent="";}
   });
-  fibPicks={};
   var t=$("fib-tot");t.className="fb";t.textContent="";
 }
 
 /* ── MATCH ── */
 var selW=null, selD=null, mCount=0;
+var mTotal=document.querySelectorAll(".m-w").length;
 function bindMatch(){
   document.querySelectorAll(".m-w").forEach(function(el){
     el.onclick=function(){
@@ -857,8 +865,8 @@ function tryPair(){
     selD.className="m-d matched";selD.dataset.matched="1";
     mCount++;
     fb.className="fb ok";
-    if(mCount===6){fb.textContent="🎉 You matched all 6!";markDone("match",20,"bd-match");}
-    else {fb.textContent="✅ Correct match ("+mCount+"/6)";}
+    if(mCount===mTotal){fb.textContent="🎉 You matched all "+mTotal+"!";markDone("match",20,"bd-match");}
+    else {fb.textContent="✅ Correct match ("+mCount+"/"+mTotal+")";}
   } else {
     fb.className="fb err";
     fb.textContent="❌ Not a match. Try again!";
