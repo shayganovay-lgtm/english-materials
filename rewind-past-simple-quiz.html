@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rewind — Past Simple Challenge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F3EFE7;
+    --card:#FFFDF9;
+    --ink:#26211B;
+    --ink-soft:#6B6255;
+    --ink-faint:#9C9284;
+    --line:#DEDACE;
+    --line-soft:#EAE6DB;
+
+    --pos-clr:#2C6E5B;   --pos-bg:#DFEEE8;
+    --neg-clr:#B3543C;   --neg-bg:#F4E1D9;
+    --q-clr:#2E5290;     --q-bg:#DFE6F3;
+    --mix-clr:#A5792B;   --mix-bg:#F1E5CD;
+
+    --correct:#2C6E5B;
+    --correct-bg:#DFEEE8;
+    --incorrect:#B3543C;
+    --incorrect-bg:#F4E1D9;
+
+    --font-display:'Fraunces', Georgia, 'Times New Roman', serif;
+    --font-body:'IBM Plex Sans', Arial, sans-serif;
+    --font-mono:'IBM Plex Mono', 'Courier New', monospace;
+    --shadow: 0 1px 2px rgba(38,33,27,0.04), 0 8px 24px rgba(38,33,27,0.08);
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    background:var(--bg);
+    background-image: radial-gradient(circle at 1px 1px, rgba(38,33,27,0.05) 1px, transparent 0);
+    background-size: 22px 22px;
+    color:var(--ink);
+    font-family:var(--font-body);
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:32px 16px 64px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; transition-duration:0.001ms !important; }
+  }
+
+  .wrap{ width:100%; max-width:660px; }
+
+  header{
+    text-align:center;
+    margin-bottom:26px;
+    animation: dropIn 0.5s ease both;
+  }
+  @keyframes dropIn{
+    from{ opacity:0; transform:translateY(-8px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  .mark{ display:flex; justify-content:center; margin-bottom:8px; }
+  .mark svg{ width:60px; height:60px; }
+
+  h1{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:2.15rem;
+    letter-spacing:-0.01em;
+    margin:0 0 6px;
+  }
+  h1 em{ font-style:italic; color:var(--q-clr); }
+
+  .subtitle{
+    font-size:0.94rem;
+    color:var(--ink-soft);
+    letter-spacing:0.01em;
+    max-width:44ch;
+    margin:0 auto;
+    line-height:1.55;
+  }
+  .subtitle b{ color:var(--ink); font-weight:600; }
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    padding:32px 30px;
+  }
+
+  /* ---------- Start screen ---------- */
+  #start-screen .card p{
+    font-size:0.97rem;
+    line-height:1.65;
+    color:var(--ink-soft);
+    margin:0 0 16px;
+  }
+  #start-screen .card p:last-of-type{ margin-bottom:26px; }
+  #start-screen strong{ color:var(--ink); }
+
+  .legend{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-bottom:26px;
+  }
+  .legend-item{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    font-family:var(--font-mono);
+    font-size:0.74rem;
+    letter-spacing:0.03em;
+    color:var(--ink-soft);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:9px 11px;
+    background:#fff;
+  }
+  .dot{ width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+
+  .btn-primary{
+    display:inline-block;
+    width:100%;
+    background:var(--ink);
+    color:#F4F1E9;
+    font-family:var(--font-body);
+    font-weight:600;
+    font-size:0.97rem;
+    letter-spacing:0.01em;
+    border:none;
+    border-radius:8px;
+    padding:14px 20px;
+    cursor:pointer;
+    transition:background 0.15s ease, transform 0.1s ease;
+  }
+  .btn-primary:hover{ background:#3a332a; }
+  .btn-primary:active{ transform:translateY(1px); }
+  .btn-primary:focus-visible{ outline:2px solid var(--q-clr); outline-offset:2px; }
+  .btn-primary:disabled{ opacity:0.4; cursor:not-allowed; }
+
+  .btn-ghost{
+    flex:1;
+    font-family:var(--font-body);
+    font-weight:600;
+    font-size:0.9rem;
+    background:transparent;
+    border:1.5px solid var(--ink);
+    color:var(--ink);
+    border-radius:8px;
+    padding:12px 16px;
+    cursor:pointer;
+    transition:background 0.15s ease, color 0.15s ease;
+  }
+  .btn-ghost:hover{ background:var(--ink); color:#F4F1E9; }
+
+  /* ---------- Path / progress ---------- */
+  .path{
+    display:flex;
+    align-items:center;
+    gap:3px;
+    margin:0 0 22px;
+  }
+  .node-link{ flex:1; height:2px; background:var(--line); }
+  .node-link.done{ background:var(--ink-faint); }
+  .node{
+    width:11px; height:11px;
+    border-radius:50%;
+    border:2px solid var(--line);
+    background:var(--card);
+    flex-shrink:0;
+    transition:all 0.2s ease;
+  }
+  .node.current{ border-color:var(--q-clr); box-shadow:0 0 0 4px var(--q-bg); transform:scale(1.15); }
+  .node.correct{ background:var(--correct); border-color:var(--correct); }
+  .node.incorrect{ background:var(--incorrect); border-color:var(--incorrect); }
+
+  .topline{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:6px;
+    font-family:var(--font-mono);
+    font-size:0.76rem;
+    color:var(--ink-soft);
+  }
+  .topline .score{ color:var(--ink); font-weight:600; }
+
+  .cat-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    font-weight:600;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    padding:5px 10px;
+    border-radius:99px;
+    margin-bottom:18px;
+  }
+  .cat-badge.pos{ color:var(--pos-clr); background:var(--pos-bg); }
+  .cat-badge.neg{ color:var(--neg-clr); background:var(--neg-bg); }
+  .cat-badge.qform{ color:var(--q-clr); background:var(--q-bg); }
+  .cat-badge.mix{ color:var(--mix-clr); background:var(--mix-bg); }
+
+  /* ---------- Quiz card ---------- */
+  #quiz-screen{ display:none; }
+  #quiz-screen.active{ display:block; }
+  #start-screen.hidden, #results-screen.hidden, #review-screen.hidden{ display:none; }
+  #results-screen{ display:none; }
+  #results-screen.active{ display:block; }
+  #review-screen{ display:none; }
+  #review-screen.active{ display:block; }
+
+  .q-card{ animation: fadeSlide 0.3s ease both; }
+  @keyframes fadeSlide{
+    from{ opacity:0; transform:translateY(6px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  .qtext{
+    font-family:var(--font-display);
+    font-size:1.28rem;
+    line-height:1.55;
+    margin:0 0 24px;
+    color:var(--ink);
+  }
+  .qtext .blank{
+    display:inline-block;
+    min-width:70px;
+    border-bottom:2px solid var(--ink-faint);
+    margin:0 2px;
+    color:var(--ink-faint);
+    font-style:italic;
+    font-size:0.9em;
+  }
+  .qtext .blank.filled{
+    border-bottom-color:var(--q-clr);
+    color:var(--q-clr);
+    font-weight:600;
+    font-style:normal;
+  }
+  .q-card.pos-cat .qtext .blank.filled{ border-bottom-color:var(--pos-clr); color:var(--pos-clr); }
+  .q-card.neg-cat .qtext .blank.filled{ border-bottom-color:var(--neg-clr); color:var(--neg-clr); }
+  .q-card.mix-cat .qtext .blank.filled{ border-bottom-color:var(--mix-clr); color:var(--mix-clr); }
+
+  .cue{
+    font-size:0.83rem;
+    color:var(--ink-soft);
+    margin:-14px 0 20px;
+  }
+  .cue b{ color:var(--ink); font-family:var(--font-mono); font-weight:500; }
+
+  .options{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-bottom:6px;
+  }
+  @media (max-width:480px){ .options{ grid-template-columns:1fr; } }
+
+  .opt{
+    text-align:left;
+    font-family:var(--font-body);
+    font-size:0.95rem;
+    color:var(--ink);
+    background:#fff;
+    border:1.5px solid var(--line);
+    border-radius:8px;
+    padding:13px 14px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    transition:border-color 0.12s ease, background 0.12s ease, transform 0.08s ease;
+  }
+  .opt:hover:not(.disabled){ border-color:var(--ink-faint); }
+  .opt:active:not(.disabled){ transform:translateY(1px); }
+  .opt:focus-visible{ outline:2px solid var(--q-clr); outline-offset:1px; }
+  .opt .letter{
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    color:var(--ink-faint);
+    border:1px solid var(--line);
+    border-radius:50%;
+    width:19px; height:19px;
+    flex:none;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .opt.disabled{ cursor:default; }
+  .opt.correct-answer{ background:var(--correct-bg); border-color:var(--correct); color:var(--correct); font-weight:600; }
+  .opt.correct-answer .letter{ border-color:var(--correct); color:var(--correct); }
+  .opt.wrong-answer{ background:var(--incorrect-bg); border-color:var(--incorrect); color:var(--incorrect); }
+  .opt.wrong-answer .letter{ border-color:var(--incorrect); color:var(--incorrect); }
+  .opt.muted{ opacity:0.5; }
+
+  .feedback{
+    margin-top:18px;
+    padding:16px 18px;
+    border-radius:8px;
+    border-left:3px solid var(--ink-faint);
+    background:#F3F0E7;
+    font-size:0.91rem;
+    line-height:1.6;
+    color:var(--ink-soft);
+    display:none;
+  }
+  .feedback.show{ display:block; animation: fadeSlide 0.25s ease both; }
+  .feedback.is-correct{ border-left-color:var(--correct); }
+  .feedback.is-wrong{ border-left-color:var(--incorrect); }
+  .feedback .verdict{
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    font-weight:600;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    display:block;
+    margin-bottom:6px;
+  }
+  .feedback.is-correct .verdict{ color:var(--correct); }
+  .feedback.is-wrong .verdict{ color:var(--incorrect); }
+
+  .next-row{ display:flex; justify-content:flex-end; margin-top:22px; }
+  .btn-next{
+    font-family:var(--font-body);
+    font-weight:600;
+    font-size:0.9rem;
+    color:var(--ink);
+    background:transparent;
+    border:1.5px solid var(--ink);
+    border-radius:8px;
+    padding:10px 18px;
+    cursor:pointer;
+    opacity:0.35;
+    pointer-events:none;
+    transition:opacity 0.15s ease, background 0.15s ease, color 0.15s ease;
+  }
+  .btn-next.enabled{ opacity:1; pointer-events:auto; }
+  .btn-next.enabled:hover{ background:var(--ink); color:#F4F1E9; }
+  .btn-next:focus-visible{ outline:2px solid var(--q-clr); outline-offset:2px; }
+
+  /* ---------- Results screen ---------- */
+  .score-hero{ text-align:center; padding:6px 0 22px; }
+  .score-hero .big{
+    font-family:var(--font-display);
+    font-size:3.4rem;
+    font-weight:600;
+    line-height:1;
+    color:var(--ink);
+  }
+  .score-hero .big span{ font-size:1.6rem; color:var(--ink-faint); font-weight:500; }
+  .score-hero .tier{ margin-top:12px; font-size:1rem; color:var(--ink-soft); max-width:44ch; margin-left:auto; margin-right:auto; line-height:1.55; }
+
+  .cat-breakdown{ display:flex; flex-direction:column; gap:12px; margin:26px 0 8px; }
+  .cat-row{ border:1px solid var(--line); border-radius:8px; padding:13px 15px; background:#fff; }
+  .cat-row-top{ display:flex; justify-content:space-between; align-items:center; font-size:0.85rem; margin-bottom:8px; }
+  .cat-row-name{ display:flex; align-items:center; gap:8px; font-weight:600; }
+  .cat-row-score{ font-family:var(--font-mono); color:var(--ink-soft); font-size:0.82rem; }
+  .bar-track{ height:6px; background:var(--line-soft); border-radius:4px; overflow:hidden; }
+  .bar-fill{ height:100%; border-radius:4px; transition:width 0.4s ease; }
+
+  hr.div{ border:none; border-top:1px solid var(--line); margin:26px 0; }
+
+  .btn-row{ display:flex; gap:10px; margin-top:22px; }
+
+  /* ---------- Review ---------- */
+  .review-title{ font-family:var(--font-display); font-size:1.15rem; font-weight:600; margin:0 0 4px; }
+  .review-sub{ font-size:0.85rem; color:var(--ink-soft); margin:0 0 18px; }
+
+  .review-item{ border:1px solid var(--line); border-radius:8px; padding:16px 18px; margin-bottom:12px; background:#fff; }
+  .review-item .riclue{ font-family:var(--font-display); font-size:1.05rem; margin-bottom:8px; }
+  .review-item .riline{ font-size:0.86rem; margin:2px 0; }
+  .review-item .riline .yours{ color:var(--incorrect); font-weight:600; }
+  .review-item .riline .right{ color:var(--correct); font-weight:600; }
+  .review-item .riexp{ font-size:0.86rem; color:var(--ink-soft); line-height:1.55; margin-top:8px; }
+
+  .all-correct-note{ text-align:center; font-size:0.92rem; color:var(--ink-soft); padding:18px 0; }
+
+  footer{ text-align:center; margin-top:24px; font-size:0.76rem; color:var(--ink-faint); }
+
+  /* confetti */
+  #confetti-canvas{ position:fixed; inset:0; pointer-events:none; z-index:999; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="mark">
+      <svg viewBox="0 0 60 60" fill="none">
+        <circle cx="30" cy="30" r="26" stroke="#26211B" stroke-width="1.4" opacity="0.15"/>
+        <path d="M30 12 A18 18 0 1 0 46.5 22" stroke="#2E5290" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+        <path d="M46.5 22 L38 20 M46.5 22 L45 30.5" stroke="#2E5290" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+    </div>
+    <h1>Rewind<span style="color:var(--ink-faint);">.</span></h1>
+    <div class="subtitle">A2 &middot; <b>28 items</b> on the Past Simple &mdash; positive, negative, and <em style="font-style:italic;color:var(--q-clr)">Did&hellip;?</em> questions</div>
+  </header>
+
+  <!-- START SCREEN -->
+  <div id="start-screen">
+    <div class="card">
+      <p>Yesterday is already gone &mdash; but your grammar for talking about it needs to be solid. This quiz mixes <strong>positive</strong> and <strong>negative</strong> Past Simple sentences with <strong>Did&hellip;?</strong> questions, using regular and irregular verbs.</p>
+      <p>Read each sentence carefully: the context tells you whether you need <em>did / didn't</em>, or just the plain past form.</p>
+      <div class="legend">
+        <div class="legend-item"><span class="dot" style="background:var(--pos-clr)"></span>Positive forms</div>
+        <div class="legend-item"><span class="dot" style="background:var(--neg-clr)"></span>Negative forms</div>
+        <div class="legend-item"><span class="dot" style="background:var(--q-clr)"></span>Did&hellip;? questions</div>
+        <div class="legend-item"><span class="dot" style="background:var(--mix-clr)"></span>Mixed forms</div>
+      </div>
+      <button class="btn-primary" onclick="beginQuiz()">Begin the quiz</button>
+    </div>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div id="quiz-screen">
+    <div class="topline">
+      <span id="progress-label">Item 1 of 28</span>
+      <span class="score">Score: <span id="live-score">0</span></span>
+    </div>
+    <div class="path" id="path-row"></div>
+
+    <div class="card q-card" id="q-card">
+      <span class="cat-badge" id="q-badge"></span>
+      <p class="qtext" id="q-text"></p>
+      <div class="cue" id="q-cue"></div>
+      <div class="options" id="q-options"></div>
+      <div class="feedback" id="q-feedback">
+        <span class="verdict" id="fb-verdict"></span>
+        <span id="fb-text"></span>
+      </div>
+      <div class="next-row">
+        <button class="btn-next" id="next-btn" onclick="nextQuestion()">Next item &rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS SCREEN -->
+  <div id="results-screen">
+    <div class="card">
+      <div class="score-hero">
+        <div class="big" id="final-score">0<span>/28</span></div>
+        <div class="tier" id="final-tier"></div>
+      </div>
+      <div class="cat-breakdown" id="cat-breakdown"></div>
+      <div class="btn-row">
+        <button class="btn-ghost" onclick="showReview()">Review every answer</button>
+        <button class="btn-ghost" onclick="restartQuiz()">Restart quiz</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- REVIEW SCREEN -->
+  <div id="review-screen">
+    <div class="card">
+      <div class="review-title">Full review</div>
+      <div class="review-sub" id="review-sub">Every question, retraced:</div>
+      <div id="review-list"></div>
+      <div class="btn-row">
+        <button class="btn-ghost" onclick="restartQuiz()">Restart quiz</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>A Past Simple review &mdash; positive, negative, and question forms &middot; A2</footer>
+</div>
+
+<canvas id="confetti-canvas"></canvas>
+
+<script>
+const CATEGORIES = {
+  pos:   { name: "Positive",        color: "var(--pos-clr)" },
+  neg:   { name: "Negative",        color: "var(--neg-clr)" },
+  qform: { name: "Did…? Question",  color: "var(--q-clr)"   },
+  mix:   { name: "Mixed Form",      color: "var(--mix-clr)" }
+};
+
+const QUESTIONS = [
+  // ---------------- POSITIVE ----------------
+  { cat:'pos', text:'Yesterday I <span class="blank"></span> my teeth three times.', cue:'clean', options:['clean','cleans','cleaned','cleaning'], correct:2,
+    explain:"Regular verbs add <b>-ed</b> in the Past Simple: clean → cleaned. No auxiliary is needed in a positive sentence." },
+  { cat:'pos', text:'It was hot in the room, so she <span class="blank"></span> the window.', cue:'open', options:['open','opens','opened','opening'], correct:2,
+    explain:"open → opened. The context (\"it was hot\") signals a completed past action, so the simple past form is needed." },
+  { cat:'pos', text:'Last Tuesday, Lisa <span class="blank"></span> from London to Madrid.', cue:'fly', options:['flied','flew','flown','fly'], correct:1,
+    explain:"Fly is irregular: fly → flew → flown. The Past Simple form is <b>flew</b>, not \"flied\" (that's a common mistake) or \"flown\" (the past participle, used with have)." },
+  { cat:'pos', text:'At 6.30, she <span class="blank"></span> home and drove to the airport.', cue:'leave', options:['leaves','leaved','left','leaving'], correct:2,
+    explain:"Leave is irregular: leave → left. There's no \"-ed\" form for this verb." },
+  { cat:'pos', text:'James always goes to work by car. Yesterday, he <span class="blank"></span> to work by car too.', cue:'go', options:['go','goes','went','gone'], correct:2,
+    explain:"Go is irregular: go → went. We're describing a specific past action (yesterday), so the Present Simple \"goes\" is wrong here." },
+  { cat:'pos', text:'We <span class="blank"></span> our holiday last year — it was wonderful.', cue:'enjoy', options:['enjoy','enjoyed','enjoying','enjoys'], correct:1,
+    explain:"Regular verb: enjoy → enjoyed. The final -y follows a vowel, so we just add -ed (no spelling change needed, unlike \"study\" → \"studied\")." },
+  { cat:'pos', text:'Tom always has a shower in the morning. This morning, he <span class="blank"></span> a shower at 7 o\u2019clock.', cue:'have', options:['has','have','had','having'], correct:2,
+    explain:"Have is irregular: have → had. \"This morning\" (already finished) tells us we need the past form, not the present \"has\"." },
+
+  // ---------------- NEGATIVE ----------------
+  { cat:'neg', text:'I saw Barbara, but I <span class="blank"></span> Jane.', cue:'not see', options:["didn't saw","didn't see","don't see","not see"], correct:1,
+    explain:"Negative Past Simple = <b>didn't + base verb</b>. The auxiliary \"didn't\" already carries the past tense, so the main verb stays in its base form: see, not \"saw\"." },
+  { cat:'neg', text:'They worked on Monday, but they <span class="blank"></span> on Tuesday.', cue:'not work', options:["didn't worked","not worked","didn't work","don't worked"], correct:2,
+    explain:"didn't + base verb → didn't work. Never double the past tense by adding -ed after \"didn't\"." },
+  { cat:'neg', text:'She had a pen, but she <span class="blank"></span> any paper.', cue:'not have', options:["didn't had","didn't have","hadn't have","not had"], correct:1,
+    explain:"Even irregular verbs like \"have\" return to their base form after didn't: didn't have, not \"didn't had\"." },
+  { cat:'neg', text:'Jack did French at school, but he <span class="blank"></span> German.', cue:'not do', options:["didn't did","didn't do","not did","doesn't did"], correct:1,
+    explain:"The base form of \"did\" is \"do\", so the negative is didn't do — the auxiliary and the main verb are never both in the past form together." },
+  { cat:'neg', text:'We went to the post office, but we <span class="blank"></span> to the bank.', cue:'not go', options:["didn't went","didn't go","not go","don't went"], correct:1,
+    explain:"go is irregular (go → went), but after \"didn't\" it returns to its base form: didn't go." },
+  { cat:'neg', text:'It was a lovely day — it <span class="blank"></span> at all yesterday.', cue:'not rain', options:["didn't rained","didn't rain","not rain","doesn't rain"], correct:1,
+    explain:"didn't + base verb → didn't rain. Regular verbs also drop their -ed ending after didn't." },
+  { cat:'neg', text:'We were tired, so we <span class="blank"></span> long at the party.', cue:'not stay', options:["didn't stayed","didn't stay","not stayed","don't stay"], correct:1,
+    explain:"didn't stay is correct — remember, only one part of the verb phrase (the auxiliary) shows the past tense." },
+
+  // ---------------- DID...? QUESTIONS ----------------
+  { cat:'qform', text:'"I watched TV last night." <span class="blank"></span> TV last night too?', cue:'you / watch', options:['Do you watch','Did you watched','Did you watch','Are you watching'], correct:2,
+    explain:"Questions in the Past Simple = <b>Did + subject + base verb</b>. \"Did\" carries the past tense, so the main verb stays base form: Did you watch?" },
+  { cat:'qform', text:'"I had a good holiday." <span class="blank"></span> a good holiday too?', cue:'you / have', options:['Did you had','Did you have','Do you have','Have you'], correct:1,
+    explain:"Did you have — even irregular verbs like \"have\" return to base form in a Did…? question." },
+  { cat:'qform', text:'"We went to New York last month." "Where <span class="blank"></span>?"', cue:'you / stay', options:['did you stayed','did you stay','do you stay','you did stay'], correct:1,
+    explain:"Wh- questions in the past follow the same rule: Where + did + subject + base verb → Where did you stay?" },
+  { cat:'qform', text:'"I was late for the meeting." "What time <span class="blank"></span>?"', cue:'you / arrive', options:['did you arrive','did you arrived','you arrived','do you arrive'], correct:0,
+    explain:"What time did you arrive? — the base verb \"arrive\" follows \"did\", with no -ed ending." },
+  { cat:'qform', text:'"I played tennis this afternoon." "<span class="blank"></span>?"', cue:'you / win', options:['Did you won','Did you win','Do you win','Have you won'], correct:1,
+    explain:"Did you win? — win stays in its base form after the auxiliary \"did\"." },
+  { cat:'qform', text:'"I had a nice holiday." "Good. Where <span class="blank"></span>?"', cue:'you / go', options:['did you went','did you go','do you go','you did go'], correct:1,
+    explain:"Where did you go? — go (not \"went\") follows \"did\" in the question form." },
+  { cat:'qform', text:'"The window is broken." "How <span class="blank"></span>?"', cue:'it / happen', options:['did it happened','did it happen','does it happen','it did happen'], correct:1,
+    explain:"How did it happen? — the subject here is \"it\", and happen stays in its base form after did." },
+
+  // ---------------- MIXED FORMS ----------------
+  { cat:'mix', text:'We went to the cinema, but the film wasn\u2019t very good. We <span class="blank"></span> it.', cue:'enjoy (negative)', options:['enjoyed',"didn't enjoy",'don\u2019t enjoy','doesn\u2019t enjoy'], correct:1,
+    explain:"\"The film wasn't very good\" signals a negative result, so we need didn't enjoy, not the positive \"enjoyed\"." },
+  { cat:'mix', text:'Tom <span class="blank"></span> some new clothes yesterday — two shirts and a jacket.', cue:'buy (positive)', options:['buys','bought','buyed','buying'], correct:1,
+    explain:"buy is irregular: buy → bought. This is a positive statement, so no auxiliary is needed." },
+  { cat:'mix', text:'"<span class="blank"></span> yesterday?" "No, it was a nice day."', cue:'it / rain (question)', options:['Did it rain','Did it rained','Does it rain','Was it rain'], correct:0,
+    explain:"The reply (\"No, it was a nice day\") confirms this is a Did…? question: Did it rain?" },
+  { cat:'mix', text:'It was very warm in the room, so I <span class="blank"></span> a window.', cue:'open (positive)', options:['open','opens','opened','opening'], correct:2,
+    explain:"A simple positive past action: open → opened." },
+  { cat:'mix', text:'"Did you phone Chris this morning?" "No, I <span class="blank"></span> time."', cue:'not have (negative)', options:["didn't had","didn't have","don't have",'hadn\u2019t'], correct:1,
+    explain:"\"No\" signals a negative answer, and the auxiliary \"didn't\" needs the base form: didn't have." },
+  { cat:'mix', text:'"I cut my hand this morning." "How <span class="blank"></span> that?"', cue:'you / do (question)', options:['did you did','did you do','do you did','you did do'], correct:1,
+    explain:"How did you do that? — the base verb \"do\" follows \"did\" in this question about how something happened." },
+  { cat:'mix', text:'"Why weren\u2019t you at the meeting yesterday?" "I <span class="blank"></span> about it."', cue:'not know (negative)', options:["didn't knew","didn't know",'don\u2019t know','not knew'], correct:1,
+    explain:"The excuse is a negative past statement: didn't know — know stays in its base form after didn't." }
+];
+
+const TOTAL = QUESTIONS.length;
+let current = 0;
+let score = 0;
+let answered = false;
+const userAnswers = new Array(TOTAL).fill(null);
+
+function beginQuiz(){
+  document.getElementById('start-screen').classList.add('hidden');
+  document.getElementById('quiz-screen').classList.add('active');
+  renderQuestion();
+}
+
+function letterFor(i){ return String.fromCharCode(65+i); }
+
+function renderPath(){
+  let html = '';
+  QUESTIONS.forEach((q, i) => {
+    const ans = userAnswers[i];
+    let cls = 'node';
+    if(i === current && ans === null) cls += ' current';
+    if(ans !== null) cls += (ans === q.correct ? ' correct' : ' incorrect');
+    html += '<div class="' + cls + '" title="Item ' + (i+1) + '"></div>';
+    if(i < TOTAL - 1){
+      html += '<div class="node-link' + (ans !== null ? ' done' : '') + '"></div>';
+    }
+  });
+  document.getElementById('path-row').innerHTML = html;
+}
+
+function renderQuestion(){
+  const q = QUESTIONS[current];
+  answered = false;
+
+  document.getElementById('progress-label').textContent = 'Item ' + (current+1) + ' of ' + TOTAL;
+  document.getElementById('live-score').textContent = score;
+  renderPath();
+
+  const card = document.getElementById('q-card');
+  card.className = 'card q-card ' + q.cat + '-cat';
+  card.style.animation = 'none';
+  void card.offsetWidth;
+  card.style.animation = '';
+
+  const badge = document.getElementById('q-badge');
+  badge.textContent = CATEGORIES[q.cat].name;
+  badge.className = 'cat-badge ' + q.cat;
+
+  document.getElementById('q-text').innerHTML = q.text;
+  document.getElementById('q-cue').innerHTML = 'Cue: <b>' + q.cue + '</b>';
+
+  const optsEl = document.getElementById('q-options');
+  optsEl.innerHTML = q.options.map((opt, i) =>
+    '<button class="opt" id="opt-' + i + '" onclick="selectOption(' + i + ')">' +
+      '<span class="letter">' + letterFor(i) + '</span><span>' + opt + '</span>' +
+    '</button>'
+  ).join('');
+
+  const fb = document.getElementById('q-feedback');
+  fb.classList.remove('show','is-correct','is-wrong');
+
+  const nextBtn = document.getElementById('next-btn');
+  nextBtn.classList.remove('enabled');
+  nextBtn.textContent = (current === TOTAL-1) ? 'See results \u2192' : 'Next item \u2192';
+}
+
+function selectOption(i){
+  if(answered) return;
+  answered = true;
+  const q = QUESTIONS[current];
+  userAnswers[current] = i;
+  const isCorrect = (i === q.correct);
+  if(isCorrect) score++;
+
+  for(let j=0; j<q.options.length; j++){
+    const btn = document.getElementById('opt-' + j);
+    btn.classList.add('disabled');
+    if(j === q.correct){
+      btn.classList.add('correct-answer');
+    } else if(j === i){
+      btn.classList.add('wrong-answer');
+    } else {
+      btn.classList.add('muted');
+    }
+  }
+
+  const word = q.options[q.correct];
+  const blank = document.querySelector('#q-text .blank');
+  if(blank){ blank.textContent = word; blank.classList.add('filled'); }
+
+  const fb = document.getElementById('q-feedback');
+  fb.classList.add('show', isCorrect ? 'is-correct' : 'is-wrong');
+  document.getElementById('fb-verdict').textContent = isCorrect ? 'Correct' : 'Not quite';
+  document.getElementById('fb-text').innerHTML = q.explain;
+
+  document.getElementById('live-score').textContent = score;
+  document.getElementById('next-btn').classList.add('enabled');
+  renderPath();
+}
+
+function nextQuestion(){
+  if(!answered) return;
+  if(current < TOTAL-1){
+    current++;
+    renderQuestion();
+  } else {
+    showResults();
+  }
+}
+
+function scoreByCategory(){
+  const out = {};
+  Object.keys(CATEGORIES).forEach(k => out[k] = {correct:0, total:0});
+  QUESTIONS.forEach((q, i) => {
+    out[q.cat].total++;
+    if(userAnswers[i] === q.correct) out[q.cat].correct++;
+  });
+  return out;
+}
+
+function bandMessage(s, total){
+  const pct = s/total;
+  if(pct >= 0.9) return "Excellent! You've got a very confident grip on the Past Simple — positive, negative, and question forms all under control.";
+  if(pct >= 0.7) return "Good solid work. A few forms are worth a second look, especially where didn't + base verb is involved.";
+  return "A useful check-up. Go back over the missed items below — the pattern to remember is: only ONE part of the verb phrase ever shows the past tense.";
+}
+
+function showResults(){
+  document.getElementById('quiz-screen').classList.remove('active');
+  document.getElementById('results-screen').classList.add('active');
+
+  const byCat = scoreByCategory();
+  document.getElementById('final-score').innerHTML = score + '<span>/' + TOTAL + '</span>';
+  document.getElementById('final-tier').textContent = bandMessage(score, TOTAL);
+
+  const rows = Object.entries(byCat).map(([key, v]) => {
+    const cat = CATEGORIES[key];
+    const pct = Math.round((v.correct / v.total) * 100);
+    return '<div class="cat-row">' +
+      '<div class="cat-row-top">' +
+        '<span class="cat-row-name"><span class="dot" style="background:' + cat.color + '"></span>' + cat.name + '</span>' +
+        '<span class="cat-row-score">' + v.correct + '/' + v.total + '</span>' +
+      '</div>' +
+      '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%; background:' + cat.color + '"></div></div>' +
+    '</div>';
+  }).join('');
+  document.getElementById('cat-breakdown').innerHTML = rows;
+
+  if(score / TOTAL >= 0.9){
+    launchConfetti();
+  }
+}
+
+function showReview(){
+  document.getElementById('results-screen').classList.remove('active');
+  document.getElementById('review-screen').classList.add('active');
+
+  const missed = QUESTIONS.map((q, idx) => ({q, idx})).filter(o => userAnswers[o.idx] !== o.q.correct);
+  const reviewList = document.getElementById('review-list');
+  const reviewSub = document.getElementById('review-sub');
+
+  if(missed.length === 0){
+    reviewSub.style.display = 'none';
+    reviewList.innerHTML = '<div class="all-correct-note">All 28 items correct \u2014 nothing to review. Well done!</div>';
+  } else {
+    reviewSub.style.display = 'block';
+    reviewSub.textContent = missed.length + ' item' + (missed.length>1?'s':'') + ' worth a second look:';
+    reviewList.innerHTML = missed.map(o => {
+      const q = o.q;
+      const cat = CATEGORIES[q.cat];
+      const yourAns = q.options[userAnswers[o.idx]];
+      const rightAns = q.options[q.correct];
+      const clueText = q.text.replace(/<span class="blank"><\/span>/, '___').replace(/<[^>]+>/g, '');
+      return '<div class="review-item">' +
+        '<span class="cat-badge ' + q.cat + '" style="margin-bottom:10px;">' + cat.name + '</span>' +
+        '<div class="riclue">' + clueText + '</div>' +
+        '<div class="riline">Your answer: <span class="yours">' + yourAns + '</span></div>' +
+        '<div class="riline">Correct answer: <span class="right">' + rightAns + '</span></div>' +
+        '<div class="riexp">' + q.explain + '</div>' +
+      '</div>';
+    }).join('');
+  }
+}
+
+function restartQuiz(){
+  current = 0;
+  score = 0;
+  userAnswers.fill(null);
+  document.getElementById('results-screen').classList.remove('active');
+  document.getElementById('review-screen').classList.remove('active');
+  document.getElementById('quiz-screen').classList.add('active');
+  renderQuestion();
+}
+
+/* ---------- confetti (90%+ score) ---------- */
+function launchConfetti(){
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const colors = ['#2C6E5B','#B3543C','#2E5290','#A5792B'];
+  const pieces = Array.from({length:90}, () => ({
+    x: Math.random()*canvas.width,
+    y: -20 - Math.random()*canvas.height*0.5,
+    w: 6+Math.random()*5,
+    h: 8+Math.random()*6,
+    color: colors[Math.floor(Math.random()*colors.length)],
+    speed: 2+Math.random()*3,
+    drift: (Math.random()-0.5)*2,
+    rot: Math.random()*360,
+    rotSpeed: (Math.random()-0.5)*8
+  }));
+  let frame = 0;
+  function draw(){
+    frame++;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    let stillFalling = false;
+    pieces.forEach(p => {
+      p.y += p.speed;
+      p.x += p.drift;
+      p.rot += p.rotSpeed;
+      if(p.y < canvas.height+20) stillFalling = true;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot * Math.PI/180);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+      ctx.restore();
+    });
+    if(stillFalling && frame < 400){
+      requestAnimationFrame(draw);
+    } else {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+    }
+  }
+  draw();
+}
+window.addEventListener('resize', () => {
+  const canvas = document.getElementById('confetti-canvas');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+</script>
+</body>
+</html>
