@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wishful Thinking — B2 Grammar Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#E8EBED;
+    --card:#FBFAF7;
+    --ink:#1E2A38;
+    --ink-soft:#5B6B78;
+    --ink-faint:#8C99A4;
+    --brass:#A8762E;
+    --brass-bg:#F1E6D2;
+    --teal:#2C5F61;
+    --teal-bg:#DDE9E8;
+    --plum:#6B4C7A;
+    --plum-bg:#EAE1EE;
+    --rust:#A15A3A;
+    --rust-bg:#F3E3D8;
+    --correct:#3C6E4D;
+    --correct-bg:#E0EDE2;
+    --incorrect:#A1463A;
+    --incorrect-bg:#F3E0DC;
+    --line:#D2D7DA;
+    --line-soft:#E3E6E8;
+    --font-display:'Fraunces', Georgia, 'Times New Roman', serif;
+    --font-body:'IBM Plex Sans', Arial, sans-serif;
+    --font-mono:'IBM Plex Mono', 'Courier New', monospace;
+    --shadow: 0 1px 2px rgba(30,42,56,0.04), 0 8px 24px rgba(30,42,56,0.07);
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    background:var(--bg);
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(30,42,56,0.05) 1px, transparent 0);
+    background-size: 22px 22px;
+    color:var(--ink);
+    font-family:var(--font-body);
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:32px 16px 64px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; transition-duration:0.001ms !important; }
+  }
+
+  .wrap{ width:100%; max-width:640px; }
+
+  header{
+    text-align:center;
+    margin-bottom:28px;
+    animation: dropIn 0.5s ease both;
+  }
+  @keyframes dropIn{
+    from{ opacity:0; transform:translateY(-8px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  .mark{ display:flex; justify-content:center; margin-bottom:10px; }
+  .mark svg{ width:56px; height:56px; }
+
+  h1{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:2.1rem;
+    letter-spacing:-0.01em;
+    margin:0 0 4px;
+  }
+  .subtitle{
+    font-size:0.92rem;
+    color:var(--ink-soft);
+    letter-spacing:0.01em;
+  }
+  .subtitle b{ color:var(--ink); font-weight:600; }
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:4px;
+    box-shadow:var(--shadow);
+    padding:32px 30px;
+  }
+
+  #start-screen .card p{
+    font-size:0.97rem;
+    line-height:1.65;
+    color:var(--ink-soft);
+    margin:0 0 16px;
+  }
+  #start-screen .card p:last-of-type{ margin-bottom:26px; }
+  #start-screen strong{ color:var(--ink); }
+
+  .stat-row{
+    display:flex;
+    gap:10px;
+    margin-bottom:26px;
+    flex-wrap:wrap;
+  }
+  .stat-chip{
+    font-family:var(--font-mono);
+    font-size:0.74rem;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    border:1px solid var(--line);
+    border-radius:3px;
+    padding:7px 11px;
+    background:#fff;
+  }
+
+  .legend{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    margin-bottom:26px;
+  }
+  .legend-item{
+    display:flex; align-items:center; gap:8px;
+    font-size:0.82rem; color:var(--ink-soft);
+    border:1px solid var(--line);
+    border-radius:3px;
+    padding:8px 10px;
+    background:#fff;
+  }
+  .dot{ width:8px; height:8px; border-radius:50%; flex:none; }
+
+  .btn-primary{
+    display:inline-block;
+    width:100%;
+    background:var(--ink);
+    color:#F4F2EE;
+    font-family:var(--font-body);
+    font-weight:600;
+    font-size:0.97rem;
+    letter-spacing:0.01em;
+    border:none;
+    border-radius:3px;
+    padding:14px 20px;
+    cursor:pointer;
+    transition:background 0.15s ease, transform 0.1s ease;
+  }
+  .btn-primary:hover{ background:#2c3d50; }
+  .btn-primary:active{ transform:translateY(1px); }
+  .btn-primary:focus-visible{ outline:2px solid var(--brass); outline-offset:2px; }
+
+  .progress-bar-track{
+    width:100%; height:5px; background:var(--line-soft);
+    border-radius:3px; overflow:hidden; margin-bottom:8px;
+  }
+  .progress-bar-fill{
+    height:100%;
+    background:linear-gradient(90deg, var(--brass), var(--plum));
+    border-radius:3px;
+    transition:width 0.35s ease;
+  }
+  .progress-row{
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:var(--font-mono); font-size:0.76rem; color:var(--ink-soft);
+    margin-bottom:18px; letter-spacing:0.02em;
+  }
+  .progress-row .score{ color:var(--ink); font-weight:600; }
+
+  #quiz-screen{ display:none; }
+  #quiz-screen.active{ display:block; }
+  #start-screen.hidden, #results-screen.hidden{ display:none; }
+
+  .q-card{ animation: fadeSlide 0.3s ease both; }
+  @keyframes fadeSlide{
+    from{ opacity:0; transform:translateY(6px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  .eyebrow{ display:flex; align-items:center; gap:10px; margin-bottom:20px; }
+  .eyebrow .tag{
+    font-family:var(--font-mono); font-size:0.72rem; font-weight:600;
+    letter-spacing:0.06em; text-transform:uppercase;
+    padding:5px 9px; border-radius:3px;
+  }
+  .tag.wish{ background:var(--brass-bg); color:var(--brass); }
+  .tag.wishpast{ background:var(--teal-bg); color:var(--teal); }
+  .tag.rather{ background:var(--plum-bg); color:var(--plum); }
+  .tag.time{ background:var(--rust-bg); color:var(--rust); }
+  .eyebrow .num{ font-family:var(--font-mono); font-size:0.78rem; color:var(--ink-faint); }
+
+  .qtext{
+    font-family:var(--font-display);
+    font-size:1.28rem;
+    line-height:1.55;
+    color:var(--ink);
+    margin:0 0 22px;
+  }
+  .qtext .blank{
+    display:inline-block;
+    min-width:64px;
+    border-bottom:2px solid var(--ink-faint);
+    margin:0 2px;
+  }
+  .qtext .blank.filled{
+    border-bottom-color:var(--brass);
+    color:var(--brass);
+    font-weight:600;
+    font-style:normal;
+  }
+  .q-card.wishpast .qtext .blank.filled{ border-bottom-color:var(--teal); color:var(--teal); }
+  .q-card.rather .qtext .blank.filled{ border-bottom-color:var(--plum); color:var(--plum); }
+  .q-card.time .qtext .blank.filled{ border-bottom-color:var(--rust); color:var(--rust); }
+
+  .prompt-line{ font-size:0.83rem; color:var(--ink-soft); margin:-10px 0 18px; }
+
+  .options{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-bottom:6px;
+  }
+  @media (max-width:480px){ .options{ grid-template-columns:1fr; } }
+
+  .opt{
+    text-align:left;
+    font-family:var(--font-body);
+    font-size:0.95rem;
+    color:var(--ink);
+    background:#fff;
+    border:1.5px solid var(--line);
+    border-radius:3px;
+    padding:13px 14px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    transition:border-color 0.12s ease, background 0.12s ease, transform 0.08s ease;
+  }
+  .opt:hover:not(.disabled){ border-color:var(--ink-faint); }
+  .opt:active:not(.disabled){ transform:translateY(1px); }
+  .opt:focus-visible{ outline:2px solid var(--brass); outline-offset:1px; }
+  .opt .letter{
+    font-family:var(--font-mono); font-size:0.74rem; color:var(--ink-faint);
+    border:1px solid var(--line); border-radius:50%;
+    width:20px; height:20px; flex:none;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .opt.disabled{ cursor:default; }
+  .opt.correct-answer{
+    background:var(--correct-bg); border-color:var(--correct); color:var(--correct); font-weight:600;
+  }
+  .opt.correct-answer .letter{ border-color:var(--correct); color:var(--correct); }
+  .opt.wrong-answer{
+    background:var(--incorrect-bg); border-color:var(--incorrect); color:var(--incorrect);
+  }
+  .opt.wrong-answer .letter{ border-color:var(--incorrect); color:var(--incorrect); }
+  .opt.muted{ opacity:0.5; }
+
+  .feedback{
+    margin-top:18px; padding:16px 18px; border-radius:3px;
+    border-left:3px solid var(--ink-faint); background:#F3F1EC;
+    font-size:0.91rem; line-height:1.6; color:var(--ink-soft); display:none;
+  }
+  .feedback.show{ display:block; animation: fadeSlide 0.25s ease both; }
+  .feedback.is-correct{ border-left-color:var(--correct); }
+  .feedback.is-wrong{ border-left-color:var(--incorrect); }
+  .feedback .verdict{
+    font-family:var(--font-mono); font-size:0.72rem; font-weight:600;
+    letter-spacing:0.05em; text-transform:uppercase; display:block; margin-bottom:6px;
+  }
+  .feedback.is-correct .verdict{ color:var(--correct); }
+  .feedback.is-wrong .verdict{ color:var(--incorrect); }
+
+  .next-row{ display:flex; justify-content:flex-end; margin-top:22px; }
+  .btn-next{
+    font-family:var(--font-body); font-weight:600; font-size:0.9rem;
+    color:var(--ink); background:transparent; border:1.5px solid var(--ink);
+    border-radius:3px; padding:10px 18px; cursor:pointer;
+    opacity:0.35; pointer-events:none;
+    transition:opacity 0.15s ease, background 0.15s ease, color 0.15s ease;
+  }
+  .btn-next.enabled{ opacity:1; pointer-events:auto; }
+  .btn-next.enabled:hover{ background:var(--ink); color:#F4F2EE; }
+  .btn-next:focus-visible{ outline:2px solid var(--brass); outline-offset:2px; }
+
+  #results-screen{ display:none; }
+  #results-screen.active{ display:block; }
+
+  .score-hero{ text-align:center; padding:6px 0 24px; }
+  .score-hero .big{
+    font-family:var(--font-display); font-size:3.4rem; font-weight:600;
+    line-height:1; color:var(--ink);
+  }
+  .score-hero .big span{ font-size:1.6rem; color:var(--ink-faint); font-weight:500; }
+  .score-hero .tier{ margin-top:10px; font-size:1rem; color:var(--ink-soft); }
+
+  .breakdown{
+    display:flex; flex-direction:column; gap:10px; margin:22px 0 8px;
+  }
+  .bd-item{
+    display:flex; justify-content:space-between; align-items:center;
+    border:1px solid var(--line); border-radius:3px; padding:12px 16px; background:#fff;
+  }
+  .bd-item .label{
+    display:flex; align-items:center; gap:8px;
+    font-size:0.88rem; font-weight:500;
+  }
+  .bd-item .val{ font-family:var(--font-mono); font-size:0.85rem; color:var(--ink-soft); }
+
+  hr.div{ border:none; border-top:1px solid var(--line); margin:28px 0 22px; }
+
+  .review-title{ font-family:var(--font-display); font-size:1.15rem; font-weight:600; margin:0 0 4px; }
+  .review-sub{ font-size:0.85rem; color:var(--ink-soft); margin:0 0 18px; }
+
+  .review-item{
+    border:1px solid var(--line); border-radius:3px; padding:16px 18px;
+    margin-bottom:12px; background:#fff;
+  }
+  .review-item .ritag{
+    font-family:var(--font-mono); font-size:0.68rem; text-transform:uppercase;
+    letter-spacing:0.05em; color:var(--ink-faint); margin-bottom:6px;
+  }
+  .review-item .riclue{ font-family:var(--font-display); font-size:1.05rem; margin-bottom:8px; }
+  .review-item .riline{ font-size:0.86rem; margin:2px 0; }
+  .review-item .riline .yours{ color:var(--incorrect); font-weight:600; }
+  .review-item .riline .right{ color:var(--correct); font-weight:600; }
+  .review-item .riexp{ font-size:0.86rem; color:var(--ink-soft); line-height:1.55; margin-top:8px; }
+
+  .all-correct-note{ text-align:center; font-size:0.92rem; color:var(--ink-soft); padding:18px 0; }
+
+  .btn-row{ display:flex; gap:10px; margin-top:24px; }
+  .btn-secondary{
+    flex:1; font-family:var(--font-body); font-weight:600; font-size:0.9rem;
+    background:transparent; border:1.5px solid var(--ink); color:var(--ink);
+    border-radius:3px; padding:12px 16px; cursor:pointer;
+    transition:background 0.15s ease, color 0.15s ease;
+  }
+  .btn-secondary:hover{ background:var(--ink); color:#F4F2EE; }
+
+  footer{ text-align:center; margin-top:24px; font-size:0.76rem; color:var(--ink-faint); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="mark">
+      <svg viewBox="0 0 56 56" fill="none">
+        <circle cx="28" cy="28" r="24" stroke="#A8762E" stroke-width="1.6"/>
+        <path d="M28 14 L28 28 L37 33" stroke="#6B4C7A" stroke-width="1.8" stroke-linecap="round"/>
+        <circle cx="28" cy="28" r="2.4" fill="#A8762E"/>
+      </svg>
+    </div>
+    <h1>Wishful Thinking</h1>
+    <div class="subtitle">A B2 grammar drill &middot; <b>16 items</b> &middot; wish, if only, would rather &amp; it's time</div>
+  </header>
+
+  <!-- START SCREEN -->
+  <div id="start-screen">
+    <div class="card">
+      <p>These structures all use a <strong>past tense form to talk about the present or future</strong> — a strange trick of English grammar, but a very common one in everyday speech.</p>
+      <p>Read each sentence carefully and choose the verb form that sounds natural. Pay close attention to <em>when</em> the sentence is really talking about.</p>
+      <div class="legend">
+        <div class="legend-item"><span class="dot" style="background:var(--brass)"></span>Wish — present</div>
+        <div class="legend-item"><span class="dot" style="background:var(--teal)"></span>Wish — past regret</div>
+        <div class="legend-item"><span class="dot" style="background:var(--plum)"></span>Would rather</div>
+        <div class="legend-item"><span class="dot" style="background:var(--rust)"></span>It's time</div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-chip">16 questions</span>
+        <span class="stat-chip">Instant feedback</span>
+        <span class="stat-chip">~10 min</span>
+      </div>
+      <button class="btn-primary" onclick="beginQuiz()">Begin the quiz</button>
+    </div>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div id="quiz-screen">
+    <div class="progress-row">
+      <span id="progress-label">Item 1 of 16</span>
+      <span class="score">Score: <span id="live-score">0</span></span>
+    </div>
+    <div class="progress-bar-track"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div>
+
+    <div class="card q-card" id="q-card">
+      <div class="eyebrow">
+        <span class="tag" id="q-tag">Wish — present</span>
+        <span class="num" id="q-num">No. 1</span>
+      </div>
+      <p class="qtext" id="q-text"></p>
+      <div class="prompt-line">Choose the correct form.</div>
+      <div class="options" id="q-options"></div>
+      <div class="feedback" id="q-feedback">
+        <span class="verdict" id="fb-verdict"></span>
+        <span id="fb-text"></span>
+      </div>
+      <div class="next-row">
+        <button class="btn-next" id="next-btn" onclick="nextQuestion()">Next item &rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS SCREEN -->
+  <div id="results-screen">
+    <div class="card">
+      <div class="score-hero">
+        <div class="big" id="final-score">0<span>/16</span></div>
+        <div class="tier" id="final-tier"></div>
+      </div>
+      <div class="breakdown" id="breakdown-list"></div>
+
+      <hr class="div">
+      <div class="review-title">Review</div>
+      <div class="review-sub" id="review-sub">Items worth a second look:</div>
+      <div id="review-list"></div>
+
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="restartQuiz()">Restart quiz</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>A grammar review of unreal uses of past tenses &mdash; wish, if only, would rather, it's time.</footer>
+</div>
+
+<script>
+const CAT_LABELS = {
+  wish: 'Wish — present',
+  wishpast: 'Wish — past regret',
+  rather: 'Would rather',
+  time: "It's time"
+};
+
+const QUESTIONS = [
+  // ---------------- WISH — PRESENT ----------------
+  {
+    cat:'wish', num:1,
+    text:'I wish I ___ more free time these days — work is taking over my life.',
+    options:['have','had','having','had had'],
+    correct:1,
+    explanation:"Wish + past simple (had) talks about a present situation we'd like to be different. \u2018Have\u2019 describes the real present, and \u2018had had\u2019 shifts the regret into the past, which isn\u2019t what\u2019s meant here."
+  },
+  {
+    cat:'wish', num:2,
+    text:'She wishes she ___ how to drive — it would make her life so much easier.',
+    options:['knows','knew','had known','would know'],
+    correct:1,
+    explanation:"Wish + past simple (knew) expresses a present unreal situation. \u2018Had known\u2019 would refer to the past, and \u2018knows\u2019 is simply the real present, not a wish."
+  },
+  {
+    cat:'wish', num:3,
+    text:'I wish it ___ raining — I really want to go for a walk.',
+    options:['stops','stopped','had stopped','would stop'],
+    correct:3,
+    explanation:"Wish + would is used for something happening now that annoys us and that we want to change. Since the rain is an ongoing, repeated action, \u2018would stop\u2019 is the natural choice, not the simple past."
+  },
+  {
+    cat:'wish', num:4,
+    text:'If only he ___ a bit more patient with the children — he loses his temper so quickly.',
+    options:['is','was','were','had been'],
+    correct:2,
+    explanation:"After wish and if only, we can use were instead of was for I/he/she/it, especially in more careful or formal style. \u2018Had been\u2019 would wrongly shift this present complaint into the past."
+  },
+
+  // ---------------- WISH — PAST REGRET ----------------
+  {
+    cat:'wishpast', num:1,
+    text:'I wish I ___ so much money on that trip last year — I really can\u2019t afford it now.',
+    options:["didn't spend","hadn't spent","wouldn't spend","haven't spent"],
+    correct:1,
+    explanation:"Wish + past perfect (hadn't spent) expresses regret about something that happened, or didn't happen, in the past. \u2018Didn't spend\u2019 would be past simple, which wish never takes for past regrets."
+  },
+  {
+    cat:'wishpast', num:2,
+    text:'If only we ___ earlier — we ended up missing the flight completely.',
+    options:['left','had left','would leave','have left'],
+    correct:1,
+    explanation:"If only + past perfect (had left) expresses regret about a completed past action. \u2018Left\u2019 alone is only past simple, which after if only would suggest a present, not past, unreal situation."
+  },
+  {
+    cat:'wishpast', num:3,
+    text:'I wish you ___ me about the meeting sooner — I would have prepared properly.',
+    options:['told','had told','would tell','have told'],
+    correct:1,
+    explanation:"The result clause (\u2018would have prepared\u2019) shows this regret is about the past, so wish takes the past perfect: had told, not the simple past told."
+  },
+  {
+    cat:'wishpast', num:4,
+    text:'She wishes she ___ harder for the exam last month — she only just passed.',
+    options:['studied','had studied','would study','studies'],
+    correct:1,
+    explanation:"Because the exam and the studying both happened last month, this is a completed past regret, so wish + had studied (past perfect) is required, not the past simple studied."
+  },
+
+  // ---------------- WOULD RATHER ----------------
+  {
+    cat:'rather', num:1,
+    text:"I'd rather you ___ smoke in here, please — the windows don't open.",
+    options:["don't", "didn't", "wouldn't", "haven't"],
+    correct:1,
+    explanation:"Would rather + subject + past simple (didn't) expresses a preference about someone else's present or future behaviour. \u2018Don't\u2019 is present tense and doesn't fit this structure."
+  },
+  {
+    cat:'rather', num:2,
+    text:'Would you rather I ___ you back later, once the meeting has finished?',
+    options:['call','called','would call','had called'],
+    correct:1,
+    explanation:"After would rather + subject, we use the past simple (called) even though the meaning is present or future. \u2018Would call\u2019 can't follow would rather because the auxiliary is already there."
+  },
+  {
+    cat:'rather', num:3,
+    text:"I'd rather ___ about it right now, if you don't mind — it's a difficult subject.",
+    options:['not talking', 'not to talk', 'not talk', "didn't talk"],
+    correct:2,
+    explanation:"When the subject doesn't change, would rather is followed by the infinitive without to: I'd rather not talk. The past simple (didn't talk) is only used when a different subject follows would rather."
+  },
+  {
+    cat:'rather', num:4,
+    text:"He'd rather she ___ him before visiting — he doesn't like surprises.",
+    options:['texts','text','texted','would text'],
+    correct:2,
+    explanation:"Since the subject changes (he'd rather she...), would rather takes the past simple: texted. Present forms like texts or text can't follow would rather with a new subject."
+  },
+
+  // ---------------- IT'S TIME ----------------
+  {
+    cat:'time', num:1,
+    text:"Don't you think it's time you ___ for a new job? You've complained about this one for years.",
+    options:['look','looked','had looked','would look'],
+    correct:1,
+    explanation:"It's time + subject is followed by the past simple (looked) to say something should happen now, even though the meaning is present or future — not the present simple look."
+  },
+  {
+    cat:'time', num:2,
+    text:"It's high time the company ___ its outdated policies — nothing has changed in a decade.",
+    options:['updates','updated','had updated','would update'],
+    correct:1,
+    explanation:"It's (high) time + subject + past simple (updated) expresses that an action needs to happen now or very soon. \u2018Updates\u2019 is simply the real present and doesn't carry that urgency."
+  },
+  {
+    cat:'time', num:3,
+    text:"It's time ___ — we don't want to be late for the flight.",
+    options:['we go', 'to go', 'we went', 'going'],
+    correct:1,
+    explanation:"When we don't want to specify a subject, it's time can be followed directly by the infinitive: it's time to go. Once a subject is added (we), the structure switches to the past simple instead."
+  },
+  {
+    cat:'time', num:4,
+    text:"Isn't it time you ___ up smoking? It's really not doing your health any good.",
+    options:['give','gave','had given','would give'],
+    correct:1,
+    explanation:"Isn't it time + subject requires the past simple form (gave up), following the same pattern as it's time — present or future meaning, past tense form."
+  }
+];
+
+const TOTAL = QUESTIONS.length;
+let current = 0;
+let score = 0;
+let answered = false;
+const userAnswers = new Array(TOTAL).fill(null);
+
+function beginQuiz(){
+  document.getElementById('start-screen').classList.add('hidden');
+  document.getElementById('quiz-screen').classList.add('active');
+  renderQuestion();
+}
+
+function letterFor(i){ return String.fromCharCode(65+i); }
+
+function renderQuestion(){
+  const q = QUESTIONS[current];
+  answered = false;
+
+  document.getElementById('progress-label').textContent = 'Item ' + (current+1) + ' of ' + TOTAL;
+  document.getElementById('progress-fill').style.width = (current/TOTAL*100) + '%';
+  document.getElementById('live-score').textContent = score;
+
+  const card = document.getElementById('q-card');
+  card.className = 'card q-card ' + q.cat;
+  card.style.animation = 'none';
+  void card.offsetWidth;
+  card.style.animation = '';
+
+  const tag = document.getElementById('q-tag');
+  tag.textContent = CAT_LABELS[q.cat];
+  tag.className = 'tag ' + q.cat;
+  document.getElementById('q-num').textContent = 'No. ' + (current+1);
+
+  document.getElementById('q-text').innerHTML = q.text.replace('___', '<span class="blank"></span>');
+
+  const optsEl = document.getElementById('q-options');
+  optsEl.innerHTML = q.options.map((opt, i) =>
+    '<button class="opt" id="opt-' + i + '" onclick="selectOption(' + i + ')">' +
+      '<span class="letter">' + letterFor(i) + '</span><span>' + opt + '</span>' +
+    '</button>'
+  ).join('');
+
+  const fb = document.getElementById('q-feedback');
+  fb.classList.remove('show','is-correct','is-wrong');
+
+  const nextBtn = document.getElementById('next-btn');
+  nextBtn.classList.remove('enabled');
+  nextBtn.textContent = (current === TOTAL-1) ? 'See results \u2192' : 'Next item \u2192';
+}
+
+function selectOption(i){
+  if(answered) return;
+  answered = true;
+  const q = QUESTIONS[current];
+  userAnswers[current] = i;
+  const isCorrect = (i === q.correct);
+  if(isCorrect) score++;
+
+  for(let j=0; j<q.options.length; j++){
+    const btn = document.getElementById('opt-' + j);
+    btn.classList.add('disabled');
+    if(j === q.correct){
+      btn.classList.add('correct-answer');
+    } else if(j === i){
+      btn.classList.add('wrong-answer');
+    } else {
+      btn.classList.add('muted');
+    }
+  }
+
+  const word = q.options[q.correct];
+  const blank = document.querySelector('#q-text .blank');
+  if(blank){
+    blank.textContent = word;
+    blank.classList.add('filled');
+  }
+
+  const fb = document.getElementById('q-feedback');
+  fb.classList.add('show', isCorrect ? 'is-correct' : 'is-wrong');
+  document.getElementById('fb-verdict').textContent = isCorrect ? 'Correct' : 'Not quite';
+  document.getElementById('fb-text').textContent = q.explanation;
+
+  document.getElementById('live-score').textContent = score;
+  document.getElementById('next-btn').classList.add('enabled');
+}
+
+function nextQuestion(){
+  if(!answered) return;
+  if(current < TOTAL-1){
+    current++;
+    renderQuestion();
+  } else {
+    showResults();
+  }
+}
+
+function showResults(){
+  document.getElementById('progress-fill').style.width = '100%';
+  document.getElementById('quiz-screen').classList.remove('active');
+  document.getElementById('results-screen').classList.add('active');
+
+  const catColors = { wish:'var(--brass)', wishpast:'var(--teal)', rather:'var(--plum)', time:'var(--rust)' };
+  const counts = {};
+  Object.keys(CAT_LABELS).forEach(k => counts[k] = {correct:0, total:0});
+  QUESTIONS.forEach((q, idx) => {
+    counts[q.cat].total++;
+    if(userAnswers[idx] === q.correct) counts[q.cat].correct++;
+  });
+
+  document.getElementById('final-score').innerHTML = score + '<span>/' + TOTAL + '</span>';
+
+  let tier;
+  if(score >= 14) tier = 'Excellent \u2014 these unreal past forms are firmly under control.';
+  else if(score >= 10) tier = 'Solid grasp, with a few structures worth a second look.';
+  else tier = 'A useful diagnostic \u2014 read the explanations below closely and revisit the misses.';
+  document.getElementById('final-tier').textContent = tier;
+
+  const bdList = document.getElementById('breakdown-list');
+  bdList.innerHTML = Object.keys(CAT_LABELS).map(k => {
+    const c = counts[k];
+    return '<div class="bd-item">' +
+      '<span class="label"><span class="dot" style="background:' + catColors[k] + '"></span>' + CAT_LABELS[k] + '</span>' +
+      '<span class="val">' + c.correct + '/' + c.total + '</span>' +
+    '</div>';
+  }).join('');
+
+  const missed = QUESTIONS.map((q, idx) => ({q, idx})).filter(o => userAnswers[o.idx] !== o.q.correct);
+  const reviewList = document.getElementById('review-list');
+  const reviewSub = document.getElementById('review-sub');
+
+  if(missed.length === 0){
+    reviewSub.style.display = 'none';
+    reviewList.innerHTML = '<div class="all-correct-note">All 16 items correct \u2014 nothing to review.</div>';
+  } else {
+    reviewSub.style.display = 'block';
+    reviewSub.textContent = missed.length + ' item' + (missed.length>1?'s':'') + ' worth a second look:';
+    reviewList.innerHTML = missed.map(o => {
+      const q = o.q;
+      const yourAns = q.options[userAnswers[o.idx]];
+      const rightAns = q.options[q.correct];
+      const clueText = q.text.replace('___', '\u2014');
+      return '<div class="review-item">' +
+        '<div class="ritag">' + CAT_LABELS[q.cat] + ' \u00b7 No. ' + (o.idx+1) + '</div>' +
+        '<div class="riclue">' + clueText + '</div>' +
+        '<div class="riline">Your answer: <span class="yours">' + yourAns + '</span></div>' +
+        '<div class="riline">Correct answer: <span class="right">' + rightAns + '</span></div>' +
+        '<div class="riexp">' + q.explanation + '</div>' +
+      '</div>';
+    }).join('');
+  }
+}
+
+function restartQuiz(){
+  current = 0;
+  score = 0;
+  userAnswers.fill(null);
+  document.getElementById('results-screen').classList.remove('active');
+  document.getElementById('quiz-screen').classList.add('active');
+  renderQuestion();
+}
+</script>
+</body>
+</html>
