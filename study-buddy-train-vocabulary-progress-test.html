@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Full Steam Ahead — Vocabulary Progress Test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#E8EBED;
+    --card:#FBFAF7;
+    --ink:#1E2A38;
+    --ink-soft:#5B6B78;
+    --ink-faint:#8C99A4;
+    --brass:#A8762E;
+    --brass-bg:#F1E6D2;
+    --teal:#2C5F61;
+    --teal-bg:#DDE9E8;
+    --plum:#6C4E7A;
+    --plum-bg:#E8E0EC;
+    --correct:#3C6E4D;
+    --correct-bg:#E0EDE2;
+    --incorrect:#A1463A;
+    --incorrect-bg:#F3E0DC;
+    --line:#D2D7DA;
+    --line-soft:#E3E6E8;
+    --font-display:'Fraunces', Georgia, 'Times New Roman', serif;
+    --font-body:'IBM Plex Sans', Arial, sans-serif;
+    --font-mono:'IBM Plex Mono', 'Courier New', monospace;
+    --shadow: 0 1px 2px rgba(30,42,56,0.04), 0 8px 24px rgba(30,42,56,0.07);
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    background:var(--bg);
+    background-image: radial-gradient(circle at 1px 1px, rgba(30,42,56,0.05) 1px, transparent 0);
+    background-size: 22px 22px;
+    color:var(--ink);
+    font-family:var(--font-body);
+    font-size:16.5px;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    padding-bottom:60px;
+  }
+  a{ color:inherit; }
+
+  /* ---------- top bar ---------- */
+  #topbar{
+    position:sticky; top:0; z-index:100;
+    background:rgba(251,250,247,0.92);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+    padding:12px clamp(16px,4vw,40px);
+    display:flex; align-items:center; gap:16px;
+  }
+  #back-link{
+    font-family:var(--font-mono);
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    text-decoration:none;
+    white-space:nowrap;
+    flex-shrink:0;
+  }
+  #back-link:hover{ color:var(--ink); }
+  #tb-track{ flex:1; height:6px; background:var(--line-soft); border-radius:3px; overflow:hidden; }
+  #tb-fill{ height:100%; background:linear-gradient(90deg,var(--brass),var(--teal)); width:0%; transition:width .4s ease; border-radius:3px; }
+  #tb-label{ font-family:var(--font-mono); font-size:0.74rem; color:var(--ink-soft); white-space:nowrap; }
+
+  .wrap{ max-width:760px; margin:0 auto; padding:0 16px; }
+
+  /* ---------- header ---------- */
+  header.hero{ text-align:center; padding:40px 16px 8px; animation:dropIn .5s ease both; }
+  @keyframes dropIn{ from{opacity:0; transform:translateY(-8px);} to{opacity:1; transform:translateY(0);} }
+  .mark{ display:flex; justify-content:center; margin-bottom:10px; }
+  .mark svg{ width:58px; height:58px; }
+  h1{ font-family:var(--font-display); font-weight:600; font-size:2.2rem; letter-spacing:-0.01em; margin:0 0 8px; }
+  .subtitle{ font-size:0.96rem; color:var(--ink-soft); line-height:1.6; max-width:52ch; margin:0 auto 22px; }
+  .subtitle b{ color:var(--ink); }
+  .stat-row{ display:flex; gap:9px; justify-content:center; flex-wrap:wrap; margin-bottom:30px; }
+  .stat-chip{ font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.03em; text-transform:uppercase; color:var(--ink-soft); border:1px solid var(--line); border-radius:3px; padding:6px 10px; background:#fff; }
+
+  #start-screen .card{ text-align:left; }
+  #start-screen .card p{ font-size:0.97rem; line-height:1.65; color:var(--ink-soft); margin:0 0 14px; }
+  #start-screen strong{ color:var(--ink); }
+  #start-screen ul{ margin:0 0 20px; padding-left:20px; color:var(--ink-soft); font-size:0.93rem; line-height:1.8; }
+
+  /* ---------- generic card ---------- */
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:6px;
+    box-shadow:var(--shadow);
+    padding:28px clamp(18px,4vw,34px);
+    margin-bottom:22px;
+    animation:fadeSlide .35s ease both;
+  }
+  @keyframes fadeSlide{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+  .sec-head{ display:flex; align-items:flex-start; gap:14px; margin-bottom:6px; }
+  .sec-num{
+    font-family:var(--font-mono); font-size:0.78rem; font-weight:600;
+    width:30px; height:30px; border-radius:50%;
+    background:var(--brass-bg); color:var(--brass);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .sec-title-wrap{ flex:1; }
+  .sec-title{ font-family:var(--font-display); font-weight:600; font-size:1.28rem; display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .sec-sub{ font-size:0.85rem; color:var(--ink-soft); margin-top:2px; }
+  .done-badge{
+    display:none; align-items:center; gap:4px; background:var(--correct-bg); color:var(--correct);
+    font-size:0.72rem; font-weight:700; padding:3px 10px; border-radius:20px; border:1px solid rgba(60,110,77,0.35);
+    white-space:nowrap; font-family:var(--font-mono);
+  }
+  .done-badge.on{ display:inline-flex; }
+
+  .instr{
+    background:var(--teal-bg); border-left:3px solid var(--teal); border-radius:0 4px 4px 0;
+    padding:12px 16px; font-size:0.88rem; color:var(--ink); margin:16px 0 22px; line-height:1.6;
+  }
+  hr.hr{ border:none; border-top:1px solid var(--line); margin:6px 0 20px; }
+
+  /* ---------- buttons ---------- */
+  .btn{ font-family:var(--font-body); font-weight:600; font-size:0.9rem; border-radius:4px; padding:11px 20px; cursor:pointer; border:none; transition:all .15s ease; font-family:var(--font-body); }
+  .btn:active{ transform:translateY(1px); }
+  .btn-primary{ background:var(--ink); color:#F4F2EE; width:100%; padding:14px 20px; font-size:0.97rem; }
+  .btn-primary:hover{ background:#2c3d50; }
+  .btn-check{ background:var(--brass); color:#fff; }
+  .btn-check:hover{ background:#8f6425; }
+  .btn-secondary{ background:transparent; border:1.5px solid var(--ink); color:var(--ink); }
+  .btn-secondary:hover{ background:var(--ink); color:#F4F2EE; }
+  .btn-row{ display:flex; gap:10px; flex-wrap:wrap; margin-top:18px; }
+
+  /* ---------- MC / choice questions ---------- */
+  .q-block{ margin-bottom:24px; padding-bottom:22px; border-bottom:1px solid var(--line-soft); }
+  .q-block:last-of-type{ border-bottom:none; margin-bottom:8px; padding-bottom:0; }
+  .q-prompt{ font-family:var(--font-display); font-size:1.04rem; line-height:1.55; margin-bottom:14px; color:var(--ink); }
+  .q-prompt .qn{ font-family:var(--font-mono); font-size:0.72rem; color:var(--ink-faint); display:block; margin-bottom:4px; text-transform:uppercase; letter-spacing:0.05em; }
+  .opts{ display:grid; grid-template-columns:1fr 1fr; gap:9px; }
+  .opts.opts-2col-narrow{ grid-template-columns:1fr 1fr; max-width:420px; }
+  @media(max-width:480px){ .opts{ grid-template-columns:1fr; } }
+  .opt-btn{
+    text-align:left; font-family:var(--font-body); font-size:0.94rem; color:var(--ink);
+    background:#fff; border:1.5px solid var(--line); border-radius:4px; padding:11px 13px; cursor:pointer;
+    display:flex; align-items:center; gap:9px; transition:border-color .12s ease, background .12s ease;
+  }
+  .opt-btn:hover:not(.locked){ border-color:var(--ink-faint); }
+  .opt-btn .lt{ font-family:var(--font-mono); font-size:0.7rem; color:var(--ink-faint); border:1px solid var(--line); border-radius:50%; width:19px; height:19px; flex:none; display:flex; align-items:center; justify-content:center; }
+  .opt-btn.selected{ border-color:var(--brass); background:var(--brass-bg); }
+  .opt-btn.locked{ cursor:default; }
+  .opt-btn.is-correct{ background:var(--correct-bg); border-color:var(--correct); color:var(--correct); font-weight:600; }
+  .opt-btn.is-correct .lt{ border-color:var(--correct); color:var(--correct); }
+  .opt-btn.is-wrong{ background:var(--incorrect-bg); border-color:var(--incorrect); color:var(--incorrect); }
+  .opt-btn.is-wrong .lt{ border-color:var(--incorrect); color:var(--incorrect); }
+  .opt-btn.is-muted{ opacity:0.5; }
+
+  .q-fb{ margin-top:11px; padding:11px 14px; border-radius:4px; border-left:3px solid var(--ink-faint); background:#F3F1EC; font-size:0.87rem; line-height:1.55; color:var(--ink-soft); display:none; }
+  .q-fb.show{ display:block; }
+  .q-fb.ok{ border-left-color:var(--correct); }
+  .q-fb.bad{ border-left-color:var(--incorrect); }
+  .q-fb .verdict{ font-family:var(--font-mono); font-size:0.68rem; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; display:block; margin-bottom:4px; }
+  .q-fb.ok .verdict{ color:var(--correct); }
+  .q-fb.bad .verdict{ color:var(--incorrect); }
+
+  /* ---------- text inputs ---------- */
+  .fill-row{ display:flex; align-items:center; flex-wrap:wrap; gap:7px; font-size:0.98rem; margin-bottom:8px; line-height:1.7; }
+  input[type="text"]{
+    border:1.5px solid var(--line); border-radius:4px; padding:9px 12px; font-size:0.94rem; font-family:inherit;
+    outline:none; background:#fff; color:var(--ink); transition:border-color .15s ease, background .15s ease;
+  }
+  input[type="text"]:focus{ border-color:var(--brass); }
+  input.gap-in{ width:180px; text-align:center; }
+  input.full-in{ width:100%; }
+  input.ok{ border-color:var(--correct) !important; background:var(--correct-bg) !important; }
+  input.bad{ border-color:var(--incorrect) !important; background:var(--incorrect-bg) !important; }
+  .item-fb{ font-size:0.85rem; margin-top:5px; line-height:1.55; display:none; }
+  .item-fb.show{ display:block; }
+  .item-fb.ok{ color:var(--correct); }
+  .item-fb.bad{ color:var(--incorrect); }
+  .orig-line{ font-style:italic; background:#F3F1EC; border:1px solid var(--line); border-radius:4px; padding:10px 13px; font-size:0.9rem; color:var(--ink-soft); margin-bottom:8px; }
+
+  /* ---------- matching ---------- */
+  .match-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media(max-width:520px){ .match-grid{ grid-template-columns:1fr; } }
+  .m-col{ display:flex; flex-direction:column; gap:8px; }
+  .m-w, .m-d{ border-radius:4px; padding:10px 13px; cursor:pointer; font-size:0.9rem; transition:all .15s ease; user-select:none; border:1.5px solid var(--line); }
+  .m-w{ background:var(--brass-bg); color:var(--brass); font-weight:700; text-align:center; border-color:transparent; }
+  .m-d{ background:#fff; color:var(--ink-soft); line-height:1.4; }
+  .m-w.sel, .m-d.sel{ border-color:var(--brass); }
+  .m-w.matched, .m-d.matched{ background:var(--correct-bg); border-color:var(--correct); color:var(--correct); cursor:default; }
+  .m-w.flash, .m-d.flash{ background:var(--incorrect-bg); border-color:var(--incorrect); animation:shake .3s ease; }
+  @keyframes shake{ 0%,100%{transform:translateX(0);} 25%{transform:translateX(-5px);} 75%{transform:translateX(5px);} }
+
+  /* ---------- reading passage ---------- */
+  .read-box{ background:#fff; border:1.5px solid var(--line); border-radius:6px; padding:22px; font-size:0.96rem; line-height:1.85; margin-bottom:22px; }
+  .read-box h3{ font-family:var(--font-display); font-size:1.1rem; color:var(--brass); margin:0 0 12px; }
+  .read-box p{ margin-bottom:11px; }
+  .read-box p:last-child{ margin-bottom:0; }
+  .hl{ background:var(--teal-bg); color:var(--teal); padding:1px 5px; border-radius:3px; font-weight:600; }
+
+  /* ---------- section total feedback ---------- */
+  .sec-total{ margin-top:16px; padding:12px 16px; border-radius:4px; font-size:0.88rem; font-weight:600; display:none; }
+  .sec-total.show{ display:block; }
+  .sec-total.ok{ background:var(--correct-bg); color:var(--correct); }
+  .sec-total.mid{ background:var(--brass-bg); color:var(--brass); }
+  .sec-total.bad{ background:var(--incorrect-bg); color:var(--incorrect); }
+
+  /* ---------- results ---------- */
+  #results-screen{ display:none; }
+  #results-screen.active{ display:block; }
+  .score-hero{ text-align:center; padding:10px 0 20px; }
+  .score-hero .big{ font-family:var(--font-display); font-size:3.6rem; font-weight:600; line-height:1; color:var(--ink); }
+  .score-hero .big span{ font-size:1.6rem; color:var(--ink-faint); font-weight:500; }
+  .score-hero .tier{ margin-top:12px; font-size:1.02rem; color:var(--ink-soft); max-width:48ch; margin-left:auto; margin-right:auto; }
+  .breakdown{ display:flex; gap:12px; margin:24px 0 8px; flex-wrap:wrap; }
+  .bd-item{ flex:1; min-width:140px; border:1px solid var(--line); border-radius:4px; padding:14px 16px; background:#fff; }
+  .bd-item .label{ font-family:var(--font-mono); font-size:0.68rem; letter-spacing:0.05em; text-transform:uppercase; margin-bottom:6px; }
+  .bd-item.vocab .label{ color:var(--teal); }
+  .bd-item.grammar .label{ color:var(--plum); }
+  .bd-item.overall .label{ color:var(--brass); }
+  .bd-item .val{ font-family:var(--font-display); font-size:1.5rem; font-weight:600; }
+  .review-box{ background:#fff; border:1px solid var(--line); border-radius:4px; padding:18px 20px; margin-top:22px; }
+  .review-box h4{ font-family:var(--font-display); font-size:1.02rem; margin-bottom:10px; }
+  .review-box ul{ margin:0 0 14px 20px; padding:0; font-size:0.89rem; color:var(--ink-soft); line-height:1.8; }
+  .review-box ul:last-child{ margin-bottom:0; }
+  .motivate{ text-align:center; font-family:var(--font-display); font-size:1.1rem; color:var(--brass); margin-top:22px; padding-top:20px; border-top:1px solid var(--line); }
+
+  footer{ text-align:center; margin-top:24px; font-size:0.78rem; color:var(--ink-faint); }
+  footer a{ color:var(--ink-soft); text-decoration:none; }
+  footer a:hover{ color:var(--ink); }
+
+  #confetti-layer{ position:fixed; inset:0; pointer-events:none; z-index:999; overflow:hidden; }
+  .confetti-piece{ position:absolute; top:-20px; border-radius:1px; opacity:0.9; }
+
+  #test-body{ display:none; }
+  #test-body.active{ display:block; }
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <a id="back-link" href="index.html">&larr; All quizzes</a>
+  <div id="tb-track"><div id="tb-fill"></div></div>
+  <span id="tb-label">0 of 9 sections</span>
+</div>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="mark">
+      <svg viewBox="0 0 64 64" fill="none">
+        <rect x="10" y="20" width="44" height="26" rx="6" fill="#DDE9E8" stroke="#2C5F61" stroke-width="2"/>
+        <rect x="16" y="26" width="10" height="9" rx="1.5" fill="#FBFAF7" stroke="#2C5F61" stroke-width="1.6"/>
+        <rect x="30" y="26" width="10" height="9" rx="1.5" fill="#FBFAF7" stroke="#2C5F61" stroke-width="1.6"/>
+        <circle cx="20" cy="49" r="4" fill="#A8762E"/>
+        <circle cx="44" cy="49" r="4" fill="#A8762E"/>
+        <path d="M10 20 L18 10 H40 L48 20" fill="none" stroke="#2C5F61" stroke-width="2" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h1>Full Steam Ahead</h1>
+    <p class="subtitle">A vocabulary progress test on <b>train travel across Europe</b>, prepared for <b>Study Buddy</b> &middot; Conversational English &middot; Level B2</p>
+  </header>
+
+  <!-- START SCREEN -->
+  <div id="start-screen">
+    <div class="card">
+      <p>This test recycles the vocabulary we've studied together — no new words, just a chance to see how well it has settled in.</p>
+      <p>You'll meet the same 13 expressions in <strong>nine different exercises</strong>: matching, multiple choice, gap-fills, error correction, sentence transformation, unscrambling, a dialogue, and a short reading passage.</p>
+      <p>Work through the sections in order, pressing <strong>Check</strong> when you're ready. There's no time limit — take it at your own pace.</p>
+      <div class="stat-row">
+        <span class="stat-chip">9 sections</span>
+        <span class="stat-chip">43 items</span>
+        <span class="stat-chip">13 target words</span>
+        <span class="stat-chip">Instant feedback</span>
+      </div>
+      <button class="btn btn-primary" onclick="beginTest()">Begin the test</button>
+    </div>
+  </div>
+
+  <!-- TEST BODY -->
+  <div id="test-body">
+
+    <!-- SECTION 1 — MATCHING -->
+    <div class="card" id="sec-matching">
+      <div class="sec-head">
+        <span class="sec-num">1</span>
+        <div class="sec-title-wrap">
+          <div class="sec-title">Match the Word to Its Meaning <span class="done-badge" id="bd-matching">&#10003; Done</span></div>
+          <div class="sec-sub">Matching &middot; 8 items</div>
+        </div>
+      </div>
+      <div class="instr">Click a word on the left, then click its definition on the right. Match all 8 pairs.</div>
+      <div class="match-grid">
+        <div class="m-col" id="mw-col"></div>
+        <div class="m-col" id="md-col"></div>
+      </div>
+      <div class="sec-total" id="tot-matching"></div>
+    </div>
+
+    <!-- SECTION 2 — MULTIPLE CHOICE -->
+    <div class="card" id="sec-mc">
+      <div class="sec-head">
+        <span class="sec-num">2</span>
+        <div class="sec-title-wrap">
+          <div class="sec-title">Choose the Best Word <span class="done-badge" id="bd-mc">&#10003; Done</span></div>
+          <div class="sec-sub">Multiple choice &middot; 6 items</div>
+        </div>
+      </div>
+      <div class="instr">Select the word that best completes each sentence, then press <strong>Check Section</strong>.</div>
+      <div id="mc-container"></div>
+      <div class="btn-row"><button class="btn btn-check" onclick="checkChoiceSection('mc')">Check Section</button></div>
+      <div class="sec-total" id="tot-mc"></div>
+    </div>
+
+    <!-- SECTION 3 — GAP FILL -->
+    <div class="card" id="sec-gap">
+      <div class="sec-head">
+        <span class="sec-num">3</span>
+        <div class="sec-title-wrap">
+          <div class="sec-title">Fill in the Gap <span class="done-badge" id="bd-gap">&#10003; Done</span></div>
+          <div class="sec-sub">Gap fill &middot; 6 items</div>
+        </div>
+      </div>
+      <div class="instr">Type one word or phrase from the target list to complete each sentence.</div>
+      <div id="gap-container"></div>
+      <div class="btn-row"><button class="btn btn-check" onclick="checkTextSection('gap')">Check Section</button></div>
+      <div class="sec-total" id="tot-gap"></div>
+    </div>
+
+    <!-- SECTION 4 — CHOOSE THE CORRECT WORD -->
+    <div class="card" id="sec-choose">
+      <div class="sec-head">
+        <span class="sec-num">4</span>
+        <div class="sec-title-wrap">
+          <div class="sec-title">Choose the Correct Word <span class="done-badge" id="bd-choose">&#10003; Done</span></div>
+          <div class="sec-sub">Two-option choice &middot; 4 items</div>
+        </div>
+      </div>
+      <div class="instr">Two similar-looking words are offered for each gap — pick the one that actually fits.</div>
+      <div id="choose-container"></div>
+      <div class="btn-row"><button class="btn btn-check" onclick="checkChoiceSection('choose')">Check Section</button></div>
+      <div class="sec-total" id="tot-choose"></div>
+    </div>
+
+    <!-- SECTION 5 — ERROR CORRECTION -->
+    <div class="card" id="sec-error">
+      <div class="sec-head">
+        <span class="sec-num">5</span>
+        <div class="sec-title-wrap">
+          <div class="sec-title">Error Correction <span class="done-badge" id="bd-error">&#10003; Done</span></div>
+          <div class="sec-sub">Find and fix the mistake &middot; 3 items</div>
+        </div>
+      </div>
+      <div class="instr">Each sentence has one grammar mistake. Type the full corrected sentence.</div>
+      <div id="error-container"></div>
+      <div class="btn-row"><button class="btn btn-check" onclick="checkTextSection('error')">Check Section</button></div>
+      <div class="sec-total" id="tot-error"></div>
+    </div>
+
+    <!-- SECTION 6 — SENTENCE TRANSFORMATION -->
+    <div class="card" id="sec-transform">
+      <div class="sec-head">
+        <span class="sec-num">6</span>
+        <div class="sec-title-wrap">
+          <div class="sec-title">Sentence Transformation <span class="done-badge" id="bd-transform">&#10003; Done</span></div>
+          <div class="sec-sub">Rewrite using the target word &middot; 3 items</div>
+        </div>
+      </div>
+      <div class="instr">Rewrite each sentence so it keeps the same meaning, using the word given.</div>
+      <div id="transform-container"></div>
+      <div class="btn-row"><button class="btn btn-check" onclick="checkTextSection('transform')">Check Section</button></div>
+      <div class="sec-total" id="tot-transform"></div>
+    </div>
+
+    <!-- SECTION 7 — UNSCRAMBLE -->
+    <div class="card" id="sec-unscramble">
+      <div class="sec-head">
+        <span class="sec-num">7</span>
+        <div class="sec-title-wrap">
+          <div class="sec-title">Unscramble the Sentence <span class="done-badge" id="bd-unscramble">&#10003; Done</span></div>
+          <div class="sec-sub">Reorder the words &middot; 3 items</div>
+        </div>
+      </div>
+      <div class="instr">Put the words in the correct order and type the full sentence, with a capital letter and full stop.</div>
+      <div id="unscramble-container"></div>
+      <div class="btn-row"><button class="btn btn-check" onclick="checkTextSection('unscramble')">Check Section</button></div>
+      <div class="sec-total" id="tot-unscramble"></div>
+    </div>
+
+    <!-- SECTION 8 — DIALOGUE -->
+    <div class="card" id="sec-dialogue">
+      <div class="sec-head">
+        <span class="sec-num">8</span>
+        <div class="sec-title-wrap">
+          <div class="sec-title">Complete the Dialogue <span class="done-badge" id="bd-dialogue">&#10003; Done</span></div>
+          <div class="sec-sub">Two travellers chatting &middot; 5 gaps</div>
+        </div>
+      </div>
+      <div class="instr">Fill each numbered gap in the conversation with one word or phrase.</div>
+      <div id="dialogue-container"></div>
+      <div class="btn-row"><button class="btn btn-check" onclick="checkTextSectionDialogueImpl()">Check Section</button></div>
+      <div class="sec-total" id="tot-dialogue"></div>
+    </div>
+
+    <!-- SECTION 9 — READING -->
+    <div class="card" id="sec-reading">
+      <div class="sec-head">
+        <span class="sec-num">9</span>
+        <div class="sec-title-wrap">
+          <div class="sec-title">Mini Reading <span class="done-badge" id="bd-reading">&#10003; Done</span></div>
+          <div class="sec-sub">Read the passage, then answer &middot; 5 items</div>
+        </div>
+      </div>
+      <div class="read-box">
+        <h3>&#128646; The Overnight Train to Vienna</h3>
+        <p>For years, the idea of travelling from Amsterdam to Vienna entirely by rail had been <span class="hl">on the back burner</span> for Diane — always a nice idea, never quite booked. This spring, tempted by the <span class="hl">much-heralded</span> new overnight service, she finally went.</p>
+        <p>She had been <span class="hl">hard-pressed</span> to find a ticket in a <span class="hl">seated carriage</span> rather than a couchette, but the extra comfort was worth it. As the train left the city, she felt genuinely <span class="hl">exhilarated</span>, watching the flat fields <span class="hl">whoosh</span> past the window.</p>
+        <p>Somewhere after Innsbruck, the line dipped through <span class="hl">outback towns</span> that most travel guides had completely <span class="hl">overlooked</span> — quiet, unhurried places with <span class="hl">manicured</span> gardens and church bells instead of traffic.</p>
+        <p>She found <span class="hl">lodging</span> for two nights in a <span class="hl">swanky</span> little guesthouse recommended by a fellow passenger, reached by a <span class="hl">handy route</span> just a ten-minute walk from the station. It was, she said, the best decision she'd made in years.</p>
+      </div>
+      <div id="reading-container"></div>
+      <div class="btn-row"><button class="btn btn-check" onclick="checkReadingSection()">Check Section</button></div>
+      <div class="sec-total" id="tot-reading"></div>
+    </div>
+
+    <div class="card" style="text-align:center;">
+      <p style="color:var(--ink-soft); font-size:0.92rem; margin-bottom:16px;">Once you've checked every section above, see your full results below.</p>
+      <button class="btn btn-primary" onclick="showResults()">See My Results</button>
+    </div>
+
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results-screen">
+    <div class="card">
+      <div class="score-hero">
+        <div class="big" id="final-score">0<span>/43</span></div>
+        <div class="tier" id="final-tier"></div>
+      </div>
+      <div class="breakdown">
+        <div class="bd-item vocab"><div class="label">Vocabulary</div><div class="val" id="bd-vocab-score">0/34</div></div>
+        <div class="bd-item grammar"><div class="label">Grammar</div><div class="val" id="bd-grammar-score">0/9</div></div>
+        <div class="bd-item overall"><div class="label">Percentage</div><div class="val" id="bd-pct">0%</div></div>
+      </div>
+      <div class="review-box">
+        <h4>Where to focus next</h4>
+        <ul id="review-list"></ul>
+      </div>
+      <div class="motivate" id="motivate-msg"></div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="restartTest()" style="flex:1;">Restart test</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>Nine exercises &middot; 13 target expressions &middot; <a href="index.html">Back to all materials</a></footer>
+</div>
+
+<div id="confetti-layer"></div>
+
+<script>
+/* ============================================================
+   DATA
+   ============================================================ */
+
+const MATCH_PAIRS = [
+  { id:'backburner', word:'on the back burner', def:'not being dealt with right now, but might be later' },
+  { id:'heralded', word:'much-heralded', def:'announced and talked about with excitement in advance' },
+  { id:'hardpressed', word:'hard-pressed', def:'finding something very difficult to do; under pressure' },
+  { id:'principality', word:'principality', def:'a small country or territory ruled by a prince' },
+  { id:'whoosh', word:'whoosh', def:'the sound of something moving fast through the air' },
+  { id:'swanky', word:'swanky', def:'stylish and expensive-looking (informal)' },
+  { id:'manicured', word:'manicured', def:'very neatly trimmed and cared for, like a garden' },
+  { id:'handyroute', word:'a handy route', def:'a convenient, practical way of getting somewhere' }
+];
+
+const MC_QUESTIONS = [
+  { prompt:"After months of ______ preparation, the new high-speed line to Lisbon finally opened.",
+    options:['much-heralded','overlooked','hard-pressed','manicured'], correct:0,
+    explanation:"Much-heralded describes something that was widely announced and talked about before it happened." },
+  { prompt:"We booked a ______ instead of standing in the corridor for six hours.",
+    options:['seated carriage','outback town','principality','lodging'], correct:0,
+    explanation:"A seated carriage is a train car with proper seats, as opposed to standing room." },
+  { prompt:"Watching the countryside blur past, she felt completely ______.",
+    options:['overlooked','exhilarated','hard-pressed','swanky'], correct:1,
+    explanation:"Exhilarated means extremely excited and full of energy — the natural reaction to a thrilling journey." },
+  { prompt:"The small ______ of Monaco is famous for its casino and Grand Prix.",
+    options:['principality','lodging','outback town','route'], correct:0,
+    explanation:"A principality is a small state ruled by a prince — exactly what Monaco is." },
+  { prompt:"The little station had been completely ______ by tourists, who preferred the bigger cities.",
+    options:['whooshed','manicured','overlooked','hard-pressed'], correct:2,
+    explanation:"Overlooked means not noticed or not given attention — the station was missed by most visitors." },
+  { prompt:"Between Vienna and Budapest, the train took a ______ that avoided three changes.",
+    options:['handy route','swanky lodging','back burner','principality'], correct:0,
+    explanation:"A handy route is a convenient, practical way of travelling somewhere." }
+];
+
+const GAP_QUESTIONS = [
+  { before:"The renovation of the old station has been put ", after:" because of budget cuts.",
+    answers:["on the back burner"], display:"on the back burner",
+    explanation:"'Put something on the back burner' means to delay it or stop treating it as a priority." },
+  { before:"By evening they were ", after:" to find a hotel with any rooms left.",
+    answers:["hard-pressed","hard pressed"], display:"hard-pressed",
+    explanation:"Hard-pressed means finding something very difficult to do, often under time pressure." },
+  { before:"The train ", after:" past the platform without stopping.",
+    answers:["whooshed"], display:"whooshed",
+    explanation:"Whoosh can be used as a verb — 'whooshed past' describes something moving quickly with that sound." },
+  { before:"Our ", after:" for the night was a small guesthouse near the station.",
+    answers:["lodging"], display:"lodging",
+    explanation:"Lodging is a general word for a temporary place to stay, like a guesthouse or hotel." },
+  { before:"The gardens outside the palace were perfectly ", after:".",
+    answers:["manicured"], display:"manicured",
+    explanation:"Manicured describes something (usually grass or gardens) that is very neatly trimmed and cared for." },
+  { before:"Beyond the city, the line passed through quiet ", after:" with only one train a day.",
+    answers:["outback towns"], display:"outback towns",
+    explanation:"Outback towns are small, remote settlements far from major cities." }
+];
+
+const CHOOSE_QUESTIONS = [
+  { prompt:"The new carriages looked ______ compared to the old ones.",
+    options:['swanky','shabby'], correct:0,
+    explanation:"Swanky means stylish and expensive-looking — the natural contrast with 'old, worn-out carriages'." },
+  { prompt:"The tiny village had been completely ______ by the guidebooks.",
+    options:['overworked','overlooked'], correct:1,
+    explanation:"Overlooked means not noticed; 'overworked' describes a person who works too hard, which doesn't fit a village." },
+  { prompt:"Staff were ______ to keep up with demand during the holidays.",
+    options:['hard-working','hard-pressed'], correct:1,
+    explanation:"Hard-pressed means struggling under pressure to manage something; hard-working describes a general character trait, not this situation." },
+  { prompt:"The station gardens were beautifully ______.",
+    options:['manufactured','manicured'], correct:1,
+    explanation:"Manicured describes neatly trimmed greenery; manufactured means industrially produced, which doesn't fit gardens." }
+];
+
+const ERROR_QUESTIONS = [
+  { orig:"The project have been on the back burner since March.",
+    answers:["the project has been on the back burner since march"],
+    display:"The project has been on the back burner since March.",
+    explanation:"The subject 'the project' is singular, so it needs 'has', not 'have'." },
+  { orig:"She was exhilarating when the train left the station.",
+    answers:["she was exhilarated when the train left the station"],
+    display:"She was exhilarated when the train left the station.",
+    explanation:"To describe how a person feels, we use the -ed adjective 'exhilarated', not 'exhilarating' (which describes the cause)." },
+  { orig:"We stay in a swanky hotel last night.",
+    answers:["we stayed in a swanky hotel last night"],
+    display:"We stayed in a swanky hotel last night.",
+    explanation:"'Last night' signals the past simple, so the verb must be 'stayed', not 'stay'." }
+];
+
+const TRANSFORM_QUESTIONS = [
+  { orig:"They decided not to deal with the issue for now.", word:"on the back burner",
+    answers:["they put the issue on the back burner","they decided to put the issue on the back burner","they've put the issue on the back burner"],
+    display:"They put the issue on the back burner.",
+    explanation:"'Put something on the back burner' is the idiomatic way to say a decision has been delayed." },
+  { orig:"The hotel was very stylish and expensive-looking.", word:"swanky",
+    answers:["the hotel was swanky"],
+    display:"The hotel was swanky.",
+    explanation:"Swanky already carries the meaning of 'stylish and expensive-looking', so it replaces both adjectives." },
+  { orig:"Nobody noticed the small village on the map.", word:"overlooked",
+    answers:["the small village was overlooked on the map","the small village on the map was overlooked"],
+    display:"The small village was overlooked on the map.",
+    explanation:"Overlooked (passive) means 'not noticed', matching the meaning of the original sentence." }
+];
+
+const UNSCRAMBLE_QUESTIONS = [
+  { words:"carriage / seated / booked / a / We", answers:["we booked a seated carriage"],
+    display:"We booked a seated carriage.",
+    explanation:"Subject + verb + article + adjective + noun: 'We booked a seated carriage.'" },
+  { words:"route / found / handy / a / They", answers:["they found a handy route"],
+    display:"They found a handy route.",
+    explanation:"Subject + verb + article + adjective + noun: 'They found a handy route.'" },
+  { words:"outback / passed / through / towns / The train", answers:["the train passed through outback towns"],
+    display:"The train passed through outback towns.",
+    explanation:"Subject + verb + preposition + adjective + noun: 'The train passed through outback towns.'" }
+];
+
+const DIALOGUE_LINES = [
+  { speaker:'A', text:"So, tell me about the trip — how was the new line to Vienna?" },
+  { speaker:'B', text:"It was __GAP1__ in the papers for months, so I expected it to be busy." },
+  { speaker:'A', text:"Was it?" },
+  { speaker:'B', text:"Very! We were glad we'd booked a __GAP2__ instead of standing." },
+  { speaker:'A', text:"Did you stop anywhere interesting?" },
+  { speaker:'B', text:"We passed through the tiny __GAP3__ of Liechtenstein — I didn't even realise it was there until the guide mentioned it." },
+  { speaker:'A', text:"And the scenery?" },
+  { speaker:'B', text:"Beautiful! The train just __GAP4__ past these little villages with perfectly kept, __GAP5__ gardens." }
+];
+const DIALOGUE_GAPS = [
+  { id:'GAP1', answers:["much-heralded"], display:"much-heralded", explanation:"Much-heralded means it was widely announced and anticipated in advance." },
+  { id:'GAP2', answers:["seated carriage"], display:"seated carriage", explanation:"A seated carriage is a train car with proper seats." },
+  { id:'GAP3', answers:["principality"], display:"principality", explanation:"Liechtenstein is a principality — a small state ruled by a prince." },
+  { id:'GAP4', answers:["whooshed"], display:"whooshed", explanation:"Whooshed (past tense) describes the quick, rushing sound of the train passing by." },
+  { id:'GAP5', answers:["manicured"], display:"manicured", explanation:"Manicured describes neatly trimmed, well-cared-for gardens." }
+];
+
+const READING_QUESTIONS = [
+  { type:'mc', prompt:"What does \u201con the back burner\u201d mean in this context?",
+    options:["Forgotten completely and never done","Planned, but kept delayed and never carried out","Officially cancelled","Too expensive to consider"], correct:1,
+    explanation:"On the back burner describes a plan that keeps being postponed rather than acted on." },
+  { type:'tf', prompt:"Diane travelled in a couchette rather than a seated carriage.",
+    options:["True","False"], correct:1,
+    explanation:"The passage says she was hard-pressed to find a ticket in a seated carriage rather than a couchette — so she did travel in a seated carriage." },
+  { type:'mc', prompt:"Why had most guidebooks overlooked the outback towns on the route?",
+    options:["They were considered dangerous","They were quiet, unremarkable places off the usual tourist path","They had no railway station at all","They were too expensive to visit"], correct:1,
+    explanation:"The text describes them as 'quiet, unhurried places' — the kind of places guidebooks tend to skip." },
+  { type:'gap', prompt:"Diane felt genuinely ______ as the train left the city.",
+    answers:["exhilarated"], display:"exhilarated",
+    explanation:"The passage states she 'felt genuinely exhilarated' as the journey began." },
+  { type:'mc', prompt:"What kind of place did Diane stay in?",
+    options:["A swanky little guesthouse","A youth hostel","A campsite","A sleeper carriage"], correct:0,
+    explanation:"The passage says she found lodging in 'a swanky little guesthouse'." }
+];
+
+/* ============================================================
+   STATE
+   ============================================================ */
+const sectionIds = ['matching','mc','gap','choose','error','transform','unscramble','dialogue','reading'];
+const sectionMeta = {
+  matching:  { total:8,  skill:'vocab'   },
+  mc:        { total:6,  skill:'vocab'   },
+  gap:       { total:6,  skill:'vocab'   },
+  choose:    { total:4,  skill:'vocab'   },
+  error:     { total:3,  skill:'grammar' },
+  transform: { total:3,  skill:'grammar' },
+  unscramble:{ total:3,  skill:'grammar' },
+  dialogue:  { total:5,  skill:'vocab'   },
+  reading:   { total:5,  skill:'vocab'   }
+};
+const sectionScore = {};
+const sectionDone = {};
+sectionIds.forEach(k => { sectionScore[k] = 0; sectionDone[k] = false; });
+
+let matchCount = 0, mSelW = null, mSelD = null;
+
+function norm(s){
+  return s.toLowerCase()
+    .replace(/[\u2018\u2019\u201C\u201D]/g,"'")
+    .replace(/[-\u2013\u2014]/g," ")
+    .replace(/[^\w\s]/g,'')
+    .replace(/\s+/g,' ')
+    .trim();
+}
+
+function updateTopbar(){
+  const doneCount = sectionIds.filter(k => sectionDone[k]).length;
+  document.getElementById('tb-fill').style.width = (doneCount/sectionIds.length*100) + '%';
+  document.getElementById('tb-label').textContent = doneCount + ' of ' + sectionIds.length + ' sections';
+}
+
+function markSectionDone(key){
+  sectionDone[key] = true;
+  const b = document.getElementById('bd-' + key);
+  if(b) b.classList.add('on');
+  updateTopbar();
+}
+
+/* ============================================================
+   START / NAV
+   ============================================================ */
+function beginTest(){
+  document.getElementById('start-screen').style.display = 'none';
+  document.getElementById('test-body').classList.add('active');
+  renderMatching();
+  renderChoiceSection('mc', MC_QUESTIONS, 'mc-container');
+  renderTextSection('gap', GAP_QUESTIONS, 'gap-container', 'gap');
+  renderChoiceSection('choose', CHOOSE_QUESTIONS, 'choose-container', true);
+  renderTextSection('error', ERROR_QUESTIONS, 'error-container', 'error');
+  renderTextSection('transform', TRANSFORM_QUESTIONS, 'transform-container', 'transform');
+  renderTextSection('unscramble', UNSCRAMBLE_QUESTIONS, 'unscramble-container', 'unscramble');
+  renderDialogue();
+  renderReading();
+  window.scrollTo({top:0, behavior:'instant'});
+}
+
+/* ============================================================
+   SECTION 1 — MATCHING
+   ============================================================ */
+function renderMatching(){
+  const shuffledWords = [...MATCH_PAIRS].sort(() => Math.random()-0.5);
+  const shuffledDefs = [...MATCH_PAIRS].sort(() => Math.random()-0.5);
+  const wCol = document.getElementById('mw-col');
+  const dCol = document.getElementById('md-col');
+  wCol.innerHTML = shuffledWords.map(p => '<div class="m-w" data-id="'+p.id+'">'+p.word+'</div>').join('');
+  dCol.innerHTML = shuffledDefs.map(p => '<div class="m-d" data-id="'+p.id+'">'+p.def+'</div>').join('');
+  bindMatch();
+}
+function bindMatch(){
+  document.querySelectorAll('.m-w').forEach(el=>{
+    el.onclick = function(){
+      if(this.dataset.matched) return;
+      document.querySelectorAll('.m-w.sel').forEach(e=>e.classList.remove('sel'));
+      this.classList.add('sel'); mSelW = this;
+      if(mSelD) tryMatchPair();
+    };
+  });
+  document.querySelectorAll('.m-d').forEach(el=>{
+    el.onclick = function(){
+      if(this.dataset.matched) return;
+      document.querySelectorAll('.m-d.sel').forEach(e=>e.classList.remove('sel'));
+      this.classList.add('sel'); mSelD = this;
+      if(mSelW) tryMatchPair();
+    };
+  });
+}
+function tryMatchPair(){
+  const tot = document.getElementById('tot-matching');
+  if(mSelW.dataset.id === mSelD.dataset.id){
+    mSelW.classList.add('matched'); mSelW.dataset.matched = '1'; mSelW.classList.remove('sel');
+    mSelD.classList.add('matched'); mSelD.dataset.matched = '1'; mSelD.classList.remove('sel');
+    matchCount++;
+    sectionScore.matching = matchCount;
+    tot.className = 'sec-total show ok';
+    if(matchCount === MATCH_PAIRS.length){
+      tot.textContent = '\u2713 All 8 pairs matched correctly!';
+      markSectionDone('matching');
+    } else {
+      tot.textContent = matchCount + ' / 8 matched so far.';
+    }
+  } else {
+    tot.className = 'sec-total show bad';
+    tot.textContent = 'Not a match — try again.';
+    const sw = mSelW, sd = mSelD;
+    sw.classList.add('flash'); sd.classList.add('flash');
+    setTimeout(()=>{ sw.classList.remove('flash','sel'); sd.classList.remove('flash','sel'); }, 350);
+  }
+  mSelW = null; mSelD = null;
+}
+
+/* ============================================================
+   CHOICE SECTIONS (MC + choose-the-word)
+   ============================================================ */
+const choiceState = {};
+function renderChoiceSection(key, questions, containerId, narrow){
+  choiceState[key] = new Array(questions.length).fill(null);
+  const el = document.getElementById(containerId);
+  el.innerHTML = questions.map((q, i) => {
+    const opts = q.options.map((opt, j) =>
+      '<button class="opt-btn" data-q="'+i+'" data-o="'+j+'" onclick="selectChoice(\''+key+'\','+i+','+j+')">'+
+        '<span class="lt">'+String.fromCharCode(65+j)+'</span><span>'+opt+'</span>'+
+      '</button>'
+    ).join('');
+    return '<div class="q-block" id="'+key+'-q'+i+'">'+
+      '<div class="q-prompt"><span class="qn">Item '+(i+1)+'</span>'+q.prompt+'</div>'+
+      '<div class="opts'+(narrow?' opts-2col-narrow':'')+'">'+opts+'</div>'+
+      '<div class="q-fb" id="'+key+'-fb'+i+'"><span class="verdict"></span><span class="fbtext"></span></div>'+
+    '</div>';
+  }).join('');
+}
+function selectChoice(key, qIndex, oIndex){
+  if(sectionDone[key]) return;
+  choiceState[key][qIndex] = oIndex;
+  const block = document.getElementById(key+'-q'+qIndex);
+  block.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+  block.querySelector('[data-o="'+oIndex+'"]').classList.add('selected');
+}
+function checkChoiceSection(key){
+  const questions = key === 'mc' ? MC_QUESTIONS : CHOOSE_QUESTIONS;
+  let correct = 0;
+  questions.forEach((q, i) => {
+    const block = document.getElementById(key+'-q'+i);
+    const sel = choiceState[key][i];
+    const fb = document.getElementById(key+'-fb'+i);
+    const isCorrect = sel === q.correct;
+    if(isCorrect) correct++;
+    block.querySelectorAll('.opt-btn').forEach((b) => {
+      const j = parseInt(b.dataset.o);
+      b.classList.add('locked');
+      if(j === q.correct) b.classList.add('is-correct');
+      else if(j === sel) b.classList.add('is-wrong');
+      else b.classList.add('is-muted');
+    });
+    fb.classList.add('show', isCorrect ? 'ok' : 'bad');
+    fb.querySelector('.verdict').textContent = sel === null ? 'Not answered' : (isCorrect ? 'Correct' : 'Not quite');
+    fb.querySelector('.fbtext').textContent = q.explanation;
+  });
+  sectionScore[key] = correct;
+  const tot = document.getElementById('tot-' + key);
+  tot.className = 'sec-total show ' + (correct === questions.length ? 'ok' : correct >= questions.length/2 ? 'mid' : 'bad');
+  tot.textContent = 'Section score: ' + correct + ' / ' + questions.length;
+  markSectionDone(key);
+}
+
+/* ============================================================
+   TEXT-INPUT SECTIONS (gap, error, transform, unscramble)
+   ============================================================ */
+function renderTextSection(key, questions, containerId, type){
+  const el = document.getElementById(containerId);
+  if(type === 'gap'){
+    el.innerHTML = questions.map((q,i) =>
+      '<div class="q-block">'+
+        '<div class="fill-row"><span class="qn" style="display:block;width:100%;font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;">Item '+(i+1)+'</span>'+
+        q.before+'<input type="text" class="gap-in" id="gap-in'+i+'" placeholder="&hellip;">'+q.after+'</div>'+
+        '<div class="item-fb" id="gap-fb'+i+'"></div>'+
+      '</div>'
+    ).join('');
+  } else if(type === 'error'){
+    el.innerHTML = questions.map((q,i) =>
+      '<div class="q-block">'+
+        '<div class="qn" style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Item '+(i+1)+'</div>'+
+        '<div class="orig-line">&#10060; \u201C'+q.orig+'\u201D</div>'+
+        '<input type="text" class="full-in" id="error-in'+i+'" placeholder="Write the correct sentence&hellip;">'+
+        '<div class="item-fb" id="error-fb'+i+'"></div>'+
+      '</div>'
+    ).join('');
+  } else if(type === 'transform'){
+    el.innerHTML = questions.map((q,i) =>
+      '<div class="q-block">'+
+        '<div class="qn" style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Item '+(i+1)+' &middot; use: <strong style="color:var(--brass);">'+q.word+'</strong></div>'+
+        '<div class="orig-line">\u201C'+q.orig+'\u201D</div>'+
+        '<input type="text" class="full-in" id="transform-in'+i+'" placeholder="Rewrite the sentence&hellip;">'+
+        '<div class="item-fb" id="transform-fb'+i+'"></div>'+
+      '</div>'
+    ).join('');
+  } else if(type === 'unscramble'){
+    el.innerHTML = questions.map((q,i) =>
+      '<div class="q-block">'+
+        '<div class="qn" style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Item '+(i+1)+'</div>'+
+        '<div class="orig-line">'+q.words+'</div>'+
+        '<input type="text" class="full-in" id="unscramble-in'+i+'" placeholder="Write the full sentence&hellip;">'+
+        '<div class="item-fb" id="unscramble-fb'+i+'"></div>'+
+      '</div>'
+    ).join('');
+  }
+}
+function checkTextSection(key){
+  let questions, prefix;
+  if(key === 'gap'){ questions = GAP_QUESTIONS; prefix = 'gap'; }
+  else if(key === 'error'){ questions = ERROR_QUESTIONS; prefix = 'error'; }
+  else if(key === 'transform'){ questions = TRANSFORM_QUESTIONS; prefix = 'transform'; }
+  else if(key === 'unscramble'){ questions = UNSCRAMBLE_QUESTIONS; prefix = 'unscramble'; }
+  let correct = 0;
+  questions.forEach((q,i) => {
+    const inp = document.getElementById(prefix+'-in'+i);
+    const fb = document.getElementById(prefix+'-fb'+i);
+    const val = norm(inp.value);
+    const isCorrect = q.answers.some(a => norm(a) === val) && val.length > 0;
+    if(isCorrect){
+      correct++;
+      inp.className = inp.className.replace(/\s*(ok|bad)/g,'') + ' ok';
+      fb.className = 'item-fb show ok';
+      fb.textContent = '\u2713 Correct. ' + q.explanation;
+    } else {
+      inp.className = inp.className.replace(/\s*(ok|bad)/g,'') + ' bad';
+      fb.className = 'item-fb show bad';
+      fb.innerHTML = '\u2717 Correct answer: <strong>' + q.display + '</strong> &mdash; ' + q.explanation;
+    }
+  });
+  sectionScore[key] = correct;
+  const tot = document.getElementById('tot-' + key);
+  tot.className = 'sec-total show ' + (correct === questions.length ? 'ok' : correct >= questions.length/2 ? 'mid' : 'bad');
+  tot.textContent = 'Section score: ' + correct + ' / ' + questions.length;
+  markSectionDone(key);
+}
+
+/* ============================================================
+   SECTION 8 — DIALOGUE
+   ============================================================ */
+function renderDialogue(){
+  const el = document.getElementById('dialogue-container');
+  let gapIdx = 0;
+  const html = DIALOGUE_LINES.map(line => {
+    let text = line.text;
+    DIALOGUE_GAPS.forEach((g) => {
+      if(text.indexOf('__'+g.id+'__') !== -1){
+        const num = gapIdx + 1;
+        text = text.replace('__'+g.id+'__', '<input type="text" class="gap-in" style="width:150px;" id="dlg-in'+gapIdx+'" placeholder="'+num+'">');
+        gapIdx++;
+      }
+    });
+    return '<div class="fill-row"><strong style="color:var(--brass);font-family:var(--font-mono);font-size:0.85rem;">'+line.speaker+':</strong> '+text+'</div>';
+  }).join('');
+  el.innerHTML = html + '<div id="dialogue-fb-wrap" style="margin-top:14px;"></div>';
+}
+function checkTextSectionDialogueImpl(){
+  let correct = 0;
+  const fbWrap = document.getElementById('dialogue-fb-wrap');
+  let fbHtml = '';
+  DIALOGUE_GAPS.forEach((g, i) => {
+    const inp = document.getElementById('dlg-in'+i);
+    const val = norm(inp.value);
+    const isCorrect = g.answers.some(a => norm(a) === val) && val.length > 0;
+    if(isCorrect){
+      correct++;
+      inp.className = inp.className.replace(/\s*(ok|bad)/g,'') + ' ok';
+      fbHtml += '<div class="item-fb show ok">\u2713 Gap '+(i+1)+': Correct. '+g.explanation+'</div>';
+    } else {
+      inp.className = inp.className.replace(/\s*(ok|bad)/g,'') + ' bad';
+      fbHtml += '<div class="item-fb show bad">\u2717 Gap '+(i+1)+': Correct answer &mdash; <strong>'+g.display+'</strong>. '+g.explanation+'</div>';
+    }
+  });
+  fbWrap.innerHTML = fbHtml;
+  sectionScore.dialogue = correct;
+  const tot = document.getElementById('tot-dialogue');
+  tot.className = 'sec-total show ' + (correct === DIALOGUE_GAPS.length ? 'ok' : correct >= DIALOGUE_GAPS.length/2 ? 'mid' : 'bad');
+  tot.textContent = 'Section score: ' + correct + ' / ' + DIALOGUE_GAPS.length;
+  markSectionDone('dialogue');
+}
+
+/* ============================================================
+   SECTION 9 — READING
+   ============================================================ */
+const readingState = new Array(READING_QUESTIONS.length).fill(null);
+function renderReading(){
+  const el = document.getElementById('reading-container');
+  el.innerHTML = READING_QUESTIONS.map((q, i) => {
+    if(q.type === 'gap'){
+      return '<div class="q-block">'+
+        '<div class="q-prompt"><span class="qn">Item '+(i+1)+'</span>'+q.prompt.replace('______','<input type="text" class="gap-in" id="read-gap'+i+'">')+'</div>'+
+        '<div class="q-fb" id="read-fb'+i+'"><span class="verdict"></span><span class="fbtext"></span></div>'+
+      '</div>';
+    }
+    const opts = q.options.map((opt,j) =>
+      '<button class="opt-btn" data-q="'+i+'" data-o="'+j+'" onclick="selectReadingChoice('+i+','+j+')">'+
+        '<span class="lt">'+String.fromCharCode(65+j)+'</span><span>'+opt+'</span>'+
+      '</button>'
+    ).join('');
+    return '<div class="q-block" id="read-q'+i+'">'+
+      '<div class="q-prompt"><span class="qn">Item '+(i+1)+'</span>'+q.prompt+'</div>'+
+      '<div class="opts'+(q.type==='tf'?' opts-2col-narrow':'')+'">'+opts+'</div>'+
+      '<div class="q-fb" id="read-fb'+i+'"><span class="verdict"></span><span class="fbtext"></span></div>'+
+    '</div>';
+  }).join('');
+}
+function selectReadingChoice(qIndex, oIndex){
+  if(sectionDone.reading) return;
+  readingState[qIndex] = oIndex;
+  const block = document.getElementById('read-q'+qIndex);
+  block.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+  block.querySelector('[data-o="'+oIndex+'"]').classList.add('selected');
+}
+function checkReadingSection(){
+  let correct = 0;
+  READING_QUESTIONS.forEach((q, i) => {
+    const fb = document.getElementById('read-fb'+i);
+    if(q.type === 'gap'){
+      const inp = document.getElementById('read-gap'+i);
+      const val = norm(inp.value);
+      const isCorrect = q.answers.some(a => norm(a) === val) && val.length > 0;
+      if(isCorrect) correct++;
+      inp.className = 'gap-in ' + (isCorrect ? 'ok' : 'bad');
+      fb.classList.add('show', isCorrect ? 'ok' : 'bad');
+      fb.querySelector('.verdict').textContent = isCorrect ? 'Correct' : ('Correct answer: ' + q.display);
+      fb.querySelector('.fbtext').textContent = q.explanation;
+    } else {
+      const block = document.getElementById('read-q'+i);
+      const sel = readingState[i];
+      const isCorrect = sel === q.correct;
+      if(isCorrect) correct++;
+      block.querySelectorAll('.opt-btn').forEach((b) => {
+        const j = parseInt(b.dataset.o);
+        b.classList.add('locked');
+        if(j === q.correct) b.classList.add('is-correct');
+        else if(j === sel) b.classList.add('is-wrong');
+        else b.classList.add('is-muted');
+      });
+      fb.classList.add('show', isCorrect ? 'ok' : 'bad');
+      fb.querySelector('.verdict').textContent = sel === null ? 'Not answered' : (isCorrect ? 'Correct' : 'Not quite');
+      fb.querySelector('.fbtext').textContent = q.explanation;
+    }
+  });
+  sectionScore.reading = correct;
+  const tot = document.getElementById('tot-reading');
+  tot.className = 'sec-total show ' + (correct === READING_QUESTIONS.length ? 'ok' : correct >= READING_QUESTIONS.length/2 ? 'mid' : 'bad');
+  tot.textContent = 'Section score: ' + correct + ' / ' + READING_QUESTIONS.length;
+  markSectionDone('reading');
+}
+
+/* ============================================================
+   RESULTS
+   ============================================================ */
+function showResults(){
+  let totalScore = 0, totalItems = 0, vocabScore = 0, vocabTotal = 0, grammarScore = 0, grammarTotal = 0;
+  sectionIds.forEach(k => {
+    const meta = sectionMeta[k];
+    totalItems += meta.total;
+    totalScore += sectionScore[k];
+    if(meta.skill === 'vocab'){ vocabTotal += meta.total; vocabScore += sectionScore[k]; }
+    else { grammarTotal += meta.total; grammarScore += sectionScore[k]; }
+  });
+
+  const pct = Math.round((totalScore/totalItems)*100);
+
+  document.getElementById('final-score').innerHTML = totalScore + '<span>/' + totalItems + '</span>';
+  document.getElementById('bd-vocab-score').textContent = vocabScore + '/' + vocabTotal;
+  document.getElementById('bd-grammar-score').textContent = grammarScore + '/' + grammarTotal;
+  document.getElementById('bd-pct').textContent = pct + '%';
+
+  let band, motivate;
+  if(pct >= 90){ band = 'Outstanding — this vocabulary is fully at your command.'; motivate = "Wonderful work! These words are clearly yours now — well done, Study Buddy."; }
+  else if(pct >= 75){ band = 'Excellent — a strong, confident grasp of the target language.'; motivate = "Really solid progress — just a few fine details left to polish."; }
+  else if(pct >= 60){ band = 'Good — the core vocabulary has settled in, with some gaps to tidy up.'; motivate = "Good, steady progress. A little more review and this will all feel automatic."; }
+  else if(pct >= 40){ band = 'Needs revision — several expressions still need more practice.'; motivate = "A useful check-in — let's go over the trickier words together next lesson."; }
+  else { band = 'Review required — worth revisiting this set of words from the start.'; motivate = "No worries at all — we'll go through these words again, one at a time."; }
+  document.getElementById('final-tier').textContent = band;
+  document.getElementById('motivate-msg').textContent = motivate;
+
+  const weakSections = sectionIds.filter(k => sectionScore[k] < sectionMeta[k].total);
+  const sectionLabels = {
+    matching:'Word meanings (matching)', mc:'Choosing the right word in context', gap:'Gap-fill usage',
+    choose:'Distinguishing near-confusable words', error:'Grammar accuracy around the vocabulary',
+    transform:'Rewriting sentences with the target word', unscramble:'Word order with the target phrases',
+    dialogue:'Using the vocabulary in natural conversation', reading:'Understanding the vocabulary in context'
+  };
+  const reviewList = document.getElementById('review-list');
+  if(weakSections.length === 0){
+    reviewList.innerHTML = '<li>No specific weak spots — every section was completed perfectly. Time for new vocabulary!</li>';
+  } else {
+    reviewList.innerHTML = weakSections.map(k =>
+      '<li><strong>' + sectionLabels[k] + ':</strong> ' + sectionScore[k] + '/' + sectionMeta[k].total + ' correct.</li>'
+    ).join('');
+  }
+
+  document.getElementById('test-body').classList.remove('active');
+  document.getElementById('results-screen').classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+
+  if(pct >= 90) launchConfetti();
+}
+
+function restartTest(){
+  location.reload();
+}
+
+/* ============================================================
+   CONFETTI
+   ============================================================ */
+function launchConfetti(){
+  const layer = document.getElementById('confetti-layer');
+  const colors = ['#A8762E','#2C5F61','#6C4E7A','#3C6E4D'];
+  for(let i=0;i<70;i++){
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    const size = 6 + Math.random()*6;
+    p.style.width = size+'px';
+    p.style.height = (size*0.4)+'px';
+    p.style.left = Math.random()*100+'vw';
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.style.transform = 'rotate('+(Math.random()*360)+'deg)';
+    const duration = 2.6 + Math.random()*1.8;
+    const delay = Math.random()*0.6;
+    p.style.animation = 'fall '+duration+'s ease-in '+delay+'s forwards';
+    layer.appendChild(p);
+    setTimeout(()=>p.remove(), (duration+delay)*1000+200);
+  }
+}
+const styleTag = document.createElement('style');
+styleTag.textContent = '@keyframes fall{ to{ transform:translateY(105vh) rotate(360deg); opacity:0.4; } }';
+document.head.appendChild(styleTag);
+</script>
+</body>
+</html>
