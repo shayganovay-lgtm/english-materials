@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Interactive English lesson: prepare a Senior Software Developer for an international HR interview (Cyprus). CEFR A2-B1.">
+<title>Interview English · Senior Developer · Cyprus</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<style>
+:root{
+  --bg:#F9F8F6; --surface:#FFFFFF; --ink:#1C1917; --muted:#79716B;
+  --border:#E8E4DF; --accent:#2451CC; --accent-soft:rgba(36,81,204,0.10);
+  --good:#0A8F65; --good-bg:rgba(10,143,101,0.10);
+  --warn:#B45309; --warn-bg:rgba(180,83,9,0.10);
+  --bad:#B23A3A; --bad-bg:rgba(178,58,58,0.10);
+  --radius:14px; --radius-sm:9px;
+  --f-serif:Georgia,'Times New Roman',serif;
+  --f-sans:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  --f-mono:ui-monospace,'SF Mono','Cascadia Code','Fira Mono','Courier New',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,textarea{font-family:inherit;font-size:inherit}
+a{color:var(--accent)}
+
+/* TOP BAR */
+.topbar{position:sticky;top:0;z-index:60;background:rgba(249,248,246,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.topbar-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px clamp(16px,4vw,40px)}
+.brand{font-family:var(--f-serif);font-weight:bold;font-size:15px;letter-spacing:-.01em;text-decoration:none;color:var(--ink)}
+.brand em{font-style:normal;color:var(--accent)}
+.progress-wrap{flex:1;max-width:520px;display:flex;align-items:center;gap:10px}
+.progress-track{flex:1;height:7px;background:var(--border);border-radius:99px;overflow:hidden}
+.progress-fill{height:100%;width:0%;background:var(--accent);border-radius:99px;transition:width .4s ease}
+.progress-txt{font-family:var(--f-mono);font-size:11px;color:var(--muted);white-space:nowrap}
+.menu-btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);background:var(--surface);border-radius:99px;padding:6px 12px;font-size:12px;color:var(--muted)}
+.menu-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* SECTION PILLS (menu drawer) */
+.drawer{position:fixed;inset:0 0 0 auto;width:min(380px,86vw);background:var(--surface);border-left:1px solid var(--border);box-shadow:-12px 0 40px rgba(0,0,0,.08);transform:translateX(100%);transition:transform .3s ease;z-index:70;overflow-y:auto;padding:18px 18px 40px}
+.drawer.open{transform:translateX(0)}
+.drawer-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.drawer h3{font-family:var(--f-serif);font-size:15px}
+.drawer-close{border:1px solid var(--border);border-radius:99px;width:30px;height:30px;font-size:15px;color:var(--muted)}
+.drawer-item{display:flex;align-items:center;gap:10px;padding:11px 12px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;width:100%;text-align:left;font-size:14px}
+.drawer-item:hover{border-color:var(--accent)}
+.drawer-item .num{font-family:var(--f-mono);font-size:11px;color:var(--muted);width:22px}
+.drawer-item .ttl{flex:1}
+.drawer-item .chk{color:var(--good);font-size:14px;opacity:0}
+.drawer-item.done .chk{opacity:1}
+.drawer-item.active{border-color:var(--accent);background:var(--accent-soft)}
+.scrim{position:fixed;inset:0;background:rgba(28,25,23,.4);opacity:0;pointer-events:none;transition:opacity .3s;z-index:65}
+.scrim.show{opacity:1;pointer-events:auto}
+
+/* LAYOUT */
+.wrap{max-width:880px;margin:0 auto;padding:clamp(20px,4vw,40px) clamp(16px,4vw,40px) 80px}
+.section{display:none;animation:fade .35s ease}
+.section.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+.eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.eyebrow::before{content:'';width:16px;height:2px;background:var(--accent);border-radius:2px}
+.s-title{font-family:var(--f-serif);font-size:clamp(26px,4vw,34px);font-weight:bold;line-height:1.1;letter-spacing:-.02em;margin-bottom:10px}
+.s-title em{font-style:normal;color:var(--accent)}
+.s-sub{color:var(--muted);font-size:15px;line-height:1.6;margin-bottom:22px;max-width:60ch}
+.hint{font-size:13px;color:var(--muted);background:var(--surface);border:1px dashed var(--border);border-radius:10px;padding:10px 14px;margin-bottom:18px}
+.hint b{color:var(--ink)}
+
+/* CARDS / CHIPS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;margin-bottom:14px}
+.card.tight{padding:14px 16px}
+.stack>*>*+*{margin-top:14px}
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--accent-soft);color:var(--accent);font-size:13px;font-weight:500;padding:5px 11px;border-radius:99px;margin:0 6px 6px 0}
+.chip.muted{background:var(--bg);color:var(--muted);border:1px solid var(--border)}
+.label{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;display:block}
+.ru{color:var(--muted);font-size:13px;font-style:italic}
+.q{font-family:var(--f-serif);font-size:18px;font-weight:bold;letter-spacing:-.01em}
+.muted{color:var(--muted)}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--border);background:var(--surface);color:var(--ink);border-radius:99px;padding:11px 20px;font-size:14px;font-weight:600;transition:all .16s ease}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{background:#1d3fa8;color:#fff}
+.btn.ghost{background:transparent}
+.btn.sm{padding:7px 13px;font-size:12.5px}
+.nav-row{display:flex;justify-content:space-between;gap:10px;margin-top:30px;padding-top:18px;border-top:1px solid var(--border)}
+
+/* VOCAB CARD (flip) */
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.vcard{border:1px solid var(--border);border-radius:12px;background:var(--surface);overflow:hidden}
+.vface{padding:14px 16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.vword{font-family:var(--f-serif);font-weight:bold;font-size:17px}
+.vplay{border:1px solid var(--border);border-radius:99px;width:30px;height:30px;font-size:13px;color:var(--accent);flex-shrink:0}
+.vplay:hover{background:var(--accent-soft)}
+.vbody{display:none;padding:0 16px 14px;border-top:1px solid var(--border)}
+.vcard.open .vbody{display:block}
+.vcard.open .vchev{transform:rotate(180deg)}
+.vchev{transition:transform .2s;color:var(--muted)}
+.vdef{font-size:14px;margin:10px 0 6px}
+.vex{font-size:13px;color:var(--muted);margin-bottom:6px}
+.vru{font-size:13px;color:var(--accent)}
+
+/* SELECT CARDS (warm-up) */
+.pick-grid{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:560px){.pick-grid{grid-template-columns:1fr 1fr}}
+.pick{display:flex;align-items:center;gap:12px;border:1px solid var(--border);border-radius:11px;padding:12px 14px;background:var(--surface);text-align:left;cursor:pointer;transition:all .15s}
+.pick:hover{border-color:var(--accent)}
+.pick.sel{border-color:var(--accent);background:var(--accent-soft)}
+.pick .dot{width:18px;height:18px;border:2px solid var(--border);border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.pick.sel .dot{border-color:var(--accent);background:var(--accent)}
+.pick.sel .dot::after{content:'';width:8px;height:8px;border-radius:50%;background:#fff}
+.pick .ptxt{font-size:14px}
+.feedback{margin-top:14px;padding:12px 14px;border-radius:10px;font-size:14px;display:none}
+.feedback.show{display:block}
+.feedback.ok{background:var(--good-bg);color:var(--good);border:1px solid var(--good-bg)}
+.feedback.no{background:var(--bad-bg);color:var(--bad);border:1px solid var(--bad-bg)}
+
+/* BUILD ANSWER */
+.build{display:grid;gap:10px;margin-bottom:16px}
+.line{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:15px}
+.line .lnum{font-family:var(--f-mono);font-size:11px;color:var(--muted);width:18px}
+.slot{border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:14px;min-width:120px;background:var(--bg)}
+.slot:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+.assembled{background:var(--accent-soft);border:1px solid var(--accent-soft);border-radius:12px;padding:14px 16px;font-size:15px;line-height:1.7;min-height:40px}
+.assembled .ph{color:var(--muted);font-style:italic}
+.reveal{margin-top:12px;padding:14px 16px;border:1px solid var(--border);border-radius:11px;background:var(--surface);display:none}
+.reveal.show{display:block}
+.reveal .mlabel{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--good);margin-bottom:6px}
+
+/* ACCORDION */
+.acc{border:1px solid var(--border);border-radius:11px;background:var(--surface);margin-bottom:10px;overflow:hidden}
+.acc-head{display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;width:100%;text-align:left}
+.acc-head:hover{background:var(--bg)}
+.acc-num{font-family:var(--f-mono);font-size:11px;color:var(--muted);width:24px;flex-shrink:0}
+.acc-q{flex:1;font-size:15px;font-weight:600}
+.acc-chev{color:var(--muted);transition:transform .2s}
+.acc.open .acc-chev{transform:rotate(180deg)}
+.acc-body{display:none;padding:0 16px 14px;border-top:1px solid var(--border)}
+.acc.open .acc-body{display:block}
+.acc-body p{font-size:14px;margin-top:10px}
+.acc-body .lbl{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;color:var(--muted);letter-spacing:.06em;margin:10px 0 4px}
+
+/* GAP FILL */
+.frame{font-size:15px;line-height:2;background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:14px 16px;margin-bottom:12px}
+.gap{display:inline-block;min-width:90px;border:none;border-bottom:2px solid var(--accent);background:var(--bg);padding:2px 6px;border-radius:4px 4px 0 0;font-size:14px;text-align:center}
+.gap:focus{outline:none;background:var(--accent-soft)}
+.gap.ok{border-bottom-color:var(--good);background:var(--good-bg)}
+.gap.no{border-bottom-color:var(--bad);background:var(--bad-bg)}
+
+/* BETTER CHAIN */
+.chain .step{display:none;border-left:3px solid var(--accent);padding:6px 0 6px 14px;margin:8px 0;font-size:15px}
+.chain .step.s1{display:block;border-left-color:var(--muted)}
+.chain .step.show{display:block}
+.chain .step.s2{border-left-color:var(--warn)}
+.chain .step.s3{border-left-color:var(--good)}
+.chain-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+
+/* MATCH */
+.match .mrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+@media(max-width:520px){.match .mrow{grid-template-columns:1fr}}
+.mcol{border:1px solid var(--border);border-radius:11px;padding:12px;background:var(--surface);font-size:14px}
+.mcol.ph{cursor:pointer}
+.mcol.ph.sel{border-color:var(--accent);background:var(--accent-soft)}
+.mcol.ph.matched{opacity:.5;pointer-events:none}
+.mcol.si{cursor:pointer;min-height:44px;display:flex;align-items:center}
+.mcol.si.sel{border-color:var(--accent);background:var(--accent-soft)}
+.mcol.si.ok{border-color:var(--good);background:var(--good-bg)}
+.mcol.si.no{border-color:var(--bad);background:var(--bad-bg)}
+
+/* MOCK */
+.mock-q{font-family:var(--f-serif);font-size:20px;font-weight:bold;letter-spacing:-.01em;margin-bottom:6px}
+.mock-stage{font-family:var(--f-mono);font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px}
+textarea.answer{width:100%;min-height:110px;border:1px solid var(--border);border-radius:11px;padding:12px 14px;background:var(--surface);resize:vertical;line-height:1.6}
+textarea.answer:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+.fb-block{margin-top:14px;border:1px solid var(--border);border-radius:11px;overflow:hidden;display:none}
+.fb-block.show{display:block}
+.fb-tab{display:flex;gap:0;border-bottom:1px solid var(--border)}
+.fb-tab button{flex:1;padding:10px;font-size:12px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent}
+.fb-tab button.active{color:var(--accent);border-bottom-color:var(--accent);background:var(--accent-soft)}
+.fb-pane{display:none;padding:14px 16px;font-size:14px;line-height:1.6}
+.fb-pane.active{display:block}
+.fb-pane .lbl{font-family:var(--f-mono);font-size:10.5px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;display:block}
+.checks{display:flex;flex-direction:column;gap:8px;margin:10px 0}
+.check{display:flex;align-items:center;gap:10px;font-size:14px;cursor:pointer}
+.check input{width:18px;height:18px;accent-color:var(--accent)}
+.model{background:var(--good-bg);border:1px solid var(--good-bg);color:var(--good);border-radius:10px;padding:12px 14px;margin-top:10px;font-size:14px;line-height:1.6}
+.model b{color:#064e3b}
+
+/* SCORE */
+.score-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin:16px 0}
+.score-card{border:1px solid var(--border);border-radius:11px;padding:14px;background:var(--surface);text-align:center}
+.score-n{font-family:var(--f-serif);font-size:30px;font-weight:bold;color:var(--accent)}
+.score-l{font-family:var(--f-mono);font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:4px}
+.bar{height:7px;background:var(--border);border-radius:99px;overflow:hidden;margin-top:10px}
+.bar i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .6s ease}
+.tips{margin-top:14px}
+.tips li{font-size:14px;margin-bottom:6px;margin-left:18px}
+
+/* FINAL */
+.fin-q{font-family:var(--f-serif);font-size:19px;font-weight:bold;margin-bottom:12px}
+
+footer{border-top:1px solid var(--border);padding:18px clamp(16px,4vw,40px);text-align:center;font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-row">
+    <a href="index.html" class="brand">Interview English · <em>Cyprus</em></a>
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" id="pfill"></div></div>
+      <span class="progress-txt" id="ptxt">1 / 10</span>
+    </div>
+    <button class="menu-btn" id="menuBtn" aria-label="Open lesson menu">☰ Sections</button>
+  </div>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Lesson sections">
+  <div class="drawer-head">
+    <h3>Lesson sections</h3>
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">✕</button>
+  </div>
+  <div id="drawerList"></div>
+</aside>
+
+<main class="wrap">
+
+<!-- ═══ SECTION 1 — WARM-UP ═══ -->
+<section class="section active" data-s="1">
+  <p class="eyebrow">Section 1 · Warm-up</p>
+  <h1 class="s-title">You have an <em>interview</em></h1>
+  <p class="s-sub">You applied for a Senior Software Developer job at an international tech company in Cyprus. The HR manager will call you soon. Let's get ready, step by step.</p>
+
+  <div class="card">
+    <span class="label">Activity 1 · What will the HR manager ask?</span>
+    <p class="muted" style="font-size:14px;margin-bottom:12px">Click all the questions you think a real HR manager will ask. Then check.</p>
+    <div class="pick-grid" id="warmupPick"></div>
+    <button class="btn primary sm" id="warmupCheck" style="margin-top:12px">Check answers</button>
+    <div class="feedback" id="warmupFb"></div>
+  </div>
+
+  <div class="card">
+    <span class="label">Activity 2 · Essential interview words</span>
+    <p class="muted" style="font-size:14px;margin-bottom:12px">Tap a card to see the meaning. Tap 🔊 to hear the word.</p>
+    <div class="vocab-grid" id="vocabGrid"></div>
+  </div>
+
+  <div class="nav-row">
+    <span></span>
+    <button class="btn primary" data-next>Next →</button>
+  </div>
+</section>
+
+<!-- ═══ SECTION 2 — INTRODUCE YOURSELF ═══ -->
+<section class="section" data-s="2">
+  <p class="eyebrow">Section 2 · Introduce yourself</p>
+  <h1 class="s-title">"Tell me about <em>yourself</em>"</h1>
+  <p class="s-sub">This is the first question in almost every interview. Build your answer line by line. Keep it short and clear.</p>
+
+  <div class="card">
+    <span class="label">Build your answer</span>
+    <div class="build" id="selfBuild"></div>
+    <span class="label">Your answer</span>
+    <div class="assembled" id="selfOut"><span class="ph">Fill the boxes above to see your answer…</span></div>
+    <button class="btn sm" id="selfModel" style="margin-top:12px">Show a model answer</button>
+    <div class="reveal" id="selfReveal">
+      <div class="mlabel">Model answer (A2–B1)</div>
+      <p>"Hi, I'm a software developer. I have about <b>eight years</b> of experience. Right now I work for a product company. I mainly work with <b>Java and Spring</b>. I build back-end services and APIs. I'm interested in working abroad because I want to grow in an international team."</p>
+    </div>
+  </div>
+
+  <div class="nav-row">
+    <button class="btn" data-prev>← Back</button>
+    <button class="btn primary" data-next>Next →</button>
+  </div>
+</section>
+
+<!-- ═══ SECTION 3 — GENERAL HR QUESTIONS ═══ -->
+<section class="section" data-s="3">
+  <p class="eyebrow">Section 3 · Common HR questions</p>
+  <h1 class="s-title">15 questions you should <em>know</em></h1>
+  <p class="s-sub">Read each question. Open it to see what the interviewer really wants to know. The questions are short and clear.</p>
+  <div id="hrList"></div>
+  <div class="nav-row">
+    <button class="btn" data-prev>← Back</button>
+    <button class="btn primary" data-next>Next →</button>
+  </div>
+</section>
+
+<!-- ═══ SECTION 4 — ANSWER BUILDER ═══ -->
+<section class="section" data-s="4">
+  <p class="eyebrow">Section 4 · Answer builder</p>
+  <h1 class="s-title">Build <em>good</em> answers</h1>
+  <p class="s-sub">For each question: read the meaning, learn useful words, then fill the gaps in the answer frame.</p>
+  <div id="builderList"></div>
+  <div class="nav-row">
+    <button class="btn" data-prev>← Back</button>
+    <button class="btn primary" data-next>Next →</button>
+  </div>
+</section>
+
+<!-- ═══ SECTION 5 — MAKE IT BETTER ═══ -->
+<section class="section" data-s="5">
+  <p class="eyebrow">Section 5 · Make it better</p>
+  <h1 class="s-title">From short to <em>professional</em></h1>
+  <p class="s-sub">Very short answers sound weak. Let's make them longer and clearer — one step at a time. Keep the same simple English.</p>
+  <div id="betterList"></div>
+  <div class="nav-row">
+    <button class="btn" data-prev>← Back</button>
+    <button class="btn primary" data-next>Next →</button>
+  </div>
+</section>
+
+<!-- ═══ SECTION 6 — DIFFICULT MOMENTS ═══ -->
+<section class="section" data-s="6">
+  <p class="eyebrow">Section 6 · Difficult moments</p>
+  <h1 class="s-title">When you don't <em>understand</em></h1>
+  <p class="s-sub">It is OK to not understand. Use these survival phrases. They show confidence, not weakness.</p>
+
+  <div class="card">
+    <span class="label">Survival phrases</span>
+    <div id="survivalList" class="stack"></div>
+  </div>
+
+  <div class="card">
+    <span class="label">Activity · Match the phrase to the situation</span>
+    <p class="muted" style="font-size:14px;margin-bottom:12px">Click a phrase on the left, then click the situation it fits.</p>
+    <div class="match" id="matchBox"></div>
+    <div class="feedback" id="matchFb"></div>
+  </div>
+
+  <div class="card">
+    <span class="label">Mini role-play</span>
+    <p style="font-size:14px">Imagine the HR manager asks: <em>"What would you say is your biggest weakness?"</em><br>You don't understand the word <em>weakness</em>. Say a survival phrase out loud, then ask the manager to explain. Practice 2–3 times.</p>
+  </div>
+
+  <div class="nav-row">
+    <button class="btn" data-prev>← Back</button>
+    <button class="btn primary" data-next>Next →</button>
+  </div>
+</section>
+
+<!-- ═══ SECTION 7 — SALARY & RELOCATION ═══ -->
+<section class="section" data-s="7">
+  <p class="eyebrow">Section 7 · Salary & relocation</p>
+  <h1 class="s-title">Money, moving and <em>start date</em></h1>
+  <p class="s-sub">The HR manager will ask practical questions near the end of the interview. Keep your answers honest and simple.</p>
+
+  <div class="card">
+    <span class="label">Useful words</span>
+    <div id="salaryVocab"></div>
+  </div>
+
+  <div id="salaryList"></div>
+
+  <div class="nav-row">
+    <button class="btn" data-prev>← Back</button>
+    <button class="btn primary" data-next>Next →</button>
+  </div>
+</section>
+
+<!-- ═══ SECTION 8 — QUESTIONS FOR INTERVIEWER ═══ -->
+<section class="section" data-s="8">
+  <p class="eyebrow">Section 8 · Ask the interviewer</p>
+  <h1 class="s-title">Your turn to <em>ask</em></h1>
+  <p class="s-sub">At the end, the HR manager will ask: <em>"Do you have any questions for me?"</em> Always have 2–3 questions ready.</p>
+
+  <div class="card">
+    <span class="label">Activity · Which questions are good to ask?</span>
+    <p class="muted" style="font-size:14px;margin-bottom:12px">Select the questions that are appropriate to ask an HR manager.</p>
+    <div class="pick-grid" id="askPick"></div>
+    <button class="btn primary sm" id="askCheck" style="margin-top:12px">Check</button>
+    <div class="feedback" id="askFb"></div>
+  </div>
+
+  <div class="nav-row">
+    <button class="btn" data-prev>← Back</button>
+    <button class="btn primary" data-next>Next →</button>
+  </div>
+</section>
+
+<!-- ═══ SECTION 9 — MOCK INTERVIEW ═══ -->
+<section class="section" data-s="9">
+  <p class="eyebrow">Section 9 · Mock interview</p>
+  <h1 class="s-title">Let's <em>practice</em> — with me</h1>
+  <p class="s-sub">I am the HR manager. One question at a time. Type your answer. Then compare it with the model and check yourself. Be honest — it helps you improve.</p>
+
+  <div class="card" id="mockCard">
+    <div class="mock-stage" id="mockStage">Question 1 of 8</div>
+    <div class="mock-q" id="mockQ"></div>
+    <p class="muted ru" id="mockRu"></p>
+    <textarea class="answer" id="mockAns" placeholder="Type your answer here…"></textarea>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+      <button class="btn primary sm" id="mockSubmit">See feedback</button>
+      <button class="btn ghost sm" id="mockSkip" style="display:none">Next question →</button>
+    </div>
+
+    <div class="fb-block" id="mockFb">
+      <div class="fb-tab">
+        <button data-tab="model" class="active">Model answer</button>
+        <button data-tab="check">Self-check</button>
+        <button data-tab="tips">Tips</button>
+      </div>
+      <div class="fb-pane active" data-pane="model">
+        <span class="lbl">A good answer at A2–B1</span>
+        <div class="model" id="mockModel"></div>
+      </div>
+      <div class="fb-pane" data-pane="check">
+        <span class="lbl">Check yourself honestly</span>
+        <div class="checks" id="mockChecks"></div>
+        <p class="muted" style="font-size:13px">Your checks will give you a score at the end.</p>
+      </div>
+      <div class="fb-pane" data-pane="tips">
+        <span class="lbl">Tips for this question</span>
+        <ul id="mockTips" class="tips"></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="scoreCard" style="display:none">
+    <span class="label">Your interview readiness</span>
+    <div class="score-grid" id="scoreGrid"></div>
+    <span class="label">3 things to improve</span>
+    <ul class="tips" id="finalTips"></ul>
+    <button class="btn primary" id="mockRestart" style="margin-top:12px">Try again</button>
+  </div>
+
+  <div class="nav-row">
+    <button class="btn" data-prev>← Back</button>
+    <button class="btn primary" data-next>Next →</button>
+  </div>
+</section>
+
+<!-- ═══ SECTION 10 — FINAL CHALLENGE ═══ -->
+<section class="section" data-s="10">
+  <p class="eyebrow">Section 10 · Final challenge</p>
+  <h1 class="s-title">5 <em>unexpected</em> questions</h1>
+  <p class="s-sub">Answer first. Then read the feedback. There is no model before you try — this is the real test.</p>
+  <div id="finalList"></div>
+  <div class="nav-row">
+    <button class="btn" data-prev>← Back</button>
+    <button class="btn primary" id="finishBtn">Finish lesson ✓</button>
+  </div>
+</section>
+
+</main>
+
+<footer>Interview English · Senior Software Developer · Cyprus · A2–B1 interactive lesson</footer>
+
+<script>
+/* ───────── DATA ───────── */
+const VOCAB=[
+ {w:"experience",d:"the time you spent working and learning a job",ex:"I have eight years of experience as a developer.",ru:"опыт"},
+ {w:"responsibility",d:"the work that you must do in your job",ex:"My main responsibility is building APIs.",ru:"обязанность"},
+ {w:"team",d:"a group of people who work together",ex:"I work in a team of six developers.",ru:"команда"},
+ {w:"project",d:"a piece of work you plan and finish",ex:"I worked on a big payment project.",ru:"проект"},
+ {w:"skills",d:"things you can do well",ex:"My strongest skills are Java and SQL.",ru:"навыки"},
+ {w:"strengths",d:"things you are good at",ex:"One of my strengths is problem-solving.",ru:"сильные стороны"},
+ {w:"weakness",d:"something you are not good at yet",ex:"My weakness is public speaking.",ru:"слабая сторона"},
+ {w:"salary",d:"the money you get for your work",ex:"My salary expectation is around €3,500.",ru:"зарплата"},
+ {w:"relocate",d:"to move to another place for a job",ex:"I am ready to relocate to Cyprus.",ru:"переезжать"},
+ {w:"career goals",d:"what you want to do in your future work life",ex:"My career goal is to become a team lead.",ru:"карьерные цели"}
+];
+
+const WARMUP=[
+ {t:"Where do you live?",good:false},
+ {t:"How many years of experience do you have?",good:true},
+ {t:"What is your favourite food?",good:false},
+ {t:"What technologies do you work with?",good:true},
+ {t:"Why do you want to work in Cyprus?",good:true},
+ {t:"Do you have a dog?",good:false},
+ {t:"What are your strengths?",good:true},
+ {t:"What time is it?",good:false}
+];
+
+const HR=[
+ {q:"Tell me about yourself.",ru:"Расскажите о себе.",w:"A short, clear picture of you, your job and your experience."},
+ {q:"How many years of experience do you have?",ru:"Сколько у вас лет опыта?",w:"The number is important, but keep it simple."},
+ {q:"What do you do in your current job?",ru:"Чем вы занимаетесь на текущей работе?",w:"Your main tasks and responsibilities now."},
+ {q:"What technologies do you work with?",ru:"С какими технологиями вы работаете?",w:"The tools and languages you really use, not all of them."},
+ {q:"What are your main responsibilities?",ru:"Какие у вас основные обязанности?",w:"The most important things you do every day."},
+ {q:"What is your biggest professional achievement?",ru:"Какое ваше главное достижение?",w:"One result you are proud of, with a number if possible."},
+ {q:"Tell me about a difficult project.",ru:"Расскажите о сложном проекте.",w:"A project that was hard and how you helped finish it."},
+ {q:"How do you work in a team?",ru:"Как вы работаете в команде?",w:"Show you can listen, share work and talk to people."},
+ {q:"Have you ever led a team?",ru:"Вы когда-нибудь руководили командой?",w:"If yes — how many people and for how long. If no — say honestly."},
+ {q:"What are your strengths?",ru:"Какие ваши сильные стороны?",w:"Two or three, each with a small example."},
+ {q:"What is one weakness you are working on?",ru:"Над какой слабой стороной вы работаете?",w:"A real one, and what you do to improve it."},
+ {q:"Why do you want to work abroad?",ru:"Почему вы хотите работать за границей?",w:"Real reasons: career, English, international team."},
+ {q:"Why are you interested in Cyprus?",ru:"Почему вам интересен Кипр?",w:"Something about the country, the company, or the life."},
+ {q:"Why do you want to leave your current job?",ru:"Почему вы хотите уйти с текущей работы?",w:"Stay positive. Talk about the new job, not bad things about the old one."},
+ {q:"Where do you see yourself in 3–5 years?",ru:"Где вы видите себя через 3–5 лет?",w:"A simple career goal that fits this company."}
+];
+
+const BUILDERS=[
+ {q:"Why do you want to work abroad?",ru:"Почему вы хотите работать за границей?",meaning:"Why do you want to leave your country and work in another country?",
+  useful:["I want to develop my career.","I want to work in an international company.","I want to improve my English.","I want to work with international teams.","I'm interested in living in Cyprus."],
+  frame:[["I want to work abroad because ",["develop","grow","improve my career"]],["I'm interested in Cyprus because ",["of the company","of the climate","of the team"]],["I think this opportunity will help me ",["grow","learn","develop"]]],
+  model:"I want to work abroad because I want to grow my career. I'm interested in Cyprus because of the company and the international team. I think this opportunity will help me improve my English and learn new things."},
+ {q:"What are your strengths?",ru:"Какие ваши сильные стороны?",meaning:"What are you good at?",
+  useful:["I'm good at problem-solving.","I work well in a team.","I learn quickly.","I'm responsible.","I have strong back-end skills."],
+  frame:[["One of my strengths is ",["problem-solving","teamwork","learning fast"]],["For example, ",["I fix bugs fast","I help my colleagues","I learn new tools quickly"]],["I also ",["work well under pressure","communicate clearly","take responsibility"]]],
+  model:"One of my strengths is problem-solving. For example, I fix difficult bugs fast. I also work well under pressure."},
+ {q:"Tell me about a difficult project.",ru:"Расскажите о сложном проекте.",meaning:"A project that was hard and what you did.",
+  useful:["It was a project to…","The difficult part was…","I solved it by…","The result was…","We finished on time."],
+  frame:[["It was a project to ",["build a payment system","migrate a database","improve performance"]],["The difficult part was ",["the deadlines","the new technology","the size of the team"]],["I solved it by ",["working extra hours","reading the docs","asking my team"]],["In the end, we ",["finished on time","delivered it","made it faster"]]],
+  model:"It was a project to build a payment system. The difficult part was the short deadlines. I solved it by planning the work with my team. In the end, we finished on time."},
+ {q:"Where do you see yourself in 3–5 years?",ru:"Где вы видите себя через 3–5 лет?",meaning:"Your future career goal.",
+  useful:["I want to grow as a developer.","I'd like to lead a team.","I want to learn new technologies.","I see myself in a senior role."],
+  frame:[["In 3–5 years I see myself ",["as a team lead","in a senior role","growing as a developer"]],["I want to ",["lead a team","learn new technologies","take more responsibility"]],["I also hope to ",["improve my English","mentor juniors","work on bigger projects"]]],
+  model:"In 3–5 years I see myself in a senior role. I want to lead a small team and learn new technologies. I also hope to mentor junior developers."}
+];
+
+const BETTER=[
+ {s1:"I am good at programming.",s2:"I'm good at programming, especially back-end development.",s3:"I'm good at programming, especially back-end development. I also enjoy solving difficult technical problems."},
+ {s1:"I have eight years of experience.",s2:"I have eight years of experience as a back-end developer.",s3:"I have eight years of experience as a back-end developer. I mainly build APIs and work with databases."},
+ {s1:"I work in a team.",s2:"I work in a team of six developers.",s3:"I work in a team of six developers. We use Agile, and I usually help with planning and code reviews."},
+ {s1:"I want to work abroad.",s2:"I want to work abroad to grow my career.",s3:"I want to work abroad to grow my career. I'm interested in an international company where I can use my English."},
+ {s1:"My weakness is public speaking.",s2:"My weakness is public speaking, but I'm practising.",s3:"My weakness is public speaking, but I'm practising. I give small presentations to my team to improve."},
+ {s1:"I want to work in Cyprus.",s2:"I want to work in Cyprus because of the climate and the company.",s3:"I want to work in Cyprus because of the climate and the company. I also like the idea of an international team."}
+];
+
+const SURVIVAL=[
+ {p:"Sorry, could you repeat the question?",ru:"Повторите, пожалуйста, вопрос?",si:"You didn't hear it well."},
+ {p:"Could you speak a little more slowly?",ru:"Можете говорить помедленнее?",si:"The person speaks too fast."},
+ {p:"Could you explain what you mean?",ru:"Можете объяснить, что вы имеете в виду?",si:"You didn't understand the meaning."},
+ {p:"Sorry, I didn't understand the question.",ru:"Извините, я не понял вопрос.",si:"The question is not clear to you."},
+ {p:"Do you mean…?",ru:"Вы имеете в виду…?",si:"You want to check your understanding."},
+ {p:"Let me think for a moment.",ru:"Дайте мне минуту подумать.",si:"You need time before you answer."},
+ {p:"That's a good question.",ru:"Хороший вопрос.",si:"You buy a few seconds to think."},
+ {p:"Could I give you an example?",ru:"Могу я привести пример?",si:"You want to show with a story."}
+];
+
+const SALARY_VOCAB=[
+ {w:"salary expectation",ru:"ожидаемая зарплата"},
+ {w:"relocation",ru:"переезд"},
+ {w:"visa sponsorship",ru:"спонсорство визы"},
+ {w:"notice period",ru:"срок уведомления об увольнении"},
+ {w:"availability",ru:"когда можете начать"},
+ {w:"remote / hybrid",ru:"удалёнка / гибрид"},
+ {w:"office-based",ru:"работа в офисе"}
+];
+
+const SALARY=[
+ {q:"What are your salary expectations?",ru:"Какие у вас ожидания по зарплате?",frame:[["My expectation is around ",["€3,500","€3,000","€3,200"]],[" per ",["month","month","month"]],[" , but I'm ",["open","flexible","open"]],[" to discuss it.",["","",""]]],model:"My expectation is around €3,500 per month, but I'm open to discuss it."},
+ {q:"When can you start?",ru:"Когда вы можете начать?",frame:[["I can start in ",["one month","two weeks","three weeks"]],[" , after my ",["notice period","current project finishes","notice period"]],[" .",[".",".","."]]],model:"I can start in one month, after my notice period."},
+ {q:"Are you willing to relocate?",ru:"Вы готовы к переезду?",frame:[["Yes, I'm ready to relocate ",["to Cyprus","abroad","to Cyprus"]],[" . I need some help with ",["visa","housing","the documents"]],[" , please.",[".",".","."]]],model:"Yes, I'm ready to relocate to Cyprus. I need some help with the visa, please."},
+ {q:"Do you need visa sponsorship?",ru:"Вам нужна визовая поддержка?",frame:[["Yes, I need ",["visa sponsorship","a work visa","visa sponsorship"]],[" . I can ",["send my documents","share my passport","help with papers"]],[" .",[".",".","."]]],model:"Yes, I need visa sponsorship. I can send my documents."},
+ {q:"Are you comfortable working from an office?",ru:"Вам удобно работать в офисе?",frame:[["Yes, I'm comfortable ",["working from an office","in an office","working from an office"]],[" . I also like ",["hybrid work","a mix of office and home","hybrid work"]],[" .",[".",".","."]]],model:"Yes, I'm comfortable working from an office. I also like hybrid work."}
+];
+
+const ASK=[
+ {t:"What does a typical day look like?",good:true},
+ {t:"What technologies does the team use?",good:true},
+ {t:"How big is the development team?",good:true},
+ {t:"Is the position remote or hybrid?",good:true},
+ {t:"What are the next steps?",good:true},
+ {t:"When can I expect to hear from you?",good:true},
+ {t:"What is the CEO's name?",good:false},
+ {t:"How much is the salary?",good:false}
+];
+
+const MOCK=[
+ {q:"Tell me about yourself.",ru:"Расскажите о себе.",model:"I'm a software developer with about eight years of experience. I mainly work with Java and Spring. Right now I build back-end services for a product company. I'm interested in this job because I want to work in an international team.",tips:["Start with your job + years of experience.","Mention 1–2 main technologies.","Say why you want this job.","Keep it under 1 minute."]},
+ {q:"Why do you want to work in Cyprus?",ru:"Почему вы хотите работать на Кипре?",model:"I'm interested in Cyprus because of the company and the international team. I also like the climate and the lifestyle. I think it's a good place to grow my career and improve my English.",tips:["Give two reasons: one about work, one about life.","Keep it positive.","Don't say 'I want money'."]},
+ {q:"What is your biggest professional achievement?",ru:"Какое ваше главное достижение?",model:"My biggest achievement was a project where I made our API 40% faster. I found the slow parts and rewrote them. It helped our users and the team was happy.",tips:["Use one clear example.","Add a number if you can.","Say the result."]},
+ {q:"Tell me about a difficult project.",ru:"Расскажите о сложном проекте.",model:"We had to migrate a big database in two weeks. It was hard because of the size and the deadlines. I planned the work with my team and we did it step by step. We finished on time with no data loss.",tips:["Describe the problem.","Say what YOU did.","End with the result."]},
+ {q:"What are your strengths?",ru:"Какие ваши сильные стороны?",model:"I'm good at problem-solving and I learn quickly. For example, last year I learned a new framework in one week and used it in production.",tips:["Give 2 strengths, not 5.","Add a small example for each.","Keep them relevant to the job."]},
+ {q:"What is one weakness you are working on?",ru:"Над какой слабой стороной вы работаете?",model:"My weakness is public speaking. I feel nervous in front of big groups. To improve, I give small presentations to my team every month.",tips:["Pick a real but not dangerous weakness.","Say what you do to improve.","Don't say 'I work too much'."]},
+ {q:"Why do you want to leave your current job?",ru:"Почему вы хотите уйти с текущей работы?",model:"I like my current job, but I want a new challenge. I want to work in an international company and use English every day. I also want to learn new technologies.",tips:["Stay positive about your old job.","Talk about the new opportunity.","Don't complain about your boss."]},
+ {q:"Where do you see yourself in 3–5 years?",ru:"Где вы видите себя через 3–5 лет?",model:"In five years I see myself in a senior role, maybe leading a small team. I want to learn new technologies and help junior developers grow. I hope to do that here.",tips:["Have a simple, clear goal.","Make it fit the company.","Don't say 'I don't know'."]}
+];
+
+const FINAL=[
+ {q:"Why should we hire you?",ru:"Почему мы должны вас нанять?",model:"You should hire me because I have strong back-end skills and eight years of experience. I learn quickly and I work well in a team. I can help your team build reliable services.",tips:["Match your skills to the job.","Be confident but simple.","End with what you can do for them."]},
+ {q:"Tell me about a mistake you made at work.",ru:"Расскажите об ошибке на работе.",model:"Once I broke a build before a release. I found the bug, fixed it fast, and told my team. After that, I always test on a copy first. I learned to be more careful.",tips:["Pick a small, real mistake.","Say how you fixed it.","Say what you learned."]},
+ {q:"How do you deal with stress?",ru:"Как вы справляетесь со стрессом?",model:"When I'm stressed, I make a list of tasks and do the most important one first. I also take short breaks. It helps me stay calm and finish my work.",tips:["Show a simple method.","Stay positive.","Don't say 'I never get stressed'."]},
+ {q:"What do you do when you disagree with a colleague?",ru:"Что вы делаете, если не согласны с коллегой?",model:"I listen to my colleague first. Then I explain my idea calmly. If we still disagree, we ask the team or the lead. The project is more important than being right.",tips:["Show you listen first.","Stay calm and respectful.","End with the team/project first."]},
+ {q:"What motivates you at work?",ru:"Что вас мотивирует в работе?",model:"I'm motivated by solving difficult problems and learning new things. I also like it when my work helps users. Working in a good team motivates me too.",tips:["Give 2 real motivators.","Keep them simple.","Connect them to the job."]}
+];
+
+/* ───────── STATE ───────── */
+const S_KEY="interviewLessonState";
+let state=JSON.parse(localStorage.getItem(S_KEY)||"{}");
+state.cur=state.cur||1; state.done=state.done||{}; state.mock=state.mock||{}; state.final=state.final||{};
+let cur=state.cur;
+
+function save(){try{localStorage.setItem(S_KEY,JSON.stringify(state))}catch(e){}}
+
+/* ───────── NAV ───────── */
+const sections=[...document.querySelectorAll(".section")];
+function go(n){
+  n=Math.max(1,Math.min(sections.length,n));
+  cur=n; state.cur=n; save();
+  sections.forEach(s=>s.classList.toggle("active",+s.dataset.s===n));
+  updateProgress(); updateDrawer();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+document.querySelectorAll("[data-next]").forEach(b=>b.addEventListener("click",()=>{markDone(cur);go(cur+1)}));
+document.querySelectorAll("[data-prev]").forEach(b=>b.addEventListener("click",()=>go(cur-1)));
+
+function updateProgress(){
+  const done=Object.keys(state.done).length;
+  const pct=Math.round((done/sections.length)*100);
+  document.getElementById("pfill").style.width=pct+"%";
+  document.getElementById("ptxt").textContent=cur+" / "+sections.length;
+}
+function markDone(n){state.done[n]=true;save();updateProgress();updateDrawer();}
+
+/* drawer */
+const drawer=document.getElementById("drawer"),scrim=document.getElementById("scrim");
+document.getElementById("menuBtn").addEventListener("click",()=>{drawer.classList.add("open");scrim.classList.add("show")});
+document.getElementById("drawerClose").addEventListener("click",closeDrawer);
+scrim.addEventListener("click",closeDrawer);
+function closeDrawer(){drawer.classList.remove("open");scrim.classList.remove("show")}
+
+const SECT_TITLES=["Warm-up","Introduce yourself","HR questions","Answer builder","Make it better","Difficult moments","Salary & relocation","Ask the interviewer","Mock interview","Final challenge"];
+function updateDrawer(){
+  const list=document.getElementById("drawerList");
+  list.innerHTML=SECT_TITLES.map((t,i)=>`<button class="drawer-item ${state.done[i+1]?"done":""} ${cur===i+1?"active":""}" data-go="${i+1}"><span class="num">${String(i+1).padStart(2,"0")}</span><span class="ttl">${t}</span><span class="chk">✓</span></button>`).join("");
+  list.querySelectorAll(".drawer-item").forEach(b=>b.addEventListener("click",()=>{closeDrawer();go(+b.dataset.go)}));
+}
+
+/* ───────── SECTION 1 ───────── */
+function renderWarmup(){
+  const box=document.getElementById("warmupPick");
+  box.innerHTML=WARMUP.map((x,i)=>`<button class="pick" data-i="${i}"><span class="dot"></span><span class="ptxt">${x.t}</span></button>`).join("");
+  box.querySelectorAll(".pick").forEach(b=>b.addEventListener("click",()=>b.classList.toggle("sel")));
+  document.getElementById("warmupCheck").addEventListener("click",()=>{
+    let correct=0,total=WARMUP.length;
+    box.querySelectorAll(".pick").forEach((b,i)=>{
+      const sel=b.classList.contains("sel");
+      if(sel===WARMUP[i].good)correct++;
+    });
+    const fb=document.getElementById("warmupFb");
+    fb.className="feedback show "+(correct===total?"ok":"no");
+    fb.textContent=correct+"/"+total+" correct. "+(correct===total?"Great! These are real interview questions.":"Look again — some are not interview questions.");
+  });
+}
+function renderVocab(){
+  document.getElementById("vocabGrid").innerHTML=VOCAB.map((v,i)=>`
+    <div class="vcard" data-i="${i}">
+      <div class="vface">
+        <span class="vword">${v.w}</span>
+        <button class="vplay" data-play="${i}" aria-label="Hear word">🔊</button>
+        <span class="vchev">▾</span>
+      </div>
+      <div class="vbody">
+        <p class="vdef">${v.d}</p>
+        <p class="vex">e.g. ${v.ex}</p>
+        <p class="vru">RU: ${v.ru}</p>
+      </div>
+    </div>`).join("");
+  document.querySelectorAll(".vface").forEach(f=>f.addEventListener("click",e=>{if(e.target.dataset.play)return;f.parentElement.classList.toggle("open")}));
+  document.querySelectorAll("[data-play]").forEach(b=>b.addEventListener("click",e=>{
+    e.stopPropagation();speak(VOCAB[+b.dataset.play].w)}));
+}
+function speak(t){try{const u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=0.9;speechSynthesis.speak(u);}catch(e){}}
+
+/* ───────── SECTION 2 ───────── */
+function renderSelf(){
+  const fields=[
+   {pre:"Hi, I'm a ",ph:"job title",def:"software developer"},
+   {pre:". I have ",ph:"years",def:"eight"},
+   {pre:" years of experience. Right now I work for ",ph:"company",def:"a product company"},
+   {pre:". I mainly work with ",ph:"tech",def:"Java and Spring"},
+   {pre:". I work on ",ph:"task",def:"back-end services"},
+   {pre:". I'm interested in working abroad because ",ph:"reason",def:"I want to grow in an international team"}
+  ];
+  const box=document.getElementById("selfBuild");
+  box.innerHTML=fields.map((f,i)=>`<div class="line"><span class="lnum">${i+1}</span><span>${f.pre}</span><input class="slot" data-i="${i}" placeholder="${f.ph}" value="${f.def}"></div>`).join("");
+  const out=document.getElementById("selfOut");
+  const upd=()=>{const v=[...box.querySelectorAll(".slot")].map(s=>s.value.trim()||"…");out.innerHTML=fields.map((f,i)=>f.pre+`<b>${v[i]}</b>`).join("")+"."};
+  box.querySelectorAll(".slot").forEach(s=>s.addEventListener("input",upd));upd();
+  const rev=document.getElementById("selfReveal");
+  document.getElementById("selfModel").addEventListener("click",()=>rev.classList.add("show"));
+}
+
+/* ───────── SECTION 3 ───────── */
+function renderHR(){
+  document.getElementById("hrList").innerHTML=HR.map((x,i)=>`
+    <div class="acc" data-i="${i}">
+      <button class="acc-head"><span class="acc-num">${i+1}</span><span class="acc-q">${x.q}</span><span class="acc-chev">▾</span></button>
+      <div class="acc-body">
+        <p class="ru">${x.ru}</p>
+        <span class="lbl">What the interviewer wants</span>
+        <p>${x.w}</p>
+      </div>
+    </div>`).join("");
+  document.querySelectorAll("#hrList .acc-head").forEach(h=>h.addEventListener("click",()=>h.parentElement.classList.toggle("open")));
+}
+
+/* ───────── SECTION 4 ───────── */
+function renderBuilders(){
+  document.getElementById("builderList").innerHTML=BUILDERS.map((b,bi)=>`
+    <div class="card">
+      <span class="label">Question ${bi+1}</span>
+      <div class="q">${b.q}</div>
+      <p class="ru">${b.ru}</p>
+      <p class="muted" style="font-size:14px;margin:8px 0"><b>Meaning:</b> ${b.meaning}</p>
+      <span class="lbl">Useful language</span>
+      <div>${b.useful.map(u=>`<span class="chip">${u}</span>`).join("")}</div>
+      <span class="lbl" style="margin-top:14px">Answer frame — fill the gaps</span>
+      <div class="frame" id="frame${bi}">${b.frame.map(seg=>{
+        const txt=seg[0],opts=seg[1];
+        return txt+`<input class="gap" data-ok="${opts.join('|').toLowerCase()}" placeholder="…">`;
+      }).join("")}</div>
+      <button class="btn sm" data-check="${bi}">Check gaps</button>
+      <button class="btn ghost sm" data-model="${bi}" style="margin-left:6px">Show model</button>
+      <div class="reveal" id="rev${bi}">
+        <div class="mlabel">Model answer</div>
+        <p>${b.model}</p>
+      </div>
+    </div>`).join("");
+  document.querySelectorAll("[data-check]").forEach(b=>b.addEventListener("click",()=>{
+    const bi=+b.dataset.check;
+    document.querySelectorAll("#frame"+bi+" .gap").forEach(g=>{
+      const ans=g.value.trim().toLowerCase();
+      const ok=g.dataset.ok.split("|").includes(ans);
+      g.classList.toggle("ok",ok&&ans!=="");
+      g.classList.toggle("no",!ok&&ans!=="");
+    });
+  }));
+  document.querySelectorAll("[data-model]").forEach(b=>b.addEventListener("click",()=>{
+    document.getElementById("rev"+b.dataset.model).classList.add("show");
+  }));
+}
+
+/* ───────── SECTION 5 ───────── */
+function renderBetter(){
+  document.getElementById("betterList").innerHTML=BETTER.map((x,i)=>`
+    <div class="card">
+      <span class="label">Example ${i+1}</span>
+      <div class="chain" data-i="${i}">
+        <div class="step s1">${x.s1}</div>
+        <div class="step s2">➕ ${x.s2}</div>
+        <div class="step s3">✓ ${x.s3}</div>
+      </div>
+      <div class="chain-btns">
+        <button class="btn sm" data-step="2" data-i="${i}">Show step 2</button>
+        <button class="btn sm" data-step="3" data-i="${i}">Show full answer</button>
+      </div>
+    </div>`).join("");
+  document.querySelectorAll("[data-step]").forEach(b=>b.addEventListener("click",()=>{
+    const i=+b.dataset.i,st=+b.dataset.step;
+    const chain=document.querySelector(`.chain[data-i="${i}"]`);
+    if(st===2)chain.querySelector(".s2").classList.add("show");
+    if(st===3){chain.querySelector(".s2").classList.add("show");chain.querySelector(".s3").classList.add("show");}
+    b.disabled=true;
+  }));
+}
+
+/* ───────── SECTION 6 ───────── */
+let mSel=null;
+function renderSurvival(){
+  document.getElementById("survivalList").innerHTML=SURVIVAL.map((s,i)=>`
+    <div class="card tight">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:center">
+        <div>
+          <div style="font-size:15px;font-weight:600">${s.p}</div>
+          <div class="ru">${s.ru}</div>
+        </div>
+        <button class="vplay" data-spk="${i}">🔊</button>
+      </div>
+    </div>`).join("");
+  document.querySelectorAll("[data-spk]").forEach(b=>b.addEventListener("click",()=>speak(SURVIVAL[+b.dataset.spk].p)));
+}
+function renderMatch(){
+  const box=document.getElementById("matchBox");
+  const phrases=[...SURVIVAL.map((s,i)=>({...s,idx:i,type:"ph"}))];
+  const sits=[...SURVIVAL.map((s,i)=>({...s,idx:i,type:"si"}))].sort(()=>Math.random()-0.5);
+  box.innerHTML=`<div class="mrow"><div class="mcol"><span class="lbl">Phrases</span><div id="phCol"></div></div><div class="mcol"><span class="lbl">Situations</span><div id="siCol"></div></div></div>`;
+  const phCol=document.getElementById("phCol"),siCol=document.getElementById("siCol");
+  phrases.forEach(p=>{
+    const el=document.createElement("div");el.className="mcol ph";el.dataset.idx=p.idx;el.textContent=p.p;
+    el.addEventListener("click",()=>{phCol.querySelectorAll(".mcol").forEach(x=>x.classList.remove("sel"));el.classList.add("sel");mSel=p.idx;});
+    phCol.appendChild(el);
+  });
+  sits.forEach(s=>{
+    const el=document.createElement("div");el.className="mcol si";el.dataset.idx=s.idx;el.textContent=s.si;
+    el.addEventListener("click",()=>{
+      if(mSel===null)return;
+      const ok=mSel===s.idx;
+      el.classList.add(ok?"ok":"no");
+      if(ok){phCol.querySelector(`.mcol[data-idx="${mSel}"]`).classList.add("matched");const fb=document.getElementById("matchFb");fb.className="feedback show ok";fb.textContent="Correct! ✅";mSel=null;}
+      else{const fb=document.getElementById("matchFb");fb.className="feedback show no";fb.textContent="Not quite — try another.";setTimeout(()=>el.classList.remove("no"),900);}
+    });
+    siCol.appendChild(el);
+  });
+}
+
+/* ───────── SECTION 7 ───────── */
+function renderSalary(){
+  document.getElementById("salaryVocab").innerHTML=SALARY_VOCAB.map(v=>`<span class="chip">${v.w} <span class="ru" style="margin-left:4px">${v.ru}</span></span>`).join("");
+  document.getElementById("salaryList").innerHTML=SALARY.map((s,si)=>`
+    <div class="card">
+      <span class="label">Question ${si+1}</span>
+      <div class="q">${s.q}</div>
+      <p class="ru">${s.ru}</p>
+      <span class="lbl" style="margin-top:10px">Answer frame</span>
+      <div class="frame" id="sframe${si}">${s.frame.map(seg=>seg[0]+`<input class="gap" data-ok="${seg[1].join('|').toLowerCase()}" placeholder="…">`).join("")}</div>
+      <button class="btn sm" data-sc="${si}">Check</button>
+      <button class="btn ghost sm" data-sm="${si}" style="margin-left:6px">Model</button>
+      <div class="reveal" id="srev${si}"><div class="mlabel">Model answer</div><p>${s.model}</p></div>
+    </div>`).join("");
+  document.querySelectorAll("[data-sc]").forEach(b=>b.addEventListener("click",()=>{
+    document.querySelectorAll("#sframe"+b.dataset.sc+" .gap").forEach(g=>{
+      const ans=g.value.trim().toLowerCase();const ok=g.dataset.ok.split("|").includes(ans);
+      g.classList.toggle("ok",ok&&ans!=="");g.classList.toggle("no",!ok&&ans!=="");
+    });
+  }));
+  document.querySelectorAll("[data-sm]").forEach(b=>b.addEventListener("click",()=>document.getElementById("srev"+b.dataset.sm).classList.add("show")));
+}
+
+/* ───────── SECTION 8 ───────── */
+function renderAsk(){
+  const box=document.getElementById("askPick");
+  box.innerHTML=ASK.map((x,i)=>`<button class="pick" data-i="${i}"><span class="dot"></span><span class="ptxt">${x.t}</span></button>`).join("");
+  box.querySelectorAll(".pick").forEach(b=>b.addEventListener("click",()=>b.classList.toggle("sel")));
+  document.getElementById("askCheck").addEventListener("click",()=>{
+    let correct=0,total=ASK.length;
+    box.querySelectorAll(".pick").forEach((b,i)=>{if(b.classList.contains("sel")===ASK[i].good)correct++;});
+    const fb=document.getElementById("askFb");
+    fb.className="feedback show "+(correct===total?"ok":"no");
+    fb.textContent=correct+"/"+total+" correct. "+(correct===total?"Perfect — always have 2–3 ready.":"Tip: don't ask about salary or personal details here — wait for a later stage.");
+  });
+}
+
+/* ───────── SECTION 9 — MOCK ───────── */
+let mIdx=0;const mChecks=["The answer was clear","The answer was long enough (2–3 sentences)","The answer really answered the question"];
+function mockStage(){
+  document.getElementById("mockStage").textContent=`Question ${mIdx+1} of ${MOCK.length}`;
+  const m=MOCK[mIdx];
+  document.getElementById("mockQ").textContent=m.q;
+  document.getElementById("mockRu").textContent=m.ru;
+  document.getElementById("mockAns").value=state.mock[mIdx]?.ans||"";
+  document.getElementById("mockFb").classList.remove("show");
+  document.getElementById("mockSubmit").style.display="";
+  document.getElementById("mockSkip").style.display="none";
+  // reset checks
+  const cb=document.getElementById("mockChecks");cb.innerHTML=mChecks.map((c,i)=>`<label class="check"><input type="checkbox" data-c="${i}" ${state.mock[mIdx]?.checks?.[i]?"checked":""}>${c}</label>`).join("");
+  cb.querySelectorAll("input").forEach(inp=>inp.addEventListener("change",()=>{state.mock[mIdx]=state.mock[mIdx]||{};state.mock[mIdx].checks=mChecks.map((_,i)=>cb.querySelector(`[data-c="${i}"]`).checked);save();}));
+}
+function mockSubmit(){
+  const m=MOCK[mIdx];
+  const ans=document.getElementById("mockAns").value;
+  state.mock[mIdx]=state.mock[mIdx]||{};state.mock[mIdx].ans=ans;save();
+  document.getElementById("mockModel").innerHTML=m.model;
+  document.getElementById("mockTips").innerHTML=m.tips.map(t=>`<li>${t}</li>`).join("");
+  document.getElementById("mockFb").classList.add("show");
+  document.getElementById("mockSubmit").style.display="none";
+  document.getElementById("mockSkip").style.display="";
+}
+function mockNext(){
+  mIdx++;
+  if(mIdx>=MOCK.length){showScore();return;}
+  mockStage();
+}
+function showScore(){
+  document.getElementById("mockCard").style.display="none";
+  const sc=document.getElementById("scoreCard");sc.style.display="";
+  // score: based on self-checks across answered questions
+  let comm=0,gram=0,voc=0,intv=0,n=MOCK.length;
+  let answered=0;
+  MOCK.forEach((_,i)=>{const s=state.mock[i];if(!s)return;answered++;const c=s.checks||[];if(c[0])comm++;if(c[1])intv++;if(c[2])voc++;});
+  comm=Math.round((comm/n)*10);intv=Math.round((intv/n)*10);voc=Math.round((voc/n)*10);
+  gram=Math.round(((answered/n)*0.5+0.5)*10); // soft estimate from completion
+  const overall=Math.round((comm+intv+voc+gram)/4);
+  const data=[["Communication",comm],["Grammar",gram],["Vocabulary",voc],["Interview skills",intv],["Overall readiness",overall]];
+  document.getElementById("scoreGrid").innerHTML=data.map(([l,v])=>`<div class="score-card"><div class="score-n">${v}/10</div><div class="score-l">${l}</div><div class="bar"><i style="width:${v*10}%"></i></div></div>`).join("");
+  // tips
+  const tips=[];
+  if(comm<7)tips.push("Practice giving 2–3 sentence answers, not one word.");
+  if(voc<7)tips.push("Learn and reuse the interview vocabulary from Section 1.");
+  if(intv<7)tips.push("Make sure your answer really responds to the question asked.");
+  if(!tips.length)tips.push("Strong work! Focus on fluency — try the Final Challenge next.");
+  while(tips.length<3)tips.push("Record yourself and listen — aim for clear, slow speech.");
+  document.getElementById("finalTips").innerHTML=tips.map(t=>`<li>${t}</li>`).join("");
+  state.score={comm,gram,voc,intv,overall};save();
+}
+document.getElementById("mockSubmit").addEventListener("click",mockSubmit);
+document.getElementById("mockSkip").addEventListener("click",mockNext);
+document.querySelectorAll("#mockFb .fb-tab button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("#mockFb .fb-tab button").forEach(x=>x.classList.remove("active"));
+  document.querySelectorAll("#mockFb .fb-pane").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active");document.querySelector(`#mockFb .fb-pane[data-pane="${b.dataset.tab}"]`).classList.add("active");
+}));
+document.getElementById("mockRestart").addEventListener("click",()=>{
+  mIdx=0;state.mock={};save();document.getElementById("scoreCard").style.display="none";document.getElementById("mockCard").style.display="";mockStage();
+});
+
+/* ───────── SECTION 10 — FINAL ───────── */
+function renderFinal(){
+  document.getElementById("finalList").innerHTML=FINAL.map((f,i)=>`
+    <div class="card">
+      <span class="label">Question ${i+1}</span>
+      <div class="fin-q">${f.q}</div>
+      <p class="ru">${f.ru}</p>
+      <textarea class="answer" data-fa="${i}" placeholder="Write your answer first…">${state.final[i]?.ans||""}</textarea>
+      <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn sm primary" data-fb="${i}">Show feedback</button>
+      </div>
+      <div class="reveal" id="frev${i}">
+        <div class="mlabel">Model answer</div>
+        <p>${f.model}</p>
+        <span class="lbl">Tips</span>
+        <ul class="tips">${f.tips.map(t=>`<li>${t}</li>`).join("")}</ul>
+      </div>
+    </div>`).join("");
+  document.querySelectorAll("[data-fa]").forEach(t=>t.addEventListener("input",()=>{state.final[+t.dataset.fa]=state.final[+t.dataset.fa]||{};state.final[+t.dataset.fa].ans=t.value;save();}));
+  document.querySelectorAll("[data-fb]").forEach(b=>b.addEventListener("click",()=>document.getElementById("frev"+b.dataset.fb).classList.add("show")));
+}
+document.getElementById("finishBtn").addEventListener("click",()=>{markDone(10);const d=Object.keys(state.done).length;if(d>=sections.length){alert("Lesson complete! 🎉 Your progress is saved.");}});
+
+/* ───────── INIT ───────── */
+renderWarmup();renderVocab();renderSelf();renderHR();renderBuilders();renderBetter();renderSurvival();renderMatch();renderSalary();renderAsk();renderFinal();
+mockStage();
+updateProgress();updateDrawer();
+go(state.cur||1);
+</script>
+</body>
+</html>
