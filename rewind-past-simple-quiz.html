@@ -790,5 +790,44 @@ window.addEventListener('resize', () => {
   canvas.height = window.innerHeight;
 });
 </script>
+
+<!-- BACK TO QUIZZES — auto-shows when the quiz is finished -->
+<style>
+.back-to-quizzes{position:fixed;left:50%;bottom:22px;transform:translate(-50%,90px);z-index:999;display:inline-flex;align-items:center;gap:8px;padding:12px 22px;background:#2451CC;color:#fff;border-radius:99px;text-decoration:none;font:600 14px/1 system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;box-shadow:0 10px 30px rgba(36,81,204,.35);transition:transform .35s ease,opacity .35s ease;opacity:0}
+.back-to-quizzes.show{transform:translate(-50%,0);opacity:1}
+.back-to-quizzes:hover{background:#1d3fa8}
+</style>
+<a href="index.html" class="back-to-quizzes" id="b2qBtn">← Back to quizzes</a>
+<script>
+(function(){
+  var btn=document.getElementById('b2qBtn');if(!btn)return;
+  function vis(el){return !!el&&el.offsetParent!==null;}
+  function finished(){
+    var rs=document.getElementById('results-screen');
+    if(rs&&rs.classList.contains('active'))return true;
+    var r=document.getElementById('results');
+    if(r&&r.children.length&&vis(r))return true;
+    var sc=document.getElementById('scoreCard');
+    if(sc&&sc.style.display!=='none'&&vis(sc))return true;
+    var st=document.getElementById('statusText');
+    if(st&&/complete/i.test(st.textContent||''))return true;
+    var ebs=document.querySelectorAll('.eyebrow');
+    for(var i=0;i<ebs.length;i++){
+      var t=(ebs[i].textContent||'').trim().toLowerCase();
+      if(t==='results'&&vis(ebs[i]))return true;
+    }
+    var m=document.getElementById('prog-text')||document.getElementById('progressLabel');
+    if(m){
+      var a=(m.textContent||'').match(/(\d+)\s*(?:of|\/)\s*(\d+)/);
+      if(a&&+a[2]>0&&+a[1]>=+a[2])return true;
+    }
+    return false;
+  }
+  function check(){if(finished())btn.classList.add('show');}
+  setInterval(check,1200);check();
+  try{new MutationObserver(function(){setTimeout(check,50)}).observe(document.body,{childList:true,subtree:true,attributes:true});}catch(e){}
+})();
+</script>
+
 </body>
 </html>
