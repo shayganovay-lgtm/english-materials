@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bigger, Better, Faster — A2 Comparatives Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EDE7DF;
+    --card:#FCFAF6;
+    --ink:#2A2320;
+    --ink-soft:#6B5F55;
+    --ink-faint:#A0938A;
+    --rust:#B5533C;
+    --rust-bg:#F3DFD8;
+    --mint:#3F7A64;
+    --mint-bg:#DCEAE3;
+    --correct:#3C6E4D;
+    --correct-bg:#E0EDE2;
+    --incorrect:#A1463A;
+    --incorrect-bg:#F3E0DC;
+    --line:#DCD3C8;
+    --line-soft:#EAE3D9;
+    --font-display:'Fraunces', Georgia, 'Times New Roman', serif;
+    --font-body:'IBM Plex Sans', Arial, sans-serif;
+    --font-mono:'IBM Plex Mono', 'Courier New', monospace;
+    --shadow: 0 1px 2px rgba(42,35,32,0.05), 0 8px 24px rgba(42,35,32,0.08);
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    background:var(--bg);
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(42,35,32,0.06) 1px, transparent 0);
+    background-size: 22px 22px;
+    color:var(--ink);
+    font-family:var(--font-body);
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:32px 16px 64px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; transition-duration:0.001ms !important; }
+  }
+
+  .wrap{
+    width:100%;
+    max-width:640px;
+  }
+
+  .back-link{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-family:var(--font-mono);
+    font-size:0.78rem;
+    letter-spacing:0.02em;
+    color:var(--ink-soft);
+    text-decoration:none;
+    margin-bottom:18px;
+    transition:color 0.15s ease;
+  }
+  .back-link:hover{ color:var(--rust); }
+
+  /* ---------- Header ---------- */
+  header{
+    text-align:center;
+    margin-bottom:28px;
+    animation: dropIn 0.5s ease both;
+  }
+  @keyframes dropIn{
+    from{ opacity:0; transform:translateY(-8px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  .mark{ display:flex; justify-content:center; margin-bottom:10px; }
+  .mark svg{ width:70px; height:44px; }
+
+  h1{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:2.05rem;
+    letter-spacing:-0.01em;
+    margin:0 0 4px;
+  }
+  .subtitle{
+    font-size:0.92rem;
+    color:var(--ink-soft);
+    letter-spacing:0.01em;
+  }
+  .subtitle b{ color:var(--ink); font-weight:600; }
+
+  /* ---------- Cards ---------- */
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:4px;
+    box-shadow:var(--shadow);
+    padding:32px 30px;
+  }
+
+  /* ---------- Start screen ---------- */
+  #start-screen .card p{
+    font-size:0.97rem;
+    line-height:1.65;
+    color:var(--ink-soft);
+    margin:0 0 16px;
+  }
+  #start-screen .card p:last-of-type{ margin-bottom:26px; }
+  #start-screen strong{ color:var(--ink); }
+
+  .stat-row{
+    display:flex;
+    gap:10px;
+    margin-bottom:26px;
+    flex-wrap:wrap;
+  }
+  .stat-chip{
+    font-family:var(--font-mono);
+    font-size:0.74rem;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    border:1px solid var(--line);
+    border-radius:3px;
+    padding:7px 11px;
+    background:#fff;
+  }
+
+  .btn-primary{
+    display:inline-block;
+    width:100%;
+    background:var(--ink);
+    color:#F8F4EC;
+    font-family:var(--font-body);
+    font-weight:600;
+    font-size:0.97rem;
+    letter-spacing:0.01em;
+    border:none;
+    border-radius:3px;
+    padding:14px 20px;
+    cursor:pointer;
+    transition:background 0.15s ease, transform 0.1s ease;
+  }
+  .btn-primary:hover{ background:#42352d; }
+  .btn-primary:active{ transform:translateY(1px); }
+  .btn-primary:focus-visible{ outline:2px solid var(--rust); outline-offset:2px; }
+
+  /* ---------- Progress ---------- */
+  .progress-bar-track{
+    width:100%;
+    height:5px;
+    background:var(--line-soft);
+    border-radius:3px;
+    overflow:hidden;
+    margin-bottom:8px;
+  }
+  .progress-bar-fill{
+    height:100%;
+    background:linear-gradient(90deg, var(--rust), var(--mint));
+    border-radius:3px;
+    transition:width 0.35s ease;
+  }
+  .progress-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-family:var(--font-mono);
+    font-size:0.76rem;
+    color:var(--ink-soft);
+    margin-bottom:18px;
+    letter-spacing:0.02em;
+  }
+  .progress-row .score{ color:var(--ink); font-weight:600; }
+
+  /* ---------- Quiz card ---------- */
+  #quiz-screen{ display:none; }
+  #quiz-screen.active{ display:block; }
+  #start-screen.hidden, #results-screen.hidden{ display:none; }
+
+  .q-card{
+    animation: fadeSlide 0.3s ease both;
+  }
+  @keyframes fadeSlide{
+    from{ opacity:0; transform:translateY(6px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  .eyebrow{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:20px;
+  }
+  .eyebrow .tag{
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    font-weight:600;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    padding:5px 9px;
+    border-radius:3px;
+  }
+  .tag.form{ background:var(--rust-bg); color:var(--rust); }
+  .tag.use{ background:var(--mint-bg); color:var(--mint); }
+  .eyebrow .num{
+    font-family:var(--font-mono);
+    font-size:0.78rem;
+    color:var(--ink-faint);
+  }
+
+  .q-text{
+    font-family:var(--font-display);
+    font-size:1.28rem;
+    line-height:1.5;
+    color:var(--ink);
+    margin:0 0 22px;
+  }
+  .q-text .blank{
+    color:var(--ink-faint);
+    font-style:italic;
+  }
+  .q-text .hint{
+    font-family:var(--font-mono);
+    font-size:0.7rem;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+    color:var(--ink-faint);
+    display:block;
+    margin-top:8px;
+  }
+
+  .options{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-bottom:6px;
+  }
+  @media (max-width:480px){
+    .options{ grid-template-columns:1fr; }
+  }
+
+  .opt{
+    text-align:left;
+    font-family:var(--font-body);
+    font-size:0.97rem;
+    color:var(--ink);
+    background:#fff;
+    border:1.5px solid var(--line);
+    border-radius:3px;
+    padding:13px 14px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    transition:border-color 0.12s ease, background 0.12s ease, transform 0.08s ease;
+  }
+  .opt:hover:not(.disabled){ border-color:var(--ink-faint); }
+  .opt:active:not(.disabled){ transform:translateY(1px); }
+  .opt:focus-visible{ outline:2px solid var(--rust); outline-offset:1px; }
+  .opt .letter{
+    font-family:var(--font-mono);
+    font-size:0.74rem;
+    color:var(--ink-faint);
+    border:1px solid var(--line);
+    border-radius:50%;
+    width:20px; height:20px;
+    flex:none;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .opt.disabled{ cursor:default; }
+  .opt.correct-answer{
+    background:var(--correct-bg);
+    border-color:var(--correct);
+    color:var(--correct);
+    font-weight:600;
+  }
+  .opt.correct-answer .letter{ border-color:var(--correct); color:var(--correct); }
+  .opt.wrong-answer{
+    background:var(--incorrect-bg);
+    border-color:var(--incorrect);
+    color:var(--incorrect);
+  }
+  .opt.wrong-answer .letter{ border-color:var(--incorrect); color:var(--incorrect); }
+  .opt.muted{ opacity:0.5; }
+
+  .feedback{
+    margin-top:18px;
+    padding:16px 18px;
+    border-radius:3px;
+    border-left:3px solid var(--ink-faint);
+    background:#F3EFE6;
+    font-size:0.91rem;
+    line-height:1.6;
+    color:var(--ink-soft);
+    display:none;
+  }
+  .feedback.show{ display:block; animation: fadeSlide 0.25s ease both; }
+  .feedback.is-correct{ border-left-color:var(--correct); }
+  .feedback.is-wrong{ border-left-color:var(--incorrect); }
+  .feedback .verdict{
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    font-weight:600;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    display:block;
+    margin-bottom:6px;
+  }
+  .feedback.is-correct .verdict{ color:var(--correct); }
+  .feedback.is-wrong .verdict{ color:var(--incorrect); }
+
+  .next-row{
+    display:flex;
+    justify-content:flex-end;
+    margin-top:22px;
+  }
+  .btn-next{
+    font-family:var(--font-body);
+    font-weight:600;
+    font-size:0.9rem;
+    color:var(--ink);
+    background:transparent;
+    border:1.5px solid var(--ink);
+    border-radius:3px;
+    padding:10px 18px;
+    cursor:pointer;
+    opacity:0.35;
+    pointer-events:none;
+    transition:opacity 0.15s ease, background 0.15s ease, color 0.15s ease;
+  }
+  .btn-next.enabled{ opacity:1; pointer-events:auto; }
+  .btn-next.enabled:hover{ background:var(--ink); color:#F8F4EC; }
+  .btn-next:focus-visible{ outline:2px solid var(--rust); outline-offset:2px; }
+
+  /* ---------- Results screen ---------- */
+  #results-screen{ display:none; }
+  #results-screen.active{ display:block; }
+
+  .score-hero{ text-align:center; padding:6px 0 24px; position:relative; }
+  .score-hero .big{
+    font-family:var(--font-display);
+    font-size:3.4rem;
+    font-weight:600;
+    line-height:1;
+    color:var(--ink);
+  }
+  .score-hero .big span{ font-size:1.6rem; color:var(--ink-faint); font-weight:500; }
+  .score-hero .tier{
+    margin-top:10px;
+    font-size:1rem;
+    color:var(--ink-soft);
+  }
+
+  .breakdown{
+    display:flex;
+    gap:12px;
+    margin:22px 0 8px;
+  }
+  .bd-item{
+    flex:1;
+    border:1px solid var(--line);
+    border-radius:3px;
+    padding:14px 16px;
+    background:#fff;
+  }
+  .bd-item .label{
+    font-family:var(--font-mono);
+    font-size:0.7rem;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    margin-bottom:6px;
+  }
+  .bd-item.form .label{ color:var(--rust); }
+  .bd-item.use .label{ color:var(--mint); }
+  .bd-item .val{ font-family:var(--font-display); font-size:1.5rem; font-weight:600; }
+
+  hr.div{
+    border:none;
+    border-top:1px solid var(--line);
+    margin:28px 0 22px;
+  }
+
+  .review-title{
+    font-family:var(--font-display);
+    font-size:1.15rem;
+    font-weight:600;
+    margin:0 0 4px;
+  }
+  .review-sub{
+    font-size:0.85rem;
+    color:var(--ink-soft);
+    margin:0 0 18px;
+  }
+
+  .review-item{
+    border:1px solid var(--line);
+    border-radius:3px;
+    padding:16px 18px;
+    margin-bottom:12px;
+    background:#fff;
+  }
+  .review-item .ritag{
+    font-family:var(--font-mono);
+    font-size:0.68rem;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    color:var(--ink-faint);
+    margin-bottom:6px;
+  }
+  .review-item .riq{
+    font-family:var(--font-display);
+    font-size:1.05rem;
+    margin-bottom:8px;
+  }
+  .review-item .riline{ font-size:0.86rem; margin:2px 0; }
+  .review-item .riline .yours{ color:var(--incorrect); font-weight:600; }
+  .review-item .riline .right{ color:var(--correct); font-weight:600; }
+  .review-item .riexp{
+    font-size:0.86rem;
+    color:var(--ink-soft);
+    line-height:1.55;
+    margin-top:8px;
+  }
+
+  .all-correct-note{
+    text-align:center;
+    font-size:0.92rem;
+    color:var(--ink-soft);
+    padding:18px 0;
+  }
+
+  .btn-row{
+    display:flex;
+    gap:10px;
+    margin-top:24px;
+  }
+  .btn-secondary{
+    flex:1;
+    font-family:var(--font-body);
+    font-weight:600;
+    font-size:0.9rem;
+    background:transparent;
+    border:1.5px solid var(--ink);
+    color:var(--ink);
+    border-radius:3px;
+    padding:12px 16px;
+    cursor:pointer;
+    transition:background 0.15s ease, color 0.15s ease;
+  }
+  .btn-secondary:hover{ background:var(--ink); color:#F8F4EC; }
+
+  footer{
+    text-align:center;
+    margin-top:24px;
+    font-size:0.76rem;
+    color:var(--ink-faint);
+  }
+
+  /* ---------- Confetti ---------- */
+  .confetti-piece{
+    position:fixed;
+    top:-10px;
+    width:8px;
+    height:14px;
+    opacity:0.9;
+    pointer-events:none;
+    z-index:999;
+    animation:confettiFall linear forwards;
+  }
+  @keyframes confettiFall{
+    to{ transform:translateY(105vh) rotate(540deg); opacity:0.3; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back-link" href="index.html">&larr; All quizzes</a>
+
+  <header>
+    <div class="mark">
+      <svg viewBox="0 0 70 44" fill="none">
+        <rect x="4" y="30" width="10" height="10" rx="1.5" fill="#A0938A"/>
+        <rect x="20" y="20" width="10" height="20" rx="1.5" fill="#B5533C"/>
+        <rect x="36" y="8" width="10" height="32" rx="1.5" fill="#3F7A64"/>
+        <line x1="4" y1="4" x2="52" y2="4" stroke="#A0938A" stroke-width="1.5" stroke-dasharray="2 3"/>
+      </svg>
+    </div>
+    <h1>Bigger, Better, Faster</h1>
+    <div class="subtitle">An A2 comparatives drill &middot; <b>16 items</b> &middot; Forming &amp; Using Comparatives</div>
+  </header>
+
+  <!-- START SCREEN -->
+  <div id="start-screen">
+    <div class="card">
+      <p>A camera costs <strong>&pound;400</strong>. Another one costs <strong>&pound;600</strong>. The second camera is <strong>more expensive</strong>. That little word change — <em>heavy &rarr; heavier</em>, <em>good &rarr; better</em>, <em>expensive &rarr; more expensive</em> — is what this quiz is all about.</p>
+      <p>You'll practise <strong>forming comparative adjectives</strong> correctly, then <strong>using them in real sentences</strong> with <em>than</em>, <em>a bit</em>, and <em>much</em>.</p>
+      <div class="stat-row">
+        <span class="stat-chip">8 Forming Comparatives</span>
+        <span class="stat-chip">8 Using Comparatives</span>
+        <span class="stat-chip">Instant feedback</span>
+        <span class="stat-chip">Full review at the end</span>
+      </div>
+      <button class="btn-primary" onclick="beginQuiz()">Begin the quiz</button>
+    </div>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div id="quiz-screen">
+    <div class="progress-row">
+      <span id="progress-label">Item 1 of 16</span>
+      <span class="score">Score: <span id="live-score">0</span></span>
+    </div>
+    <div class="progress-bar-track"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div>
+
+    <div class="card q-card" id="q-card">
+      <div class="eyebrow">
+        <span class="tag" id="q-tag">Forming Comparatives</span>
+        <span class="num" id="q-num">No. 1</span>
+      </div>
+      <div class="q-text" id="q-text"></div>
+      <div class="options" id="q-options"></div>
+      <div class="feedback" id="q-feedback">
+        <span class="verdict" id="fb-verdict"></span>
+        <span id="fb-text"></span>
+      </div>
+      <div class="next-row">
+        <button class="btn-next" id="next-btn" onclick="nextQuestion()">Next item &rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS SCREEN -->
+  <div id="results-screen">
+    <div class="card">
+      <div class="score-hero" id="score-hero">
+        <div class="big" id="final-score">0<span>/16</span></div>
+        <div class="tier" id="final-tier"></div>
+      </div>
+      <div class="breakdown">
+        <div class="bd-item form">
+          <div class="label">Forming</div>
+          <div class="val" id="bd-form">0/8</div>
+        </div>
+        <div class="bd-item use">
+          <div class="label">Using</div>
+          <div class="val" id="bd-use">0/8</div>
+        </div>
+      </div>
+
+      <hr class="div">
+      <div class="review-title">Review</div>
+      <div class="review-sub" id="review-sub">Items worth a second look:</div>
+      <div id="review-list"></div>
+
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="restartQuiz()">Restart quiz</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>Based on a comparative adjectives review &middot; forming and using comparatives with "than", "a bit" and "much".</footer>
+</div>
+
+<script>
+const QUESTIONS = [
+  // ---------------- FORMING COMPARATIVES ----------------
+  {
+    cat:'form', num:1,
+    text:'A weight of 40g and a weight of 50g. The 50g weight is <span class="blank">___</span> than the 40g one. <span class="hint">heavy &rarr; ?</span>',
+    options:['more heavy','heavyer','heavier','heaviest'],
+    correct:2,
+    explanation:"Short adjectives ending in a consonant + y change y to i and add -er: heavy \u2192 heavier. \u2018More heavy\u2019 and \u2018heaviest\u2019 (a superlative) are both wrong here."
+  },
+  {
+    cat:'form', num:2,
+    text:'One house has 2 floors, another has 4. The second house is <span class="blank">___</span>. <span class="hint">big &rarr; ?</span>',
+    options:['more big','biger','bigger','bigest'],
+    correct:2,
+    explanation:"Short one-syllable adjectives ending in a single vowel + consonant double the final consonant: big \u2192 bigger. We don\u2019t say \u2018more big\u2019."
+  },
+  {
+    cat:'form', num:3,
+    text:'A camera costs \u00a3400. Another costs \u00a3600. The second one is <span class="blank">___</span>. <span class="hint">expensive &rarr; ?</span>',
+    options:['expensiver','more expensive','expensivest','most expensive'],
+    correct:1,
+    explanation:"Longer adjectives (usually three or more syllables, like expensive) form the comparative with more + adjective, not with -er."
+  },
+  {
+    cat:'form', num:4,
+    text:'Mountain A is 4000m. Mountain B is 5000m. Mountain B is <span class="blank">___</span>. <span class="hint">high &rarr; ?</span>',
+    options:['higher','more high','highter','highest'],
+    correct:0,
+    explanation:"High is a short adjective, so we simply add -er: high \u2192 higher."
+  },
+  {
+    cat:'form', num:5,
+    text:'Which is the correct comparative of <strong>happy</strong>?',
+    options:['happyer','more happy','happier','happiest'],
+    correct:2,
+    explanation:"Two-syllable adjectives ending in -y change y to i and add -er: happy \u2192 happier, just like heavy \u2192 heavier."
+  },
+  {
+    cat:'form', num:6,
+    text:'Which is the correct comparative of <strong>modern</strong>?',
+    options:['moderner','more modern','modernest','most modern'],
+    correct:1,
+    explanation:"Modern is a longer adjective, so it takes more, not -er: modern \u2192 more modern."
+  },
+  {
+    cat:'form', num:7,
+    text:'Which is the correct comparative of <strong>good</strong>?',
+    options:['gooder','more good','better','goodest'],
+    correct:2,
+    explanation:"Good is irregular: good \u2192 better (not \u2018gooder\u2019 or \u2018more good\u2019). This irregular form must simply be learned."
+  },
+  {
+    cat:'form', num:8,
+    text:'Which word is the correct opposite (comparative) of <strong>cheaper</strong>?',
+    options:['more cheap','expensiver','more expensive','most expensive'],
+    correct:2,
+    explanation:"The opposite of cheaper is more expensive \u2014 expensive is a longer adjective, so it takes more rather than -er."
+  },
+
+  // ---------------- USING COMPARATIVES ----------------
+  {
+    cat:'use', num:1,
+    text:'Helen\u2019s car isn\u2019t very big. She wants a <span class="blank">___</span> one. <span class="hint">big</span>',
+    options:['bigger','more big','biggest','the bigger'],
+    correct:0,
+    explanation:"We just need the comparative form here \u2014 bigger \u2014 with no \u2018the\u2019 and no \u2018more\u2019 before a short adjective."
+  },
+  {
+    cat:'use', num:2,
+    text:'My job isn\u2019t very interesting. I want to do something <span class="blank">___</span>. <span class="hint">interesting</span>',
+    options:['interestinger','more interesting','most interesting','much interesting'],
+    correct:1,
+    explanation:"Interesting is a longer adjective, so the comparative is formed with more: more interesting."
+  },
+  {
+    cat:'use', num:3,
+    text:'He isn\u2019t very tall. You\u2019re <span class="blank">___</span> him. <span class="hint">tall + than</span>',
+    options:['taller than','taller as','more tall than','tall than'],
+    correct:0,
+    explanation:"Comparative adjectives are followed by than when we compare two things: taller than him."
+  },
+  {
+    cat:'use', num:4,
+    text:'Kate is 26. Ben is 24. Kate <span class="blank">___</span> Ben. <span class="hint">old + than</span>',
+    options:['is older than','is older as','is more old than','older than'],
+    correct:0,
+    explanation:"The full comparative sentence needs the verb be + comparative + than: Kate is older than Ben."
+  },
+  {
+    cat:'use', num:5,
+    text:'Emma is 25. Joe is 24\u00bd. Emma is <span class="blank">___</span> older than Joe (the difference is small). <span class="hint">small difference</span>',
+    options:['much','a bit','very','far'],
+    correct:1,
+    explanation:"A bit + comparative shows a small difference. Emma is only six months older, so \u2018a bit older\u2019 is correct \u2014 \u2018much older\u2019 would suggest a big age gap."
+  },
+  {
+    cat:'use', num:6,
+    text:'Jack\u2019s mother is 52. His father is 69. Jack\u2019s mother is <span class="blank">___</span> younger than his father (the difference is big). <span class="hint">big difference</span>',
+    options:['a bit','a little','much','a small bit'],
+    correct:2,
+    explanation:"Much + comparative shows a big difference. A 17-year gap is large, so \u2018much younger\u2019 is correct here, not \u2018a bit\u2019."
+  },
+  {
+    cat:'use', num:7,
+    text:'I don\u2019t work very hard. You work <span class="blank">___</span> me. <span class="hint">hard + than</span>',
+    options:['harder than','more hard than','harder as','hardest than'],
+    correct:0,
+    explanation:"Hard is a short adjective/adverb, so the comparative is hard \u2192 harder, followed by than: harder than me."
+  },
+  {
+    cat:'use', num:8,
+    text:'I can\u2019t run very fast. You can run <span class="blank">___</span> me. <span class="hint">fast + than</span>',
+    options:['fastest than','more fast than','fast than','faster than'],
+    correct:3,
+    explanation:"Fast \u2192 faster is the correct short-adjective comparative, and it\u2019s followed by than: faster than me."
+  }
+];
+
+const TOTAL = QUESTIONS.length;
+let current = 0;
+let score = 0;
+let answered = false;
+const userAnswers = new Array(TOTAL).fill(null);
+const shuffledOptionsCache = new Array(TOTAL).fill(null);
+
+function shuffleOptions(q, qIndex){
+  if(shuffledOptionsCache[qIndex]) return shuffledOptionsCache[qIndex];
+  const indices = q.options.map((_, i) => i);
+  for(let i = indices.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [indices[i], indices[j]] = [indices[j], indices[i]];
+  }
+  const shuffled = {
+    options: indices.map(i => q.options[i]),
+    correct: indices.indexOf(q.correct)
+  };
+  shuffledOptionsCache[qIndex] = shuffled;
+  return shuffled;
+}
+
+function beginQuiz(){
+  document.getElementById('start-screen').classList.add('hidden');
+  document.getElementById('quiz-screen').classList.add('active');
+  renderQuestion();
+}
+
+function letterFor(i){ return String.fromCharCode(65+i); }
+
+function renderQuestion(){
+  const q = QUESTIONS[current];
+  const sq = shuffleOptions(q, current);
+  answered = false;
+
+  document.getElementById('progress-label').textContent = 'Item ' + (current+1) + ' of ' + TOTAL;
+  document.getElementById('progress-fill').style.width = (current/TOTAL*100) + '%';
+  document.getElementById('live-score').textContent = score;
+
+  const card = document.getElementById('q-card');
+  card.style.animation = 'none';
+  void card.offsetWidth;
+  card.style.animation = '';
+
+  const tag = document.getElementById('q-tag');
+  tag.textContent = q.cat === 'form' ? 'Forming Comparatives' : 'Using Comparatives';
+  tag.className = 'tag ' + q.cat;
+  document.getElementById('q-num').textContent = 'No. ' + q.num;
+
+  document.getElementById('q-text').innerHTML = q.text;
+
+  const optsEl = document.getElementById('q-options');
+  optsEl.innerHTML = sq.options.map((opt, i) =>
+    '<button class="opt" id="opt-' + i + '" onclick="selectOption(' + i + ')">' +
+      '<span class="letter">' + letterFor(i) + '</span><span>' + opt + '</span>' +
+    '</button>'
+  ).join('');
+
+  const fb = document.getElementById('q-feedback');
+  fb.classList.remove('show','is-correct','is-wrong');
+
+  const nextBtn = document.getElementById('next-btn');
+  nextBtn.classList.remove('enabled');
+  nextBtn.textContent = (current === TOTAL-1) ? 'See results \u2192' : 'Next item \u2192';
+}
+
+function selectOption(i){
+  if(answered) return;
+  answered = true;
+  const q = QUESTIONS[current];
+  const sq = shuffleOptionsCacheGet(current);
+  userAnswers[current] = i;
+  const isCorrect = (i === sq.correct);
+  if(isCorrect) score++;
+
+  for(let j=0; j<sq.options.length; j++){
+    const btn = document.getElementById('opt-' + j);
+    btn.classList.add('disabled');
+    if(j === sq.correct){
+      btn.classList.add('correct-answer');
+    } else if(j === i){
+      btn.classList.add('wrong-answer');
+    } else {
+      btn.classList.add('muted');
+    }
+  }
+
+  const fb = document.getElementById('q-feedback');
+  fb.classList.add('show', isCorrect ? 'is-correct' : 'is-wrong');
+  document.getElementById('fb-verdict').textContent = isCorrect ? 'Correct' : 'Not quite';
+  document.getElementById('fb-text').textContent = q.explanation;
+
+  document.getElementById('live-score').textContent = score;
+  document.getElementById('next-btn').classList.add('enabled');
+}
+
+function shuffleOptionsCacheGet(idx){ return shuffledOptionsCache[idx]; }
+
+function nextQuestion(){
+  if(!answered) return;
+  if(current < TOTAL-1){
+    current++;
+    renderQuestion();
+  } else {
+    showResults();
+  }
+}
+
+function launchConfetti(){
+  const colors = ['#B5533C','#3F7A64','#D9C28C','#8E9E8B','#C77B5E'];
+  for(let i=0; i<60; i++){
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random()*100 + 'vw';
+    piece.style.background = colors[Math.floor(Math.random()*colors.length)];
+    piece.style.animationDuration = (2.2 + Math.random()*1.6) + 's';
+    piece.style.animationDelay = (Math.random()*0.4) + 's';
+    piece.style.transform = 'rotate(' + Math.floor(Math.random()*360) + 'deg)';
+    document.body.appendChild(piece);
+    setTimeout(() => piece.remove(), 4200);
+  }
+}
+
+function showResults(){
+  document.getElementById('progress-fill').style.width = '100%';
+  document.getElementById('quiz-screen').classList.remove('active');
+  document.getElementById('results-screen').classList.add('active');
+
+  let formCorrect = 0, useCorrect = 0;
+  QUESTIONS.forEach((q, idx) => {
+    const sq = shuffledOptionsCache[idx];
+    if(userAnswers[idx] === sq.correct){
+      if(q.cat === 'form') formCorrect++; else useCorrect++;
+    }
+  });
+
+  document.getElementById('final-score').innerHTML = score + '<span>/' + TOTAL + '</span>';
+  document.getElementById('bd-form').textContent = formCorrect + '/8';
+  document.getElementById('bd-use').textContent = useCorrect + '/8';
+
+  let tier;
+  if(score >= 15){ tier = 'Excellent! Comparatives are second nature to you now.'; launchConfetti(); }
+  else if(score >= 11) tier = 'Good control, with a few forms worth reviewing.';
+  else tier = 'A useful diagnostic \u2014 read the explanations below closely and try again.';
+  document.getElementById('final-tier').textContent = tier;
+
+  const missed = QUESTIONS.map((q, idx) => ({q, idx})).filter(o => userAnswers[o.idx] !== shuffledOptionsCache[o.idx].correct);
+  const reviewList = document.getElementById('review-list');
+  const reviewSub = document.getElementById('review-sub');
+
+  if(missed.length === 0){
+    reviewSub.style.display = 'none';
+    reviewList.innerHTML = '<div class="all-correct-note">All 16 items correct \u2014 nothing to review.</div>';
+  } else {
+    reviewSub.style.display = 'block';
+    reviewSub.textContent = missed.length + ' item' + (missed.length>1?'s':'') + ' worth a second look:';
+    reviewList.innerHTML = missed.map(o => {
+      const q = o.q;
+      const sq = shuffledOptionsCache[o.idx];
+      const yourAns = sq.options[userAnswers[o.idx]];
+      const rightAns = sq.options[sq.correct];
+      const qText = q.text.replace(/<[^>]+>/g, '').replace(/___/g, '\u2014');
+      return '<div class="review-item">' +
+        '<div class="ritag">' + (q.cat==='form'?'Forming Comparatives':'Using Comparatives') + ' \u00b7 No. ' + q.num + '</div>' +
+        '<div class="riq">' + qText + '</div>' +
+        '<div class="riline">Your answer: <span class="yours">' + yourAns + '</span></div>' +
+        '<div class="riline">Correct answer: <span class="right">' + rightAns + '</span></div>' +
+        '<div class="riexp">' + q.explanation + '</div>' +
+      '</div>';
+    }).join('');
+  }
+}
+
+function restartQuiz(){
+  current = 0;
+  score = 0;
+  userAnswers.fill(null);
+  shuffledOptionsCache.fill(null);
+  document.getElementById('results-screen').classList.remove('active');
+  document.getElementById('quiz-screen').classList.add('active');
+  renderQuestion();
+}
+</script>
+
+<!-- BACK TO QUIZZES — auto-shows when the quiz is finished -->
+<style>
+.back-to-quizzes{position:fixed;left:50%;bottom:22px;transform:translate(-50%,90px);z-index:999;display:inline-flex;align-items:center;gap:8px;padding:12px 22px;background:#2451CC;color:#fff;border-radius:99px;text-decoration:none;font:600 14px/1 system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;box-shadow:0 10px 30px rgba(36,81,204,.35);transition:transform .35s ease,opacity .35s ease;opacity:0}
+.back-to-quizzes.show{transform:translate(-50%,0);opacity:1}
+.back-to-quizzes:hover{background:#1d3fa8}
+</style>
+<a href="index.html" class="back-to-quizzes" id="b2qBtn">← Back to quizzes</a>
+<script>
+(function(){
+  var btn=document.getElementById('b2qBtn');if(!btn)return;
+  function vis(el){return !!el&&el.offsetParent!==null;}
+  function finished(){
+    var rs=document.getElementById('results-screen');
+    if(rs&&rs.classList.contains('active'))return true;
+    var r=document.getElementById('results');
+    if(r&&r.children.length&&vis(r))return true;
+    var sc=document.getElementById('scoreCard');
+    if(sc&&sc.style.display!=='none'&&vis(sc))return true;
+    var st=document.getElementById('statusText');
+    if(st&&/complete/i.test(st.textContent||''))return true;
+    var ebs=document.querySelectorAll('.eyebrow');
+    for(var i=0;i<ebs.length;i++){
+      var t=(ebs[i].textContent||'').trim().toLowerCase();
+      if(t==='results'&&vis(ebs[i]))return true;
+    }
+    var m=document.getElementById('prog-text')||document.getElementById('progressLabel');
+    if(m){
+      var a=(m.textContent||'').match(/(\d+)\s*(?:of|\/)\s*(\d+)/);
+      if(a&&+a[2]>0&&+a[1]>=+a[2])return true;
+    }
+    return false;
+  }
+  function check(){if(finished())btn.classList.add('show');}
+  setInterval(check,1200);check();
+  try{new MutationObserver(function(){setTimeout(check,50)}).observe(document.body,{childList:true,subtree:true,attributes:true});}catch(e){}
+})();
+</script>
+
+</body>
+</html>
