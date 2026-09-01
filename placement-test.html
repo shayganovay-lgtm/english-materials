@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Online CEFR placement test — grammar, vocabulary and reading. Find your English level from A1 to C2.">
+<title>General English Placement Test · Find Your Level</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<style>
+:root{
+  --bg:#F9F8F6; --surface:#FFFFFF; --ink:#1C1917; --muted:#79716B;
+  --border:#E8E4DF; --accent:#2451CC; --accent-soft:rgba(36,81,204,0.10);
+  --good:#0A8F65; --good-bg:rgba(10,143,101,0.10);
+  --bad:#B23A3A; --bad-bg:rgba(178,58,58,0.10);
+  --radius:14px;
+  --f-serif:Georgia,'Times New Roman',serif;
+  --f-sans:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  --f-mono:ui-monospace,'SF Mono','Cascadia Code','Fira Mono','Courier New',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh}
+button{font-family:inherit;cursor:pointer}
+
+/* top progress */
+#topbar{position:sticky;top:0;z-index:50;background:rgba(249,248,246,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:none;align-items:center;gap:14px;padding:12px clamp(16px,4vw,40px)}
+#topbar.show{display:flex}
+#part-label{font-family:var(--f-mono);font-size:11px;color:var(--muted);white-space:nowrap}
+#prog-track{flex:1;height:7px;background:var(--border);border-radius:99px;overflow:hidden}
+#prog-fill{height:100%;width:0%;background:var(--accent);border-radius:99px;transition:width .35s ease}
+#item-label{font-family:var(--f-mono);font-size:11px;color:var(--muted);white-space:nowrap;min-width:70px;text-align:right}
+
+.hero{min-height:88vh;display:flex;align-items:center;justify-content:center;padding:40px 20px;background-image:radial-gradient(rgba(28,25,23,0.07) 1.2px,transparent 1.2px);background-size:26px 26px}
+.hero-inner{max-width:620px;text-align:center}
+.eyebrow{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
+.hero h1{font-family:var(--f-serif);font-style:italic;font-size:clamp(36px,6vw,58px);font-weight:bold;line-height:1.08;letter-spacing:-.025em;margin-bottom:16px}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero .sub{font-size:16px;color:var(--muted);line-height:1.65;max-width:52ch;margin:0 auto 28px}
+.parts{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:30px}
+.parts span{font-family:var(--f-mono);font-size:11px;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:99px;padding:6px 12px}
+.btn-start{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;border:none;border-radius:99px;padding:15px 32px;font-size:16px;font-weight:600;transition:background .18s}
+.btn-start:hover{background:#1d3fa8}
+.hero .note{font-size:12.5px;color:var(--muted);margin-top:22px}
+.hero .note a{color:var(--accent)}
+
+/* quiz stage */
+#quiz{max-width:760px;margin:0 auto;padding:clamp(24px,4vw,44px) clamp(16px,4vw,40px) 90px;display:none}
+#quiz.show{display:block}
+.part-head{margin-bottom:22px}
+.part-eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.part-title{font-family:var(--f-serif);font-size:clamp(24px,4vw,32px);font-weight:bold;letter-spacing:-.02em;line-height:1.1}
+.part-sub{font-size:14px;color:var(--muted);margin-top:8px;line-height:1.6}
+
+.passage{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:18px;font-size:14.5px;line-height:1.7;color:var(--ink)}
+.passage .p-title{font-family:var(--f-serif);font-weight:bold;font-size:16px;margin-bottom:10px}
+.passage p{margin-bottom:10px}
+.passage p:last-child{margin-bottom:0}
+
+.q-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px 24px}
+.q-tag{display:inline-block;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--bg);border:1px solid var(--border);border-radius:99px;padding:4px 10px;margin-bottom:14px}
+.q-text{font-family:var(--f-serif);font-size:clamp(18px,2.6vw,21px);font-weight:bold;line-height:1.4;margin-bottom:18px}
+.q-text .blank{color:var(--accent);border-bottom:2px solid var(--accent);padding:0 4px}
+.opts{display:grid;gap:10px}
+.opt{display:flex;align-items:center;gap:12px;border:1px solid var(--border);border-radius:11px;padding:13px 16px;background:var(--surface);text-align:left;font-size:15px;transition:all .15s;width:100%}
+.opt:hover{border-color:var(--accent)}
+.opt .key{font-family:var(--f-mono);font-size:12px;color:var(--muted);border:1px solid var(--border);border-radius:7px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+.opt.sel .key{background:var(--accent);color:#fff;border-color:var(--accent)}
+.q-nav{display:flex;justify-content:space-between;gap:10px;margin-top:18px}
+.q-btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);background:var(--surface);border-radius:99px;padding:11px 20px;font-size:14px;font-weight:600;color:var(--ink);transition:all .15s}
+.q-btn:hover{border-color:var(--accent);color:var(--accent)}
+.q-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.q-btn.primary:hover{background:#1d3fa8;color:#fff}
+.q-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* results */
+#results{max-width:760px;margin:0 auto;padding:clamp(24px,4vw,44px) clamp(16px,4vw,40px) 100px;display:none}
+#results.show{display:block}
+.res-eyebrow{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.level-hero{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;text-align:center;margin-bottom:18px}
+.level-code{font-family:var(--f-serif);font-style:italic;font-size:clamp(52px,9vw,84px);font-weight:bold;line-height:1;color:var(--accent);letter-spacing:-.03em}
+.level-name{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+.level-desc{font-size:14.5px;color:var(--muted);line-height:1.65;max-width:52ch;margin:14px auto 0}
+.level-link{display:inline-flex;align-items:center;gap:6px;margin-top:18px;background:var(--accent);color:#fff;border-radius:99px;padding:12px 24px;font-size:14px;font-weight:600;text-decoration:none;transition:background .18s}
+.level-link:hover{background:#1d3fa8}
+.score-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:18px}
+.score-card{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:16px}
+.score-card .lbl{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px}
+.score-card .val{font-family:var(--f-serif);font-size:22px;font-weight:bold}
+.score-card .lvl{font-size:13px;color:var(--accent);font-weight:600;margin-top:2px;display:block}
+.review{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:18px}
+.review h3{font-family:var(--f-serif);font-size:17px;margin-bottom:12px}
+.rev-item{font-size:13.5px;padding:8px 0;border-bottom:1px solid var(--border);line-height:1.55}
+.rev-item:last-child{border-bottom:none}
+.rev-item .wrong{color:var(--bad)}
+.rev-item .right{color:var(--good);font-weight:600}
+.speak-note{background:var(--surface);border:1px dashed var(--border);border-radius:12px;padding:16px 18px;font-size:13.5px;color:var(--muted);line-height:1.65}
+.speak-note b{color:var(--ink)}
+.res-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+
+footer{border-top:1px solid var(--border);padding:20px;text-align:center;font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+footer a{color:var(--accent)}
+@media (max-width:540px){#item-label{display:none}#part-label{min-width:96px}}
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <span id="part-label">Part 1 · Grammar</span>
+  <div id="prog-track"><div id="prog-fill"></div></div>
+  <span id="item-label">1 / 60</span>
+</div>
+
+<!-- HERO -->
+<div class="hero" id="hero">
+  <div class="hero-inner">
+    <p class="eyebrow">Placement Test · CEFR Aligned</p>
+    <h1>What's your<br><em>English level?</em></h1>
+    <p class="sub">
+      Answer 60 questions that get harder as you go — grammar, vocabulary and
+      reading. At the end you'll get your CEFR level from A1 to C2, with a
+      breakdown of each part. Don't worry if later questions feel difficult:
+      that's how the test finds your level.
+    </p>
+    <div class="parts">
+      <span>Part 1 · Grammar · 30 items</span>
+      <span>Part 2 · Vocabulary · 20 items</span>
+      <span>Part 3 · Reading · 10 items</span>
+      <span>~55 min</span>
+    </div>
+    <button class="btn-start" id="startBtn">Start the test →</button>
+    <p class="note">
+      No account needed · Your answers stay in your browser ·
+      Prefer paper? <a href="CEFR_English_Placement_Test.docx" download>Download the test paper (DOCX)</a>
+    </p>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz">
+  <div class="part-head" id="partHead"></div>
+  <div class="passage" id="passageBox" style="display:none"></div>
+  <div class="q-card">
+    <span class="q-tag" id="qTag"></span>
+    <div class="q-text" id="qText"></div>
+    <div class="opts" id="qOpts"></div>
+    <div class="q-nav">
+      <button class="q-btn" id="prevBtn">← Previous</button>
+      <button class="q-btn primary" id="nextBtn" disabled>Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div id="results">
+  <p class="res-eyebrow">Your result</p>
+  <div class="level-hero">
+    <div class="level-code" id="lvlCode">B1</div>
+    <div class="level-name" id="lvlName">Intermediate</div>
+    <p class="level-desc" id="lvlDesc"></p>
+    <a class="level-link" id="lvlLink" href="level-a2.html">See quizzes for your level →</a>
+  </div>
+  <div class="score-grid" id="scoreGrid"></div>
+  <div class="review" id="reviewBox">
+    <h3>Review — questions you missed</h3>
+    <div id="reviewList"></div>
+  </div>
+  <div class="speak-note">
+    <b>About speaking (Part 4):</b> this online test covers the written parts
+    (grammar, vocabulary, reading). Speaking is assessed live by an examiner
+    in a 10–12 minute interview — see the paper version for the interview
+    stages and the assessment rubric. If your spoken level differs from this
+    result by more than one band, start at the lower level and reassess after
+    a few lessons.
+  </div>
+  <div class="res-actions">
+    <button class="q-btn" id="restartBtn">↻ Take the test again</button>
+    <a class="q-btn" href="CEFR_English_Placement_Test.docx" download>⬇ Download paper version</a>
+  </div>
+</div>
+
+<footer>General English Placement Test · CEFR A1–C2 · <a href="index.html">english-materials</a></footer>
+
+<!-- BACK TO QUIZZES — auto-shows when the quiz is finished -->
+<a href="index.html" class="back-to-quizzes" id="b2qBtn" style="position:fixed;left:50%;bottom:22px;transform:translate(-50%,90px);z-index:999;display:inline-flex;align-items:center;gap:8px;padding:12px 22px;background:#2451CC;color:#fff;border-radius:99px;text-decoration:none;font:600 14px/1 system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;box-shadow:0 10px 30px rgba(36,81,204,.35);transition:transform .35s ease,opacity .35s ease;opacity:0">← Back to quizzes</a>
+
+<script>
+/* ───────── DATA ───────── */
+const GRAMMAR=[
+ {t:"She ___ a teacher at the local school.",o:["is","are","am","be"],a:0},
+ {t:"There ___ some milk in the fridge.",o:["is","are","be","am"],a:0},
+ {t:"I usually ___ up at seven o'clock.",o:["get","gets","getting","got"],a:0},
+ {t:"He ___ to the gym yesterday evening.",o:["go","goes","went","gone"],a:2},
+ {t:"My sister is ___ than me.",o:["tall","taller","tallest","more tall"],a:1},
+ {t:"___ you like coffee or tea?",o:["Do","Does","Are","Is"],a:0},
+ {t:"There isn't ___ sugar left in the jar.",o:["some","any","much","many"],a:1},
+ {t:"We ___ watching TV when the phone rang.",o:["was","were","are","is"],a:1},
+ {t:"This is ___ interesting book I've ever read.",o:["more","most","the most","very"],a:2},
+ {t:"I have ___ finished my homework, so I can relax now.",o:["already","yet","still","ever"],a:0},
+ {t:"If I ___ more free time, I would travel more often.",o:["have","had","has","having"],a:1},
+ {t:"She has been working here ___ 2019.",o:["for","since","from","during"],a:1},
+ {t:"The final report ___ by the manager before the meeting started.",o:["was written","wrote","is writing","has write"],a:0},
+ {t:"I wish I ___ more foreign languages.",o:["know","knew","have known","known"],a:1},
+ {t:"By the time we arrived, the film ___.",o:["already started","had already started","has already started","already starts"],a:1},
+ {t:"He suggested ___ the meeting until Friday.",o:["to postpone","postponing","postpone","postponed"],a:1},
+ {t:"Despite ___ hard for weeks, he failed the exam.",o:["study","studying","studied","to study"],a:1},
+ {t:"You ___ have called me — I was really worried!",o:["must","should","could","needn't"],a:1},
+ {t:"The book, ___ was written in 1984, is still relevant today.",o:["that","which","who","whose"],a:1},
+ {t:"Neither of the two answers ___ correct.",o:["is","are","was","were"],a:0},
+ {t:"Hardly ___ the door when the phone started ringing.",o:["I had closed","had I closed","I closed","did I close"],a:1},
+ {t:"It's high time you ___ your decision about the job.",o:["make","made","have made","will make"],a:1},
+ {t:"Not only ___ late, but he also forgot to bring the documents.",o:["he was","was he","he is","is he"],a:1},
+ {t:"She would rather I ___ tell anyone about it just yet.",o:["don't","didn't","won't","hadn't"],a:1},
+ {t:"The proposal was met with considerable resistance ___ the board.",o:["with","by","from","at"],a:2},
+ {t:"___ his enormous wealth, he lives a remarkably modest life.",o:["Despite of","In spite","Despite","Although"],a:2},
+ {t:"He is said ___ the company for over thirty years before retiring.",o:["to run","to have run","running","have run"],a:1},
+ {t:"Had I known about the roadworks, I ___ earlier.",o:["would leave","would have left","left","will leave"],a:1},
+ {t:"It was ___ that we eventually decided to call off the trip.",o:["such a bad weather","so bad a weather","such bad weather","so bad weather"],a:2},
+ {t:"Controversial ___ it was, the committee's decision went ahead unchanged.",o:["as","that","which","who"],a:0}
+];
+const G_SECTIONS=[["SECTION A · Elementary (A1–A2)",0,9],["SECTION B · Intermediate (B1–B2)",10,19],["SECTION C · Advanced (C1–C2)",20,29]];
+
+const VOCAB=[
+ {t:"Which word does NOT belong with the others?",o:["apple","banana","carrot","orange"],a:2},
+ {t:"The opposite of \u201cbig\u201d is ___.",o:["small","short","little","less"],a:0},
+ {t:"My father's brother is my ___.",o:["cousin","nephew","uncle","in-law"],a:2},
+ {t:"I go to school ___ bus every morning.",o:["by","on","in","with"],a:0},
+ {t:"It's very cold outside — put on your ___.",o:["coat","slipper","sock","belt"],a:0},
+ {t:"\u201cWhat ___ is it today?\u201d \u201cIt's Monday.\u201d",o:["date","day","time","hour"],a:1},
+ {t:"She's very ___; she's always the first to offer help.",o:["generous","jealous","nervous","curious"],a:0},
+ {t:"Our flight was ___ by two hours because of the storm.",o:["delayed","cancelled","boarded","landed"],a:0},
+ {t:"He has a lot of ___ in his job — he can choose his own hours.",o:["flexibility","flexible","flexibly","flex"],a:0},
+ {t:"I really can't ___ this constant noise anymore!",o:["stand","hold","keep","take off"],a:0},
+ {t:"The company is planning to ___ its operations into new markets next year.",o:["expand","extend","enlarge","increase"],a:0},
+ {t:"She was highly ___ for the position, given her ten years of experience.",o:["qualify","qualified","qualification","qualifying"],a:1},
+ {t:"Choose the word closest in meaning to \u201creluctant\u201d:",o:["eager","unwilling","curious","confident"],a:1},
+ {t:"Choose the correct collocation: to ___ a mistake.",o:["do","make","have","take"],a:1},
+ {t:"His argument was completely ___; it had holes in every point he made.",o:["flawed","flawless","flawing","flawedly"],a:0},
+ {t:"The two sides finally reached a ___ after months of difficult negotiations.",o:["breakthrough","breakdown","outbreak","backlog"],a:0},
+ {t:"Choose the word closest in meaning to \u201cmeticulous\u201d:",o:["careless","thorough","hesitant","impulsive"],a:1},
+ {t:"The economy showed clear signs of ___ after two years of recession.",o:["recovery","collapse","downturn","stagnation"],a:0},
+ {t:"Choose the correct collocation: to ___ a risk.",o:["make","do","take","have"],a:2},
+ {t:"Her closing speech was remarkably ___; not a single word was out of place.",o:["eloquent","clumsy","blunt","vague"],a:0}
+];
+const V_SECTIONS=[["SECTION A · Elementary (A1–A2)",0,5],["SECTION B · Intermediate (B1–B2)",6,13],["SECTION C · Advanced (C1–C2)",14,19]];
+
+const PASSAGES=[
+ {title:"Passage 1 · Working From Home (A2–B1)",text:[
+  "More and more people now work from home instead of going to an office. This has some clear advantages. First, workers save time because they don't have to travel every day. Second, many people say they feel more relaxed working in their own space.",
+  "However, working from home also has problems. Some people find it hard to separate work time from free time. Others miss talking to their colleagues face to face. Because of this, many companies now offer a mix: a few days at home and a few days in the office. This is often called \u201chybrid working\u201d, and it is becoming very popular around the world."]},
+ {title:"Passage 2 · The Rise of Remote Learning (B2)",text:[
+  "Over the past decade, remote learning has moved from a niche option to a mainstream part of education. Universities that once relied entirely on lecture halls now offer full degree programmes online, and even primary schools increasingly use digital platforms to support classroom teaching.",
+  "Supporters argue that remote learning removes geographical barriers, allowing students in rural areas or developing countries to access courses previously available only to a privileged few. Critics, meanwhile, point out that it can widen inequality rather than close it: students without reliable internet access or a quiet place to study are often left behind.",
+  "What most researchers agree on is that remote learning works best not as a total replacement for traditional teaching, but as a complement to it — combining the flexibility of digital tools with the structure and social contact that a classroom provides."]},
+ {title:"Passage 3 · Critical Thinking in the Age of Information (C1–C2)",text:[
+  "We live in an era of unprecedented access to information, yet this abundance has, paradoxically, made critical thinking more essential — and more difficult to sustain — than ever before. The sheer volume of content competing for our attention means that speed is frequently rewarded over accuracy, and claims that provoke an emotional reaction tend to spread further than those requiring careful evaluation.",
+  "This dynamic places a heavier burden on individuals to interrogate their sources, recognise their own cognitive biases, and resist the temptation to accept information simply because it confirms what they already believe. Educational institutions have responded unevenly: some have integrated media literacy and source evaluation directly into their curricula, while others continue to treat critical thinking as an implicit by-product of general study rather than a skill requiring explicit instruction.",
+  "Ultimately, the capacity to think critically may prove to be less a matter of intelligence than of disposition — a willingness to tolerate uncertainty, question convenient conclusions, and revise one's views in light of new evidence."]}
+];
+const READING=[
+ {p:0,t:"According to the text, what is one advantage of working from home?",o:["Workers save time because they don't have to travel every day.","Workers earn more money working from home.","Workers get longer holidays.","Workers receive better training at home."],a:0},
+ {p:0,t:"What is one problem that some people have when working from home?",o:["It is hard to separate work time from free time.","They have to travel every day.","Their computers are too slow at home.","Companies pay home workers less."],a:0},
+ {p:0,t:"What does \u201chybrid working\u201d mean, according to the passage?",o:["A mix: a few days at home and a few days in the office.","Working only from home, never in the office.","Working in different countries every month.","Working only at weekends."],a:0},
+ {p:1,t:"What is one benefit of remote learning mentioned by its supporters?",o:["It removes geographical barriers, giving more students access to courses.","It is always cheaper than classroom teaching.","It replaces teachers with recorded videos.","It makes degree programmes shorter."],a:0},
+ {p:1,t:"According to critics, why might remote learning increase inequality?",o:["Students without reliable internet access or a quiet place to study are left behind.","Online degrees are more expensive than traditional ones.","Teachers give lower grades to online students.","Rural students are not interested in studying."],a:0},
+ {p:1,t:"What conclusion do most researchers reach about remote learning?",o:["It works best as a complement to traditional teaching, not a full replacement.","It should completely replace traditional classrooms.","It only works well at universities.","Researchers fully disagree about its value."],a:0},
+ {p:2,t:"According to the passage, why has critical thinking become more difficult to sustain?",o:["The huge volume of content rewards speed and emotional reaction over careful evaluation.","People now read far fewer books than before.","Schools have stopped teaching any thinking skills.","The internet has become too slow to use."],a:0},
+ {p:2,t:"What criticism is implied about how some educational institutions treat critical thinking?",o:["They treat it as an unplanned by-product of general study rather than teaching it explicitly.","They teach too much media literacy.","They ignore modern technology completely.","They only teach critical thinking to older students."],a:0},
+ {p:2,t:"The author describes critical thinking as \u201ca matter of disposition\u201d rather than intelligence. What does this mean?",o:["It is an attitude — a willingness to tolerate uncertainty, question conclusions and revise views.","It is a natural talent that people are born with.","It is a skill that can only be learned at university.","It is something that intelligent people never need."],a:0},
+ {p:2,t:"What is the overall tone and purpose of this passage?",o:["Informative and analytical — it explains and examines an idea.","Purely narrative — it tells a personal story.","Persuasive — it argues for one single opinion.","Humorous — it is written to entertain."],a:0}
+];
+
+/* build unified item list */
+const ITEMS=[
+ ...GRAMMAR.map((q,i)=>({...q,part:0,tag:secOf(G_SECTIONS,i)+" · Grammar",n:i+1})),
+ ...VOCAB.map((q,i)=>({...q,part:1,tag:secOf(V_SECTIONS,i)+" · Vocabulary",n:i+1})),
+ ...READING.map((q,i)=>({...q,part:2,tag:"Part 3 · Reading · Passage "+(q.p+1),n:i+1}))
+];
+function secOf(secs,i){for(const s of secs)if(i>=s[1]&&i<=s[2])return s[0];return ""}
+
+const PART_META=[
+ {label:"Part 1 · Grammar",title:"Grammar",sub:"30 questions, from elementary to advanced. Choose the option that best completes each sentence."},
+ {label:"Part 2 · Vocabulary",title:"Vocabulary",sub:"20 questions on word choice, collocation and meaning."},
+ {label:"Part 3 · Reading",title:"Reading",sub:"Read each passage, then answer the questions. You can look back at the text as often as you like."}
+];
+
+/* ───────── STATE ───────── */
+const S_KEY="placementTestState";
+let state=JSON.parse(localStorage.getItem(S_KEY)||"{}");
+state.answers=state.answers||{};let cur=state.cur||0;
+const N=ITEMS.length;
+function save(){try{localStorage.setItem(S_KEY,JSON.stringify(state))}catch(e){}}
+
+const $=id=>document.getElementById(id);
+const KEYS=["A","B","C","D"];
+
+function render(){
+  const it=ITEMS[cur];
+  $("topbar").classList.add("show");
+  const pm=PART_META[it.part];
+  $("part-label").textContent=pm.label;
+  $("item-label").textContent=(cur+1)+" / "+N;
+  $("prog-fill").style.width=((cur)/N*100)+"%";
+  $("partHead").innerHTML=`<p class="part-eyebrow">${pm.label}</p><h2 class="part-title">${pm.title}</h2><p class="part-sub">${pm.sub}</p>`;
+  // passage
+  const pb=$("passageBox");
+  if(it.part===2){
+    const p=PASSAGES[it.p];
+    pb.style.display="block";
+    pb.innerHTML=`<div class="p-title">${p.title}</div>`+p.text.map(t=>`<p>${t}</p>`).join("");
+  }else pb.style.display="none";
+  $("qTag").textContent=it.tag+" · Item "+it.n;
+  $("qText").innerHTML=it.t.replace("___",'<span class="blank">&nbsp;___&nbsp;</span>');
+  $("qOpts").innerHTML=it.o.map((o,i)=>`<button class="opt" data-i="${i}"><span class="key">${KEYS[i]}</span><span>${o}</span></button>`).join("");
+  $("qOpts").querySelectorAll(".opt").forEach(b=>{
+    b.addEventListener("click",()=>{
+      state.answers[cur]=+b.dataset.i;save();
+      $("qOpts").querySelectorAll(".opt").forEach(x=>x.classList.remove("sel"));
+      b.classList.add("sel");$("nextBtn").disabled=false;
+    });
+    if(state.answers[cur]===+b.dataset.i)b.classList.add("sel");
+  });
+  $("prevBtn").disabled=cur===0;
+  $("nextBtn").textContent=cur===N-1?"See your level →":"Next →";
+  $("nextBtn").disabled=state.answers[cur]===undefined;
+  $("quiz").classList.add("show");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+$("startBtn").addEventListener("click",()=>{$("hero").style.display="none";render()});
+$("prevBtn").addEventListener("click",()=>{if(cur>0){cur--;state.cur=cur;save();render()}});
+$("nextBtn").addEventListener("click",()=>{
+  if(state.answers[cur]===undefined)return;
+  if(cur===N-1){finish();return}
+  cur++;state.cur=cur;save();render();
+});
+
+/* ───────── SCORING ───────── */
+const GV_BANDS=[[8,1,"A1","Beginner"],[17,2,"A2","Elementary"],[27,3,"B1","Intermediate"],[36,4,"B2","Upper-Intermediate"],[44,5,"C1","Advanced"],[50,6,"C2","Proficient"]];
+const RD_BANDS=[[2,2,"A2 or below"],[5,3,"B1"],[8,4,"B2"],[10,5,"C1–C2"]];
+function bandOf(score,table){for(const b of table)if(score<=b[0])return b;return table[table.length-1]}
+
+const LVL_NAMES={1:["A1","Beginner"],2:["A2","Elementary"],3:["B1","Intermediate"],4:["B2","Upper-Intermediate"],5:["C1","Advanced"],6:["C2","Proficient"]};
+const LVL_DESC={
+ 1:"You are at the very beginning. Start with basic words and simple phrases — the A2 quizzes on this site will be a good first challenge once you know the basics.",
+ 2:"You can handle simple, everyday English. The A2 quizzes on this site are right for you — daily routines, present and past tenses, and core vocabulary.",
+ 3:"You can deal with most everyday situations and produce simple connected text. Start with the B1 quizzes — question forms, word order and natural-sounding details.",
+ 4:"You can understand the main ideas of complex text and interact with fluency. The B2 quizzes are for you — modals of deduction, real-life vocabulary and themed revision.",
+ 5:"You can express ideas fluently and use language flexibly. The C1 quizzes will stretch you — CAE collocations, mixed conditionals and advanced vocabulary.",
+ 6:"You understand virtually everything with ease. Try the C2 quiz — inversion for emphasis and the finer points of English style."
+};
+const LVL_LINKS={1:"level-a2.html",2:"level-a2.html",3:"level-b1.html",4:"level-b2.html",5:"level-c1.html",6:"level-c2.html"};
+
+function finish(){
+  let g=0,v=0,r=0;
+  ITEMS.forEach((it,i)=>{
+    const ok=state.answers[i]===it.a;
+    if(it.part===0&&ok)g++;if(it.part===1&&ok)v++;if(it.part===2&&ok)r++;
+  });
+  const gv=g+v;
+  const gvB=bandOf(gv,GV_BANDS),rdB=bandOf(r,RD_BANDS);
+  // rule of thumb: if written parts differ by more than one band, take the lower
+  const finalBand=Math.abs(gvB[1]-rdB[1])>1?Math.min(gvB[1],rdB[1]):gvB[1];
+  const [code,name]=LVL_NAMES[finalBand];
+
+  $("lvlCode").textContent=code;
+  $("lvlName").textContent=name+" · CEFR "+code;
+  $("lvlDesc").textContent=LVL_DESC[finalBand];
+  const link=$("lvlLink");link.href=LVL_LINKS[finalBand];
+  link.textContent=finalBand===1?"Start with the A2 quizzes →":"See quizzes for your level →";
+
+  $("scoreGrid").innerHTML=[
+    {lbl:"Grammar (Part 1)",val:g+" / 30",lvl:""},
+    {lbl:"Vocabulary (Part 2)",val:v+" / 20",lvl:""},
+    {lbl:"Grammar + Vocabulary",val:gv+" / 50",lvl:gvB[2]+" · "+(gvB[3]||"")},
+    {lbl:"Reading (Part 3)",val:r+" / 10",lvl:rdB[2]}
+  ].map(s=>`<div class="score-card"><span class="lbl">${s.lbl}</span><span class="val">${s.val}</span>${s.lvl?`<span class="lvl">${s.lvl}</span>`:""}</div>`).join("");
+
+  // review of missed items
+  const missed=[];
+  ITEMS.forEach((it,i)=>{
+    if(state.answers[i]!==it.a){
+      const partName=["Grammar","Vocabulary","Reading"][it.part];
+      const chosen=state.answers[i]===undefined?"— no answer":KEYS[state.answers[i]]+") "+it.o[state.answers[i]];
+      missed.push(`<div class="rev-item"><b>${partName} ${it.n}.</b> ${it.t.replace("___","___")}<br><span class="wrong">Your answer: ${chosen}</span><br><span class="right">Correct: ${KEYS[it.a]}) ${it.o[it.a]}</span></div>`);
+    }
+  });
+  $("reviewBox").style.display=missed.length?"block":"none";
+  $("reviewList").innerHTML=missed.length?missed.join(""):"<p style='font-size:14px;color:var(--good)'>Perfect score — every answer correct! 🎉</p>";
+
+  $("quiz").classList.remove("show");
+  $("topbar").classList.remove("show");
+  $("results").classList.add("show");
+  document.getElementById("b2qBtn").classList.add("show");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+$("restartBtn").addEventListener("click",()=>{
+  state={answers:{},cur:0};cur=0;save();
+  $("results").classList.remove("show");
+  document.getElementById("b2qBtn").classList.remove("show");
+  $("hero").style.display="flex";
+  window.scrollTo({top:0,behavior:"smooth"});
+});
+
+/* resume support */
+if(state.cur>0&&Object.keys(state.answers).length>0&&state.cur<N){
+  // offer resume by rendering directly if user was mid-test
+  const resume=confirm("Continue the placement test from question "+(state.cur+1)+"? (Cancel to start over)");
+  if(resume){$("hero").style.display="none";render()}
+  else{state={answers:{},cur:0};cur=0;save()}
+}
+</script>
+</body>
+</html>
