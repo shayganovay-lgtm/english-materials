@@ -96,6 +96,10 @@ button{font-family:inherit;cursor:pointer}
 .speak-note{background:var(--surface);border:1px dashed var(--border);border-radius:12px;padding:16px 18px;font-size:13.5px;color:var(--muted);line-height:1.65}
 .speak-note b{color:var(--ink)}
 .res-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.level-links{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:18px}
+.level-links .level-link{margin-top:0}
+.level-link.secondary{background:var(--surface);color:var(--ink);border:1px solid var(--border)}
+.level-link.secondary:hover{background:var(--bg);border-color:var(--accent);color:var(--accent)}
 
 footer{border-top:1px solid var(--border);padding:20px;text-align:center;font-family:var(--f-mono);font-size:11px;color:var(--muted)}
 footer a{color:var(--accent)}
@@ -157,7 +161,10 @@ footer a{color:var(--accent)}
     <div class="level-code" id="lvlCode">B1</div>
     <div class="level-name" id="lvlName">Intermediate</div>
     <p class="level-desc" id="lvlDesc"></p>
-    <a class="level-link" id="lvlLink" href="level-a2.html">See quizzes for your level →</a>
+    <div class="level-links">
+      <a class="level-link" id="lvlLink" href="level-a2.html">See quizzes for your level →</a>
+      <a class="level-link secondary" href="index.html">← Back to main page</a>
+    </div>
   </div>
   <div class="score-grid" id="scoreGrid"></div>
   <div class="review" id="reviewBox">
