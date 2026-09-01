@@ -1041,5 +1041,56 @@ function closePopover(){
 })();
 </script>
 
+
+<!-- ENTER KEY = CHECK — press Enter to check an answer or go to the next item -->
+<script>
+(function(){
+  document.addEventListener('keydown',function(e){
+    if(e.key!=='Enter')return;
+    var t=e.target;
+    if(!t||t.tagName==='TEXTAREA'||t.tagName==='A'||t.tagName==='SELECT')return;
+    if(t===document.body||t===document.documentElement){/* continue: quiz advance */}
+    else if(t.tagName==='INPUT'){
+      var ty=(t.type||'text').toLowerCase();
+      if(/^(checkbox|radio|submit|button|file|reset)$/i.test(ty))return;
+      // skip inputs with their own Enter handler (e.g. chat)
+      if(/enter/i.test(t.getAttribute('onkeydown')||''))return;
+      if(/chat/i.test(t.id||'')||/chat/i.test(t.name||'')||/chat/i.test(t.placeholder||''))return;
+    } else if(t.tagName==='BUTTON'){
+      // only hijack Enter on answer-choice buttons; other focused buttons keep native Enter
+      var cid=t.id||'',ccn=t.className||'',pcn=(t.parentElement&&t.parentElement.className)||'';
+      var isOpt=/^opt-|^option/i.test(cid)||/(^|[\s_-])(opt|option|options|opts|choice|mc-opt|mini-opt|tf-btn|pick|answer)([\s_-]|$)/i.test(ccn)||/(^|[\s_-])(opts|options)([\s_-]|$)/i.test(pcn);
+      if(!isOpt)return;
+    }
+    var btn=findAction(t);
+    if(btn&&btn!==t){e.preventDefault();btn.focus();btn.click();}
+  });
+  function visible(el){return !!el&&el.offsetParent!==null&&!el.disabled&&!el.classList.contains('disabled')&&el.getAttribute('aria-disabled')!=='true';}
+  function isCheckBtn(b){return /^(✔\s*)?check/i.test((b.textContent||'').trim());}
+  function findAction(t){
+    // 1) nearest "Check" button in the same card/section (gap-fills, homework tasks)
+    var cont=t.closest?t.closest('.card,.task,.q-card,.frame,section,.container,div'):null;
+    var guard=0;
+    while(cont&&cont!==document.body&&guard<8){
+      var btns=cont.querySelectorAll('button');
+      for(var i=0;i<btns.length;i++){if(visible(btns[i])&&isCheckBtn(btns[i]))return btns[i];}
+      cont=cont.parentElement?cont.parentElement.closest('div,section,form'):null;guard++;
+    }
+    // 2) single-item quizzes: enabled Next / See results button
+    var nb=document.getElementById('next-btn')||document.getElementById('nextBtn');
+    if(nb&&visible(nb)&&(nb.classList.contains('enabled')||!nb.disabled)){
+      if(/next|results|item|scorecard/i.test((nb.textContent||'').trim()))return nb;
+    }
+    // 3) quiz apps: enabled primary action (Check answer / Next question / See results)
+    var prim=document.querySelectorAll('.btn-primary');
+    for(var j=0;j<prim.length;j++){
+      var p=prim[j],pt=(p.textContent||'').trim();
+      if(visible(p)&&/check answer|next question|see results|see the scorecard/i.test(pt))return p;
+    }
+    return null;
+  }
+})();
+</script>
+
 </body>
 </html>
