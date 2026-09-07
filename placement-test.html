@@ -89,6 +89,16 @@ button{font-family:inherit;cursor:pointer}
 .score-card .lvl{font-size:13px;color:var(--accent);font-weight:600;margin-top:2px;display:block}
 .review{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:18px}
 .review h3{font-family:var(--f-serif);font-size:17px;margin-bottom:12px}
+.topic-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;margin-bottom:14px}
+.topic-card{border:1px solid var(--border);border-radius:10px;padding:12px 14px;background:var(--bg)}
+.topic-top{display:flex;justify-content:space-between;gap:8px;align-items:baseline;flex-wrap:wrap}
+.topic-name{font-weight:600;font-size:14px}
+.topic-band{font-family:var(--f-mono);font-size:10px;color:var(--accent);background:var(--accent-soft);border-radius:99px;padding:2px 8px;white-space:nowrap}
+.topic-score{font-family:var(--f-mono);font-size:11px;color:var(--bad);margin:4px 0}
+.topic-tip{font-size:13px;color:var(--muted);line-height:1.55;margin-bottom:8px}
+.topic-quiz{font-size:13px;font-weight:600;color:var(--accent);text-decoration:none}
+.topic-quiz:hover{text-decoration:underline}
+.solid{font-size:12.5px;color:var(--good);margin-top:12px;line-height:1.6}
 .rev-item{font-size:13.5px;padding:8px 0;border-bottom:1px solid var(--border);line-height:1.55}
 .rev-item:last-child{border-bottom:none}
 .rev-item .wrong{color:var(--bad)}
@@ -167,6 +177,7 @@ footer a{color:var(--accent)}
     </div>
   </div>
   <div class="score-grid" id="scoreGrid"></div>
+  <div class="review" id="studyPlan" style="display:none"></div>
   <div class="review" id="reviewBox">
     <h3>Review — questions you missed</h3>
     <div id="reviewList"></div>
@@ -250,6 +261,36 @@ const VOCAB=[
 ];
 const V_SECTIONS=[["SECTION A · Elementary (A1–A2)",0,5],["SECTION B · Intermediate (B1–B2)",6,13],["SECTION C · Advanced (C1–C2)",14,19]];
 
+/* grammar topic per item (index → topic key) */
+const G_TOPIC=["be","thereis","pressimple","pastsimple","comparatives","questions","quantifiers","pastcont","superlatives","presperf","cond2","presperf","passive","wish","pastperf","verbpatt","verbpatt","modalperf","relatives","agreement","inversion","rather","inversion","rather","prepositions","linking","repinf","cond3","sosuch","inversion"];
+const TOPICS={
+ be:{n:"Verb 'to be' (am/is/are)",b:"A1–A2",tip:"The foundation of every sentence — practise I am / he is / they are until it's automatic."},
+ thereis:{n:"There is / there are",b:"A2",tip:"There is + singular noun, there are + plural noun."},
+ pressimple:{n:"Present Simple",b:"A1–A2",tip:"Routines and facts: I work, he works.",q:["now-or-always-present-tenses-quiz.html","Now or Always? (A2)"]},
+ pastsimple:{n:"Past Simple",b:"A2",tip:"Regular (-ed) and irregular verbs (go → went) for finished actions.",q:["rewind-past-simple-quiz.html","Rewind · Past Simple (A2)"]},
+ comparatives:{n:"Comparatives",b:"A2",tip:"Short adjectives take -er, long adjectives take more.",q:["bigger-better-comparatives-quiz.html","Bigger, Better, Faster (A2)"]},
+ questions:{n:"Questions & auxiliaries",b:"A2–B1",tip:"Do / does / did + base verb for questions and negatives.",q:["grammar-gym-questions-present-simple-quiz.html","Grammar Gym (B1)"]},
+ quantifiers:{n:"Some / any / much / many",b:"A2",tip:"Some in positive sentences, any in negatives and questions."},
+ pastcont:{n:"Past Continuous",b:"A2–B1",tip:"was / were + -ing for actions in progress in the past."},
+ superlatives:{n:"Superlatives",b:"A2",tip:"the + -est / the most for the top of a group.",q:["bigger-better-comparatives-quiz.html","Bigger, Better, Faster (A2)"]},
+ presperf:{n:"Present Perfect",b:"B1",tip:"have / has + past participle — experience, results, already / yet, for / since."},
+ cond2:{n:"Second conditional",b:"B1–B2",tip:"If + past simple, would + base verb for unreal present situations.",q:["turning_points_c1_grammar_quiz.html","Mixed Conditionals (C1)"]},
+ passive:{n:"Passive voice",b:"B1–B2",tip:"be + past participle when the action matters more than the person."},
+ wish:{n:"Wish / if only",b:"B2–C1",tip:"wish + past simple for present regrets, wish + past perfect for past regrets.",q:["wishful-thinking-b2-grammar-quiz.html","Wishful Thinking (C1)"]},
+ pastperf:{n:"Past Perfect",b:"B2",tip:"had + past participle for the earlier of two past actions."},
+ verbpatt:{n:"Verb patterns (gerund / infinitive)",b:"B1–B2",tip:"Some verbs take -ing (suggest doing), some take to (decide to do)."},
+ modalperf:{n:"Modal perfect (should have…)",b:"B2",tip:"should / must / can't + have + past participle for past regret and deduction.",q:["homework-study-buddy-speculation-deduction.html","Speculation & Deduction (B2)"]},
+ relatives:{n:"Relative clauses",b:"B1–B2",tip:"which / who / whose — and that in defining clauses."},
+ agreement:{n:"Subject–verb agreement",b:"B1",tip:"Neither of + singular verb — the verb agrees with the true subject."},
+ inversion:{n:"Inversion for emphasis",b:"C1–C2",tip:"Hardly had I…, Not only was he… — advanced word order after negative adverbs.",q:["flipping_the_script_inversion_quiz.html","Flipping the Script (C1–C2)"]},
+ rather:{n:"Would rather & it's time",b:"C1",tip:"would rather + past, it's high time + past — unreal uses of the past.",q:["wishful-thinking-b2-grammar-quiz.html","Wishful Thinking (C1)"]},
+ prepositions:{n:"Dependent prepositions",b:"B2–C1",tip:"Verbs and nouns with fixed prepositions: resistance from, met with."},
+ linking:{n:"Despite / in spite of",b:"B2–C1",tip:"Despite + noun / gerund, although + full clause."},
+ repinf:{n:"Perfect infinitive (is said to have…)",b:"C1",tip:"Perfect infinitives for reported past actions: is said to have run."},
+ cond3:{n:"Third conditional",b:"C1",tip:"If + past perfect, would have + past participle for past unreal situations.",q:["turning_points_c1_grammar_quiz.html","Mixed Conditionals (C1)"]},
+ sosuch:{n:"So / such",b:"B2",tip:"such + adjective + noun, so + adjective on its own."}
+};
+
 const PASSAGES=[
  {title:"Passage 1 · Working From Home (A2–B1)",text:[
   "More and more people now work from home instead of going to an office. This has some clear advantages. First, workers save time because they don't have to travel every day. Second, many people say they feel more relaxed working in their own space.",
@@ -264,16 +305,16 @@ const PASSAGES=[
   "Ultimately, the capacity to think critically may prove to be less a matter of intelligence than of disposition — a willingness to tolerate uncertainty, question convenient conclusions, and revise one's views in light of new evidence."]}
 ];
 const READING=[
- {p:0,t:"According to the text, what is one advantage of working from home?",o:["Workers save time because they don't have to travel every day.","Workers earn more money working from home.","Workers get longer holidays.","Workers receive better training at home."],a:0},
- {p:0,t:"What is one problem that some people have when working from home?",o:["It is hard to separate work time from free time.","They have to travel every day.","Their computers are too slow at home.","Companies pay home workers less."],a:0},
- {p:0,t:"What does \u201chybrid working\u201d mean, according to the passage?",o:["A mix: a few days at home and a few days in the office.","Working only from home, never in the office.","Working in different countries every month.","Working only at weekends."],a:0},
+ {p:0,t:"According to the text, what is one advantage of working from home?",o:["Workers earn more money working from home.","Workers save time because they don't have to travel every day.","Workers get longer holidays.","Workers receive better training at home."],a:1},
+ {p:0,t:"What is one problem that some people have when working from home?",o:["They have to travel every day.","Their computers are too slow at home.","Companies pay home workers less.","It is hard to separate work time from free time."],a:3},
+ {p:0,t:"What does \u201chybrid working\u201d mean, according to the passage?",o:["Working only from home, never in the office.","Working in different countries every month.","A mix: a few days at home and a few days in the office.","Working only at weekends."],a:2},
  {p:1,t:"What is one benefit of remote learning mentioned by its supporters?",o:["It removes geographical barriers, giving more students access to courses.","It is always cheaper than classroom teaching.","It replaces teachers with recorded videos.","It makes degree programmes shorter."],a:0},
- {p:1,t:"According to critics, why might remote learning increase inequality?",o:["Students without reliable internet access or a quiet place to study are left behind.","Online degrees are more expensive than traditional ones.","Teachers give lower grades to online students.","Rural students are not interested in studying."],a:0},
- {p:1,t:"What conclusion do most researchers reach about remote learning?",o:["It works best as a complement to traditional teaching, not a full replacement.","It should completely replace traditional classrooms.","It only works well at universities.","Researchers fully disagree about its value."],a:0},
- {p:2,t:"According to the passage, why has critical thinking become more difficult to sustain?",o:["The huge volume of content rewards speed and emotional reaction over careful evaluation.","People now read far fewer books than before.","Schools have stopped teaching any thinking skills.","The internet has become too slow to use."],a:0},
+ {p:1,t:"According to critics, why might remote learning increase inequality?",o:["Online degrees are more expensive than traditional ones.","Students without reliable internet access or a quiet place to study are left behind.","Teachers give lower grades to online students.","Rural students are not interested in studying."],a:1},
+ {p:1,t:"What conclusion do most researchers reach about remote learning?",o:["It should completely replace traditional classrooms.","It only works well at universities.","Researchers fully disagree about its value.","It works best as a complement to traditional teaching, not a full replacement."],a:3},
+ {p:2,t:"According to the passage, why has critical thinking become more difficult to sustain?",o:["People now read far fewer books than before.","Schools have stopped teaching any thinking skills.","The huge volume of content rewards speed and emotional reaction over careful evaluation.","The internet has become too slow to use."],a:2},
  {p:2,t:"What criticism is implied about how some educational institutions treat critical thinking?",o:["They treat it as an unplanned by-product of general study rather than teaching it explicitly.","They teach too much media literacy.","They ignore modern technology completely.","They only teach critical thinking to older students."],a:0},
- {p:2,t:"The author describes critical thinking as \u201ca matter of disposition\u201d rather than intelligence. What does this mean?",o:["It is an attitude — a willingness to tolerate uncertainty, question conclusions and revise views.","It is a natural talent that people are born with.","It is a skill that can only be learned at university.","It is something that intelligent people never need."],a:0},
- {p:2,t:"What is the overall tone and purpose of this passage?",o:["Informative and analytical — it explains and examines an idea.","Purely narrative — it tells a personal story.","Persuasive — it argues for one single opinion.","Humorous — it is written to entertain."],a:0}
+ {p:2,t:"The author describes critical thinking as \u201ca matter of disposition\u201d rather than intelligence. What does this mean?",o:["It is a natural talent that people are born with.","It is an attitude — a willingness to tolerate uncertainty, question conclusions and revise views.","It is a skill that can only be learned at university.","It is something that intelligent people never need."],a:1},
+ {p:2,t:"What is the overall tone and purpose of this passage?",o:["Purely narrative — it tells a personal story.","Persuasive — it argues for one single opinion.","Humorous — it is written to entertain.","Informative and analytical — it explains and examines an idea."],a:3}
 ];
 
 /* build unified item list */
@@ -291,7 +332,7 @@ const PART_META=[
 ];
 
 /* ───────── STATE ───────── */
-const S_KEY="placementTestState";
+const S_KEY="placementTestStateV2";
 let state=JSON.parse(localStorage.getItem(S_KEY)||"{}");
 state.answers=state.answers||{};let cur=state.cur||0;
 const N=ITEMS.length;
@@ -393,6 +434,57 @@ function finish(){
   });
   $("reviewBox").style.display=missed.length?"block":"none";
   $("reviewList").innerHTML=missed.length?missed.join(""):"<p style='font-size:14px;color:var(--good)'>Perfect score — every answer correct! 🎉</p>";
+
+  /* study plan — grammar topic analysis */
+  const tStats={};
+  GRAMMAR.forEach((q,i)=>{
+    const k=G_TOPIC[i];
+    tStats[k]=tStats[k]||{ok:0,n:0};
+    tStats[k].n++;
+    if(state.answers[i]===q.a)tStats[k].ok++;
+  });
+  const weak=Object.keys(tStats).map(k=>({k,...tStats[k]})).filter(x=>x.ok<x.n)
+    .sort((a,b)=>(b.n-b.ok)-(a.n-a.ok));
+  const solid=Object.keys(tStats).filter(k=>tStats[k].ok===tStats[k].n).map(k=>TOPICS[k].n);
+  const vMiss=[[],[],[]];
+  VOCAB.forEach((q,i)=>{
+    if(state.answers[30+i]!==q.a)vMiss[i<6?0:(i<14?1:2)].push(q.o[q.a]);
+  });
+  const RD_ADVICE=[
+    [2,"You understood the easier passage but found the harder ones difficult — start with short A2–B1 texts and build up."],
+    [5,"Good basic comprehension. Keep reading graded B1 texts to build speed and confidence."],
+    [8,"Strong reading across medium-difficulty texts. Challenge yourself with authentic B2–C1 articles."],
+    [10,"Excellent comprehension up to advanced texts — reading is clearly one of your strengths."]
+  ];
+  const rdA=RD_ADVICE.find(x=>r<=x[0])[1];
+  const vNames=["Elementary (A1–A2)","Intermediate (B1–B2)","Advanced (C1–C2)"];
+
+  let sp='<h3>Your study plan</h3>';
+  sp+='<p style="font-size:14px;color:var(--muted);margin-bottom:14px">Based on your answers, here are the grammar topics to focus on, in priority order.</p>';
+  if(weak.length){
+    sp+='<div class="topic-list">';
+    weak.forEach(w=>{
+      const t=TOPICS[w.k];
+      sp+='<div class="topic-card"><div class="topic-top"><span class="topic-name">'+t.n+'</span><span class="topic-band">'+t.b+'</span></div>'
+        +'<div class="topic-score">'+w.ok+'/'+w.n+' correct</div>'
+        +'<p class="topic-tip">'+t.tip+'</p>'
+        +(t.q?'<a class="topic-quiz" href="'+t.q[0]+'">Practice: '+t.q[1]+' →</a>':"")
+        +'</div>';
+    });
+    sp+='</div>';
+    if(solid.length)sp+='<p class="solid">Solid — no mistakes in: '+solid.join(" · ")+'</p>';
+  }else{
+    sp+='<p style="font-size:14.5px;color:var(--good)">No grammar gaps detected — every grammar topic answered correctly. Focus on vocabulary breadth and speaking fluency.</p>';
+  }
+  sp+='<h3 style="margin-top:20px">Vocabulary &amp; reading</h3>';
+  let vOut=false;
+  vMiss.forEach((arr,i)=>{
+    if(arr.length){sp+='<p class="topic-tip" style="margin:8px 0"><b>'+vNames[i]+' — words to review:</b> '+arr.join(", ")+'.</p>';vOut=true;}
+  });
+  if(!vOut)sp+='<p class="topic-tip" style="margin:8px 0">No vocabulary mistakes — well done.</p>';
+  sp+='<p class="topic-tip" style="margin-top:8px"><b>Reading:</b> '+rdA+'</p>';
+  $("studyPlan").innerHTML=sp;
+  $("studyPlan").style.display="block";
 
   $("quiz").classList.remove("show");
   $("topbar").classList.remove("show");
