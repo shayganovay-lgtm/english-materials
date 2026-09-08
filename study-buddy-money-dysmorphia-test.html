@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Money Dysmorphia — Vocabulary Progress Test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EFEDE7;
+    --card:#FFFFFF;
+    --ink:#1E2A24;
+    --ink-soft:#5C6B62;
+    --ink-faint:#8E9C93;
+    --brass:#B8823B;
+    --brass-bg:#F3E7D2;
+    --teal:#286B62;
+    --teal-bg:#DCEAE6;
+    --plum:#6E4A82;
+    --plum-bg:#E9E0EF;
+    --correct:#2F7A4F;
+    --correct-bg:#E1F0E4;
+    --incorrect:#B0433A;
+    --incorrect-bg:#F5E0DD;
+    --line:#DCD8CF;
+    --line-soft:#EAE7DF;
+    --font-display:'Fraunces', Georgia, serif;
+    --font-body:'IBM Plex Sans', Arial, sans-serif;
+    --font-mono:'IBM Plex Mono', 'Courier New', monospace;
+    --shadow: 0 1px 2px rgba(30,42,36,0.05), 0 10px 30px rgba(30,42,36,0.08);
+    --radius: 16px;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    background:var(--bg);
+    background-image: radial-gradient(circle at 1px 1px, rgba(30,42,36,0.06) 1px, transparent 0);
+    background-size: 22px 22px;
+    color:var(--ink);
+    font-family:var(--font-body);
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:34px 16px 70px;
+  }
+  @media (prefers-reduced-motion: reduce){ *{ animation-duration:0.001ms !important; transition-duration:0.001ms !important; } }
+
+  .wrap{ width:100%; max-width:700px; }
+
+  header.top{ text-align:center; margin-bottom:26px; animation:dropIn .5s ease both; }
+  @keyframes dropIn{ from{opacity:0; transform:translateY(-8px);} to{opacity:1; transform:translateY(0);} }
+  .badge-lvl{
+    display:inline-block; font-family:var(--font-mono); font-size:.72rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--teal); background:var(--teal-bg); border-radius:99px;
+    padding:5px 13px; margin-bottom:10px;
+  }
+  h1.maintitle{
+    font-family:var(--font-display); font-weight:600; font-size:2.15rem; letter-spacing:-.01em; margin:0 0 6px;
+  }
+  .subtitle{ font-size:.95rem; color:var(--ink-soft); }
+
+  .progress-bar-track{ width:100%; height:6px; background:var(--line-soft); border-radius:4px; overflow:hidden; margin:22px 0 6px; }
+  .progress-bar-fill{ height:100%; background:linear-gradient(90deg,var(--brass),var(--teal)); border-radius:4px; transition:width .4s ease; width:0%; }
+  .progress-row{ display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:.74rem; color:var(--ink-soft); margin-bottom:20px; }
+
+  .card{ background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:34px 30px; animation:fadeSlide .35s ease both; }
+  @keyframes fadeSlide{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
+
+  .screen{ display:none; }
+  .screen.active{ display:block; }
+
+  p.lead{ font-size:.98rem; line-height:1.7; color:var(--ink-soft); margin:0 0 16px; }
+  p.lead strong{ color:var(--ink); }
+  .icon-row{ display:flex; gap:14px; margin:22px 0 4px; flex-wrap:wrap; }
+  .icon-chip{
+    font-family:var(--font-mono); font-size:.74rem; letter-spacing:.03em; color:var(--ink-soft);
+    border:1px solid var(--line); border-radius:99px; padding:8px 14px; background:#FBFAF7;
+  }
+
+  .btn-primary{
+    display:inline-block; width:100%; background:var(--ink); color:#FBF9F4; font-family:var(--font-body);
+    font-weight:600; font-size:.98rem; border:none; border-radius:10px; padding:15px 20px; cursor:pointer;
+    transition:background .15s ease, transform .1s ease; margin-top:24px;
+  }
+  .btn-primary:hover{ background:#2c3d32; }
+  .btn-primary:active{ transform:translateY(1px); }
+  .btn-primary:disabled{ opacity:.4; cursor:not-allowed; }
+  .btn-secondary{
+    display:inline-block; width:100%; background:transparent; color:var(--ink); font-family:var(--font-body);
+    font-weight:600; font-size:.92rem; border:1.5px solid var(--ink); border-radius:10px; padding:13px 20px;
+    cursor:pointer; margin-top:12px; transition:background .15s ease, color .15s ease;
+  }
+  .btn-secondary:hover{ background:var(--ink); color:#FBF9F4; }
+
+  /* pre-reading */
+  .pretask{ background:#FBFAF7; border:1px solid var(--line); border-radius:12px; padding:18px 20px; margin-bottom:16px; }
+  .pretask h3{ font-family:var(--font-display); font-size:1.05rem; margin:0 0 8px; color:var(--brass); }
+  .pretask p{ font-size:.9rem; line-height:1.6; color:var(--ink-soft); margin:0 0 8px; }
+  .pretask ul{ margin:6px 0 0 18px; padding:0; }
+  .pretask li{ font-size:.9rem; color:var(--ink-soft); line-height:1.7; }
+  textarea.reflect{
+    width:100%; font-family:var(--font-body); font-size:.9rem; border:1.5px solid var(--line); border-radius:8px;
+    padding:10px 12px; margin-top:8px; resize:vertical; min-height:56px; color:var(--ink);
+  }
+  textarea.reflect:focus{ outline:none; border-color:var(--brass); }
+
+  /* reading */
+  .read-box{ background:#FBFAF7; border:1px solid var(--line); border-radius:12px; padding:26px 24px; }
+  .read-box .rtitle{ font-family:var(--font-mono); font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--teal); margin-bottom:10px; }
+  .read-box p{ font-family:var(--font-display); font-size:1.08rem; line-height:1.75; color:var(--ink); margin:0 0 16px; }
+  .read-box p:last-child{ margin-bottom:0; }
+  .read-box .tv{ color:var(--brass); font-weight:600; }
+
+  /* eyebrow / question header */
+  .eyebrow{ display:flex; align-items:center; gap:10px; margin-bottom:18px; flex-wrap:wrap; }
+  .eyebrow .tag{ font-family:var(--font-mono); font-size:.7rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; padding:5px 10px; border-radius:99px; background:var(--brass-bg); color:var(--brass); }
+  .eyebrow .num{ font-family:var(--font-mono); font-size:.76rem; color:var(--ink-faint); margin-left:auto; }
+  .diff-tag{ font-family:var(--font-mono); font-size:.68rem; letter-spacing:.05em; text-transform:uppercase; padding:4px 9px; border-radius:99px; }
+  .diff-medium{ background:var(--teal-bg); color:var(--teal); }
+  .diff-challenging{ background:var(--plum-bg); color:var(--plum); }
+
+  .qtext{ font-family:var(--font-display); font-size:1.15rem; line-height:1.55; margin:0 0 20px; color:var(--ink); }
+  .qtext .blank{ display:inline-block; min-width:70px; border-bottom:2px solid var(--ink-faint); }
+
+  .options{ display:flex; flex-direction:column; gap:10px; margin-bottom:6px; }
+  .opt{
+    text-align:left; font-family:var(--font-body); font-size:.95rem; color:var(--ink); background:#fff;
+    border:1.5px solid var(--line); border-radius:10px; padding:13px 15px; cursor:pointer; display:flex;
+    align-items:center; gap:11px; transition:border-color .12s ease, background .12s ease;
+  }
+  .opt:hover:not(.disabled){ border-color:var(--ink-faint); }
+  .opt:focus-visible{ outline:2px solid var(--brass); outline-offset:1px; }
+  .opt .letter{
+    font-family:var(--font-mono); font-size:.72rem; color:var(--ink-faint); border:1px solid var(--line);
+    border-radius:50%; width:20px; height:20px; flex:none; display:flex; align-items:center; justify-content:center;
+  }
+  .opt.disabled{ cursor:default; }
+  .opt.selected{ border-color:var(--brass); background:var(--brass-bg); }
+  .opt.correct-answer{ background:var(--correct-bg); border-color:var(--correct); color:var(--correct); font-weight:600; }
+  .opt.correct-answer .letter{ border-color:var(--correct); color:var(--correct); }
+  .opt.wrong-answer{ background:var(--incorrect-bg); border-color:var(--incorrect); color:var(--incorrect); }
+  .opt.wrong-answer .letter{ border-color:var(--incorrect); color:var(--incorrect); }
+  .opt.muted{ opacity:.5; }
+
+  .feedback{ margin-top:14px; padding:14px 16px; border-radius:10px; border-left:3px solid var(--ink-faint); background:#F3F1EA; font-size:.88rem; line-height:1.55; color:var(--ink-soft); display:none; }
+  .feedback.show{ display:block; animation:fadeSlide .2s ease both; }
+  .feedback.is-correct{ border-left-color:var(--correct); }
+  .feedback.is-wrong{ border-left-color:var(--incorrect); }
+  .feedback .verdict{ font-family:var(--font-mono); font-size:.7rem; font-weight:600; letter-spacing:.05em; text-transform:uppercase; display:block; margin-bottom:5px; }
+  .feedback.is-correct .verdict{ color:var(--correct); }
+  .feedback.is-wrong .verdict{ color:var(--incorrect); }
+
+  /* gap fill list */
+  .gap-item{ border:1px solid var(--line); border-radius:10px; padding:16px 18px; margin-bottom:12px; background:#fff; }
+  .gap-item .gnum{ font-family:var(--font-mono); font-size:.7rem; color:var(--ink-faint); margin-bottom:6px; }
+  .gap-item .gtext{ font-size:.98rem; line-height:1.6; margin-bottom:10px; }
+  .gap-item input[type=text]{
+    width:100%; font-family:var(--font-body); font-size:.94rem; border:1.5px solid var(--line); border-radius:8px;
+    padding:10px 12px; color:var(--ink); background:#FBFAF7;
+  }
+  .gap-item input[type=text]:focus{ outline:none; border-color:var(--brass); }
+  .gap-item input.correct-in{ border-color:var(--correct); background:var(--correct-bg); }
+  .gap-item input.wrong-in{ border-color:var(--incorrect); background:var(--incorrect-bg); }
+  .gap-item .gfb{ font-size:.85rem; margin-top:8px; line-height:1.5; display:none; }
+  .gap-item .gfb.show{ display:block; }
+  .gap-item .gfb.ok{ color:var(--correct); }
+  .gap-item .gfb.err{ color:var(--incorrect); }
+  .wordbank{ display:flex; flex-wrap:wrap; gap:8px; margin:4px 0 22px; }
+  .wb-chip{ font-family:var(--font-mono); font-size:.78rem; background:var(--brass-bg); color:var(--brass); border-radius:99px; padding:6px 12px; }
+
+  /* matching */
+  .match-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:520px){ .match-grid{ grid-template-columns:1fr; } }
+  .m-col{ display:flex; flex-direction:column; gap:9px; }
+  .m-w, .m-d{ border-radius:10px; padding:12px 14px; cursor:pointer; font-size:.9rem; transition:all .15s ease; user-select:none; border:1.5px solid var(--line); }
+  .m-w{ background:var(--teal-bg); color:var(--teal); font-weight:600; text-align:center; }
+  .m-d{ background:#FBFAF7; color:var(--ink-soft); line-height:1.45; }
+  .m-w.sel, .m-d.sel{ border-color:var(--brass); background:var(--brass-bg); color:var(--brass); }
+  .m-w.matched, .m-d.matched{ background:var(--correct-bg); border-color:var(--correct); color:var(--correct); cursor:default; }
+  .m-w.flash, .m-d.flash{ background:var(--incorrect-bg); border-color:var(--incorrect); animation:shake .3s ease; }
+  @keyframes shake{ 0%,100%{transform:translateX(0);} 25%{transform:translateX(-5px);} 75%{transform:translateX(5px);} }
+
+  /* drag and drop */
+  .dd-instructions{ font-size:.88rem; color:var(--ink-soft); margin-bottom:16px; line-height:1.6; }
+  .dd-pool{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:22px; min-height:44px; }
+  .dd-card{
+    font-family:var(--font-body); font-size:.87rem; background:#fff; border:1.5px solid var(--line); border-radius:9px;
+    padding:10px 13px; cursor:grab; transition:border-color .12s ease, background .12s ease, opacity .15s ease;
+  }
+  .dd-card.sel{ border-color:var(--brass); background:var(--brass-bg); }
+  .dd-card.placed{ opacity:0; pointer-events:none; position:absolute; }
+  .dd-card:active{ cursor:grabbing; }
+  .dd-zones{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:520px){ .dd-zones{ grid-template-columns:1fr; } }
+  .dd-zone{ border:2px dashed var(--line); border-radius:12px; padding:14px; min-height:150px; background:#FBFAF7; transition:border-color .15s ease, background .15s ease; }
+  .dd-zone.hover{ border-color:var(--brass); background:var(--brass-bg); }
+  .dd-zone h4{ font-family:var(--font-mono); font-size:.72rem; letter-spacing:.05em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 10px; }
+  .dd-zone .dd-card{ margin-bottom:8px; cursor:default; width:100%; }
+  .dd-zone .dd-card.right{ border-color:var(--correct); background:var(--correct-bg); }
+  .dd-zone .dd-card.wrong{ border-color:var(--incorrect); background:var(--incorrect-bg); }
+
+  .next-row{ display:flex; justify-content:flex-end; margin-top:24px; gap:10px; }
+  .btn-next{
+    font-family:var(--font-body); font-weight:600; font-size:.9rem; color:var(--ink); background:transparent;
+    border:1.5px solid var(--ink); border-radius:10px; padding:11px 20px; cursor:pointer; opacity:.35; pointer-events:none;
+    transition:opacity .15s ease, background .15s ease, color .15s ease;
+  }
+  .btn-next.enabled{ opacity:1; pointer-events:auto; }
+  .btn-next.enabled:hover{ background:var(--ink); color:#FBF9F4; }
+  .btn-check{
+    font-family:var(--font-body); font-weight:600; font-size:.9rem; color:#FBF9F4; background:var(--teal);
+    border:none; border-radius:10px; padding:11px 20px; cursor:pointer; transition:background .15s ease;
+  }
+  .btn-check:hover{ background:#1e4f48; }
+  .btn-check:disabled{ opacity:.4; cursor:not-allowed; }
+
+  /* results */
+  .score-hero{ text-align:center; padding:8px 0 26px; }
+  .score-hero .big{ font-family:var(--font-display); font-size:3.6rem; font-weight:600; line-height:1; color:var(--ink); }
+  .score-hero .big span{ font-size:1.7rem; color:var(--ink-faint); font-weight:500; }
+  .score-hero .band{ margin-top:12px; font-family:var(--font-mono); font-size:.78rem; letter-spacing:.06em; text-transform:uppercase; display:inline-block; padding:6px 14px; border-radius:99px; }
+  .band-outstanding{ background:var(--correct-bg); color:var(--correct); }
+  .band-excellent{ background:var(--teal-bg); color:var(--teal); }
+  .band-good{ background:var(--brass-bg); color:var(--brass); }
+  .band-revision{ background:var(--plum-bg); color:var(--plum); }
+  .band-review{ background:var(--incorrect-bg); color:var(--incorrect); }
+  .score-hero .msg{ margin-top:14px; font-size:.95rem; color:var(--ink-soft); max-width:44ch; margin-left:auto; margin-right:auto; }
+
+  .breakdown{ display:flex; gap:12px; margin:24px 0 8px; flex-wrap:wrap; }
+  .bd-item{ flex:1; min-width:140px; border:1px solid var(--line); border-radius:12px; padding:16px 17px; background:#FBFAF7; }
+  .bd-item .label{ font-family:var(--font-mono); font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; margin-bottom:6px; color:var(--teal); }
+  .bd-item .val{ font-family:var(--font-display); font-size:1.6rem; font-weight:600; }
+
+  hr.div{ border:none; border-top:1px solid var(--line); margin:28px 0 22px; }
+  .revise-block h3{ font-family:var(--font-display); font-size:1.05rem; margin:0 0 10px; color:var(--brass); }
+  .revise-block ul{ margin:0 0 18px 18px; padding:0; }
+  .revise-block li{ font-size:.9rem; color:var(--ink-soft); line-height:1.7; }
+  .motivate{ background:var(--teal-bg); border-radius:12px; padding:18px 20px; margin-top:8px; text-align:center; }
+  .motivate p{ font-size:.94rem; color:var(--teal); font-weight:500; margin:0; line-height:1.6; }
+
+  footer{ text-align:center; margin-top:24px; font-size:.76rem; color:var(--ink-faint); }
+
+  .confetti-piece{ position:fixed; top:-20px; width:9px; height:14px; opacity:.9; z-index:999; pointer-events:none; }
+  @keyframes confettiFall{ to{ transform:translateY(110vh) rotate(540deg); opacity:0; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <span class="badge-lvl">C1 · General English · Study Buddy</span>
+    <h1 class="maintitle">Money Dysmorphia</h1>
+    <div class="subtitle">A vocabulary-in-context progress test &middot; reading, then five recycling tasks</div>
+  </header>
+
+  <div class="progress-bar-track"><div class="progress-bar-fill" id="progress-fill"></div></div>
+  <div class="progress-row"><span id="progress-label">Getting started</span><span id="progress-pct"></span></div>
+
+  <!-- START -->
+  <div class="screen active" id="screen-start">
+    <div class="card">
+      <p class="lead">This test checks how well you can use eight expressions we've covered around the theme of <strong>money and self-perception</strong>: <em>contemplate life goals, be in overdraft, hoard money, a distorted image of reality, have shortcomings, scarcity, go all out, a queasy stomach.</em></p>
+      <p class="lead">You'll do two short pre-reading tasks, read a text, then work through five exercises that get gradually harder — multiple choice, gap fill, matching, drag and drop, and choose the correct word.</p>
+      <div class="icon-row">
+        <span class="icon-chip">📖 1 short text</span>
+        <span class="icon-chip">🧩 5 exercises</span>
+        <span class="icon-chip">⏱ ~15 min</span>
+        <span class="icon-chip">✅ instant feedback</span>
+      </div>
+      <button class="btn-primary" onclick="goTo('prereading')">Start the test →</button>
+    </div>
+  </div>
+
+  <!-- PRE-READING -->
+  <div class="screen" id="screen-prereading">
+    <div class="card">
+      <div class="eyebrow"><span class="tag">Before you read</span></div>
+      <div class="pretask">
+        <h3>1. Break the word down</h3>
+        <p>Look at the word <strong>dysmorphia</strong> on its own — no title yet. In Greek, <em>dys-</em> means "bad/abnormal" and <em>morph</em> means "form/shape". You may already know it from the term "body dysmorphia".</p>
+        <p>Before reading on, jot down a guess:</p>
+        <ul>
+          <li>What field do you usually hear <em>dysmorphia</em> used in?</li>
+          <li>By analogy, what might <strong>money dysmorphia</strong> mean?</li>
+        </ul>
+        <textarea class="reflect" placeholder="My guess: money dysmorphia might mean…"></textarea>
+      </div>
+      <div class="pretask">
+        <h3>2. Think it over</h3>
+        <p>Consider these questions for a moment before you read:</p>
+        <ul>
+          <li>Is there a difference between how much money someone <em>has</em> and how rich they <em>feel</em>?</li>
+          <li>Have you ever spent money to avoid feeling embarrassed, even when you didn't need to?</li>
+          <li>Does social media change how people think about wealth?</li>
+        </ul>
+        <textarea class="reflect" placeholder="A quick thought or two…"></textarea>
+      </div>
+      <button class="btn-primary" onclick="goTo('reading')">Continue to the text →</button>
+    </div>
+  </div>
+
+  <!-- READING -->
+  <div class="screen" id="screen-reading">
+    <div class="card">
+      <div class="eyebrow"><span class="tag">Reading</span></div>
+      <div class="read-box">
+        <div class="rtitle">Money Dysmorphia</div>
+        <p>Maria always assumed that anxiety about money would disappear the moment her bank balance grew. But now, earning more than she ever imagined, she still checks her banking app with a <span class="tv">queasy stomach</span> every morning, half expecting to find she's <span class="tv">in overdraft</span>. It makes no sense on paper — yet the fear won't lift.</p>
+        <p>This is what psychologists increasingly call money dysmorphia: a <span class="tv">distorted image of reality</span> in which how safe you feel with money has almost nothing to do with how much you actually have. Someone can be financially comfortable and still feel poor; someone else can have very little and feel oddly secure.</p>
+        <p>For some, like Maria, the response is to <span class="tv">hoard money</span> compulsively, refusing to spend even on essentials, terrified that a sense of <span class="tv">scarcity</span> is only ever one bill away. For others, it works the other way entirely: they <span class="tv">go all out</span> on things they can't really afford, buying rounds of drinks or upgrading their phone every year, because spending publicly feels like proof they're doing fine.</p>
+        <p>Neither pattern is really about arithmetic. It's about old beliefs — that money defines worth, that admitting to <span class="tv">having shortcomings</span> means failure — and about a culture that never stops asking how much you're worth, in every sense of the word. Perhaps it's worth pausing occasionally to <span class="tv">contemplate your life goals</span> and ask whether money is really the measure you want to use.</p>
+      </div>
+      <button class="btn-primary" onclick="goTo('mcq')">Continue to the exercises →</button>
+    </div>
+  </div>
+
+  <!-- EXERCISE 1: MULTIPLE CHOICE -->
+  <div class="screen" id="screen-mcq">
+    <div class="card" id="mcq-card">
+      <div class="eyebrow">
+        <span class="tag">① Multiple Choice</span>
+        <span class="diff-tag diff-medium">Medium</span>
+        <span class="num" id="mcq-num">No. 1</span>
+      </div>
+      <p class="qtext" id="mcq-qtext"></p>
+      <div class="options" id="mcq-options"></div>
+      <div class="feedback" id="mcq-feedback"><span class="verdict" id="mcq-verdict"></span><span id="mcq-fbtext"></span></div>
+      <div class="next-row"><button class="btn-next" id="mcq-next" onclick="mcqNext()">Next →</button></div>
+    </div>
+  </div>
+
+  <!-- EXERCISE 2: GAP FILL -->
+  <div class="screen" id="screen-gapfill">
+    <div class="card">
+      <div class="eyebrow">
+        <span class="tag">② Gap Fill</span>
+        <span class="diff-tag diff-medium">Medium</span>
+      </div>
+      <p class="qtext" style="font-size:.95rem;">Complete each sentence with one word or phrase from the box. Each item is used once.</p>
+      <div class="wordbank">
+        <span class="wb-chip">contemplate</span><span class="wb-chip">in overdraft</span><span class="wb-chip">hoard</span>
+        <span class="wb-chip">distorted</span><span class="wb-chip">shortcomings</span><span class="wb-chip">scarcity</span>
+        <span class="wb-chip">go all out</span><span class="wb-chip">queasy</span>
+      </div>
+      <div id="gapfill-list"></div>
+      <div class="next-row">
+        <button class="btn-check" id="gapfill-check" onclick="checkGapFill()">Check answers</button>
+        <button class="btn-next" id="gapfill-next" onclick="goTo('matching')">Next exercise →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXERCISE 3: MATCHING -->
+  <div class="screen" id="screen-matching">
+    <div class="card">
+      <div class="eyebrow">
+        <span class="tag">③ Matching</span>
+        <span class="diff-tag diff-medium">Medium</span>
+      </div>
+      <p class="qtext" style="font-size:.95rem;">Click an expression on the left, then click its definition on the right. Match all 8 pairs.</p>
+      <div class="match-grid">
+        <div class="m-col" id="mw-col"></div>
+        <div class="m-col" id="md-col"></div>
+      </div>
+      <div class="feedback" id="match-feedback" style="margin-top:16px;"></div>
+      <div class="next-row"><button class="btn-next" id="match-next" onclick="goTo('dragdrop')">Next exercise →</button></div>
+    </div>
+  </div>
+
+  <!-- EXERCISE 4: DRAG AND DROP -->
+  <div class="screen" id="screen-dragdrop">
+    <div class="card">
+      <div class="eyebrow">
+        <span class="tag">④ Drag and Drop</span>
+        <span class="diff-tag diff-challenging">Challenging</span>
+      </div>
+      <p class="dd-instructions">Drag each behaviour into the correct pattern of money dysmorphia. (On touch screens: tap a card, then tap the zone.)</p>
+      <div class="dd-pool" id="dd-pool"></div>
+      <div class="dd-zones">
+        <div class="dd-zone" id="zone-hoard" ondragover="ddOver(event)" ondrop="ddDrop(event,'hoard')" onclick="ddZoneClick('hoard')">
+          <h4>🔒 Hoarding pattern</h4>
+        </div>
+        <div class="dd-zone" id="zone-spend" ondragover="ddOver(event)" ondrop="ddDrop(event,'spend')" onclick="ddZoneClick('spend')">
+          <h4>💸 Overspending pattern</h4>
+        </div>
+      </div>
+      <div class="next-row">
+        <button class="btn-check" id="dd-check" onclick="checkDragDrop()">Check answers</button>
+        <button class="btn-next" id="dd-next" onclick="goTo('chooseword')">Next exercise →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXERCISE 5: CHOOSE THE CORRECT WORD -->
+  <div class="screen" id="screen-chooseword">
+    <div class="card" id="cw-card">
+      <div class="eyebrow">
+        <span class="tag">⑤ Choose the Correct Word</span>
+        <span class="diff-tag diff-challenging">Challenging</span>
+        <span class="num" id="cw-num">No. 1</span>
+      </div>
+      <p class="qtext" id="cw-qtext"></p>
+      <div class="options" id="cw-options"></div>
+      <div class="feedback" id="cw-feedback"><span class="verdict" id="cw-verdict"></span><span id="cw-fbtext"></span></div>
+      <div class="next-row"><button class="btn-next" id="cw-next" onclick="cwNext()">Next →</button></div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="screen" id="screen-results">
+    <div class="card">
+      <div class="score-hero">
+        <div class="big" id="final-score">0<span>/30</span></div>
+        <div class="band" id="final-band"></div>
+        <p class="msg" id="final-msg"></p>
+      </div>
+      <div class="breakdown">
+        <div class="bd-item"><div class="label">Comprehension</div><div class="val" id="bd-comprehension">0/4</div></div>
+        <div class="bd-item"><div class="label">Vocabulary</div><div class="val" id="bd-vocab">0/26</div></div>
+        <div class="bd-item"><div class="label">Overall</div><div class="val" id="bd-overall">0%</div></div>
+      </div>
+      <hr class="div">
+      <div class="revise-block">
+        <h3>Worth revisiting</h3>
+        <ul id="revise-list"></ul>
+      </div>
+      <div class="motivate"><p id="motivate-msg"></p></div>
+      <button class="btn-secondary" onclick="restartTest()">Restart test</button>
+    </div>
+  </div>
+
+  <footer>Prepared for Study Buddy · C1 General English · Money &amp; self-perception vocabulary</footer>
+</div>
+
+<script>
+/* ---------------- STATE ---------------- */
+const SCREEN_ORDER = ['start','prereading','reading','mcq','gapfill','matching','dragdrop','chooseword','results'];
+const SCREEN_LABELS = {
+  start:'Getting started', prereading:'Pre-reading', reading:'Reading',
+  mcq:'Exercise 1 · Multiple Choice', gapfill:'Exercise 2 · Gap Fill', matching:'Exercise 3 · Matching',
+  dragdrop:'Exercise 4 · Drag and Drop', chooseword:'Exercise 5 · Choose the Word', results:'Results'
+};
+
+function goTo(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+name).classList.add('active');
+  const idx = SCREEN_ORDER.indexOf(name);
+  document.getElementById('progress-fill').style.width = (idx/(SCREEN_ORDER.length-1)*100) + '%';
+  document.getElementById('progress-label').textContent = SCREEN_LABELS[name];
+  document.getElementById('progress-pct').textContent = Math.round(idx/(SCREEN_ORDER.length-1)*100) + '%';
+  window.scrollTo({top:0, behavior:'smooth'});
+
+  if(name==='mcq' && mcqIndex===0) renderMcq();
+  if(name==='matching' && !matchRendered) renderMatching();
+  if(name==='dragdrop' && !ddRendered) renderDragDrop();
+  if(name==='chooseword' && cwIndex===0) renderCw();
+  if(name==='results') renderResults();
+}
+
+let totalCorrect = 0;
+let comprehensionCorrect = 0;
+let vocabCorrect = 0;
+const missedTopics = new Set();
+
+/* ---------------- EXERCISE 1: MULTIPLE CHOICE ---------------- */
+const MCQ = [
+  { q:"Why does Maria still feel anxious even though she earns well?",
+    opts:["She actually has very little money saved","Her sense of safety isn't connected to her real financial situation","She expects to lose her job soon","She has never learned to budget"],
+    correct:1,
+    explain:"The text says the fear \u201cmakes no sense on paper\u201d \u2014 her anxiety is disconnected from her actual finances, which is the core of money dysmorphia." },
+  { q:"According to the text, what is the defining feature of money dysmorphia itself?",
+    opts:["Having too much debt","The gap between financial reality and emotional experience","A medical diagnosis given by a bank","A marketing term with no real basis"],
+    correct:1,
+    explain:"The text defines it as a distorted image of reality where \u201chow safe you feel\u2026 has almost nothing to do with how much you actually have.\u201d" },
+  { q:"What do hoarding and overspending have in common, according to the text?",
+    opts:["Both are purely about arithmetic","Both are recommended coping strategies","Both stem from old beliefs about self-worth","Both only affect people with low income"],
+    correct:2,
+    explain:"The text states neither pattern \u201cis really about arithmetic \u2014 it's about old beliefs\u201d linking money to personal worth." },
+  { q:"Why does the text suggest people \u2018go all out\u2019 on spending?",
+    opts:["Because they genuinely enjoy shopping","Because spending publicly feels like proof they're doing fine","Because prices are unusually low","Because they've been advised to by a counsellor"],
+    correct:1,
+    explain:"The text says overspenders act this way \u201cbecause spending publicly feels like proof they're doing fine.\u201d" }
+];
+let mcqIndex = 0, mcqAnswered = false, mcqScore = 0;
+
+function renderMcq(){
+  const q = MCQ[mcqIndex];
+  mcqAnswered = false;
+  document.getElementById('mcq-num').textContent = 'No. ' + (mcqIndex+1) + ' of ' + MCQ.length;
+  document.getElementById('mcq-qtext').textContent = q.q;
+  const optsEl = document.getElementById('mcq-options');
+  optsEl.innerHTML = q.opts.map((o,i)=>
+    `<button class="opt" id="mcq-opt-${i}" onclick="selectMcq(${i})"><span class="letter">${String.fromCharCode(65+i)}</span><span>${o}</span></button>`
+  ).join('');
+  const fb = document.getElementById('mcq-feedback');
+  fb.classList.remove('show','is-correct','is-wrong');
+  document.getElementById('mcq-next').classList.remove('enabled');
+  document.getElementById('mcq-next').textContent = (mcqIndex===MCQ.length-1) ? 'Continue to Gap Fill →' : 'Next →';
+}
+function selectMcq(i){
+  if(mcqAnswered) return;
+  mcqAnswered = true;
+  const q = MCQ[mcqIndex];
+  const isCorrect = i===q.correct;
+  if(isCorrect){ mcqScore++; comprehensionCorrect++; } else { missedTopics.add('Reading comprehension: main ideas of the text'); }
+  q.opts.forEach((o,j)=>{
+    const btn = document.getElementById('mcq-opt-'+j);
+    btn.classList.add('disabled');
+    if(j===q.correct) btn.classList.add('correct-answer');
+    else if(j===i) btn.classList.add('wrong-answer');
+    else btn.classList.add('muted');
+  });
+  const fb = document.getElementById('mcq-feedback');
+  fb.classList.add('show', isCorrect?'is-correct':'is-wrong');
+  document.getElementById('mcq-verdict').textContent = isCorrect ? 'Correct' : 'Not quite';
+  document.getElementById('mcq-fbtext').textContent = q.explain;
+  document.getElementById('mcq-next').classList.add('enabled');
+}
+function mcqNext(){
+  if(!mcqAnswered) return;
+  if(mcqIndex < MCQ.length-1){ mcqIndex++; renderMcq(); }
+  else { totalCorrect += mcqScore; goTo('gapfill'); }
+}
+
+/* ---------------- EXERCISE 2: GAP FILL ---------------- */
+const GAPFILL = [
+  { text:"Every time I check my account, I get a ___ feeling in my stomach, even when I have money saved.", ans:"queasy" },
+  { text:"He tends to ___ money rather than spend it, even on things he clearly needs.", ans:"hoard" },
+  { text:"She has a ___ image of her own finances \u2014 she thinks she's broke even though she isn't.", ans:"distorted" },
+  { text:"I was shocked to find out I was ___ this month after that unexpected bill.", ans:"in overdraft" },
+  { text:"For her birthday, they decided to ___ and book a table at the most expensive restaurant in town.", ans:"go all out" },
+  { text:"Many people feel a sense of ___ even when they technically have enough to live comfortably.", ans:"scarcity" },
+  { text:"It's healthy to occasionally ___ your long-term life goals rather than just react to daily pressures.", ans:"contemplate" },
+  { text:"Nobody enjoys admitting to their ___, but pretending you have none isn't honest either.", ans:"shortcomings" }
+];
+function renderGapFill(){
+  const list = document.getElementById('gapfill-list');
+  list.innerHTML = GAPFILL.map((g,i)=>
+    `<div class="gap-item">
+      <div class="gnum">Sentence ${i+1}</div>
+      <div class="gtext">${g.text.replace('___','<span style="color:var(--brass);font-weight:600;">_____</span>')}</div>
+      <input type="text" id="gf-${i}" placeholder="Type your answer…">
+      <div class="gfb" id="gf-fb-${i}"></div>
+    </div>`
+  ).join('');
+  document.getElementById('gapfill-next').classList.remove('enabled');
+}
+renderGapFill();
+
+function norm(s){ return s.toLowerCase().trim().replace(/['’]/g,"'").replace(/\s+/g,' '); }
+function checkGapFill(){
+  let ok = 0;
+  GAPFILL.forEach((g,i)=>{
+    const inp = document.getElementById('gf-'+i);
+    const fb = document.getElementById('gf-fb-'+i);
+    const isCorrect = norm(inp.value) === norm(g.ans);
+    inp.classList.remove('correct-in','wrong-in');
+    fb.classList.add('show');
+    fb.classList.remove('ok','err');
+    if(isCorrect){
+      inp.classList.add('correct-in'); fb.classList.add('ok'); fb.textContent = '✔ Correct.'; ok++;
+    } else {
+      inp.classList.add('wrong-in'); fb.classList.add('err');
+      fb.textContent = '✖ Correct answer: "' + g.ans + '".';
+      missedTopics.add('Vocabulary: "' + g.ans + '" in context');
+    }
+  });
+  vocabCorrect += ok;
+  totalCorrect += ok;
+  document.getElementById('gapfill-check').disabled = true;
+  document.getElementById('gapfill-next').classList.add('enabled');
+}
+
+/* ---------------- EXERCISE 3: MATCHING ---------------- */
+const MATCH_PAIRS = [
+  { id:'contemplate', w:'contemplate life goals', d:'to think deeply about what you want to achieve in life' },
+  { id:'overdraft', w:'to be in overdraft', d:'to have spent more money than is in your bank account' },
+  { id:'hoard', w:'hoard money', d:'to keep and save money obsessively, refusing to spend it' },
+  { id:'distorted', w:'a distorted image of reality', d:'an inaccurate, warped perception of a situation' },
+  { id:'shortcomings', w:'have shortcomings', d:'to have flaws or weaknesses' },
+  { id:'scarcity', w:'scarcity', d:'the state of there not being enough of something' },
+  { id:'gallout', w:'go all out', d:'to make a great effort, often spending freely, holding nothing back' },
+  { id:'queasy', w:'a queasy stomach', d:'a feeling of nausea, often caused by anxiety' }
+];
+let matchRendered = false, matchSelW = null, matchSelD = null, matchCount = 0, matchWrongAttempts = 0;
+
+function shuffleArr(arr){ const a=[...arr]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+
+function renderMatching(){
+  matchRendered = true;
+  const wCol = document.getElementById('mw-col');
+  const dCol = document.getElementById('md-col');
+  const wOrder = shuffleArr(MATCH_PAIRS);
+  const dOrder = shuffleArr(MATCH_PAIRS);
+  wCol.innerHTML = wOrder.map(p=>`<div class="m-w" data-id="${p.id}">${p.w}</div>`).join('');
+  dCol.innerHTML = dOrder.map(p=>`<div class="m-d" data-id="${p.id}">${p.d}</div>`).join('');
+  bindMatch();
+}
+function bindMatch(){
+  document.querySelectorAll('.m-w').forEach(el=>{
+    el.onclick = function(){
+      if(this.dataset.matched) return;
+      document.querySelectorAll('.m-w.sel').forEach(e=>e.classList.remove('sel'));
+      this.classList.add('sel'); matchSelW = this;
+      if(matchSelD) tryMatchPair();
+    };
+  });
+  document.querySelectorAll('.m-d').forEach(el=>{
+    el.onclick = function(){
+      if(this.dataset.matched) return;
+      document.querySelectorAll('.m-d.sel').forEach(e=>e.classList.remove('sel'));
+      this.classList.add('sel'); matchSelD = this;
+      if(matchSelW) tryMatchPair();
+    };
+  });
+}
+function tryMatchPair(){
+  const fb = document.getElementById('match-feedback');
+  fb.classList.add('show');
+  if(matchSelW.dataset.id === matchSelD.dataset.id){
+    matchSelW.classList.add('matched'); matchSelW.dataset.matched='1';
+    matchSelD.classList.add('matched'); matchSelD.dataset.matched='1';
+    matchCount++;
+    fb.className = 'feedback show is-correct';
+    document.getElementById?.(null);
+    fb.innerHTML = `<span class="verdict">Correct</span>Matched (${matchCount}/8).`;
+    if(matchCount===8){
+      vocabCorrect += (8 - matchWrongAttempts>0 ? 8 : 8);
+      totalCorrect += 8;
+      document.getElementById('match-next').classList.add('enabled');
+      fb.innerHTML = `<span class="verdict">Correct</span>All 8 expressions matched. Well done!`;
+    }
+  } else {
+    matchWrongAttempts++;
+    fb.className = 'feedback show is-wrong';
+    fb.innerHTML = `<span class="verdict">Not quite</span>That's not a match — think about the meaning of "${matchSelW.textContent}" again.`;
+    matchSelW.classList.add('flash'); matchSelD.classList.add('flash');
+    const sw = matchSelW, sd = matchSelD;
+    setTimeout(()=>{ sw.classList.remove('flash','sel'); sd.classList.remove('flash','sel'); }, 400);
+  }
+  matchSelW = null; matchSelD = null;
+}
+
+/* ---------------- EXERCISE 4: DRAG AND DROP ---------------- */
+const DD_ITEMS = [
+  { id:'dd1', text:"Refuses to buy new clothes despite needing them", zone:'hoard' },
+  { id:'dd2', text:"Books an expensive holiday she can't really afford", zone:'spend' },
+  { id:'dd3', text:"Keeps checking the bank balance but never touches savings", zone:'hoard' },
+  { id:'dd4', text:"Buys a round of drinks for everyone to look successful", zone:'spend' },
+  { id:'dd5', text:"Avoids spending even in a genuine emergency", zone:'hoard' },
+  { id:'dd6', text:"Upgrades gadgets every year to feel secure and impressive", zone:'spend' }
+];
+let ddRendered = false, ddSelected = null, ddPlacements = {}, ddChecked = false;
+
+function renderDragDrop(){
+  ddRendered = true;
+  const pool = document.getElementById('dd-pool');
+  pool.innerHTML = shuffleArr(DD_ITEMS).map(it =>
+    `<div class="dd-card" id="${it.id}" draggable="true" data-zone="${it.zone}"
+      ondragstart="ddStart(event,'${it.id}')" onclick="ddCardClick('${it.id}')">${it.text}</div>`
+  ).join('');
+}
+function ddStart(ev,id){ ev.dataTransfer.setData('text/plain', id); ddSelected = id; }
+function ddOver(ev){ ev.preventDefault(); ev.currentTarget.classList.add('hover'); }
+function ddDrop(ev, zoneName){
+  ev.preventDefault();
+  ev.currentTarget.classList.remove('hover');
+  const id = ev.dataTransfer.getData('text/plain') || ddSelected;
+  if(id) placeCard(id, zoneName);
+}
+function ddCardClick(id){
+  document.querySelectorAll('.dd-card').forEach(c=>c.classList.remove('sel'));
+  const el = document.getElementById(id);
+  if(el && !el.classList.contains('placed')){ el.classList.add('sel'); ddSelected = id; }
+}
+function ddZoneClick(zoneName){
+  if(ddSelected) placeCard(ddSelected, zoneName);
+}
+function placeCard(id, zoneName){
+  const card = document.getElementById(id);
+  if(!card || ddPlacements[id]) return;
+  const zoneEl = document.getElementById('zone-' + zoneName);
+  const clone = card.cloneNode(true);
+  clone.removeAttribute('draggable');
+  clone.classList.remove('sel');
+  clone.onclick = null;
+  zoneEl.appendChild(clone);
+  card.classList.add('placed');
+  ddPlacements[id] = { zone: zoneName, el: clone };
+  ddSelected = null;
+}
+function checkDragDrop(){
+  if(ddChecked) return;
+  ddChecked = true;
+  let ok = 0;
+  DD_ITEMS.forEach(it=>{
+    const placement = ddPlacements[it.id];
+    if(placement){
+      const isRight = placement.zone === it.zone;
+      placement.el.classList.add(isRight ? 'right' : 'wrong');
+      if(isRight) ok++; else missedTopics.add('Hoarding vs overspending behaviour patterns');
+    } else {
+      missedTopics.add('Hoarding vs overspending behaviour patterns');
+    }
+  });
+  vocabCorrect += ok;
+  totalCorrect += ok;
+  document.getElementById('dd-check').disabled = true;
+  document.getElementById('dd-next').classList.add('enabled');
+}
+
+/* ---------------- EXERCISE 5: CHOOSE THE CORRECT WORD ---------------- */
+const CW = [
+  { text:"She tends to <strong>___</strong> money out of fear of running out, even though she doesn't need to.",
+    opts:["hoard","collect"], correct:0,
+    explain:"\u201cHoard\u201d captures anxious, fear-driven saving; \u201ccollect\u201d suggests an interest-based hobby, not fear." },
+  { text:"He has a <strong>___</strong> image of his own financial situation \u2014 he feels broke despite being financially secure.",
+    opts:["accurate","distorted"], correct:1,
+    explain:"\u201cDistorted\u201d fits because his perception doesn't match reality \u2014 that mismatch is the essence of money dysmorphia." },
+  { text:"Growing up with very little gave her a lasting sense of <strong>___</strong>, even after her income grew.",
+    opts:["abundance","scarcity"], correct:1,
+    explain:"\u201cScarcity\u201d describes the lingering feeling of not having enough, which is the pattern described in the text." },
+  { text:"When his balance hit zero and kept falling, he realised he was <strong>___</strong>.",
+    opts:["in overdraft","in profit"], correct:0,
+    explain:"\u201cIn overdraft\u201d means spending more than is in the account \u2014 exactly what a falling-below-zero balance shows." }
+];
+let cwIndex = 0, cwAnswered = false, cwScore = 0;
+
+function renderCw(){
+  const q = CW[cwIndex];
+  cwAnswered = false;
+  document.getElementById('cw-num').textContent = 'No. ' + (cwIndex+1) + ' of ' + CW.length;
+  document.getElementById('cw-qtext').innerHTML = q.text;
+  const optsEl = document.getElementById('cw-options');
+  optsEl.innerHTML = q.opts.map((o,i)=>
+    `<button class="opt" id="cw-opt-${i}" onclick="selectCw(${i})"><span class="letter">${String.fromCharCode(65+i)}</span><span>${o}</span></button>`
+  ).join('');
+  const fb = document.getElementById('cw-feedback');
+  fb.classList.remove('show','is-correct','is-wrong');
+  document.getElementById('cw-next').classList.remove('enabled');
+  document.getElementById('cw-next').textContent = (cwIndex===CW.length-1) ? 'See results →' : 'Next →';
+}
+function selectCw(i){
+  if(cwAnswered) return;
+  cwAnswered = true;
+  const q = CW[cwIndex];
+  const isCorrect = i===q.correct;
+  if(isCorrect) cwScore++; else missedTopics.add('Near-synonym precision (e.g. "' + q.opts[q.correct] + '")');
+  q.opts.forEach((o,j)=>{
+    const btn = document.getElementById('cw-opt-'+j);
+    btn.classList.add('disabled');
+    if(j===q.correct) btn.classList.add('correct-answer');
+    else if(j===i) btn.classList.add('wrong-answer');
+    else btn.classList.add('muted');
+  });
+  const fb = document.getElementById('cw-feedback');
+  fb.classList.add('show', isCorrect?'is-correct':'is-wrong');
+  document.getElementById('cw-verdict').textContent = isCorrect ? 'Correct' : 'Not quite';
+  document.getElementById('cw-fbtext').textContent = q.explain;
+  document.getElementById('cw-next').classList.add('enabled');
+}
+function cwNext(){
+  if(!cwAnswered) return;
+  if(cwIndex < CW.length-1){ cwIndex++; renderCw(); }
+  else { vocabCorrect += cwScore; totalCorrect += cwScore; goTo('results'); }
+}
+
+/* ---------------- RESULTS ---------------- */
+const TOTAL_ITEMS = 30; // 4 MCQ + 8 gapfill + 8 matching + 6 dragdrop + 4 choose-word
+const VOCAB_ITEMS = 26;
+const COMPREHENSION_ITEMS = 4;
+
+function bandFor(pct){
+  if(pct>=90) return {cls:'band-outstanding', label:'Outstanding'};
+  if(pct>=75) return {cls:'band-excellent', label:'Excellent'};
+  if(pct>=60) return {cls:'band-good', label:'Good'};
+  if(pct>=40) return {cls:'band-revision', label:'Needs Revision'};
+  return {cls:'band-review', label:'Review Required'};
+}
+function renderResults(){
+  document.getElementById('progress-fill').style.width = '100%';
+  const pct = Math.round((totalCorrect/TOTAL_ITEMS)*100);
+  document.getElementById('final-score').innerHTML = totalCorrect + '<span>/' + TOTAL_ITEMS + '</span>';
+  const band = bandFor(pct);
+  const bandEl = document.getElementById('final-band');
+  bandEl.className = 'band ' + band.cls;
+  bandEl.textContent = band.label + ' · ' + pct + '%';
+
+  let msg;
+  if(pct>=90) msg = "Exceptional command of this vocabulary set \u2014 you're using these expressions with real precision, Study Buddy.";
+  else if(pct>=75) msg = "Strong, confident use of the target language, with just a few points worth polishing.";
+  else if(pct>=60) msg = "A solid foundation is there \u2014 a bit more practice with the trickier collocations will make this rock-solid.";
+  else if(pct>=40) msg = "You've grasped the core ideas, but several expressions still need active review before they'll feel natural.";
+  else msg = "This is a good diagnostic \u2014 let's go back over the vocabulary together before moving on.";
+  document.getElementById('final-msg').textContent = msg;
+
+  document.getElementById('bd-comprehension').textContent = comprehensionCorrect + '/' + COMPREHENSION_ITEMS;
+  document.getElementById('bd-vocab').textContent = vocabCorrect + '/' + VOCAB_ITEMS;
+  document.getElementById('bd-overall').textContent = pct + '%';
+
+  const reviseList = document.getElementById('revise-list');
+  if(missedTopics.size === 0){
+    reviseList.innerHTML = '<li>Nothing missed \u2014 this whole set is well consolidated.</li>';
+  } else {
+    reviseList.innerHTML = Array.from(missedTopics).map(t => `<li>${t}</li>`).join('');
+  }
+
+  const motivations = [
+    "Every review session like this one makes the next real-life conversation about money easier.",
+    "Precision with vocabulary like this is exactly what separates confident C1 speakers from the rest.",
+    "You're building exactly the kind of nuanced vocabulary that native speakers reach for instinctively."
+  ];
+  document.getElementById('motivate-msg').textContent = motivations[Math.floor(Math.random()*motivations.length)];
+
+  if(pct >= 90) launchConfetti();
+}
+
+function launchConfetti(){
+  const colors = ['#B8823B','#286B62','#6E4A82','#2F7A4F'];
+  for(let i=0;i<70;i++){
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = Math.random()*100 + 'vw';
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.style.animation = `confettiFall ${2.2+Math.random()*1.6}s ease-in forwards`;
+    p.style.animationDelay = (Math.random()*0.6) + 's';
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(), 4200);
+  }
+}
+
+function restartTest(){
+  mcqIndex=0; mcqScore=0; totalCorrect=0; comprehensionCorrect=0; vocabCorrect=0; missedTopics.clear();
+  matchRendered=false; matchCount=0; matchWrongAttempts=0;
+  ddRendered=false; ddPlacements={}; ddChecked=false; ddSelected=null;
+  cwIndex=0; cwScore=0;
+  renderGapFill();
+  document.getElementById('gapfill-check').disabled = false;
+  document.getElementById('dd-check').disabled = false;
+  goTo('start');
+}
+</script>
+
+<!-- BACK TO QUIZZES — auto-shows when the quiz is finished -->
+<style>
+.back-to-quizzes{position:fixed;left:50%;bottom:22px;transform:translate(-50%,90px);z-index:999;display:inline-flex;align-items:center;gap:8px;padding:12px 22px;background:#2451CC;color:#fff;border-radius:99px;text-decoration:none;font:600 14px/1 system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;box-shadow:0 10px 30px rgba(36,81,204,.35);transition:transform .35s ease,opacity .35s ease;opacity:0}
+.back-to-quizzes.show{transform:translate(-50%,0);opacity:1}
+.back-to-quizzes:hover{background:#1d3fa8}
+</style>
+<a href="index.html" class="back-to-quizzes" id="b2qBtn">← Back to quizzes</a>
+<script>
+(function(){
+  var btn=document.getElementById('b2qBtn');if(!btn)return;
+  function vis(el){return !!el&&el.offsetParent!==null;}
+  function finished(){
+    var rs=document.getElementById('results-screen')||document.getElementById('screen-results');
+    if(rs&&rs.classList.contains('active'))return true;
+    var r=document.getElementById('results');
+    if(r&&r.children.length&&vis(r))return true;
+    var sc=document.getElementById('scoreCard');
+    if(sc&&sc.style.display!=='none'&&vis(sc))return true;
+    var st=document.getElementById('statusText');
+    if(st&&/complete/i.test(st.textContent||''))return true;
+    var ebs=document.querySelectorAll('.eyebrow');
+    for(var i=0;i<ebs.length;i++){
+      var t=(ebs[i].textContent||'').trim().toLowerCase();
+      if(t==='results'&&vis(ebs[i]))return true;
+    }
+    var m=document.getElementById('prog-text')||document.getElementById('progressLabel');
+    if(m){
+      var a=(m.textContent||'').match(/(\d+)\s*(?:of|\/)\s*(\d+)/);
+      if(a&&+a[2]>0&&+a[1]>=+a[2])return true;
+    }
+    return false;
+  }
+  function check(){if(finished())btn.classList.add('show');}
+  setInterval(check,1200);check();
+  try{new MutationObserver(function(){setTimeout(check,50)}).observe(document.body,{childList:true,subtree:true,attributes:true});}catch(e){}
+})();
+</script>
+
+<!-- ENTER KEY = CHECK — press Enter to check an answer or go to the next item -->
+<script>
+(function(){
+  document.addEventListener('keydown',function(e){
+    if(e.key!=='Enter')return;
+    var t=e.target;
+    if(!t||t.tagName==='TEXTAREA'||t.tagName==='A'||t.tagName==='SELECT')return;
+    if(t===document.body||t===document.documentElement){/* continue: quiz advance */}
+    else if(t.tagName==='INPUT'){
+      var ty=(t.type||'text').toLowerCase();
+      if(/^(checkbox|radio|submit|button|file|reset)$/i.test(ty))return;
+      if(/enter/i.test(t.getAttribute('onkeydown')||''))return;
+      if(/chat/i.test(t.id||'')||/chat/i.test(t.name||'')||/chat/i.test(t.placeholder||''))return;
+    } else if(t.tagName==='BUTTON'){
+      var cid=t.id||'',ccn=t.className||'',pcn=(t.parentElement&&t.parentElement.className)||'';
+      var isOpt=/^opt-|^option/i.test(cid)||/(^|[\s_-])(opt|option|options|opts|choice|mc-opt|mini-opt|tf-btn|pick|answer)([\s_-]|$)/i.test(ccn)||/(^|[\s_-])(opts|options)([\s_-]|$)/i.test(pcn);
+      if(!isOpt)return;
+    }
+    var btn=findAction(t);
+    if(btn&&btn!==t){e.preventDefault();btn.focus();btn.click();}
+  });
+  function visible(el){return !!el&&el.offsetParent!==null&&!el.disabled&&!el.classList.contains('disabled')&&el.getAttribute('aria-disabled')!=='true';}
+  function isCheckBtn(b){return /^(\u2714\s*)?check/i.test((b.textContent||'').trim());}
+  function findAction(t){
+    var cont=t.closest?t.closest('.card,.task,.q-card,.frame,section,.container,div'):null;
+    var guard=0;
+    while(cont&&cont!==document.body&&guard<8){
+      var btns=cont.querySelectorAll('button');
+      for(var i=0;i<btns.length;i++){if(visible(btns[i])&&isCheckBtn(btns[i]))return btns[i];}
+      cont=cont.parentElement?cont.parentElement.closest('div,section,form'):null;guard++;
+    }
+    var nb=document.getElementById('next-btn')||document.getElementById('nextBtn')||document.getElementById('mcq-next')||document.getElementById('cw-next');
+    if(nb&&visible(nb)&&(nb.classList.contains('enabled')||!nb.disabled)){
+      if(/next|results|item|scorecard/i.test((nb.textContent||'').trim()))return nb;
+    }
+    var prim=document.querySelectorAll('.btn-primary');
+    for(var j=0;j<prim.length;j++){
+      var p=prim[j],pt=(p.textContent||'').trim();
+      if(visible(p)&&/check answer|next question|see results|see the scorecard/i.test(pt))return p;
+    }
+    return null;
+  }
+})();
+</script>
+
+</body>
+</html>
