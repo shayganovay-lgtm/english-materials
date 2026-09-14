@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Even So — C1 Conjunctions Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #1B2438;
+    --bg-deep: #141C2C;
+    --surface: #232E47;
+    --surface-2: #2C3957;
+    --text: #F2E9D8;
+    --text-muted: #A9B4C9;
+    --gold: #D7A65A;
+    --gold-soft: rgba(215,166,90,0.16);
+    --correct: #8FB996;
+    --correct-soft: rgba(143,185,150,0.16);
+    --incorrect: #C97B84;
+    --incorrect-soft: rgba(201,123,132,0.16);
+    --cat-cond: #6FAFA0;
+    --cat-conc: #C4726B;
+    --border: rgba(242,233,216,0.12);
+    --radius: 14px;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse 900px 500px at 15% -10%, rgba(215,166,90,0.08), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 110% 10%, rgba(196,114,107,0.10), transparent 55%),
+      var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    display:flex;
+    justify-content:center;
+    padding: 40px 20px 60px;
+  }
+
+  .wrap{ width:100%; max-width: 680px; }
+
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight: 600;
+    font-size: clamp(34px, 6vw, 50px);
+    line-height: 1.05;
+    margin: 8px 0 6px;
+    letter-spacing: -0.01em;
+  }
+  h1 em{
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .lede{
+    color: var(--text-muted);
+    font-size: 16px;
+    line-height: 1.55;
+    max-width: 56ch;
+  }
+
+  .start-card{ margin-top: 28px; }
+  .legend{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 28px 0 32px;
+  }
+  .legend-item{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 13.5px;
+  }
+  .dot{ width: 9px; height: 9px; border-radius: 50%; flex-shrink:0; }
+
+  button{ font-family:'Inter', sans-serif; cursor: pointer; }
+  .btn-primary{
+    background: var(--gold);
+    color: var(--bg-deep);
+    border: none;
+    padding: 15px 28px;
+    border-radius: 999px;
+    font-size: 15.5px;
+    font-weight: 600;
+    transition: transform .15s ease, box-shadow .15s ease;
+    box-shadow: 0 6px 20px rgba(215,166,90,0.25);
+  }
+  .btn-primary:hover{ transform: translateY(-1px); box-shadow: 0 8px 24px rgba(215,166,90,0.35); }
+  .btn-primary:focus-visible{ outline: 2px solid var(--text); outline-offset: 3px; }
+  .btn-primary:disabled{ opacity:.4; cursor:not-allowed; transform:none; box-shadow:none; }
+
+  .btn-ghost{
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 13px 24px;
+    border-radius: 999px;
+    font-size: 14.5px;
+    font-weight: 500;
+  }
+  .btn-ghost:hover{ border-color: var(--text-muted); }
+  .btn-ghost:focus-visible{ outline: 2px solid var(--text); outline-offset: 3px; }
+
+  .path{ display:flex; align-items:center; gap: 4px; margin: 30px 0 36px; }
+  .node-link{ flex: 1; height: 2px; background: var(--border); }
+  .node-link.done{ background: var(--text-muted); }
+  .node{
+    width: 13px; height: 13px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: var(--bg-deep);
+    flex-shrink:0;
+    transition: all .2s ease;
+  }
+  .node.current{
+    border-color: var(--gold);
+    box-shadow: 0 0 0 4px var(--gold-soft);
+    transform: scale(1.15);
+  }
+  .node.correct{ background: var(--correct); border-color: var(--correct); }
+  .node.incorrect{ background: var(--incorrect); border-color: var(--incorrect); }
+
+  .topline{ display:flex; justify-content: space-between; align-items:baseline; margin-bottom: 6px; }
+  .qcount{ font-family:'IBM Plex Mono', monospace; font-size: 13px; color: var(--text-muted); }
+
+  .cat-badge{
+    display:inline-flex;
+    align-items:center;
+    gap: 7px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+  }
+
+  .card{
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 30px 28px;
+  }
+  .qtext{
+    font-family:'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(19px, 3.2vw, 23px);
+    line-height: 1.45;
+    margin: 0 0 26px;
+  }
+  .blank{ color: var(--gold); font-weight: 600; }
+
+  .options{ display:flex; flex-direction: column; gap: 10px; }
+  .option{
+    text-align:left;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 14px 16px;
+    border-radius: 10px;
+    font-size: 15px;
+    display:flex;
+    align-items:center;
+    gap: 12px;
+    transition: border-color .15s ease, background .15s ease;
+  }
+  .option:hover:not(:disabled){ border-color: var(--text-muted); }
+  .option:focus-visible{ outline: 2px solid var(--gold); outline-offset: 2px; }
+  .option.selected{ border-color: var(--gold); background: var(--gold-soft); }
+  .option.correct{ border-color: var(--correct); background: var(--correct-soft); }
+  .option.incorrect{ border-color: var(--incorrect); background: var(--incorrect-soft); }
+  .option:disabled{ cursor: default; }
+  .opt-letter{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    width: 18px;
+    flex-shrink:0;
+  }
+  .option.correct .opt-letter, .option.correct{ color: var(--text); }
+
+  .feedback{
+    margin-top: 20px;
+    padding: 16px 18px;
+    border-radius: 10px;
+    font-size: 14.5px;
+    line-height: 1.55;
+    border: 1px solid var(--border);
+    display:none;
+  }
+  .feedback.show{ display:block; }
+  .feedback.correct{ background: var(--correct-soft); border-color: rgba(143,185,150,0.4); }
+  .feedback.incorrect{ background: var(--incorrect-soft); border-color: rgba(201,123,132,0.4); }
+  .feedback-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display:block;
+    margin-bottom: 6px;
+  }
+  .feedback.correct .feedback-label{ color: var(--correct); }
+  .feedback.incorrect .feedback-label{ color: var(--incorrect); }
+
+  .actions{ display:flex; justify-content: flex-end; margin-top: 24px; }
+
+  .score-hero{ text-align:center; padding: 38px 20px 30px; }
+  .score-num{
+    font-family:'Fraunces', serif;
+    font-size: 64px;
+    font-weight: 600;
+    color: var(--gold);
+    line-height:1;
+  }
+  .band{
+    margin-top: 14px;
+    font-size: 15.5px;
+    color: var(--text-muted);
+    max-width: 46ch;
+    margin-left:auto; margin-right:auto;
+  }
+
+  .cat-breakdown{ display:flex; flex-direction:column; gap: 12px; margin: 28px 0; }
+  .cat-row{
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .cat-row-top{
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    font-size: 13.5px;
+    margin-bottom: 8px;
+  }
+  .cat-name{ display:flex; align-items:center; gap:8px; font-weight: 500;}
+  .cat-score{ font-family:'IBM Plex Mono', monospace; color: var(--text-muted); }
+  .bar-track{ height: 6px; background: var(--surface-2); border-radius: 4px; overflow:hidden; }
+  .bar-fill{ height:100%; border-radius:4px; }
+
+  .result-actions{ display:flex; gap: 12px; justify-content:center; margin-top: 30px; flex-wrap: wrap; }
+
+  .review-item{
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    margin-bottom: 14px;
+  }
+  .review-q{ font-family:'Fraunces', serif; font-size: 17px; line-height: 1.5; margin: 6px 0 12px; }
+  .review-answer-row{ font-size: 14px; margin: 4px 0; }
+  .review-answer-row .lbl{ color: var(--text-muted); margin-right: 6px;}
+  .review-answer-row .val.correct{ color: var(--correct); font-weight:600;}
+  .review-answer-row .val.incorrect{ color: var(--incorrect); font-weight:600; text-decoration: line-through; text-decoration-color: var(--incorrect); }
+  .review-explain{
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    font-size: 13.5px;
+    color: var(--text-muted);
+    line-height: 1.55;
+  }
+
+  .back-link{
+    display:inline-block;
+    margin-top: 40px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color .15s ease, color .15s ease;
+  }
+  .back-link:hover{ color: var(--text); border-color: var(--text-muted); }
+
+  @media (prefers-reduced-motion: reduce){ *{ transition: none !important; } }
+  @media (max-width: 480px){
+    .legend{ grid-template-columns: 1fr; }
+    .card{ padding: 24px 18px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<script>
+const CATEGORIES = {
+  cond: { name: "If · When · Unless · In Case", color: "var(--cat-cond)" },
+  conc: { name: "Although · Though · Despite",   color: "var(--cat-conc)" }
+};
+
+const QUESTIONS = [
+  {
+    cat: "cond",
+    text: "I won't be able to help you tomorrow ______ something changes at the last minute.",
+    options: ["if", "unless", "in case", "as"],
+    correct: 1,
+    explain: "<strong>Unless</strong> means \u2018except if\u2019: I won't help unless something changes = I'll help only if nothing changes."
+  },
+  {
+    cat: "cond",
+    text: "Take an umbrella with you ______ it rains later \u2014 the forecast looks unreliable.",
+    options: ["if", "when", "in case", "unless"],
+    correct: 2,
+    explain: "<strong>In case</strong> + present simple describes a precaution taken before something might happen. \u2018If it rains\u2019 would wrongly suggest you only pick up the umbrella once the rain starts."
+  },
+  {
+    cat: "cond",
+    text: "______ the meeting finishes, could you send me the notes?",
+    options: ["If", "When", "Unless", "As"],
+    correct: 1,
+    explain: "<strong>When</strong> is used because the meeting finishing is certain \u2014 it's just a matter of time. \u2018If\u2019 would suggest doubt about whether it will ever finish."
+  },
+  {
+    cat: "cond",
+    text: "She won't get the promotion ______ she improves her presentation skills.",
+    options: ["if", "unless", "in case", "when"],
+    correct: 1,
+    explain: "<strong>Unless</strong> (= except if) fits: she'll get the promotion only on condition that she improves."
+  },
+  {
+    cat: "cond",
+    text: "I always feel nervous ______ I have to speak in public.",
+    options: ["if", "when", "unless", "in case"],
+    correct: 1,
+    explain: "For a habitual, regularly-occurring situation, <strong>when</strong> is correct \u2014 it isn't hypothetical, it happens every time."
+  },
+  {
+    cat: "cond",
+    text: "Leave your number with reception ______ we need to contact you during the conference.",
+    options: ["if", "when", "in case", "unless"],
+    correct: 2,
+    explain: "<strong>In case</strong> describes leaving the number now, as a precaution against a possible future need \u2014 not a condition for acting."
+  },
+  {
+    cat: "cond",
+    text: "______ she'd never used the software before, the trainer gave her some extra guidance.",
+    options: ["As", "When", "If", "Unless"],
+    correct: 0,
+    explain: "Here <strong>as</strong> means \u2018because/since\u2019, giving a reason at the start of the sentence \u2014 \u2018when\u2019 or \u2018if\u2019 wouldn't make sense as a cause."
+  },
+  {
+    cat: "cond",
+    text: "I'll email you the invoice ______ I get back to my desk.",
+    options: ["if", "when", "unless", "in case"],
+    correct: 1,
+    explain: "<strong>When</strong> fits because getting back to the desk is treated as a certain future event, not a hypothetical condition."
+  },
+  {
+    cat: "conc",
+    text: "______ we'd budgeted carefully, the project still went over cost.",
+    options: ["Although", "Despite", "In spite of", "Because of"],
+    correct: 0,
+    explain: "<strong>Although</strong> is followed by a full clause (subject + verb). Despite/in spite of need a noun or -ing form, not \u2018we'd budgeted carefully\u2019."
+  },
+  {
+    cat: "conc",
+    text: "______ the traffic, we arrived at the airport with time to spare.",
+    options: ["Although", "Despite", "Even though", "Because"],
+    correct: 1,
+    explain: "<strong>Despite</strong> is followed directly by a noun (the traffic). Although/even though would need a clause: \u2018although there was a lot of traffic\u2019."
+  },
+  {
+    cat: "conc",
+    text: "He accepted the job offer ______ the relatively low starting salary.",
+    options: ["although", "despite", "even though", "because"],
+    correct: 1,
+    explain: "<strong>Despite</strong> + noun phrase fits neatly. \u2018Although\u2019 would require rephrasing as a clause: \u2018although the salary was relatively low\u2019."
+  },
+  {
+    cat: "conc",
+    text: "______ having very little experience, she performed brilliantly in the interview.",
+    options: ["Although", "Despite", "Even though", "Because of"],
+    correct: 1,
+    explain: "<strong>Despite</strong> / in spite of + -ing is a standard structure. \u2018Although\u2019 would need a full clause: \u2018although she had very little experience\u2019."
+  },
+  {
+    cat: "conc",
+    text: "I couldn't get through to the helpline. I sent an email ______.",
+    options: ["though", "although", "despite", "in spite of"],
+    correct: 0,
+    explain: "<strong>Though</strong>, meaning \u2018but\u2019, is commonly placed at the end of a sentence in informal spoken English. The others don't work in that end position with this meaning."
+  },
+  {
+    cat: "conc",
+    text: "______ I was exhausted, I stayed up to finish the report.",
+    options: ["Despite", "In spite of", "Even though", "Because of"],
+    correct: 2,
+    explain: "<strong>Even though</strong> is a stronger form of \u2018although\u2019 and is followed by subject + verb; despite/in spite of would need a noun or -ing instead."
+  },
+  {
+    cat: "conc",
+    text: "We enjoyed the walking holiday ______ the constant rain.",
+    options: ["although", "even though", "in spite of", "because"],
+    correct: 2,
+    explain: "<strong>In spite of</strong> + noun (the constant rain) is correct. Although/even though would need a clause: \u2018although it rained constantly\u2019."
+  },
+  {
+    cat: "conc",
+    text: "The client wasn't happy with the design at first. ______ this, they approved the final version a week later.",
+    options: ["Despite", "In spite", "Although", "Because of"],
+    correct: 0,
+    explain: "We say <strong>despite this</strong>, not \u2018despite of this\u2019. \u2018In spite of this\u2019 is also correct, but \u2018in spite\u2019 alone \u2014 without \u2018of\u2019 \u2014 is not."
+  },
+  {
+    cat: "conc",
+    text: "______ the negative reviews, the restaurant is fully booked every weekend.",
+    options: ["Although", "Despite", "Even though", "Because"],
+    correct: 1,
+    explain: "<strong>Despite</strong> takes the noun phrase \u2018the negative reviews\u2019 directly. \u2018Although\u2019 would require: \u2018although the reviews are negative\u2019."
+  }
+];
+
+const state = {
+  screen: 'start',
+  index: 0,
+  selected: null,
+  answers: new Array(QUESTIONS.length).fill(null)
+};
+
+function letterFor(i){ return ['A','B','C','D'][i]; }
+
+function renderLegend(){
+  return Object.values(CATEGORIES).map(c =>
+    `<div class="legend-item"><span class="dot" style="background:${c.color}"></span>${c.name}</div>`
+  ).join('');
+}
+
+function renderStart(){
+  return `
+    <div class="eyebrow">C1 · Use of English</div>
+    <h1>Even <em>So</em></h1>
+    <p class="lede">Sixteen sentences that turn on a single joining word \u2014 the point where a condition becomes a contrast, and a clause becomes a phrase. Pick the word that actually fits the grammar, not just the meaning.</p>
+    <div class="legend">${renderLegend()}</div>
+    <button class="btn-primary" onclick="startQuiz()">Begin the quiz →</button>
+    <div><a class="back-link" href="index.html">← All quizzes</a></div>
+  `;
+}
+
+function renderPath(){
+  let html = '<div class="path">';
+  QUESTIONS.forEach((q, i) => {
+    const ans = state.answers[i];
+    let cls = 'node';
+    if (i === state.index && !ans) cls += ' current';
+    if (ans) cls += ans.correct ? ' correct' : ' incorrect';
+    html += `<div class="${cls}" title="Question ${i+1}"></div>`;
+    if (i < QUESTIONS.length - 1){
+      html += `<div class="node-link${ans ? ' done' : ''}"></div>`;
+    }
+  });
+  html += '</div>';
+  return html;
+}
+
+function renderQuestion(){
+  const q = QUESTIONS[state.index];
+  const cat = CATEGORIES[q.cat];
+  const ans = state.answers[state.index];
+  const checked = !!ans;
+
+  const optionsHtml = q.options.map((opt, i) => {
+    let cls = 'option';
+    let disabled = checked ? 'disabled' : '';
+    if (checked){
+      if (i === q.correct) cls += ' correct';
+      else if (i === ans.selected) cls += ' incorrect';
+    } else if (i === state.selected){
+      cls += ' selected';
+    }
+    return `<button class="${cls}" ${disabled} onclick="selectOption(${i})">
+      <span class="opt-letter">${letterFor(i)}</span>${opt}
+    </button>`;
+  }).join('');
+
+  const isLast = state.index === QUESTIONS.length - 1;
+  const actionLabel = checked ? (isLast ? 'See results →' : 'Next question →') : 'Check answer';
+  const actionHandler = checked ? 'goNext()' : 'checkAnswer()';
+  const actionDisabled = (!checked && state.selected === null) ? 'disabled' : '';
+
+  let feedbackHtml = '';
+  if (checked){
+    feedbackHtml = `
+      <div class="feedback show ${ans.correct ? 'correct' : 'incorrect'}">
+        <span class="feedback-label">${ans.correct ? 'Correct' : 'Not quite'}</span>
+        ${q.explain}
+      </div>`;
+  }
+
+  return `
+    ${renderPath()}
+    <div class="topline">
+      <span class="qcount">Question ${state.index + 1} / ${QUESTIONS.length}</span>
+    </div>
+    <div class="cat-badge"><span class="dot" style="background:${cat.color}"></span>${cat.name}</div>
+    <div class="card">
+      <p class="qtext">${q.text}</p>
+      <div class="options">${optionsHtml}</div>
+      ${feedbackHtml}
+      <div class="actions">
+        <button class="btn-primary" ${actionDisabled} onclick="${actionHandler}">${actionLabel}</button>
+      </div>
+    </div>
+  `;
+}
+
+function scoreByCategory(){
+  const out = {};
+  Object.keys(CATEGORIES).forEach(k => out[k] = {correct:0, total:0});
+  QUESTIONS.forEach((q, i) => {
+    out[q.cat].total++;
+    if (state.answers[i] && state.answers[i].correct) out[q.cat].correct++;
+  });
+  return out;
+}
+
+function bandMessage(score, total){
+  const pct = score/total;
+  if (pct >= 0.87) return "Excellent \u2014 the shift between clause-based and noun-based contrast is clearly under control. Exam-ready.";
+  if (pct >= 0.6) return "Solid grasp overall, with a few specific gaps worth revisiting. Check which category pulled the score down.";
+  return "These structures need more focused review \u2014 especially which conjunctions take a clause and which take a noun or -ing form.";
+}
+
+function renderResults(){
+  const total = QUESTIONS.length;
+  const score = state.answers.filter(a => a && a.correct).length;
+  const byCat = scoreByCategory();
+
+  const rows = Object.entries(byCat).map(([key, v]) => {
+    const cat = CATEGORIES[key];
+    const pct = Math.round((v.correct / v.total) * 100);
+    return `
+      <div class="cat-row">
+        <div class="cat-row-top">
+          <span class="cat-name"><span class="dot" style="background:${cat.color}"></span>${cat.name}</span>
+          <span class="cat-score">${v.correct}/${v.total}</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width:${pct}%; background:${cat.color}"></div></div>
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="score-hero">
+      <div class="eyebrow">Results</div>
+      <div class="score-num">${score}<span style="font-size:28px;color:var(--text-muted)"> / ${total}</span></div>
+      <p class="band">${bandMessage(score, total)}</p>
+    </div>
+    <div class="cat-breakdown">${rows}</div>
+    <div class="result-actions">
+      <button class="btn-primary" onclick="showReview()">Review every answer</button>
+      <button class="btn-ghost" onclick="restartQuiz()">Retry quiz</button>
+    </div>
+    <div style="text-align:center;"><a class="back-link" href="index.html">← All quizzes</a></div>
+  `;
+}
+
+function renderReview(){
+  const items = QUESTIONS.map((q, i) => {
+    const ans = state.answers[i];
+    const cat = CATEGORIES[q.cat];
+    return `
+      <div class="review-item">
+        <div class="cat-badge"><span class="dot" style="background:${cat.color}"></span>${cat.name} · Q${i+1}</div>
+        <p class="review-q">${q.text}</p>
+        <div class="review-answer-row"><span class="lbl">Your answer:</span><span class="val ${ans.correct ? 'correct' : 'incorrect'}">${q.options[ans.selected]}</span></div>
+        ${!ans.correct ? `<div class="review-answer-row"><span class="lbl">Correct answer:</span><span class="val correct">${q.options[q.correct]}</span></div>` : ''}
+        <div class="review-explain">${q.explain}</div>
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="eyebrow">Full review</div>
+    <h1 style="font-size:32px;">Every fork, retraced</h1>
+    <div style="margin: 24px 0;">${items}</div>
+    <div class="result-actions">
+      <button class="btn-ghost" onclick="restartQuiz()">Retry quiz</button>
+    </div>
+    <div style="text-align:center;"><a class="back-link" href="index.html">← All quizzes</a></div>
+  `;
+}
+
+function render(){
+  const app = document.getElementById('app');
+  if (state.screen === 'start') app.innerHTML = renderStart();
+  else if (state.screen === 'question') app.innerHTML = renderQuestion();
+  else if (state.screen === 'results') app.innerHTML = renderResults();
+  else if (state.screen === 'review') app.innerHTML = renderReview();
+  window.scrollTo({top:0, behavior:'instant'});
+}
+
+function startQuiz(){
+  state.screen = 'question';
+  state.index = 0;
+  render();
+}
+
+function selectOption(i){
+  if (state.answers[state.index]) return;
+  state.selected = i;
+  render();
+}
+
+function checkAnswer(){
+  if (state.selected === null) return;
+  const q = QUESTIONS[state.index];
+  state.answers[state.index] = { selected: state.selected, correct: state.selected === q.correct };
+  render();
+}
+
+function goNext(){
+  if (state.index < QUESTIONS.length - 1){
+    state.index++;
+    state.selected = null;
+    state.screen = 'question';
+  } else {
+    state.screen = 'results';
+  }
+  render();
+}
+
+function showReview(){
+  state.screen = 'review';
+  render();
+}
+
+function restartQuiz(){
+  state.index = 0;
+  state.selected = null;
+  state.answers = new Array(QUESTIONS.length).fill(null);
+  state.screen = 'start';
+  render();
+}
+
+render();
+</script>
+
+<!-- BACK TO QUIZZES — auto-shows when the quiz is finished -->
+<style>
+.back-to-quizzes{position:fixed;left:50%;bottom:22px;transform:translate(-50%,90px);z-index:999;display:inline-flex;align-items:center;gap:8px;padding:12px 22px;background:#2451CC;color:#fff;border-radius:99px;text-decoration:none;font:600 14px/1 system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;box-shadow:0 10px 30px rgba(36,81,204,.35);transition:transform .35s ease,opacity .35s ease;opacity:0}
+.back-to-quizzes.show{transform:translate(-50%,0);opacity:1}
+.back-to-quizzes:hover{background:#1d3fa8}
+</style>
+<a href="index.html" class="back-to-quizzes" id="b2qBtn">← Back to quizzes</a>
+<script>
+(function(){
+  var btn=document.getElementById('b2qBtn');if(!btn)return;
+  function vis(el){return !!el&&el.offsetParent!==null;}
+  function finished(){
+    var rs=document.getElementById('results-screen')||document.getElementById('screen-results');
+    if(rs&&rs.classList.contains('active'))return true;
+    var r=document.getElementById('results');
+    if(r&&r.children.length&&vis(r))return true;
+    var sc=document.getElementById('scoreCard');
+    if(sc&&sc.style.display!=='none'&&vis(sc))return true;
+    var st=document.getElementById('statusText');
+    if(st&&/complete/i.test(st.textContent||''))return true;
+    var ebs=document.querySelectorAll('.eyebrow');
+    for(var i=0;i<ebs.length;i++){
+      var t=(ebs[i].textContent||'').trim().toLowerCase();
+      if(t==='results'&&vis(ebs[i]))return true;
+    }
+    var m=document.getElementById('prog-text')||document.getElementById('progressLabel');
+    if(m){
+      var a=(m.textContent||'').match(/(\d+)\s*(?:of|\/)\s*(\d+)/);
+      if(a&&+a[2]>0&&+a[1]>=+a[2])return true;
+    }
+    return false;
+  }
+  function check(){if(finished())btn.classList.add('show');}
+  setInterval(check,1200);check();
+  try{new MutationObserver(function(){setTimeout(check,50)}).observe(document.body,{childList:true,subtree:true,attributes:true});}catch(e){}
+})();
+</script>
+
+<!-- ENTER KEY = CHECK — press Enter to check an answer or go to the next item -->
+<script>
+(function(){
+  document.addEventListener('keydown',function(e){
+    if(e.key!=='Enter')return;
+    var t=e.target;
+    if(!t||t.tagName==='TEXTAREA'||t.tagName==='A'||t.tagName==='SELECT')return;
+    if(t===document.body||t===document.documentElement){/* continue: quiz advance */}
+    else if(t.tagName==='INPUT'){
+      var ty=(t.type||'text').toLowerCase();
+      if(/^(checkbox|radio|submit|button|file|reset)$/i.test(ty))return;
+      if(/enter/i.test(t.getAttribute('onkeydown')||''))return;
+      if(/chat/i.test(t.id||'')||/chat/i.test(t.name||'')||/chat/i.test(t.placeholder||''))return;
+    } else if(t.tagName==='BUTTON'){
+      var cid=t.id||'',ccn=t.className||'',pcn=(t.parentElement&&t.parentElement.className)||'';
+      var isOpt=/^opt-|^option/i.test(cid)||/(^|[\s_-])(opt|option|options|opts|choice|mc-opt|mini-opt|tf-btn|pick|answer)([\s_-]|$)/i.test(ccn)||/(^|[\s_-])(opts|options)([\s_-]|$)/i.test(pcn);
+      if(!isOpt)return;
+    }
+    var btn=findAction(t);
+    if(btn&&btn!==t){e.preventDefault();btn.focus();btn.click();}
+  });
+  function visible(el){return !!el&&el.offsetParent!==null&&!el.disabled&&!el.classList.contains('disabled')&&el.getAttribute('aria-disabled')!=='true';}
+  function isCheckBtn(b){return /^(\u2714\s*)?check/i.test((b.textContent||'').trim());}
+  function findAction(t){
+    var cont=t.closest?t.closest('.card,.task,.q-card,.frame,section,.container,div'):null;
+    var guard=0;
+    while(cont&&cont!==document.body&&guard<8){
+      var btns=cont.querySelectorAll('button');
+      for(var i=0;i<btns.length;i++){if(visible(btns[i])&&isCheckBtn(btns[i]))return btns[i];}
+      cont=cont.parentElement?cont.parentElement.closest('div,section,form'):null;guard++;
+    }
+    var nb=document.getElementById('next-btn')||document.getElementById('nextBtn');
+    if(nb&&visible(nb)&&(nb.classList.contains('enabled')||!nb.disabled)){
+      if(/next|results|item|scorecard/i.test((nb.textContent||'').trim()))return nb;
+    }
+    var prim=document.querySelectorAll('.btn-primary');
+    for(var j=0;j<prim.length;j++){
+      var p=prim[j],pt=(p.textContent||'').trim();
+      if(visible(p)&&/check answer|next question|see results|see the scorecard/i.test(pt))return p;
+    }
+    return null;
+  }
+})();
+</script>
+
+</body>
+</html>
