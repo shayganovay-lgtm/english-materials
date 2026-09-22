@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crossroads — Conditionals &amp; Unreal Structures</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EFEAE0;
+    --card:#FFFDF8;
+    --ink:#231F1B;
+    --ink-soft:#6B6055;
+    --ink-faint:#9C9186;
+    --clay:#B5502C;
+    --clay-bg:#F3E1D7;
+    --sage:#4B6E58;
+    --sage-bg:#E1E9E1;
+    --gold:#A8762E;
+    --correct:#3C6E4D;
+    --correct-bg:#E0EDE2;
+    --incorrect:#A1463A;
+    --incorrect-bg:#F3E0DC;
+    --line:#DDD4C6;
+    --line-soft:#EAE3D6;
+    --font-display:'Fraunces', Georgia, 'Times New Roman', serif;
+    --font-body:'IBM Plex Sans', Arial, sans-serif;
+    --font-mono:'IBM Plex Mono', 'Courier New', monospace;
+    --shadow: 0 1px 2px rgba(35,31,27,0.05), 0 10px 28px rgba(35,31,27,0.08);
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    background:var(--bg);
+    background-image: radial-gradient(circle at 1px 1px, rgba(35,31,27,0.06) 1px, transparent 0);
+    background-size: 22px 22px;
+    color:var(--ink);
+    font-family:var(--font-body);
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    padding:32px 16px 64px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; transition-duration:0.001ms !important; }
+  }
+
+  .wrap{ width:100%; max-width:680px; margin:0 auto; }
+
+  .back-link{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:var(--font-mono); font-size:0.78rem; color:var(--ink-soft);
+    text-decoration:none; margin-bottom:22px;
+  }
+  .back-link:hover{ color:var(--clay); }
+
+  header{ text-align:center; margin-bottom:28px; animation: dropIn 0.5s ease both; }
+  @keyframes dropIn{ from{ opacity:0; transform:translateY(-8px);} to{ opacity:1; transform:translateY(0);} }
+
+  .mark{ display:flex; justify-content:center; margin-bottom:8px; }
+  .mark svg{ width:78px; height:46px; }
+
+  h1{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:2.15rem;
+    letter-spacing:-0.01em;
+    margin:0 0 6px;
+  }
+  .subtitle{ font-size:0.93rem; color:var(--ink-soft); }
+  .subtitle b{ color:var(--ink); font-weight:600; }
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:4px;
+    box-shadow:var(--shadow);
+    padding:32px 30px;
+  }
+
+  /* start screen */
+  #start-screen .card p{ font-size:0.97rem; line-height:1.65; color:var(--ink-soft); margin:0 0 16px; }
+  #start-screen .card p:last-of-type{ margin-bottom:26px; }
+  #start-screen strong{ color:var(--ink); }
+
+  .stat-row{ display:flex; gap:10px; margin-bottom:26px; flex-wrap:wrap; }
+  .stat-chip{
+    font-family:var(--font-mono); font-size:0.74rem; letter-spacing:0.03em;
+    color:var(--ink-soft); border:1px solid var(--line); border-radius:3px;
+    padding:7px 11px; background:#fff;
+  }
+
+  .btn-primary{
+    display:inline-block; width:100%;
+    background:var(--ink); color:#F7F3EA;
+    font-family:var(--font-body); font-weight:600; font-size:0.97rem;
+    border:none; border-radius:3px; padding:14px 20px; cursor:pointer;
+    transition:background 0.15s ease, transform 0.1s ease;
+  }
+  .btn-primary:hover{ background:var(--clay); }
+  .btn-primary:active{ transform:translateY(1px); }
+  .btn-primary:focus-visible{ outline:2px solid var(--clay); outline-offset:2px; }
+  .btn-primary:disabled{ opacity:0.4; cursor:not-allowed; }
+
+  /* progress */
+  .progress-bar-track{ width:100%; height:5px; background:var(--line-soft); border-radius:3px; overflow:hidden; margin-bottom:8px; }
+  .progress-bar-fill{ height:100%; background:linear-gradient(90deg, var(--clay), var(--sage)); border-radius:3px; transition:width 0.35s ease; }
+  .progress-row{
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:var(--font-mono); font-size:0.76rem; color:var(--ink-soft); margin-bottom:18px;
+  }
+  .progress-row .score{ color:var(--ink); font-weight:600; }
+
+  #quiz-screen{ display:none; }
+  #quiz-screen.active{ display:block; }
+  #start-screen.hidden, #results-screen.hidden{ display:none; }
+
+  .q-card{ animation: fadeSlide 0.3s ease both; }
+  @keyframes fadeSlide{ from{ opacity:0; transform:translateY(6px);} to{ opacity:1; transform:translateY(0);} }
+
+  .eyebrow{ display:flex; align-items:center; gap:10px; margin-bottom:20px; flex-wrap:wrap; }
+  .eyebrow .tag{
+    font-family:var(--font-mono); font-size:0.72rem; font-weight:600;
+    padding:5px 9px; border-radius:3px;
+  }
+  .tag.t-mc{ background:var(--clay-bg); color:var(--clay); }
+  .tag.t-gap{ background:var(--sage-bg); color:var(--sage); }
+  .tag.t-transform{ background:#EFE3F1; color:#6E3E7A; }
+  .tag.t-error{ background:#FBEAD9; color:#8A5A1E; }
+  .eyebrow .num{ font-family:var(--font-mono); font-size:0.78rem; color:var(--ink-faint); }
+
+  .q-prompt{
+    font-family:var(--font-display);
+    font-size:1.28rem;
+    line-height:1.55;
+    color:var(--ink);
+    margin:0 0 8px;
+  }
+  .q-prompt .blank{
+    display:inline-block; min-width:80px; border-bottom:2px solid var(--ink-faint); margin:0 2px;
+  }
+  .q-hint{ font-size:0.85rem; color:var(--ink-faint); margin-bottom:22px; font-style:italic; }
+  .q-sub{ font-size:0.88rem; color:var(--ink-soft); margin:0 0 20px; line-height:1.55; }
+  .q-orig{
+    font-family:var(--font-display); font-size:1.05rem; font-style:italic;
+    background:#F7F1E8; border-left:3px solid var(--gold); border-radius:0 3px 3px 0;
+    padding:10px 14px; margin-bottom:16px; color:var(--ink);
+  }
+  .keyword-row{ display:flex; align-items:center; gap:8px; margin-bottom:16px; }
+  .keyword-chip{
+    font-family:var(--font-mono); font-size:0.78rem; font-weight:600;
+    background:var(--ink); color:#F7F3EA; padding:4px 10px; border-radius:3px; letter-spacing:0.04em;
+  }
+
+  /* MC options */
+  .options{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:6px; }
+  @media (max-width:480px){ .options{ grid-template-columns:1fr; } }
+  .opt{
+    text-align:left; font-family:var(--font-body); font-size:0.96rem; color:var(--ink);
+    background:#fff; border:1.5px solid var(--line); border-radius:3px; padding:13px 14px;
+    cursor:pointer; display:flex; align-items:center; gap:10px;
+    transition:border-color 0.12s ease, background 0.12s ease, transform 0.08s ease;
+  }
+  .opt:hover:not(.disabled){ border-color:var(--ink-faint); }
+  .opt:active:not(.disabled){ transform:translateY(1px); }
+  .opt:focus-visible{ outline:2px solid var(--clay); outline-offset:1px; }
+  .opt .letter{
+    font-family:var(--font-mono); font-size:0.74rem; color:var(--ink-faint);
+    border:1px solid var(--line); border-radius:50%; width:20px; height:20px; flex:none;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .opt.disabled{ cursor:default; }
+  .opt.correct-answer{ background:var(--correct-bg); border-color:var(--correct); color:var(--correct); font-weight:600; }
+  .opt.correct-answer .letter{ border-color:var(--correct); color:var(--correct); }
+  .opt.wrong-answer{ background:var(--incorrect-bg); border-color:var(--incorrect); color:var(--incorrect); }
+  .opt.wrong-answer .letter{ border-color:var(--incorrect); color:var(--incorrect); }
+  .opt.muted{ opacity:0.5; }
+
+  /* text input questions */
+  .text-answer{ margin-bottom:6px; }
+  .text-answer input{
+    width:100%; font-family:var(--font-body); font-size:1rem; color:var(--ink);
+    background:#fff; border:1.5px solid var(--line); border-radius:3px; padding:13px 14px;
+    outline:none; transition:border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .text-answer input:focus{ border-color:var(--clay); box-shadow:0 0 0 3px var(--clay-bg); }
+  .text-answer input.correct-answer{ border-color:var(--correct); background:var(--correct-bg); color:var(--correct); font-weight:600; }
+  .text-answer input.wrong-answer{ border-color:var(--incorrect); background:var(--incorrect-bg); color:var(--incorrect); }
+  .text-answer input:disabled{ cursor:default; }
+
+  .btn-check{
+    margin-top:14px; font-family:var(--font-body); font-weight:600; font-size:0.9rem;
+    color:#fff; background:var(--ink); border:none; border-radius:3px; padding:11px 20px; cursor:pointer;
+    transition:background 0.15s ease, opacity 0.15s ease;
+  }
+  .btn-check:hover{ background:var(--clay); }
+  .btn-check:disabled{ opacity:0.4; cursor:not-allowed; }
+  .btn-check.hide{ display:none; }
+
+  .feedback{
+    margin-top:18px; padding:16px 18px; border-radius:3px; border-left:3px solid var(--ink-faint);
+    background:#F3F0E8; font-size:0.91rem; line-height:1.6; color:var(--ink-soft); display:none;
+  }
+  .feedback.show{ display:block; animation: fadeSlide 0.25s ease both; }
+  .feedback.is-correct{ border-left-color:var(--correct); }
+  .feedback.is-wrong{ border-left-color:var(--incorrect); }
+  .feedback .verdict{
+    font-family:var(--font-mono); font-size:0.72rem; font-weight:600; display:block; margin-bottom:6px;
+  }
+  .feedback.is-correct .verdict{ color:var(--correct); }
+  .feedback.is-wrong .verdict{ color:var(--incorrect); }
+  .feedback .correct-line{ display:block; margin-top:8px; font-weight:600; color:var(--ink); }
+
+  .next-row{ display:flex; justify-content:space-between; margin-top:22px; }
+  .btn-next{
+    font-family:var(--font-body); font-weight:600; font-size:0.9rem; color:var(--ink);
+    background:transparent; border:1.5px solid var(--ink); border-radius:3px; padding:10px 18px;
+    cursor:pointer; opacity:0.35; pointer-events:none; transition:opacity 0.15s ease, background 0.15s ease, color 0.15s ease;
+  }
+  .btn-next.enabled{ opacity:1; pointer-events:auto; }
+  .btn-next.enabled:hover{ background:var(--ink); color:#F7F3EA; }
+  .btn-next:focus-visible{ outline:2px solid var(--clay); outline-offset:2px; }
+
+  /* results */
+  #results-screen{ display:none; }
+  #results-screen.active{ display:block; }
+
+  .score-hero{ text-align:center; padding:6px 0 22px; }
+  .score-hero .big{ font-family:var(--font-display); font-size:3.4rem; font-weight:600; line-height:1; color:var(--ink); }
+  .score-hero .big span{ font-size:1.6rem; color:var(--ink-faint); font-weight:500; }
+  .score-hero .pct{ font-family:var(--font-mono); font-size:0.85rem; color:var(--ink-soft); margin-top:8px; }
+  .score-hero .tier{ margin-top:10px; font-size:1rem; color:var(--ink-soft); line-height:1.55; }
+
+  .cat-breakdown{ display:flex; flex-direction:column; gap:12px; margin:24px 0 8px; }
+  .cat-row{ border:1px solid var(--line); border-radius:3px; padding:14px 16px; background:#fff; }
+  .cat-row-top{ display:flex; justify-content:space-between; align-items:center; font-size:0.86rem; margin-bottom:8px; }
+  .cat-name{ font-weight:600; }
+  .cat-score{ font-family:var(--font-mono); color:var(--ink-soft); font-size:0.82rem; }
+  .bar-track{ height:6px; background:var(--line-soft); border-radius:4px; overflow:hidden; }
+  .bar-fill{ height:100%; border-radius:4px; background:var(--clay); }
+
+  hr.div{ border:none; border-top:1px solid var(--line); margin:28px 0 22px; }
+
+  .rec-title{ font-family:var(--font-display); font-size:1.1rem; font-weight:600; margin:0 0 12px; }
+  .rec-list{ margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:10px; }
+  .rec-list li{
+    font-size:0.9rem; line-height:1.55; color:var(--ink-soft);
+    background:#fff; border:1px solid var(--line); border-radius:3px; padding:12px 14px;
+    display:flex; gap:10px;
+  }
+  .rec-list li::before{ content:'→'; color:var(--clay); font-weight:600; flex:none; }
+
+  .review-title{ font-family:var(--font-display); font-size:1.15rem; font-weight:600; margin:0 0 4px; }
+  .review-sub{ font-size:0.85rem; color:var(--ink-soft); margin:0 0 18px; }
+  .review-item{ border:1px solid var(--line); border-radius:3px; padding:16px 18px; margin-bottom:12px; background:#fff; }
+  .review-item .ritag{ font-family:var(--font-mono); font-size:0.68rem; color:var(--ink-faint); margin-bottom:6px; }
+  .review-item .riq{ font-family:var(--font-display); font-size:1.02rem; margin-bottom:8px; line-height:1.5; }
+  .review-item .riline{ font-size:0.86rem; margin:2px 0; }
+  .review-item .riline .yours{ color:var(--incorrect); font-weight:600; }
+  .review-item .riline .right{ color:var(--correct); font-weight:600; }
+  .review-item .riexp{ font-size:0.86rem; color:var(--ink-soft); line-height:1.55; margin-top:8px; }
+
+  .all-correct-note{ text-align:center; font-size:0.92rem; color:var(--ink-soft); padding:18px 0; }
+
+  .btn-row{ display:flex; gap:10px; margin-top:24px; }
+  .btn-secondary{
+    flex:1; font-family:var(--font-body); font-weight:600; font-size:0.9rem;
+    background:transparent; border:1.5px solid var(--ink); color:var(--ink);
+    border-radius:3px; padding:12px 16px; cursor:pointer; transition:background 0.15s ease, color 0.15s ease;
+  }
+  .btn-secondary:hover{ background:var(--ink); color:#F7F3EA; }
+
+  footer{ text-align:center; margin-top:24px; font-size:0.76rem; color:var(--ink-faint); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back-link" href="index.html">&larr; All quizzes</a>
+
+  <header>
+    <div class="mark">
+      <svg viewBox="0 0 78 46" fill="none">
+        <line x1="4" y1="23" x2="34" y2="23" stroke="#A8762E" stroke-width="1.6"/>
+        <line x1="34" y1="23" x2="60" y2="8"  stroke="#B5502C" stroke-width="1.6"/>
+        <line x1="34" y1="23" x2="60" y2="23" stroke="#9C9186" stroke-width="1.6" stroke-dasharray="3 3"/>
+        <line x1="34" y1="23" x2="60" y2="38" stroke="#4B6E58" stroke-width="1.6"/>
+        <circle cx="4" cy="23" r="3" fill="#A8762E"/>
+        <circle cx="34" cy="23" r="3.5" fill="#231F1B"/>
+        <circle cx="60" cy="8" r="3" fill="#B5502C"/>
+        <circle cx="60" cy="23" r="3" fill="#9C9186"/>
+        <circle cx="60" cy="38" r="3" fill="#4B6E58"/>
+      </svg>
+    </div>
+    <h1>Crossroads</h1>
+    <div class="subtitle">A B1&ndash;B2 conditionals drill &middot; <b>20 items</b> &middot; every sentence forks on one choice</div>
+  </header>
+
+  <!-- START SCREEN -->
+  <div id="start-screen">
+    <div class="card">
+      <p>Every sentence below sits at a fork: a real possibility or a hypothesis, a warning or a wish, a fact you accept or a condition you set. Picking the wrong path doesn&rsquo;t just sound odd &mdash; it changes what actually happened, or might.</p>
+      <p>Twenty multiple-choice items, mixed randomly across every structure &mdash; so you can&rsquo;t guess the answer from the pattern of the quiz. Read for meaning and time, not just keywords.</p>
+      <div class="stat-row">
+        <span class="stat-chip">20 Multiple choice</span>
+        <span class="stat-chip">Instant feedback</span>
+        <span class="stat-chip">Full review at the end</span>
+      </div>
+      <button class="btn-primary" onclick="beginQuiz()">Begin the quiz</button>
+    </div>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div id="quiz-screen">
+    <div class="progress-row">
+      <span id="progress-label">Item 1 of 20</span>
+      <span class="score">Score: <span id="live-score">0</span></span>
+    </div>
+    <div class="progress-bar-track"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div>
+
+    <div class="card q-card" id="q-card">
+      <div class="eyebrow">
+        <span class="tag" id="q-tag"></span>
+        <span class="num" id="q-num">No. 1</span>
+      </div>
+      <div id="q-body"></div>
+      <div class="feedback" id="q-feedback">
+        <span class="verdict" id="fb-verdict"></span>
+        <span id="fb-text"></span>
+        <span class="correct-line" id="fb-correct-line" style="display:none;"></span>
+      </div>
+      <div class="next-row">
+        <button class="btn-next" id="prev-btn" onclick="prevQuestion()">&larr; Previous</button>
+        <button class="btn-next" id="next-btn" onclick="nextQuestion()">Next item &rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS SCREEN -->
+  <div id="results-screen">
+    <div class="card">
+      <div class="score-hero">
+        <div class="big" id="final-score">0<span>/20</span></div>
+        <div class="pct" id="final-pct"></div>
+        <div class="tier" id="final-tier"></div>
+      </div>
+
+      <div class="cat-breakdown" id="cat-breakdown"></div>
+
+      <hr class="div">
+      <div class="rec-title">Where to focus next</div>
+      <ul class="rec-list" id="rec-list"></ul>
+
+      <hr class="div">
+      <div class="review-title">Review</div>
+      <div class="review-sub" id="review-sub">Items worth a second look:</div>
+      <div id="review-list"></div>
+
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="restartQuiz()">Restart quiz</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>A grammar diagnostic for real, unreal and mixed conditionals, even if / even though, unless / provided, wish / if only, and would rather.</footer>
+</div>
+
+<script>
+/* ---------------- helpers ---------------- */
+function norm(s){
+  return String(s).toLowerCase()
+    .replace(/[\u2018\u2019\u201C\u201D]/g,"'")
+    .replace(/[^\w\s]/g,'')
+    .replace(/\s+/g,' ')
+    .trim();
+}
+function letterFor(i){ return String.fromCharCode(65+i); }
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+/* ---------------- categories ---------------- */
+const CATEGORIES = {
+  cond:   { name: "Real, unreal &amp; mixed conditionals" },
+  contrast: { name: "Even if / even though / unless / provided" },
+  wish:   { name: "Wish &amp; if only" },
+  rather: { name: "Would rather &amp; advice" }
+};
+
+/* ---------------- question bank ---------------- */
+const RAW_QUESTIONS = [
+  {
+    type:'mc', cat:'cond',
+    prompt:'If you finish the report by Friday, your manager ______ very pleased.',
+    options:['will be','would be','is','would have been'],
+    correct:0,
+    explanation:"This is a realistic future situation, so the first conditional is needed: if + present simple, main clause with <em>will</em>. \u2018Would be\u2019 wrongly treats a genuine possibility as a hypothesis, and \u2018would have been\u2019 shifts the whole sentence into an unreal past that nothing here suggests."
+  },
+  {
+    type:'mc', cat:'wish',
+    prompt:'I wish I ______ so much money on that laptop last year \u2014 I never even use it.',
+    options:["hadn't spent","wouldn't have spent","didn't spend","haven't spent"],
+    correct:0,
+    explanation:"The regret is about a specific, completed action last year, so <em>wish</em> takes the past perfect: <em>hadn\u2019t spent</em>. \u2018Wouldn\u2019t have spent\u2019 is a very common mistake \u2014 <em>wish</em> never pairs with \u2018would have\u2019 to express regret about your own past."
+  },
+  {
+    type:'mc', cat:'cond',
+    prompt:'Which sentence is correct?',
+    options:[
+      'If I would have known about the traffic, I would have left earlier.',
+      'If I had known about the traffic, I would have left earlier.',
+      'If I knew about the traffic, I would have left earlier.',
+      'If I had known about the traffic, I would leave earlier.'
+    ],
+    correct:1,
+    explanation:"The if-clause of a third conditional never takes \u2018would have\u2019 \u2014 it needs the past perfect, <em>had known</em>. The result clause needs \u2018would have left\u2019, matching the same unreal past; \u2018would leave\u2019 wrongly shifts the result into the present."
+  },
+  {
+    type:'mc', cat:'contrast',
+    prompt:'______ we don\u2019t always agree, we always find a way to talk things through.',
+    options:['Even if','Even though','Provided that','Unless'],
+    correct:1,
+    explanation:"This describes a real, known fact \u2014 they genuinely disagree sometimes \u2014 so it needs <em>even though</em>, which introduces a contrast with something true. <em>Even if</em> would wrongly suggest the disagreement is only a hypothetical possibility."
+  },
+  {
+    type:'mc', cat:'wish',
+    prompt:'Which sentence best expresses the same meaning as: &ldquo;I regret telling him the truth&rdquo;?',
+    options:[
+      "I wish I hadn't told him the truth.",
+      "I wish I didn't tell him the truth.",
+      "I wish I wouldn't tell him the truth.",
+      "I wish I haven't told him the truth."
+    ],
+    correct:0,
+    explanation:"The regret is about one completed past action, so <em>wish</em> + past perfect (<em>hadn\u2019t told</em>) is required \u2014 not \u2018didn\u2019t tell\u2019, which would describe an ongoing present state instead, and never \u2018wouldn\u2019t tell\u2019 or the ungrammatical \u2018haven\u2019t told\u2019."
+  },
+  {
+    type:'mc', cat:'contrast',
+    prompt:'You won\u2019t get a seat ______ you arrive at the station early.',
+    options:['unless','if','even if','provided'],
+    correct:0,
+    explanation:"<em>Unless</em> means \u2018if\u2026not\u2019, which exactly fits: you won\u2019t get a seat if you don\u2019t arrive early. Plain \u2018if\u2019 would reverse the logic of the sentence."
+  },
+  {
+    type:'mc', cat:'cond',
+    prompt:'If I ______ more savings, I would invest in that start-up.',
+    options:['had','have','would have','have had'],
+    correct:0,
+    explanation:"This is a present/future unreal situation \u2014 a second conditional: if + past simple (<em>had</em>) \u2192 would + infinitive. \u2018Have\u2019 alone would make it a real, first-conditional situation, which doesn\u2019t match the hypothetical tone here."
+  },
+  {
+    type:'mc', cat:'contrast',
+    prompt:'You can take my car for the weekend ______ you fill up the tank before you bring it back.',
+    options:['unless','even if','provided that','if only'],
+    correct:2,
+    explanation:"<em>Provided that</em> means \u2018on condition that\u2019 and attaches a specific requirement to permission \u2014 exactly the pattern here. <em>Unless</em> would reverse the meaning, making the tank-filling a reason to refuse, not a condition of allowing it."
+  },
+  {
+    type:'mc', cat:'contrast',
+    prompt:'Which sentence is correct?',
+    options:[
+      "Unless you don't call me by six, I'll assume you're not coming.",
+      "Unless you call me by six, I'll assume you're not coming.",
+      "Unless you won't call me by six, I'll assume you're not coming.",
+      "Unless you didn't call me by six, I'll assume you're not coming."
+    ],
+    correct:1,
+    explanation:"<em>Unless</em> already means \u2018if\u2026not\u2019, so adding another negative creates a double negative and flips the intended meaning. After <em>unless</em>, the verb stays positive."
+  },
+  {
+    type:'mc', cat:'contrast',
+    prompt:'Which sentence means the same as: &ldquo;If you don\u2019t book early, you won\u2019t get a discount&rdquo;?',
+    options:[
+      "Unless you book early, you won't get a discount.",
+      "Unless you don't book early, you won't get a discount.",
+      "If you book early, you won't get a discount.",
+      "Unless you booked early, you won't get a discount."
+    ],
+    correct:0,
+    explanation:"<em>Unless</em> replaces \u2018if\u2026not\u2019, so the negative disappears from the verb: <em>book</em>, not \u2018don\u2019t book\u2019. The other options either double the negative or reverse the original meaning."
+  },
+  {
+    type:'mc', cat:'rather',
+    prompt:'______, I\u2019d ask for a raise before accepting extra responsibilities.',
+    options:['If I am you','If I were you','If I would be you','Unless I were you'],
+    correct:1,
+    explanation:"This fixed advice expression always uses the subjunctive <em>were</em>, whatever the subject. \u2018Would be\u2019 never appears in the if-clause itself, and \u2018am\u2019 breaks the hypothetical, advice-giving tone of the phrase."
+  },
+  {
+    type:'mc', cat:'rather',
+    prompt:'I\u2019d rather you ______ my parents about this yet \u2014 I want to explain it myself.',
+    options:["didn't tell","wouldn't tell","don't tell","hadn't told"],
+    correct:0,
+    explanation:"A preference about someone else\u2019s present or future action uses <em>would rather</em> + past simple: <em>didn\u2019t tell</em>. <em>Would rather</em> never takes another <em>would</em> in the clause that follows it, and \u2018hadn\u2019t told\u2019 would wrongly shift this into a past regret."
+  },
+  {
+    type:'mc', cat:'wish',
+    prompt:'I\u2019m so tired today. I wish I ______ to bed earlier last night.',
+    options:['went','had gone','would go','go'],
+    correct:1,
+    explanation:"The regret targets one specific, finished night, so <em>wish</em> needs the past perfect: <em>had gone</em>. \u2018Went\u2019 would suit a general present-unreal wish (like \u2018I wish I went to bed earlier\u2019 as a habit), not a single past event."
+  },
+  {
+    type:'mc', cat:'rather',
+    prompt:'Which sentence means the same as: &ldquo;I regret that you didn\u2019t warn me about the problem&rdquo;?',
+    options:[
+      "I'd rather you had warned me about the problem.",
+      "I'd rather you warned me about the problem.",
+      "I'd rather you would have warned me about the problem.",
+      "I'd rather you have warned me about the problem."
+    ],
+    correct:0,
+    explanation:"A preference or regret about someone else\u2019s past action uses <em>would rather</em> + past perfect (<em>had warned</em>), the past equivalent of the present pattern with the past simple. <em>Would rather</em> never takes \u2018would have\u2019 or a bare present perfect."
+  },
+  {
+    type:'mc', cat:'contrast',
+    prompt:'Even if I ______ unlimited time, I probably wouldn\u2019t learn to code \u2014 it\u2019s just not my thing.',
+    options:['had','have','would have','have had'],
+    correct:0,
+    explanation:"This <em>even if</em> is hypothetical, like a second conditional, so it takes the past simple (<em>had</em>) even though the topic is the present. \u2018Have\u2019 would treat unlimited time as a real, likely possibility, which contradicts the speaker\u2019s tone."
+  },
+  {
+    type:'mc', cat:'cond',
+    prompt:'If she ______ harder for her exams last year, she ______ at university now instead of retaking her final year.',
+    options:['had studied / would be','studied / would have been','had studied / would have been','would have studied / would be'],
+    correct:0,
+    explanation:"This is a mixed conditional: an unreal past condition (<em>had studied</em>) produces a present result (<em>would be</em> at university now). The result is about the present, so it can\u2019t take \u2018would have been\u2019."
+  },
+  {
+    type:'mc', cat:'wish',
+    prompt:'Which sentence is correct?',
+    options:[
+      'I wish I would have studied harder for the exam.',
+      'I wish I had studied harder for the exam.',
+      'I wish I studied harder for the exam.',
+      'I wish I have studied harder for the exam.'
+    ],
+    correct:1,
+    explanation:"<em>Wish</em> never takes \u2018would have\u2019 for the speaker\u2019s own past regret \u2014 only <em>had</em> + past participle. \u2018Would have\u2019 is reserved for the result clause of a third conditional, not for wishes, and the present forms don\u2019t fit a finished past exam."
+  },
+  {
+    type:'mc', cat:'wish',
+    prompt:'If only I ______ how to cook \u2014 I wouldn\u2019t have to order takeout every night.',
+    options:['knew','had known','know','would know'],
+    correct:0,
+    explanation:"This is a present, ongoing unreal situation (a lack of skill that continues now), so <em>if only</em> takes the past simple: <em>knew</em>. The past perfect would only fit if the regret were about one finished past event."
+  },
+  {
+    type:'mc', cat:'cond',
+    prompt:'If it ______ tomorrow, we\u2019ll move the picnic indoors.',
+    options:['rains','rained','would rain','will rain'],
+    correct:0,
+    explanation:"This is a realistic future plan, so the first conditional applies: if + present simple (<em>rains</em>), main clause with <em>will</em>. <em>Will rain</em> in the if-clause is a classic learner slip \u2014 <em>will</em> never follows <em>if</em> in a real conditional."
+  },
+  {
+    type:'mc', cat:'wish',
+    prompt:'Which sentence means the same as: &ldquo;I regret not seeing a doctor sooner about my back pain&rdquo;?',
+    options:[
+      'If only I had seen a doctor sooner about my back pain.',
+      'If only I saw a doctor sooner about my back pain.',
+      'If only I would have seen a doctor sooner about my back pain.',
+      'If only I have seen a doctor sooner about my back pain.'
+    ],
+    correct:0,
+    explanation:"The regret is about a specific missed opportunity in the past, so <em>if only</em> + past perfect (<em>had seen</em>) is needed \u2014 the same pattern as <em>wish</em> + past perfect, but more emphatic. <em>If only</em> never takes \u2018would have\u2019."
+  }
+];
+
+/* attach stable ids and shuffle overall order once */
+const QUESTIONS = shuffle(RAW_QUESTIONS.map((q,i)=>({...q, id:i})));
+const TOTAL = QUESTIONS.length;
+
+/* pre-shuffle MC option order per question, tracking the new correct index */
+QUESTIONS.forEach(q=>{
+  if(q.type === 'mc'){
+    const withIdx = q.options.map((opt,i)=>({opt, wasCorrect:i===q.correct}));
+    const shuffled = shuffle(withIdx);
+    q.options = shuffled.map(o=>o.opt);
+    q.correct = shuffled.findIndex(o=>o.wasCorrect);
+  }
+});
+
+const TYPE_LABEL = { mc:'Multiple choice', gap:'Gap-fill', transform:'Transformation', error:'Error correction' };
+const TYPE_TAGCLASS = { mc:'t-mc', gap:'t-gap', transform:'t-transform', error:'t-error' };
+
+let current = 0;
+let score = 0;
+let answered = false;
+const userResults = new Array(TOTAL).fill(null); // {correct:boolean, yourText/yourIndex}
+
+function beginQuiz(){
+  document.getElementById('start-screen').classList.add('hidden');
+  document.getElementById('quiz-screen').classList.add('active');
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const q = QUESTIONS[current];
+  answered = false;
+
+  document.getElementById('progress-label').textContent = 'Item ' + (current+1) + ' of ' + TOTAL;
+  document.getElementById('progress-fill').style.width = (current/TOTAL*100) + '%';
+  document.getElementById('live-score').textContent = score;
+
+  const card = document.getElementById('q-card');
+  card.style.animation = 'none'; void card.offsetWidth; card.style.animation = '';
+
+  const tag = document.getElementById('q-tag');
+  tag.textContent = TYPE_LABEL[q.type];
+  tag.className = 'tag ' + TYPE_TAGCLASS[q.type];
+  document.getElementById('q-num').textContent = 'No. ' + (current+1);
+
+  const body = document.getElementById('q-body');
+  let html = '';
+
+  html += '<div class="q-prompt">' + q.prompt.replace('______','<span class="blank"></span>') + '</div>';
+  html += '<div class="q-hint">Choose the option that completes the sentence naturally.</div>';
+  html += '<div class="options" id="opt-wrap">';
+  q.options.forEach((opt,i)=>{
+    html += '<button class="opt" id="opt-'+i+'" onclick="selectMC('+i+')"><span class="letter">'+letterFor(i)+'</span><span>'+opt+'</span></button>';
+  });
+  html += '</div>';
+
+  body.innerHTML = html;
+
+  const fb = document.getElementById('q-feedback');
+  fb.classList.remove('show','is-correct','is-wrong');
+  document.getElementById('fb-correct-line').style.display = 'none';
+
+  const nextBtn = document.getElementById('next-btn');
+  nextBtn.classList.remove('enabled');
+  nextBtn.textContent = (current === TOTAL-1) ? 'See results \u2192' : 'Next item \u2192';
+
+  const prevBtn = document.getElementById('prev-btn');
+  if(current === 0) prevBtn.classList.remove('enabled');
+  else prevBtn.classList.add('enabled');
+
+  if(userResults[current]){
+    restoreAnsweredState(q, userResults[current]);
+  }
+}
+
+function restoreAnsweredState(q, res){
+  answered = true;
+  for(let j=0;j<q.options.length;j++){
+    const btn = document.getElementById('opt-'+j);
+    btn.classList.add('disabled');
+    if(j === q.correct) btn.classList.add('correct-answer');
+    else if(j === res.yourIndex) btn.classList.add('wrong-answer');
+    else btn.classList.add('muted');
+  }
+  showFeedback(res.correct, q);
+}
+
+function prevQuestion(){
+  if(current === 0) return;
+  current--;
+  renderQuestion();
+}
+
+function selectMC(i){
+  if(answered) return;
+  answered = true;
+  const q = QUESTIONS[current];
+  const isCorrect = (i === q.correct);
+  if(isCorrect) score++;
+  userResults[current] = { correct:isCorrect, yourIndex:i };
+
+  for(let j=0;j<q.options.length;j++){
+    const btn = document.getElementById('opt-'+j);
+    btn.classList.add('disabled');
+    if(j === q.correct) btn.classList.add('correct-answer');
+    else if(j === i) btn.classList.add('wrong-answer');
+    else btn.classList.add('muted');
+  }
+
+  showFeedback(isCorrect, q);
+}
+
+function showFeedback(isCorrect, q){
+  const fb = document.getElementById('q-feedback');
+  fb.classList.add('show', isCorrect ? 'is-correct' : 'is-wrong');
+  document.getElementById('fb-verdict').textContent = isCorrect ? 'Correct' : 'Not quite';
+  document.getElementById('fb-text').innerHTML = q.explanation;
+  document.getElementById('fb-correct-line').style.display = 'none';
+
+  document.getElementById('live-score').textContent = score;
+  document.getElementById('next-btn').classList.add('enabled');
+}
+
+function nextQuestion(){
+  if(!answered) return;
+  if(current < TOTAL-1){
+    current++;
+    renderQuestion();
+  } else {
+    showResults();
+  }
+}
+
+function showResults(){
+  document.getElementById('progress-fill').style.width = '100%';
+  document.getElementById('quiz-screen').classList.remove('active');
+  document.getElementById('results-screen').classList.add('active');
+
+  const pct = Math.round((score/TOTAL)*100);
+  document.getElementById('final-score').innerHTML = score + '<span>/' + TOTAL + '</span>';
+  document.getElementById('final-pct').textContent = pct + '%';
+
+  let tier;
+  if(pct >= 90) tier = 'Strong, exam-ready control of conditionals and their close relatives \u2014 the kind of precision B2/C1 Use of English rewards.';
+  else if(pct >= 70) tier = 'Solid overall control, with a few specific structures worth tightening up before they show up in an exam.';
+  else if(pct >= 50) tier = 'A developing grasp \u2014 the core if-clauses are there, but the related structures (wish, unless, provided, rather) still need consolidation.';
+  else tier = 'These structures need focused review. Work through the explanations below carefully before retrying.';
+  document.getElementById('final-tier').textContent = tier;
+
+  // category breakdown
+  const catStats = {};
+  Object.keys(CATEGORIES).forEach(k => catStats[k] = {correct:0, total:0});
+  QUESTIONS.forEach((q,i)=>{
+    catStats[q.cat].total++;
+    if(userResults[i] && userResults[i].correct) catStats[q.cat].correct++;
+  });
+
+  const bdWrap = document.getElementById('cat-breakdown');
+  bdWrap.innerHTML = Object.entries(catStats).map(([key,v])=>{
+    const p = Math.round((v.correct/v.total)*100);
+    return '<div class="cat-row">'+
+      '<div class="cat-row-top"><span class="cat-name">'+CATEGORIES[key].name+'</span><span class="cat-score">'+v.correct+'/'+v.total+'</span></div>'+
+      '<div class="bar-track"><div class="bar-fill" style="width:'+p+'%"></div></div>'+
+    '</div>';
+  }).join('');
+
+  // recommendations
+  const RECS = {
+    cond: "Revisit the difference between first (real, present simple + will), second (unreal present, past simple + would) and third (unreal past, past perfect + would have) conditionals, then practise mixed conditionals where the time reference of the if-clause and the result clause differ.",
+    contrast: "Drill the contrast between <em>even if</em> (a hypothetical condition) and <em>even though</em> (a known fact), and between <em>unless</em> (if\u2026not, no extra negative) and <em>provided that</em> (a stated requirement, not a warning).",
+    wish: "Practise choosing between <em>wish</em>/<em>if only</em> + past simple (a present unreal situation) and + past perfect (regret about a finished past action) \u2014 and remember neither ever takes \u2018would have\u2019 for your own regrets.",
+    rather: "Review <em>would rather</em> + past simple for a preference about someone else\u2019s present/future action versus + past perfect for a past preference or regret, and keep an eye on the fixed \u2018if I were you\u2019 pattern for advice."
+  };
+  const weak = Object.entries(catStats)
+    .map(([key,v]) => ({key, pct: v.correct/v.total}))
+    .filter(c => c.pct < 0.8)
+    .sort((a,b) => a.pct - b.pct);
+
+  const recList = document.getElementById('rec-list');
+  if(weak.length === 0){
+    recList.innerHTML = '<li>All four areas are in strong shape \u2014 keep the skills sharp by reading and listening to authentic English and noticing these structures in context.</li>'+
+      '<li>Try producing your own examples for each structure (real, unreal, wish, unless, rather) about your own life to move from recognition to free use.</li>'+
+      '<li>Revisit this quiz in a couple of weeks to check the structures have stayed automatic.</li>';
+  } else {
+    recList.innerHTML = weak.slice(0,5).map(w => '<li>' + RECS[w.key] + '</li>').join('');
+  }
+
+  // review of missed items
+  const missed = QUESTIONS.map((q,idx)=>({q,idx})).filter(o => !(userResults[o.idx] && userResults[o.idx].correct));
+  const reviewList = document.getElementById('review-list');
+  const reviewSub = document.getElementById('review-sub');
+
+  if(missed.length === 0){
+    reviewSub.style.display = 'none';
+    reviewList.innerHTML = '<div class="all-correct-note">All 20 items correct \u2014 nothing to review.</div>';
+  } else {
+    reviewSub.style.display = 'block';
+    reviewSub.textContent = missed.length + ' item' + (missed.length>1?'s':'') + ' worth a second look:';
+    reviewList.innerHTML = missed.map(o=>{
+      const q = o.q;
+      const res = userResults[o.idx];
+      let qText = q.type === 'mc' ? q.prompt.replace('______','\u2014') :
+                  q.type === 'transform' ? '\u201c' + q.original + '\u201d \u2014 ' + q.keyword :
+                  q.type === 'error' ? q.prompt : q.prompt.replace('______','\u2014');
+      const yourDisplay = q.type === 'mc' ? q.options[res.yourIndex] : (res.yourText || '(no answer)');
+      return '<div class="review-item">'+
+        '<div class="ritag">'+TYPE_LABEL[q.type]+' &middot; No. '+(o.idx+1)+'</div>'+
+        '<div class="riq">'+qText+'</div>'+
+        '<div class="riline">Your answer: <span class="yours">'+yourDisplay+'</span></div>'+
+        '<div class="riline">Correct answer: <span class="right">'+(q.type==='mc' ? q.options[q.correct] : q.display)+'</span></div>'+
+        '<div class="riexp">'+q.explanation+'</div>'+
+      '</div>';
+    }).join('');
+  }
+}
+
+function restartQuiz(){
+  current = 0;
+  score = 0;
+  userResults.fill(null);
+  document.getElementById('results-screen').classList.remove('active');
+  document.getElementById('quiz-screen').classList.add('active');
+  renderQuestion();
+}
+</script>
+</body>
+</html>
