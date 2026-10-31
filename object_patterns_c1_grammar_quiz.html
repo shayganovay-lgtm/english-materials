@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Who Does What — Verb + Object Patterns</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F3EFE6;--card:#FCFBF7;--ink:#1F2933;--soft:#5E6A73;--faint:#939CA3;--brass:#A8762E;--teal:#2C5F61;--plum:#7A4B78;--rust:#B0532F;--ok:#3C6E4D;--okbg:#E2EEE4;--bad:#A1463A;--badbg:#F5E1DC;--line:#DAD5C8;
+--fd:'Fraunces',Georgia,serif;--fb:'IBM Plex Sans',Arial,sans-serif;--fm:'IBM Plex Mono','Courier New',monospace}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg) radial-gradient(circle at 1px 1px,rgba(31,41,51,.07) 1px,transparent 0) 0 0/22px 22px;color:var(--ink);font-family:var(--fb);min-height:100vh;display:flex;justify-content:center;padding:28px 16px 60px}
+.wrap{width:100%;max-width:660px}
+.back{font-family:var(--fm);font-size:.78rem;color:var(--soft);text-decoration:none;display:inline-block;margin-bottom:18px}
+.back:hover{color:var(--brass)}
+h1{font-family:var(--fd);font-weight:600;font-size:clamp(2rem,6vw,2.7rem);line-height:1.05;margin:6px 0 8px;letter-spacing:-.01em}
+h1 em{color:var(--brass)}
+.eyebrow{font-family:var(--fm);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--soft)}
+.lede{color:var(--soft);line-height:1.6;margin:0 0 22px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 24px rgba(31,41,51,.07);padding:28px}
+.legend{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 24px}
+.li{display:flex;align-items:center;gap:8px;font-size:.86rem;background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.dot{width:9px;height:9px;border-radius:50%;flex:none}
+button{font-family:var(--fb);cursor:pointer}
+.btn{background:var(--ink);color:#F7F4EC;border:0;border-radius:8px;padding:13px 22px;font-weight:600;font-size:.95rem}
+.btn:hover{background:#33424f}.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}
+.btn.ghost:hover{background:var(--ink);color:#F7F4EC}
+button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.bar{height:5px;background:var(--line);border-radius:3px;overflow:hidden;margin:6px 0 16px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--brass),var(--teal));transition:width .3s}
+.row{display:flex;justify-content:space-between;font-family:var(--fm);font-size:.76rem;color:var(--soft)}
+.badge{display:inline-flex;align-items:center;gap:7px;font-family:var(--fm);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--soft);margin-bottom:16px}
+.q{font-family:var(--fd);font-size:clamp(1.15rem,3.6vw,1.4rem);line-height:1.5;margin:0 0 22px}
+.blank{display:inline-block;min-width:70px;border-bottom:2px solid var(--faint);text-align:center;color:var(--brass);font-weight:600}
+.opts{display:grid;gap:9px}
+.opt{text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:8px;padding:12px 14px;font-size:.96rem;color:var(--ink);display:flex;gap:10px;align-items:center}
+.opt:hover:not(:disabled){border-color:var(--faint)}
+.opt b{font-family:var(--fm);font-weight:500;font-size:.75rem;color:var(--faint);width:16px}
+.opt.right{background:var(--okbg);border-color:var(--ok);color:var(--ok);font-weight:600}
+.opt.wrong{background:var(--badbg);border-color:var(--bad);color:var(--bad)}
+.opt:disabled{cursor:default}
+.fb{display:none;margin-top:18px;padding:14px 16px;border-left:3px solid var(--faint);background:#F4F1E9;border-radius:4px;font-size:.9rem;line-height:1.6;color:var(--soft)}
+.fb.show{display:block}.fb.ok{border-color:var(--ok)}.fb.no{border-color:var(--bad)}
+.fb .v{display:block;font-family:var(--fm);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px;font-weight:500}
+.fb.ok .v{color:var(--ok)}.fb.no .v{color:var(--bad)}
+.act{display:flex;justify-content:flex-end;margin-top:20px}
+.hero{text-align:center;padding:6px 0 20px}
+.big{font-family:var(--fd);font-size:3.4rem;font-weight:600;line-height:1}
+.big span{font-size:1.5rem;color:var(--faint)}
+.hero p{color:var(--soft);max-width:44ch;margin:10px auto 0;line-height:1.55}
+.cr{background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-bottom:9px}
+.cr div{display:flex;justify-content:space-between;font-size:.86rem;margin-bottom:7px}
+.cr span:last-child{font-family:var(--fm);color:var(--soft)}
+.cr .t{height:6px;background:#EEEAE0;border-radius:4px;overflow:hidden}.cr .t i{display:block;height:100%}
+h2{font-family:var(--fd);font-size:1.15rem;margin:26px 0 12px}
+.ri{background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-bottom:10px;font-size:.88rem;line-height:1.55}
+.ri .rq{font-family:var(--fd);font-size:1rem;margin:4px 0 8px}
+.ri .y{color:var(--bad);font-weight:600}.ri .c{color:var(--ok);font-weight:600}.ri .e{color:var(--soft);margin-top:6px}
+.btns{display:flex;gap:10px;justify-content:center;margin-top:22px;flex-wrap:wrap}
+.cf{position:fixed;top:-12px;width:9px;height:14px;z-index:99;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(720deg);opacity:.8}}
+@media(max-width:480px){.legend{grid-template-columns:1fr}.card{padding:22px 18px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}.cf{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">← All quizzes</a>
+  <div id="app"></div>
+</div>
+<script>
+const CATS={
+  inf:{n:"Object + to-infinitive",c:"var(--brass)"},
+  bare:{n:"Bare infinitive & passive make",c:"var(--teal)"},
+  prep:{n:"arrange / wait / plan + for",c:"var(--plum)"},
+  ger:{n:"Object + gerund",c:"var(--rust)"}
+};
+/* first option in each list is the correct one; options are shuffled on every load */
+const Q=[
+ {c:"inf",t:"The manager encouraged all of us ___ for the new training course.",o:["to apply","applying","apply","that we applying"],e:"<b>encourage + object + to-infinitive</b>: encouraged us <em>to apply</em>."},
+ {c:"ger",t:"Our teacher doesn't allow ___ in the library.",o:["eating","to eat","eat","that eating"],e:"With no object, <b>allow</b> takes a gerund: <em>doesn't allow eating</em>. (With an object: <em>allow us to eat</em>.)"},
+ {c:"bare",t:"Her sudden laughter made everyone ___ round.",o:["turn","to turn","turning","turned"],e:"<b>make + object + bare infinitive</b> in the active voice: made everyone <em>turn</em>."},
+ {c:"bare",t:"Please let me ___ you a coffee to say thank you.",o:["buy","to buy","buying","bought"],e:"<b>let + object + bare infinitive</b>: let me <em>buy</em>."},
+ {c:"bare",t:"The prisoners were made ___ in complete silence.",o:["to work","work","working","worked"],e:"In the <b>passive</b>, make sb do sth switches to <em>to</em> + infinitive: were made <em>to work</em>."},
+ {c:"prep",t:"We've arranged ___ a taxi to collect us at six.",o:["for","of","on","by"],e:"After <b>arrange</b>, <em>for</em> comes straight after the verb: arranged <em>for</em> a taxi <em>to collect</em> us."},
+ {c:"prep",t:"Everyone is waiting ___ the results to be announced.",o:["for","of","on","in"],e:"<b>wait for + object + to-infinitive</b>: waiting <em>for</em> the results <em>to be announced</em>."},
+ {c:"prep",t:"They've planned ___ the whole family to stay for a week.",o:["for","of","with","about"],e:"<b>plan for + object + to-infinitive</b>: planned <em>for</em> the family <em>to stay</em>."},
+ {c:"ger",t:"I can't imagine him ___ in such a tiny village.",o:["living","to live","live","he living"],e:"<b>imagine + object + gerund</b>: imagine him <em>living</em>."},
+ {c:"ger",t:"I really dislike people ___ me when I'm concentrating.",o:["interrupting","to interrupt","interrupt","that interrupting"],e:"<b>dislike + object + gerund</b>: dislike people <em>interrupting</em> me."},
+ {c:"inf",t:"I would hate you ___ that I was ungrateful.",o:["to think","thinking","think","thought"],e:"<b>would hate + object + to-infinitive</b>. Note that <em>would hate that you think</em> is not possible."},
+ {c:"inf",t:"The organisers want the festival ___ a huge success this year.",o:["to be","being","be","that be"],e:"<b>want + object + to-infinitive</b>: want the festival <em>to be</em>."},
+ {c:"ger",t:"Sorry to keep you ___ so long.",o:["waiting","to wait","wait","for waiting"],e:"<b>keep + object + gerund</b>: keep you <em>waiting</em>."},
+ {c:"inf",t:"The mountain guide advised us ___ the path after dark.",o:["not to leave","not leaving","to not leaving","no to leave"],e:"<b>advise + object + (not) to-infinitive</b>: advised us <em>not to leave</em>."},
+ {c:"ger",t:"The receptionist recommended ___ the museum early in the morning.",o:["visiting","us to visit","to visit","us visit"],e:"<b>recommend</b> takes a gerund when there is no object: recommended <em>visiting</em>. It is not followed by object + to-infinitive."},
+ {c:"inf",t:"She reminded me ___ the lights off before leaving.",o:["to turn","turning","turn","of turn"],e:"<b>remind + object + to-infinitive</b>: reminded me <em>to turn</em>."},
+ {c:"ger",t:"We can't risk the server ___ down during the sale.",o:["going","to go","go","gone"],e:"<b>risk + object + gerund</b>: risk the server <em>going</em> down."},
+ {c:"inf",t:"Which sentence is correct?",o:["I'd like you to come early.","I'd like that you come early.","I'd like you coming early.","I'd like you come early."],e:"After <b>would like</b> use object + to-infinitive. A <em>that</em>-clause is impossible after want, would like, would love, would hate."}
+];
+const st={scr:"start",i:0,sel:null,ans:[],qs:[]};
+const $=id=>document.getElementById(id);
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function prep(){st.qs=shuffle(Q).map(q=>({...q,opts:shuffle(q.o),right:q.o[0]}));st.ans=[];st.i=0;st.sel=null}
+function L(i){return "ABCD"[i]}
+function start(){
+  return `<div class="eyebrow">C1 · Use of English</div>
+  <h1>Who Does <em>What?</em></h1>
+  <p class="lede">${Q.length} sentences on verbs followed by an object and then an infinitive or a gerund. Choose the form that fits.</p>
+  <div class="legend">${Object.values(CATS).map(c=>`<div class="li"><span class="dot" style="background:${c.c}"></span>${c.n}</div>`).join("")}</div>
+  <button class="btn" onclick="go()">Begin the quiz →</button>`;
+}
+function question(){
+  const q=st.qs[st.i],a=st.ans[st.i],cat=CATS[q.c];
+  const score=st.ans.filter(x=>x&&x.ok).length;
+  const t=q.t.replace("___",`<span class="blank">${a?q.right:"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"}</span>`);
+  const opts=q.opts.map((o,i)=>{let cl="opt";if(a){if(o===q.right)cl+=" right";else if(i===a.sel)cl+=" wrong"}
+    return `<button class="${cl}" ${a?"disabled":""} onclick="pick(${i})"><b>${L(i)}</b>${o}</button>`}).join("");
+  const last=st.i===st.qs.length-1;
+  return `<div class="row"><span>Question ${st.i+1} of ${st.qs.length}</span><span>Score: ${score}</span></div>
+  <div class="bar"><i style="width:${st.i/st.qs.length*100}%"></i></div>
+  <div class="card"><div class="badge"><span class="dot" style="background:${cat.c}"></span>${cat.n}</div>
+  <p class="q">${t}</p><div class="opts">${opts}</div>
+  ${a?`<div class="fb show ${a.ok?"ok":"no"}"><span class="v">${a.ok?"Correct":"Not quite"}</span>${q.e}</div>`:""}
+  <div class="act"><button class="btn" ${a?"":"disabled"} onclick="next()">${last?"See results →":"Next question →"}</button></div></div>`;
+}
+function results(){
+  const n=st.qs.length,s=st.ans.filter(a=>a.ok).length,p=s/n;
+  const msg=p>=.9?"Excellent — these patterns are exam-ready.":p>=.65?"Solid, with a few patterns to tighten up. Check the weakest category below.":"Worth another pass — focus on which verbs take an object + infinitive and which take a gerund.";
+  const by={};Object.keys(CATS).forEach(k=>by[k]={c:0,t:0});
+  st.qs.forEach((q,i)=>{by[q.c].t++;if(st.ans[i].ok)by[q.c].c++});
+  const rows=Object.entries(by).map(([k,v])=>`<div class="cr"><div><span>${CATS[k].n}</span><span>${v.c}/${v.t}</span></div><div class="t"><i style="width:${v.c/v.t*100}%;background:${CATS[k].c}"></i></div></div>`).join("");
+  const miss=st.qs.map((q,i)=>({q,a:st.ans[i]})).filter(x=>!x.a.ok);
+  const rev=miss.length?miss.map(x=>`<div class="ri"><div class="eyebrow">${CATS[x.q.c].n}</div><div class="rq">${x.q.t.replace("___","—")}</div>Your answer: <span class="y">${x.q.opts[x.a.sel]}</span><br>Correct: <span class="c">${x.q.right}</span><div class="e">${x.q.e}</div></div>`).join(""):`<p class="lede" style="text-align:center">Every answer correct — nothing to review.</p>`;
+  return `<div class="card"><div class="hero"><div class="eyebrow">Results</div><div class="big">${s}<span> / ${n}</span></div><p>${msg}</p></div>${rows}
+  <h2>Review</h2>${rev}
+  <div class="btns"><button class="btn" onclick="restart()">Retry quiz</button><a class="btn ghost" style="text-decoration:none" href="index.html">← All quizzes</a></div></div>`;
+}
+function render(){$("app").innerHTML=st.scr==="start"?start():st.scr==="q"?question():results();window.scrollTo(0,0)}
+function go(){prep();st.scr="q";render()}
+function pick(i){if(st.ans[st.i])return;const q=st.qs[st.i];st.ans[st.i]={sel:i,ok:q.opts[i]===q.right};render()}
+function next(){if(st.i<st.qs.length-1){st.i++}else{st.scr="r";if(st.ans.filter(a=>a.ok).length/st.qs.length>=.9)confetti()}render()}
+function restart(){st.scr="start";render()}
+function confetti(){const cols=["#A8762E","#2C5F61","#7A4B78","#B0532F","#3C6E4D"];
+  for(let i=0;i<60;i++){const d=document.createElement("div");d.className="cf";d.style.left=Math.random()*100+"vw";d.style.background=cols[i%5];d.style.animationDuration=(2+Math.random()*2.5)+"s";d.style.animationDelay=Math.random()*.8+"s";document.body.appendChild(d);setTimeout(()=>d.remove(),5500)}}
+render();
+</script>
+</body>
+</html>
